@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mixxdev.more_useful_coc.more_useful_clash_of_clans">
+    package="com.mixxdev.more_useful_clash_of_clans">
    <application
         android:label="more_useful_clash_of_clans"
         android:name="${applicationName}"
