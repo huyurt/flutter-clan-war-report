@@ -34,18 +34,72 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  # BASE
+  cupertino_icons: ^1.0.5
+  flutter_vector_icons: ^2.0.0
+  google_fonts: ^4.0.3
+  intl: ^0.17.0
+  nb_utils: ^5.0.5
+
+  # FIREBASE PACKAGES
+  cloud_firestore: ^4.3.2
+  firebase_core: ^2.5.0
+  firebase_messaging: ^14.2.2
+
+  # COMMON
+  html: ^0.15.1
+  http: ^0.13.5
+  http_auth: ^1.0.1
+  json_annotation: ^4.8.0
+  share_plus: ^6.3.1
+  url_launcher: ^6.1.9
+
+  # DATABASE
+  hive: ^2.2.3
+
+  # IMAGE
+  cached_network_image: ^3.2.3
+
+  # STATE MANAGEMENT
+  provider: ^6.0.5
+
+  # UI
+  animations: ^2.0.7
+  carousel_slider: ^4.2.1
+  clippy_flutter: ^2.0.0-nullsafety.1
+  date_time_picker: ^2.1.0
+  dots_indicator: ^2.1.0
+  fl_chart: 0.60.0
+  flutter_colorpicker: ^1.0.3
+  flutter_slidable: 2.0.0
+  flutter_staggered_grid_view: 0.6.2
+  flutter_svg: ^1.1.6
+  liquid_swipe: ^3.0.0
+  lottie: ^2.2.0
+  percent_indicator: ^4.2.2
+  showcaseview: ^2.0.0
+  simple_animations: 4.1.0
+  syncfusion_flutter_charts: ^20.4.49
+
+  # NOTIFICATION
+  flutter_local_notifications: ^13.0.0
+
+  flutter_localizations:
+    sdk: flutter
+  path_drawing: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.3.3
+  json_serializable: ^6.6.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,7 +113,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/mapStyles/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
