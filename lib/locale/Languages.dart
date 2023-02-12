@@ -108,4 +108,6 @@ abstract class BaseLanguage {
   String get lblProkitUIDesignKit;
 
   String get lblAboutUsDescription;
+
+  String get lblWars;
 }

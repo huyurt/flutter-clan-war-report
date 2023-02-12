@@ -6,33 +6,33 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:more_useful_clash_of_clans/main.dart';
-import 'package:more_useful_clash_of_clans/model/ListModels.dart';
 
+import '../main.dart';
+import '../model/ListModels.dart';
 import 'AppColors.dart';
 import 'AppConstant.dart';
 
 Widget text(
-  String? text, {
-  var fontSize = textSizeLargeMedium,
-  Color? textColor,
-  var fontFamily,
-  var isCentered = false,
-  var maxLine = 1,
-  var latterSpacing = 0.5,
-  bool textAllCaps = false,
-  var isLongText = false,
-  bool lineThrough = false,
-}) {
+    String? text, {
+      var fontSize = textSizeLargeMedium,
+      Color? textColor,
+      var fontFamily,
+      var isCentered = false,
+      var maxLine = 1,
+      var latterSpacing = 0.5,
+      bool textAllCaps = false,
+      var isLongText = false,
+      bool lineThrough = false,
+    }) {
   return Text(
     textAllCaps ? text!.toUpperCase() : text!,
     textAlign: isCentered ? TextAlign.center : TextAlign.start,
     maxLines: isLongText ? null : maxLine,
     overflow: TextOverflow.ellipsis,
     style: TextStyle(
-      fontFamily: fontFamily ?? null,
+      fontFamily: fontFamily,
       fontSize: fontSize,
-      //color: textColor ?? appStore.textSecondaryColor,
+      color: textColor ?? appStore.textSecondaryColor,
       height: 1.5,
       letterSpacing: latterSpacing,
       decoration: lineThrough ? TextDecoration.lineThrough : TextDecoration.none,
@@ -42,8 +42,8 @@ Widget text(
 
 BoxDecoration boxDecoration({double radius = 2, Color color = Colors.transparent, Color? bgColor, var showShadow = false}) {
   return BoxDecoration(
-    //color: bgColor ?? appStore.scaffoldBackground,
-    boxShadow: showShadow ? defaultBoxShadow(shadowColor: shadowColorGlobal) : [BoxShadow(color: Colors.transparent)],
+    color: bgColor ?? appStore.scaffoldBackground,
+    boxShadow: showShadow ? defaultBoxShadow(shadowColor: shadowColorGlobal) : [const BoxShadow(color: Colors.transparent)],
     border: Border.all(color: color),
     borderRadius: BorderRadius.all(Radius.circular(radius)),
   );
@@ -58,9 +58,9 @@ Future<List<LatLngAndGeohash>> getListOfLatLngAndGeoHash(BuildContext context) a
       //TODO Without NullSafety Geo coder
       //final fakePoint = fakeList[i];
       final p = LatLngAndGeohash(
-          //TODO Without NullSafety Geo coder
-          // LatLng(fakePoint["LATITUDE"], fakePoint["LONGITUDE"]),
-          );
+        //TODO Without NullSafety Geo coder
+        // LatLng(fakePoint["LATITUDE"], fakePoint["LONGITUDE"]),
+      );
       myPoints.add(p);
     }
     return myPoints;
@@ -106,12 +106,12 @@ Widget settingItem(context, String text, {Function? onTap, Widget? detail, Widge
         children: <Widget>[
           Row(
             children: <Widget>[
-              Container(child: leading ?? SizedBox(), width: 30, alignment: Alignment.center),
-              leading != null ? 10.width : SizedBox(),
-              Text(text, style: primaryTextStyle(size: textSize ?? 18, color: textColor)).expand()// ?? appStore.textPrimaryColor)).expand(),
+              Container(width: 30, alignment: Alignment.center, child: leading ?? const SizedBox()),
+              leading != null ? 10.width : const SizedBox(),
+              Text(text, style: primaryTextStyle(size: textSize ?? 18, color: textColor ?? appStore.textPrimaryColor)).expand(),
             ],
           ).expand(),
-          //detail ?? Icon(Icons.arrow_forward_ios, size: 16, color: appStore.textSecondaryColor),
+          detail ?? Icon(Icons.arrow_forward_ios, size: 16, color: appStore.textSecondaryColor),
         ],
       ).paddingOnly(left: 16, right: 16, top: 8, bottom: 8),
     ),
@@ -122,12 +122,12 @@ Widget appBarTitleWidget(context, String title, {Color? color, Color? textColor}
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 60,
-    //color: color ?? appStore.appBarColor,
+    color: color ?? appStore.appBarColor,
     child: Row(
       children: <Widget>[
         Text(
           title,
-          //style: boldTextStyle(color: color ?? appStore.textPrimaryColor, size: 20),
+          style: boldTextStyle(color: color ?? appStore.textPrimaryColor, size: 20),
           maxLines: 1,
         ).expand(),
       ],
@@ -138,14 +138,14 @@ Widget appBarTitleWidget(context, String title, {Color? color, Color? textColor}
 AppBar appBar(BuildContext context, String title, {List<Widget>? actions, bool showBack = true, Color? color, Color? iconColor, Color? textColor}) {
   return AppBar(
     automaticallyImplyLeading: false,
-    //backgroundColor: color ?? appStore.appBarColor,
+    backgroundColor: color ?? appStore.appBarColor,
     leading: showBack
         ? IconButton(
-            onPressed: () {
-              finish(context);
-            },
-            icon: Icon(Icons.arrow_back)//, color: appStore.isDarkModeOn ? white : black),
-          )
+      onPressed: () {
+        finish(context);
+      },
+      icon: Icon(Icons.arrow_back, color: appStore.isDarkModeOn ? white : black),
+    )
         : null,
     title: appBarTitleWidget(context, title, textColor: textColor, color: color),
     actions: actions,
@@ -158,23 +158,23 @@ class ExampleItemWidget extends StatelessWidget {
   final Function onTap;
   final bool showTrailing;
 
-  ExampleItemWidget(this.tabBarType, {required this.onTap, this.showTrailing = false});
+  const ExampleItemWidget(this.tabBarType, {super.key, required this.onTap, this.showTrailing = false});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      //color: appStore.appBarColor,
-      margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
+      color: appStore.appBarColor,
+      margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
       elevation: 2.0,
       shadowColor: Colors.black,
       child: ListTile(
         onTap: () => onTap(),
         title: Text(tabBarType.name!, style: boldTextStyle()),
         trailing: showTrailing
-            ? Icon(Icons.arrow_forward_ios, size: 15)//, color: appStore.textPrimaryColor)
+            ? Icon(Icons.arrow_forward_ios, size: 15, color: appStore.textPrimaryColor)
             : tabBarType.isNew.validate()
-                ? Text('New', style: secondaryTextStyle(color: Colors.red))
-                : null,
+            ? Text('New', style: secondaryTextStyle(color: Colors.red))
+            : null,
       ),
     );
   }
@@ -184,7 +184,9 @@ String convertDate(date) {
   try {
     return date != null ? DateFormat(dateFormat).format(DateTime.parse(date)) : '';
   } catch (e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
     return '';
   }
 }
@@ -197,11 +199,11 @@ class CustomTheme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: true //appStore.isDarkModeOn
+      data: appStore.isDarkModeOn
           ? ThemeData.dark().copyWith(
-              accentColor: appColorPrimary,
-              backgroundColor: context.scaffoldBackgroundColor,
-            )
+        accentColor: appColorPrimary,
+        backgroundColor: context.scaffoldBackgroundColor,
+      )
           : ThemeData.light(),
       child: child!,
     );
@@ -285,20 +287,20 @@ class ContainerX extends StatelessWidget {
   final Widget? web;
   final bool? useFullWidth;
 
-  ContainerX({this.mobile, this.web, this.useFullWidth});
+  const ContainerX({super.key, this.mobile, this.web, this.useFullWidth});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constraints) {
         if (constraints.device == DeviceSize.mobile) {
-          return mobile ?? SizedBox();
+          return mobile ?? const SizedBox();
         } else {
           return Container(
             alignment: Alignment.topCenter,
             child: Container(
               constraints: useFullWidth.validate() ? null : dynamicBoxConstraints(maxWidth: context.width() * 0.9),
-              child: web ?? SizedBox(),
+              child: web ?? const SizedBox(),
             ),
           );
         }

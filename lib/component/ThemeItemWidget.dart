@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:more_useful_clash_of_clans/main.dart';
-import 'package:more_useful_clash_of_clans/model/AppModel.dart';
-import 'package:more_useful_clash_of_clans/view/AppScreenListing.dart';
-import 'package:more_useful_clash_of_clans/utils/AppColors.dart';
-import 'package:more_useful_clash_of_clans/utils/AppImages.dart';
-import 'package:more_useful_clash_of_clans/utils/AppStrings.dart';
+
+import '../main.dart';
+import '../model/AppModel.dart';
+import '../utils/AppColors.dart';
+import '../utils/AppImages.dart';
+import '../view/MainScreen.dart';
 
 List<Color> colors = [appCat1, appCat2, appCat3];
 
@@ -19,33 +19,23 @@ class ThemeItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //if (appStore.isDarkModeOn) {
-        //  appStore.toggleDarkMode(value: data.darkThemeSupported.validate());
-        //}
-
-        if (data.sub_kits == null || data.sub_kits!.isEmpty) {
-          if (data.widget != null) {
-            log('Tag ${data.widget!.key}');
-
-            data.widget.launch(context);
-          } else {
-            toasty(context, appComingSoon);
-          }
-        } else {
-          AppScreenListing(data).launch(context);
+        if (appStore.isDarkModeOn) {
+          appStore.toggleDarkMode(value: data.darkThemeSupported.validate());
         }
+
+        const MainScreen().launch(context);
       },
       child: Container(
-        margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
         child: Row(
           children: <Widget>[
             Container(
               width: 80,
               height: 80,
-              margin: EdgeInsets.only(right: 12),
-              padding: EdgeInsets.all(16),
-              child: Image.asset(icons[index % icons.length], color: Colors.white),
+              margin: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.all(16),
               decoration: boxDecorationDefault(color: colors[index % colors.length]),
+              child: Image.asset(icons[index % icons.length], color: Colors.white),
             ),
             Expanded(
               child: Stack(
@@ -54,7 +44,7 @@ class ThemeItemWidget extends StatelessWidget {
                   Container(
                     width: context.width(),
                     height: 80,
-                    padding: EdgeInsets.only(left: 16, right: 16),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
                     margin: EdgeInsets.only(right: context.width() / 28),
                     decoration: boxDecorationDefault(color: context.cardColor),
                     child: Row(
@@ -64,7 +54,7 @@ class ThemeItemWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text('${data.name.validate()}', style: boldTextStyle(), maxLines: 2),
+                            Text(data.name.validate(), style: boldTextStyle(), maxLines: 2),
                             Text(
                               data.title_name.validate(),
                               style: secondaryTextStyle(),
@@ -75,8 +65,8 @@ class ThemeItemWidget extends StatelessWidget {
                         ).expand(),
                         Container(
                           //height: 25,
-                          margin: EdgeInsets.only(right: 8),
-                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: data.tag.validate().isNotEmpty ? boxDecorationDefault(color: appDarkRed) : BoxDecoration(),
                           child: Text(data.tag.validate(), style: primaryTextStyle(color: white, size: 12)),
                         ),
@@ -86,8 +76,8 @@ class ThemeItemWidget extends StatelessWidget {
                   Container(
                     width: 30,
                     height: 30,
-                    child: Icon(Icons.keyboard_arrow_right, color: Colors.white),
                     decoration: boxDecorationDefault(color: colors[index % colors.length], shape: BoxShape.circle),
+                    child: const Icon(Icons.keyboard_arrow_right, color: Colors.white),
                   ),
                 ],
               ),

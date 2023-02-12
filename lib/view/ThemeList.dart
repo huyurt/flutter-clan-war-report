@@ -6,14 +6,14 @@ import 'package:more_useful_clash_of_clans/model/AppModel.dart';
 class ThemeList extends StatelessWidget {
   final List<ProTheme> list;
 
-  ThemeList(this.list);
+  const ThemeList(this.list, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return AnimatedListView(
       scrollDirection: Axis.vertical,
       itemCount: list.length,
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       shrinkWrap: true,
       listAnimationType: ListAnimationType.FadeIn,
       fadeInConfiguration: FadeInConfiguration(delay: 100.milliseconds, duration: 700.milliseconds),

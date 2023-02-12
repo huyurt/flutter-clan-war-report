@@ -1,4 +1,4 @@
-import 'package:more_useful_clash_of_clans/locale/Languages.dart';
+import 'Languages.dart';
 
 class LanguageTr extends BaseLanguage {
   @override
@@ -155,9 +155,13 @@ class LanguageTr extends BaseLanguage {
   String get lblVersion => 'Version';
 
   @override
-  String get lblProkitUIDesignKit => 'Prokit – Flutter App UI Design Template Kit';
+  String get lblProkitUIDesignKit =>
+      'Prokit – Flutter App UI Design Template Kit';
 
   @override
   String get lblAboutUsDescription =>
       'As the name says, Prokit is the Biggest Flutter UI kit. It is the ultimate library of Flutter UI app templates combined into high-quality UI kit for Android developers and iOS developers. The collection consists of app UI kits, full apps, and UI themes. With it’s clean code and single code base, this set of mix App UI kit and UI themes, it is easily your standalone solution.';
+
+  @override
+  String get lblWars => 'Savaşlar';
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/locale/LanguageEn.dart';
-import 'package:more_useful_clash_of_clans/locale/LanguageTr.dart';
-import 'package:more_useful_clash_of_clans/locale/Languages.dart';
 import 'package:nb_utils/nb_utils.dart';
+
+import 'LanguageEn.dart';
+import 'LanguageTr.dart';
+import 'Languages.dart';
 
 class AppLocalizations extends LocalizationsDelegate<BaseLanguage> {
   const AppLocalizations();
