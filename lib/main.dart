@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:more_useful_clash_of_clans/routes.dart';
@@ -20,9 +19,6 @@ AppStore appStore = AppStore();
 
 BaseLanguage? language;
 
-late String darkMapStyle;
-late String lightMapStyle;
-
 void main() async {
   //region Entry Point
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,9 +28,6 @@ void main() async {
   appStore.toggleDarkMode(value: getBoolAsync(isDarkModeOnPref));
   await appStore.setLanguage(
       getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
-
-  darkMapStyle = await rootBundle.loadString('assets/mapStyles/dark.json');
-  lightMapStyle = await rootBundle.loadString('assets/mapStyles/light.json');
 
   defaultRadius = 10;
 
@@ -60,11 +53,12 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: '$mainAppName${!isMobile ? ' ${platformName()}' : ''}',
-            theme: !appStore.isDarkModeOn
-                ? AppThemeData.lightTheme
-                : AppThemeData.darkTheme,
+            theme: !appStore.isDarkModeOn ? AppThemeData.lightTheme : AppThemeData.darkTheme,
             initialRoute: MainScreen.tag,
             routes: routes(),
+            onGenerateInitialRoutes: (route) => [
+              MaterialPageRoute(builder: (_) => const MainScreen()),
+            ],
             navigatorKey: navigatorKey,
             scrollBehavior: SBehavior(),
             supportedLocales: LanguageDataModel.languageLocales(),

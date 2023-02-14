@@ -18,14 +18,10 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends State<MainScreen> {
   int currentIndex1 = 0;
   final example1 = [
-    Text('Example 1',
-        style: TextStyle(color: appStore.textPrimaryColor, fontSize: 24)),
-    Text('Reels',
-        style: TextStyle(color: appStore.textPrimaryColor, fontSize: 24)),
-    Text('New Photo',
-        style: TextStyle(color: appStore.textPrimaryColor, fontSize: 24)),
-    Text('Activity',
-        style: TextStyle(color: appStore.textPrimaryColor, fontSize: 24)),
+    'Example 1',
+    'Reels',
+    'New Photo',
+    'Activity',
   ];
 
   @override
@@ -76,17 +72,18 @@ class MainScreenState extends State<MainScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Center(child: example1.elementAt(currentIndex1)),
+              Center(child: Text(example1.elementAt(currentIndex1),
+                      style: TextStyle(color: appStore.textPrimaryColor, fontSize: 24)
+                  )
+              ),
               15.height,
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  bulletText(
-                      'A bottom navigation bar is usually used in conjunction with a Scaffold.'),
+                  bulletText('A bottom navigation bar is usually used in conjunction with a Scaffold.'),
                   5.height,
-                  bulletText(
-                      'Bottom navigation bar consists of multiple items in the form of text labels, icons, or both.'),
+                  bulletText('Bottom navigation bar consists of multiple items in the form of text labels, icons, or both.'),
                   5.height,
                   bulletText('This example consists of icons and label both.'),
                   5.height,
