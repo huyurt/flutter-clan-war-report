@@ -491,14 +491,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_mobx:
-    dependency: "direct main"
-    description:
-      name: flutter_mobx
-      sha256: "0da4add0016387a7bf309a0d0c41d36c6b3ae25ed7a176409267f166509e723e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.6+5"
   flutter_slidable:
     dependency: "direct main"
     description:
@@ -726,7 +718,7 @@ packages:
     source: hosted
     version: "1.0.4"
   mobx:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: mobx
       sha256: f1862bd92c6a903fab67338f27e2f731117c3cb9ea37cee1a487f9e4e0de314a

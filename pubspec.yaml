@@ -50,8 +50,6 @@ dependencies:
   url_launcher: ^6.1.9
 
   # STATE MANAGEMENT
-  flutter_mobx: ^2.0.6+4
-  mobx: ^2.1.0
   provider: ^6.0.5
 
   # STORAGE
