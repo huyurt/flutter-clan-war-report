@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../types/ThemeDark.dart';
@@ -21,14 +22,18 @@ class ThemeManager extends ChangeNotifier implements IThemeManager {
 
   ThemeManager._init();
 
-  ThemeData currentTheme = ThemeEnum.LIGHT.generateTheme;
+  ThemeData currentTheme = ThemeEnum.LIGHT.generate;
   ThemeEnum currentThemeEnum = ThemeEnum.LIGHT;
 
   @override
-  void changeTheme(ThemeEnum newTheme) {
+  Future<void> changeTheme(ThemeEnum newTheme) async {
     if (newTheme != currentThemeEnum) {
-      currentTheme = newTheme.generateTheme;
+      currentTheme = newTheme.generate;
       currentThemeEnum = newTheme;
+
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setInt(THEME_MODE_INDEX, newTheme.index);
+
       notifyListeners();
     }
     return;
@@ -39,7 +44,7 @@ class ThemeManager extends ChangeNotifier implements IThemeManager {
 }
 
 extension ThemeEnumExtension on ThemeEnum {
-  ThemeData get generateTheme {
+  ThemeData get generate {
     switch (this) {
       case ThemeEnum.LIGHT:
         return ThemeLight.instance.theme!;

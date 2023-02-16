@@ -45,9 +45,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             message: 'Dark Mode',
             child: Switch(
               value: ThemeManager.instance.darkModeOn,
-              onChanged: (s) {
+              onChanged: (s) async {
                 ThemeEnum selectedTheme = s ? ThemeEnum.DARK : ThemeEnum.LIGHT;
-                ThemeManager.instance.changeTheme(selectedTheme);
+                await ThemeManager.instance.changeTheme(selectedTheme);
                 setState(() {});
               },
             ),

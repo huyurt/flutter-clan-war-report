@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:more_useful_clash_of_clans/routes.dart';
 import 'package:more_useful_clash_of_clans/utils/AppDataProvider.dart';
+import 'package:more_useful_clash_of_clans/utils/locale/Languages.dart';
 import 'package:more_useful_clash_of_clans/utils/theme/manager/ThemeManager.dart';
 import 'package:more_useful_clash_of_clans/view/HomeScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
-
-import 'locale/AppLocalizations.dart';
-import 'locale/Languages.dart';
 
 BaseLanguage? language;
 
 void main() async {
   //region Entry Point
   WidgetsFlutterBinding.ensureInitialized();
+
+  var prefs = await SharedPreferences.getInstance();
+  int? initTheme = prefs.getInt(THEME_MODE_INDEX);
+  if (initTheme != null) {
+    ThemeManager.instance.changeTheme(ThemeEnum.values[initTheme]);
+  }
 
   await initialize(aLocaleLanguageList: languageList());
 
@@ -60,8 +64,8 @@ class MyApp extends StatelessWidget {
       scrollBehavior: SBehavior(),
       supportedLocales: LanguageDataModel.languageLocales(),
       localizationsDelegates: const [
-        AppLocalizations(),
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
       localeResolutionCallback: (locale, supportedLocales) => locale,
