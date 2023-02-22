@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/language-type.dart';
 
 class AppLocalizations {
   final Locale locale;
@@ -22,6 +23,10 @@ class AppLocalizations {
   Map<String, String> _localizedStrings = {};
 
   Future<bool> load() async {
+    return await loadWithLocale(locale);
+  }
+
+  Future<bool> loadWithLocale(Locale locale) async {
     // Load the language JSON file from the "lang" folder
     String jsonString =
         await rootBundle.loadString('assets/lang/${locale.languageCode}.json');
@@ -49,7 +54,8 @@ class _AppLocalizationsDelegate
   @override
   bool isSupported(Locale locale) {
     // Include all of your supported language codes here
-    return ['en', 'tr'].contains(locale.languageCode);
+    return [LanguageType.en.name, LanguageType.tr.name]
+        .contains(locale.languageCode);
   }
 
   @override

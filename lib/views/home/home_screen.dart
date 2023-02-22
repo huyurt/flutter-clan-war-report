@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/language-type.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/localization/app_localizations.dart';
+import '../../utils/localization/language_provider.dart';
 import '../../utils/theme/theme_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,42 +32,51 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(builder: (_, themeProviderRef, __) {
-      return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: const Padding(
-            padding: EdgeInsets.all(12.0),
-            child: FlutterLogo(
-              style: FlutterLogoStyle.markOnly,
+      return Consumer<LanguageProvider>(builder: (_, languageProviderRef, __) {
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            leading: const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: FlutterLogo(
+                style: FlutterLogoStyle.markOnly,
+              ),
             ),
+            actions: <Widget>[
+              Tooltip(
+                message: 'Dark Mode',
+                child: Switch(
+                  value: themeProviderRef.isDarkModeOn,
+                  onChanged: (s) {
+                    LanguageType languageType =
+                        s ? LanguageType.tr : LanguageType.en;
+                    AppLocalizations.of(context)
+                        .loadWithLocale(Locale(languageType.name))
+                        .then((value) {
+                      languageProviderRef.changeLanguage(languageType);
+                    });
+                    themeProviderRef.changeTheme(s);
+                    setState(() {});
+                  },
+                ),
+              ),
+            ],
           ),
-          actions: <Widget>[
-            Tooltip(
-              message: 'Dark Mode',
-              child: Switch(
-                value: themeProviderRef.isDarkModeOn,
-                onChanged: (s) {
-                  themeProviderRef.changeTheme(s);
-                  setState(() {});
-                },
-              ),
-            ),
-          ],
-        ),
-        body: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ListTile(
-                title: Text(items[index]['title'] ?? ''),
-                subtitle: Text(items[index]['description'] ?? ''),
-                leading: Image.network(items[index]['image'] ?? ''),
-              ),
-            );
-          },
-        ),
-      );
+          body: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
+                  title: Text(AppLocalizations.of(context).translate('title')),
+                  subtitle: Text(items[index]['description'] ?? ''),
+                  leading: Image.network(items[index]['image'] ?? ''),
+                ),
+              );
+            },
+          ),
+        );
+      });
     });
   }
 }

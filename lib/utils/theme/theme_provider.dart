@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
 import '../helpers/shared_preference_helper.dart';
 
 class ThemeProvider extends ChangeNotifier {
@@ -8,7 +9,7 @@ class ThemeProvider extends ChangeNotifier {
   bool _isDarkModeOn = false;
 
   ThemeProvider() {
-    _sharedPrefsHelper = SharedPreferenceHelper();
+    _sharedPrefsHelper = locator<SharedPreferenceHelper>();
   }
 
   bool get isDarkModeOn {
@@ -23,10 +24,8 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   void changeTheme(bool isDarkModeOn) {
-    _sharedPrefsHelper.changeTheme(isDarkModeOn);
-    _sharedPrefsHelper.isDarkMode.then((darkModeStatus) {
-      _isDarkModeOn = darkModeStatus;
-    });
+    _sharedPrefsHelper.saveTheme(isDarkModeOn);
+    _isDarkModeOn = isDarkModeOn;
 
     notifyListeners();
   }
