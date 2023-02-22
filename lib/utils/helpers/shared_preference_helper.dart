@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:system_theme/system_theme.dart';
 
 class SharedPreferenceHelper {
   static const String themeMode = 'themeMode';
@@ -12,7 +13,7 @@ class SharedPreferenceHelper {
 
   Future<bool> get isDarkMode {
     return _sharedPreference!.then((prefs) {
-      return prefs.getBool(themeMode) ?? false;
+      return prefs.getBool(themeMode) ?? SystemTheme.isDarkMode;
     });
   }
 
