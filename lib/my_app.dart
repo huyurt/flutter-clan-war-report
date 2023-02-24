@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/language-type.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/language-type-enum.dart';
 import 'package:more_useful_clash_of_clans/utils/localization/app_localizations.dart';
 import 'package:more_useful_clash_of_clans/utils/theme/app_themes.dart';
 import 'package:more_useful_clash_of_clans/utils/theme/theme_provider.dart';
@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
           locale: locale,
           //List of all supported locales
           supportedLocales: [
-            Locale(LanguageType.en.name),
-            Locale(LanguageType.tr.name),
+            Locale(LanguageTypeEnum.en.name),
+            Locale(LanguageTypeEnum.tr.name),
           ],
           //These delegates make sure that the localization data for the proper language is loaded
           localizationsDelegates: const [

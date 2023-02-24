@@ -1,0 +1,4 @@
+enum LanguageTypeEnum {
+  en,
+  tr
+}

@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:system_theme/system_theme.dart';
 
-import '../enums/language-type.dart';
+import '../enums/language-type-enum.dart';
 
 class SharedPreferenceHelper {
   static const String themeModeKey = 'themeMode';
@@ -19,9 +19,9 @@ class SharedPreferenceHelper {
     });
   }
 
-  Future<void> saveTheme(bool value) {
-    return _sharedPreference.then((prefs) {
-      return prefs.setBool(themeModeKey, value);
+  Future<void> saveTheme(bool value) async {
+    _sharedPreference.then((prefs) {
+      prefs.setBool(themeModeKey, value);
     });
   }
 
@@ -29,16 +29,16 @@ class SharedPreferenceHelper {
     return _sharedPreference.then((prefs) {
       String languageCode =
           prefs.getString(languageCodeKey) ?? Platform.localeName.split('_')[0];
-      LanguageType languageType = LanguageType.values.firstWhereOrNull(
+      LanguageTypeEnum languageType = LanguageTypeEnum.values.firstWhereOrNull(
               (languageType) => languageType.name == languageCode) ??
-          LanguageType.en;
+          LanguageTypeEnum.en;
       return languageType.name;
     });
   }
 
-  Future<void> saveLanguage(String value) {
-    return _sharedPreference.then((prefs) {
-      return prefs.setString(languageCodeKey, value);
+  Future<void> saveLanguage(String value) async {
+    _sharedPreference.then((prefs) {
+      prefs.setString(languageCodeKey, value);
     });
   }
 }

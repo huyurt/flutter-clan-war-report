@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/language-type.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/language-type-enum.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/localization/app_localizations.dart';
@@ -7,7 +7,7 @@ import '../../utils/localization/language_provider.dart';
 import '../../utils/theme/theme_provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -48,8 +48,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Switch(
                   value: themeProviderRef.isDarkModeOn,
                   onChanged: (s) {
-                    LanguageType languageType =
-                        s ? LanguageType.tr : LanguageType.en;
+                    LanguageTypeEnum languageType =
+                        s ? LanguageTypeEnum.tr : LanguageTypeEnum.en;
                     AppLocalizations.of(context)
                         .loadWithLocale(Locale(languageType.name))
                         .then((value) {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
-import '../enums/language-type.dart';
+import '../enums/language-type-enum.dart';
 import '../helpers/shared_preference_helper.dart';
 
 class LanguageProvider extends ChangeNotifier {
   late SharedPreferenceHelper _sharedPrefsHelper;
 
-  Locale _appLocale = Locale(LanguageType.en.name);
+  Locale _appLocale = Locale(LanguageTypeEnum.en.name);
 
   LanguageProvider() {
     _sharedPrefsHelper = locator<SharedPreferenceHelper>();
@@ -21,8 +21,8 @@ class LanguageProvider extends ChangeNotifier {
     return _appLocale;
   }
 
-  void changeLanguage(LanguageType languageType) {
-    _appLocale = Locale(LanguageType.tr.name);
+  void changeLanguage(LanguageTypeEnum languageType) {
+    _appLocale = Locale(LanguageTypeEnum.tr.name);
     _sharedPrefsHelper.saveLanguage(languageType.name);
     notifyListeners();
   }
