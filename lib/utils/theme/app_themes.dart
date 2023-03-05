@@ -6,7 +6,7 @@ class AppThemes {
   AppThemes._();
 
   static final ThemeData lightTheme = ThemeData(
-    fontFamily: AppFontFamily.productSans,
+    //fontFamily: AppFontFamily.productSans,
     primarySwatch: MaterialColor(4280361249, {
       50: Color(0xff191919),
       100: Color(0xff333333),
@@ -317,7 +317,7 @@ class AppThemes {
   );
 
   static final ThemeData darkTheme = ThemeData(
-    fontFamily: AppFontFamily.productSans,
+    //fontFamily: AppFontFamily.productSans,
     primarySwatch: MaterialColor(4280361249, {
       50: Color(0xfff2f2f2),
       100: Color(0xffe6e6e6),

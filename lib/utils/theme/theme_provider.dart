@@ -23,7 +23,7 @@ class ThemeProvider extends ChangeNotifier {
     return _isDarkModeOn;
   }
 
-  void changeTheme(bool isDarkModeOn) {
+  void toggleDarkMode(bool isDarkModeOn) {
     _sharedPrefsHelper.saveTheme(isDarkModeOn);
     _isDarkModeOn = isDarkModeOn;
 

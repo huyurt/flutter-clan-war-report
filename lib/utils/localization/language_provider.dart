@@ -13,8 +13,8 @@ class LanguageProvider extends ChangeNotifier {
     _sharedPrefsHelper = locator<SharedPreferenceHelper>();
   }
 
-  Locale get appLocale {
-    _sharedPrefsHelper.appLocale.then((localeValue) {
+  Future<Locale> get appLocale async {
+    await _sharedPrefsHelper.appLocale.then((localeValue) {
       _appLocale = Locale(localeValue);
     });
 
@@ -22,8 +22,9 @@ class LanguageProvider extends ChangeNotifier {
   }
 
   void changeLanguage(LanguageTypeEnum languageType) {
-    _appLocale = Locale(LanguageTypeEnum.tr.name);
+    _appLocale = Locale(languageType.name);
     _sharedPrefsHelper.saveLanguage(languageType.name);
+
     notifyListeners();
   }
 }

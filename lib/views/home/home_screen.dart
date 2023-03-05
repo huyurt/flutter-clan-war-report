@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/language-type-enum.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/constants/localization.dart';
 import '../../utils/localization/app_localizations.dart';
 import '../../utils/localization/language_provider.dart';
 import '../../utils/theme/theme_provider.dart';
+import '../setting/setting_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,67 +15,126 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  final items = [
-    {
-      'title': 'What is Lorem Ipsum?',
-      'description': 'Lorem Ipsum is simply dummy text.',
-      'image': 'https://picsum.photos/200'
-    }
+class _HomeScreenState extends State<HomeScreen> {
+  int currentIndex1 = 0;
+  final example1 = [
+    'Example 1',
+    'Reels',
+    'New Photo',
+    'Activity',
   ];
 
   @override
-  void initState() {
-    context.read<ThemeProvider>();
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(builder: (_, themeProviderRef, __) {
-      return Consumer<LanguageProvider>(builder: (_, languageProviderRef, __) {
+    return Consumer<LanguageProvider>(builder: (_, languageProviderRef, __) {
+      return Consumer<ThemeProvider>(builder: (_, themeProviderRef, __) {
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            leading: const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: FlutterLogo(
-                style: FlutterLogoStyle.markOnly,
+          body: SafeArea(
+            child: NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    floating: false,
+                    forceElevated: innerBoxIsScrolled,
+                    automaticallyImplyLeading: false,
+                    pinned: true,
+                    backgroundColor: context.scaffoldBackgroundColor,
+                    elevation: 0,
+                    actions: [
+                      IconButton(
+                        icon: Icon(Icons.settings,
+                            color:
+                                themeProviderRef.isDarkModeOn ? white : black),
+                        onPressed: () {
+                          const SettingScreen().launch(context);
+                        },
+                      ),
+                    ],
+                    title: Text(AppLocalizations.of(context)
+                        .translate(Localization.Wars)),
+                  ),
+                ];
+              },
+              body: Container(
+                padding: const EdgeInsets.all(16),
+                alignment: Alignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Center(
+                      child: Text(AppLocalizations.of(context)
+                          .translate(example1.elementAt(currentIndex1))),
+                    ),
+                  ],
+                ),
               ),
             ),
-            actions: <Widget>[
-              Tooltip(
-                message: 'Dark Mode',
-                child: Switch(
-                  value: themeProviderRef.isDarkModeOn,
-                  onChanged: (s) {
-                    LanguageTypeEnum languageType =
-                        s ? LanguageTypeEnum.tr : LanguageTypeEnum.en;
-                    AppLocalizations.of(context)
-                        .loadWithLocale(Locale(languageType.name))
-                        .then((value) {
-                      languageProviderRef.changeLanguage(languageType);
-                    });
-                    themeProviderRef.changeTheme(s);
-                    setState(() {});
-                  },
-                ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            onTap: (int index) {
+              setState(() {
+                currentIndex1 = index;
+              });
+            },
+            currentIndex: currentIndex1,
+            type: BottomNavigationBarType.fixed,
+            //selectedItemColor: appStore.iconColor,
+            //unselectedItemColor: appStore.textSecondaryColor,
+            //backgroundColor: appStore.appBarColor,
+            items: [
+              //1
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                    'images/widgets/materialWidgets/mwAppStructureWidgets/BottomNavigation/home.png',
+                    height: 25,
+                    width: 25),
+                activeIcon: Image.asset(
+                    'images/widgets/materialWidgets/mwAppStructureWidgets/BottomNavigation/home_fill.png',
+                    height: 25,
+                    width: 25),
+                label: 'Home',
+              ),
+              //2
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                    'images/widgets/materialWidgets/mwAppStructureWidgets/BottomNavigation/reel.png',
+                    height: 25,
+                    width: 25),
+                activeIcon: Image.asset(
+                    'images/widgets/materialWidgets/mwAppStructureWidgets/BottomNavigation/reel_fill.png',
+                    height: 25,
+                    width: 25),
+                label: 'Reels',
+              ),
+              //3
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                    'images/widgets/materialWidgets/mwAppStructureWidgets/BottomNavigation/gallery.png',
+                    height: 25,
+                    width: 25),
+                activeIcon: Image.asset(
+                    'images/widgets/materialWidgets/mwAppStructureWidgets/BottomNavigation/gallery_fill.png',
+                    height: 25,
+                    width: 25),
+                label: 'Gallery',
+              ),
+              //4
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                    'images/widgets/materialWidgets/mwAppStructureWidgets/BottomNavigation/heart.png',
+                    height: 25,
+                    width: 25),
+                activeIcon: Image.asset(
+                    'images/widgets/materialWidgets/mwAppStructureWidgets/BottomNavigation/heart_fill.png',
+                    height: 25,
+                    width: 25),
+                label: AppLocalizations.of(context)
+                    .translate(Localization.Activity),
               ),
             ],
-          ),
-          body: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ListTile(
-                  title: Text(AppLocalizations.of(context).translate('title')),
-                  subtitle: Text(items[index]['description'] ?? ''),
-                  leading: Image.network(items[index]['image'] ?? ''),
-                ),
-              );
-            },
           ),
         );
       });
