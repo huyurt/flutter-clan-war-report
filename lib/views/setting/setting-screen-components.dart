@@ -36,24 +36,36 @@ void contactBottomSheet(BuildContext context) {
   }
 
   showModalBottomSheet(
-      context: context,
-      backgroundColor: context.scaffoldBackgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: radiusOnly(topRight: defaultRadius, topLeft: defaultRadius)),
-      builder: (builder) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            16.height,
-            Text('Contact Us', style: boldTextStyle(size: 20)),
-            16.height,
-            const Divider(height: 0),
-            options('images/app/socialIcons/ic_instagram.svg', "Instagram", 'https://www.instagram.com/iqonicdesign/?hl=en'),
-            const Divider(height: 0),
-            options('images/app/socialIcons/ic_youtube.svg', "Youtube", 'https://www.youtube.com/iqonicdesign'),
-            const Divider(height: 0),
-            options('images/app/socialIcons/ic_twitter.svg', "Twitter", 'https://twitter.com/iqonicdesign'),
-            16.height,
-          ],
-        );
-      });
+    context: context,
+    backgroundColor: context.scaffoldBackgroundColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: radiusOnly(
+        topRight: defaultRadius,
+        topLeft: defaultRadius,
+      ),
+    ),
+    builder: (builder) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          16.height,
+          Text(
+            'Contact Us',
+            style: boldTextStyle(size: 20),
+          ),
+          16.height,
+          const Divider(height: 0),
+          options('images/app/socialIcons/ic_instagram.svg', "Instagram",
+              'https://www.instagram.com/iqonicdesign/?hl=en'),
+          const Divider(height: 0),
+          options('images/app/socialIcons/ic_youtube.svg', "Youtube",
+              'https://www.youtube.com/iqonicdesign'),
+          const Divider(height: 0),
+          options('images/app/socialIcons/ic_twitter.svg', "Twitter",
+              'https://twitter.com/iqonicdesign'),
+          16.height,
+        ],
+      );
+    },
+  );
 }

@@ -250,16 +250,20 @@ class _SettingScreenState extends State<SettingScreen> {
                                           Row(
                                             children: [
                                               Text(
-                                                  'Version ${data.versionName}',
-                                                  style: secondaryTextStyle(
-                                                      size: 12)),
+                                                'Version ${data.versionName}',
+                                                style: secondaryTextStyle(
+                                                    size: 12),
+                                              ),
                                             ],
                                           ),
                                         ],
                                       ),
-                                    ).onTap(() {
-                                      //AboutUsScreen().launch(context);
-                                    }, borderRadius: radius(defaultRadius)),
+                                    ).onTap(
+                                      () {
+                                        //AboutUsScreen().launch(context);
+                                      },
+                                      borderRadius: radius(defaultRadius),
+                                    ),
                                   ),
                                 ],
                               ).paddingSymmetric(horizontal: 16),
