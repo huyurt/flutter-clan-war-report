@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/language-type-enum.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/localization_enum.dart';
 
 class AppLocalizations {
   final Locale locale;
@@ -54,7 +54,7 @@ class _AppLocalizationsDelegate
   @override
   bool isSupported(Locale locale) {
     // Include all of your supported language codes here
-    return LanguageTypeEnum.values
+    return LocalizationEnum.values
         .map((e) => e.name)
         .contains(locale.languageCode);
   }

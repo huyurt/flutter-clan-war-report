@@ -1,4 +1,0 @@
-enum LanguageTypeEnum {
-  en,
-  tr
-}

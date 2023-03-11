@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:more_useful_clash_of_clans/providers/screen_provider.dart';
 import 'package:more_useful_clash_of_clans/utils/helpers/shared_preference_helper.dart';
-import 'package:more_useful_clash_of_clans/utils/localization/language_provider.dart';
+import 'package:more_useful_clash_of_clans/providers/localization_provider.dart';
 import 'package:more_useful_clash_of_clans/utils/locator.dart';
-import 'package:more_useful_clash_of_clans/utils/theme/theme_provider.dart';
+import 'package:more_useful_clash_of_clans/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'my_app.dart';
@@ -37,8 +38,11 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<ThemeProvider>(
           create: (context) => ThemeProvider(),
         ),
-        ChangeNotifierProvider<LanguageProvider>(
-          create: (context) => LanguageProvider(),
+        ChangeNotifierProvider<LocalizationProvider>(
+          create: (context) => LocalizationProvider(),
+        ),
+        ChangeNotifierProvider<ScreenProvider>(
+          create: (context) => ScreenProvider(),
         ),
       ],
       child: MyApp(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SampleListModel {
+class BottomNavigationBarItemModel {
   Widget? leading;
   String? title;
   String? subTitle;
@@ -11,7 +11,7 @@ class SampleListModel {
   Color? colors;
   Widget? launchWidget;
 
-  SampleListModel(
+  BottomNavigationBarItemModel(
       {this.leading,
       this.title,
       this.subTitle,

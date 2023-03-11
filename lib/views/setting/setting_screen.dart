@@ -9,10 +9,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/constants/app_constants.dart';
 import '../../utils/constants/localization.dart';
-import '../../utils/enums/language-type-enum.dart';
-import '../../utils/localization/language_provider.dart';
+import '../../utils/enums/localization_enum.dart';
+import '../../providers/localization_provider.dart';
 import 'setting-screen-components.dart';
-import '../../utils/theme/theme_provider.dart';
+import '../../providers/theme_provider.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -24,8 +24,8 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<LanguageProvider>(
-      builder: (_, languageProviderRef, __) {
+    return Consumer<LocalizationProvider>(
+      builder: (_, localizationProviderRef, __) {
         return Consumer<ThemeProvider>(
           builder: (_, themeProviderRef, __) {
             return Scaffold(
@@ -54,12 +54,10 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
               body: FutureBuilder(
-                future: languageProviderRef.appLocale,
+                future: localizationProviderRef.appLocale,
                 builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
                   if (asyncSnapshot.data == null) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return Stack();
                   } else {
                     return Stack(
                       alignment: Alignment.center,
@@ -206,16 +204,16 @@ class _SettingScreenState extends State<SettingScreen> {
                                     ),
                                   ).onTap(() async {
                                     Locale appLocale = asyncSnapshot.data;
-                                    LanguageTypeEnum languageType =
+                                    LocalizationEnum localization =
                                         appLocale.languageCode == 'en'
-                                            ? LanguageTypeEnum.tr
-                                            : LanguageTypeEnum.en;
+                                            ? LocalizationEnum.tr
+                                            : LocalizationEnum.en;
                                     AppLocalizations.of(context)
                                         .loadWithLocale(
-                                            Locale(languageType.name))
+                                            Locale(localization.name))
                                         .then((value) {
-                                      languageProviderRef
-                                          .changeLanguage(languageType);
+                                      localizationProviderRef
+                                          .changeLocalization(localization);
                                     });
                                   }, borderRadius: radius(defaultRadius)),
                                   SettingContainerWidget(
