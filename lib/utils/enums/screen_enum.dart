@@ -1,5 +1,5 @@
 enum ScreenEnum {
-  Wars,
-  Clans,
-  Players,
+  wars,
+  clans,
+  players,
 }

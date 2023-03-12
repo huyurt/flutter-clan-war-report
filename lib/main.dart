@@ -1,53 +1,62 @@
+import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:more_useful_clash_of_clans/providers/screen_provider.dart';
-import 'package:more_useful_clash_of_clans/utils/helpers/shared_preference_helper.dart';
-import 'package:more_useful_clash_of_clans/providers/localization_provider.dart';
-import 'package:more_useful_clash_of_clans/utils/locator.dart';
-import 'package:more_useful_clash_of_clans/providers/theme_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:more_useful_clash_of_clans/routes.dart';
+import 'package:more_useful_clash_of_clans/states/theme_mode_state.dart';
+import 'package:more_useful_clash_of_clans/utils/constants/app_constants.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/localization_enum.dart';
+import 'package:more_useful_clash_of_clans/utils/theme/app_themes.dart';
+import 'package:path_provider/path_provider.dart';
 
-import 'my_app.dart';
-
-GetIt locator = GetIt.instance;
-
-main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await setupLocator(locator);
-  await locator.allReady();
-  Locale locale = await initLanguage();
-  runApp(App(
-    locale: locale,
-  ));
+  await EasyLocalization.ensureInitialized();
+  if (Platform.isAndroid) {
+    await FlutterDisplayMode.setHighRefreshRate();
+  }
+  final Directory tmpDir = await getTemporaryDirectory();
+  await Hive.initFlutter(tmpDir.toString());
+  await Hive.openBox(AppConstants.hivePreferenceKey);
+
+  runApp(
+    ProviderScope(
+      child: EasyLocalization(
+        path: 'assets/translations',
+        supportedLocales: <Locale>[
+          Locale(LocalizationEnum.en.name),
+          Locale(LocalizationEnum.tr.name),
+        ],
+        fallbackLocale: Locale(LocalizationEnum.en.name),
+        useFallbackTranslations: true,
+        child: const MyApp(),
+      ),
+    ),
+  );
 }
 
-Future<Locale> initLanguage() async {
-  String languageCode = await locator<SharedPreferenceHelper>().appLocale;
-  return Locale(languageCode);
-}
-
-class App extends StatelessWidget {
-  final Locale locale;
-
-  const App({super.key, required this.locale});
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ThemeProvider>(
-          create: (context) => ThemeProvider(),
-        ),
-        ChangeNotifierProvider<LocalizationProvider>(
-          create: (context) => LocalizationProvider(),
-        ),
-        ChangeNotifierProvider<ScreenProvider>(
-          create: (context) => ScreenProvider(),
-        ),
-      ],
-      child: MyApp(
-        locale: locale,
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ThemeModeState currentTheme = ref.watch(themeProvider);
+
+    return MaterialApp(
+      title: 'More Useful Clash of Clans',
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: currentTheme.themeMode,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      debugShowCheckedModeBanner: false,
+      //home: const SkeletonScreen(),
+      initialRoute: Routes.splash,
+      routes: Routes.routes,
     );
   }
 }

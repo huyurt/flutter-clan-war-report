@@ -8,14 +8,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:more_useful_clash_of_clans/my_app.dart';
+import 'package:more_useful_clash_of_clans/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp(
       key: Key('test'),
-      locale: Locale('tr'),
     ));
 
     // Verify that our counter starts at 0.
