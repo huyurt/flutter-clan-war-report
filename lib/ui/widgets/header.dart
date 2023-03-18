@@ -2,10 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  const Header({super.key, required this.text, this.actions});
+  const Header({super.key, required this.text});
 
   final String text;
-  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +17,6 @@ class Header extends StatelessWidget {
               .textTheme
               .headlineMedium!
               .apply(fontWeightDelta: 2),
-        ),
-        Wrap(
-          direction: Axis.horizontal,
-          crossAxisAlignment: WrapCrossAlignment.end,
-          spacing: 5,
-          runSpacing: 5,
-          children: [
-            ...?actions,
-          ],
         ),
       ],
     );

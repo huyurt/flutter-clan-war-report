@@ -15,7 +15,7 @@ class SecondScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         physics: const BouncingScrollPhysics(),
-        children: <Widget>[
+        children: [
           const Header(text: 'bottom_nav_second'),
           LinkCard(
               title: 'github_card_title',

@@ -39,6 +39,10 @@ class BottomNavBar extends ConsumerWidget {
         unselectedItemColor: Theme.of(context).textTheme.bodySmall!.color,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            icon: const Icon(Ionicons.information_circle_outline),
+            label: tr(Localization.clans),
+          ),
+          BottomNavigationBarItem(
             icon: const Icon(Ionicons.home_outline),
             label: tr(Localization.wars),
           ),

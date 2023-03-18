@@ -5,9 +5,10 @@ import 'package:more_useful_clash_of_clans/ui/screens/wars_screen.dart';
 
 import '../../states/widgets/bottom_nav_bar/bottom_nav_bar_state.dart';
 import '../../utils/enums/screen_enum.dart';
-import '../widgets/app_bar_gone.dart';
+import '../widgets/app_bar_builder.dart';
 import '../widgets/app_floating_action_button.dart';
 import '../widgets/bottom_nav_bar.dart';
+import 'clans_screen.dart';
 import 'first_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -17,6 +18,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ScreenEnum? navScreen = ref.watch(bottomNavProvider) as ScreenEnum?;
     const List<Widget> pageNavigation = <Widget>[
+      ClansScreen(),
       WarsScreen(),
       FirstScreen(),
       SecondScreen(),
@@ -24,11 +26,14 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: const AppBarGone(),
+      appBar: appBarBuilder(context, ref),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: SafeArea(
-          child: pageNavigation.elementAt(navScreen?.index ?? 0),
+          child: IndexedStack(
+            index: navScreen?.index ?? 0,
+            children: pageNavigation,
+          ),
         ),
       ),
       floatingActionButton: Visibility(

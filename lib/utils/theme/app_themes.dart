@@ -343,7 +343,7 @@ class AppThemes {
     primaryColorBrightness: Brightness.dark,
     primaryColorLight: Color(0xff9e9e9e),
     primaryColorDark: Color(0xff000000),
-    accentColor: Color(0xff4285f4),
+    accentColor: Color(0xff808080),
     accentColorBrightness: Brightness.light,
     canvasColor: Color(0xff303030),
     scaffoldBackgroundColor: Color(0xff303030),

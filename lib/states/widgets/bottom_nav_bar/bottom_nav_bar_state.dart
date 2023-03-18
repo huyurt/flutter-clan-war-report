@@ -5,7 +5,7 @@ import '../../../utils/enums/screen_enum.dart';
 final AutoDisposeStateNotifierProvider<BottomNavBarState, Object?>
     bottomNavProvider = StateNotifierProvider.autoDispose(
         (AutoDisposeStateNotifierProviderRef<BottomNavBarState, Object?> ref) {
-  return BottomNavBarState(ScreenEnum.wars);
+  return BottomNavBarState(ScreenEnum.clans);
 });
 
 class BottomNavBarState extends StateNotifier<ScreenEnum> {

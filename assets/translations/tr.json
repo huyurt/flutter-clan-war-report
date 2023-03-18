@@ -7,5 +7,12 @@
   "Wars": "Savaşlar",
   "Clans": "Klanlar",
   "Players": "Oyuncular",
-  "Activity": "Aktivite"
+  "Activity": "Aktivite",
+  "Search": "Ara",
+  "Search Clan": "Klan Ara",
+  "SearchClanMessage": "Yukarıdaki arama kutusuna klan adı ya da klan etiketi girin.",
+  "Location": "Konum",
+  "Members": "Üyeler",
+  "Minimum Level": "Minimum Seviye",
+  "Member": "Üye"
 }

@@ -40,24 +40,23 @@ dependencies:
   google_fonts: ^4.0.3
   intl: ^0.17.0
   nb_utils: ^5.0.5
+  infinite_scroll_pagination: ^3.2.0
 
   # COMMON
-  html: ^0.15.1
-  http: ^0.13.5
-  http_auth: ^1.0.1
+  dio: ^5.0.2
+  easy_localization: ^3.0.1
+  flutter_displaymode: ^0.5.0
+  flutter_dotenv: ^5.0.2
   json_annotation: ^4.8.0
   share_plus: ^6.3.1
   url_launcher: ^6.1.9
   system_theme: ^2.1.0
-  easy_localization: ^3.0.1
-  flutter_displaymode: ^0.5.0
 
   # STATE MANAGEMENT
   flutter_riverpod: ^2.3.1
   path_provider: ^2.0.13
 
   # STORAGE
-  shared_preferences: ^2.0.17
   drift: ^2.5.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -120,6 +119,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/translations/
     - images/
     - images/app/icons/

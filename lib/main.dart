@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:more_useful_clash_of_clans/routes.dart';
@@ -14,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
   await EasyLocalization.ensureInitialized();
   if (Platform.isAndroid) {
     await FlutterDisplayMode.setHighRefreshRate();
@@ -46,6 +48,7 @@ class MyApp extends ConsumerWidget {
     final ThemeModeState currentTheme = ref.watch(themeProvider);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'More Useful Clash of Clans',
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
@@ -53,8 +56,6 @@ class MyApp extends ConsumerWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      debugShowCheckedModeBanner: false,
-      //home: const SkeletonScreen(),
       initialRoute: Routes.splash,
       routes: Routes.routes,
     );

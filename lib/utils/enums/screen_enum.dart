@@ -1,5 +1,6 @@
 enum ScreenEnum {
-  wars,
   clans,
+  wars,
+  test,//clans,
   players,
 }

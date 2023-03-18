@@ -1,27 +1,24 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:more_useful_clash_of_clans/utils/constants/localization.dart';
 
-import '../../utils/constants/localization.dart';
-
-class WarsScreen extends ConsumerStatefulWidget {
-  const WarsScreen({super.key});
+class ClansScreen extends ConsumerStatefulWidget {
+  const ClansScreen({super.key});
 
   @override
-  ConsumerState<WarsScreen> createState() => _WarsScreenState();
+  ConsumerState<ClansScreen> createState() => _ClansScreenState();
 }
 
-class _WarsScreenState extends ConsumerState<WarsScreen> {
+class _ClansScreenState extends ConsumerState<ClansScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         physics: const BouncingScrollPhysics(),
-        children: <Widget>[
-          Text(
-            tr(Localization.wars),
-          )
+        children: [
+          Text(tr(Localization.clans)),
         ],
       ),
     );
