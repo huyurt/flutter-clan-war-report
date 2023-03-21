@@ -1,23 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/localization.dart';
+import 'package:more_useful_clash_of_clans/core/constants/locale_keys.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../models/api/search_clans_request_model.dart';
 import '../../../models/api/search_clans_response_model.dart';
 import '../../../services/coc/coc_api_clans.dart';
 
-class SearchClanScreen extends ConsumerStatefulWidget {
+class SearchClanScreen extends StatefulWidget {
   const SearchClanScreen({super.key});
 
   @override
-  ConsumerState<SearchClanScreen> createState() => _SearchClanScreenState();
+  State<SearchClanScreen> createState() => _SearchClanScreenState();
 }
 
-class _SearchClanScreenState extends ConsumerState<SearchClanScreen> {
+class _SearchClanScreenState extends State<SearchClanScreen> {
   late final TextEditingController _clanNameFilterController;
   final PagingController<String, SearchedClanItem> _pagingController =
       PagingController(firstPageKey: '');
@@ -92,7 +91,7 @@ class _SearchClanScreenState extends ConsumerState<SearchClanScreen> {
                     padding: const EdgeInsets.only(left: 10, top: 15),
                     child: Row(
                       children: [
-                        Text(tr(Localization.members)),
+                        Text(tr(LocaleKey.members)),
                         const Spacer(flex: 1),
                         Text(
                             '${_members.start.round().toString()} - ${_members.end.round().toString()}')
@@ -137,7 +136,7 @@ class _SearchClanScreenState extends ConsumerState<SearchClanScreen> {
                     padding: const EdgeInsets.only(left: 10, top: 15),
                     child: Row(
                       children: [
-                        Text(tr(Localization.minimumLevel)),
+                        Text(tr(LocaleKey.minimumLevel)),
                         const Spacer(flex: 1),
                         Text(_minClanLevel.toStringAsFixed(0)),
                       ],
@@ -196,7 +195,7 @@ class _SearchClanScreenState extends ConsumerState<SearchClanScreen> {
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
-            hintText: tr(Localization.search),
+            hintText: tr(LocaleKey.search),
           ),
           controller: _clanNameFilterController,
         ),
@@ -226,7 +225,7 @@ class _SearchClanScreenState extends ConsumerState<SearchClanScreen> {
                           padding: EdgeInsets.symmetric(vertical: 5.0)),
                       Center(
                         child: Text(
-                          tr(Localization.searchClan),
+                          tr(LocaleKey.searchClan),
                           style: const TextStyle(fontSize: 20.0),
                         ),
                       ),
@@ -235,7 +234,7 @@ class _SearchClanScreenState extends ConsumerState<SearchClanScreen> {
                             vertical: 15.0, horizontal: 75.0),
                         child: Center(
                           child: Text(
-                            tr(Localization.searchClanMessage),
+                            tr(LocaleKey.searchClanMessage),
                             textAlign: TextAlign.center,
                           ),
                         ),

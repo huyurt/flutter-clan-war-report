@@ -1,27 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/constants/localization.dart';
+import '../../core/constants/locale_keys.dart';
 
-class WarsScreen extends ConsumerStatefulWidget {
+class WarsScreen extends StatelessWidget {
   const WarsScreen({super.key});
 
-  @override
-  ConsumerState<WarsScreen> createState() => _WarsScreenState();
-}
-
-class _WarsScreenState extends ConsumerState<WarsScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         physics: const BouncingScrollPhysics(),
-        children: <Widget>[
+        children: [
           Text(
-            tr(Localization.wars),
-          )
+            tr(LocaleKey.wars),
+          ),
         ],
       ),
     );

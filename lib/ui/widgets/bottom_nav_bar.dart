@@ -1,19 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 
-import '../../states/widgets/bottom_nav_bar/bottom_nav_bar_state.dart';
-import '../../utils/constants/localization.dart';
-import '../../utils/enums/screen_enum.dart';
+import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
+import '../../core/constants/locale_keys.dart';
+import '../../core/enums/screen_enum.dart';
 
-class BottomNavBar extends ConsumerWidget {
+class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ScreenEnum? navScreen = ref.watch(bottomNavProvider) as ScreenEnum?;
-
+  Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(top: 1, right: 4, left: 4),
       elevation: 4,
@@ -26,12 +24,7 @@ class BottomNavBar extends ConsumerWidget {
         ),
       ),
       child: BottomNavigationBar(
-        currentIndex: navScreen?.index ?? 0,
-        onTap: (int index) {
-          ref
-              .read(bottomNavProvider.notifier)
-              .setAndPersistValue(ScreenEnum.values[index]);
-        },
+        currentIndex: context.read<BottomNavigationBarCubit>().state.index,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -40,21 +33,24 @@ class BottomNavBar extends ConsumerWidget {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: const Icon(Ionicons.information_circle_outline),
-            label: tr(Localization.clans),
+            label: tr(LocaleKey.clans),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Ionicons.home_outline),
-            label: tr(Localization.wars),
+            label: tr(LocaleKey.wars),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Ionicons.information_circle_outline),
-            label: tr(Localization.clans),
+            label: tr(LocaleKey.clans),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Ionicons.planet),
-            label: tr(Localization.players),
+            label: tr(LocaleKey.players),
           ),
         ],
+        onTap: (int index) {
+          context.read<BottomNavigationBarCubit>().setScreen(ScreenEnum.values[index]);
+        },
       ),
     );
   }

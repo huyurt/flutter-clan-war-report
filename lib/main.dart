@@ -2,62 +2,75 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:more_useful_clash_of_clans/core/helpers/enum_helper.dart';
 import 'package:more_useful_clash_of_clans/routes.dart';
-import 'package:more_useful_clash_of_clans/states/theme_mode_state.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/app_constants.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/localization_enum.dart';
-import 'package:more_useful_clash_of_clans/utils/theme/app_themes.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:more_useful_clash_of_clans/core/themes/app_themes.dart';
+
+import 'bloc/app_bloc_observer.dart';
+import 'bloc/locale/locale_cubit.dart';
+import 'bloc/theme/theme_cubit.dart';
+import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
+import 'core/constants/locale_keys.dart';
+import 'core/enums/locale_enum.dart';
+import 'core/helpers/cache_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   await EasyLocalization.ensureInitialized();
+  await CacheHelper.init();
   if (Platform.isAndroid) {
     await FlutterDisplayMode.setHighRefreshRate();
   }
-  final Directory tmpDir = await getTemporaryDirectory();
-  await Hive.initFlutter(tmpDir.toString());
-  await Hive.openBox(AppConstants.hivePreferenceKey);
+  Bloc.observer = const AppBlocObserver();
 
   runApp(
-    ProviderScope(
-      child: EasyLocalization(
-        path: 'assets/translations',
-        supportedLocales: <Locale>[
-          Locale(LocalizationEnum.en.name),
-          Locale(LocalizationEnum.tr.name),
-        ],
-        fallbackLocale: Locale(LocalizationEnum.en.name),
-        useFallbackTranslations: true,
-        child: const MyApp(),
-      ),
+    EasyLocalization(
+      path: 'assets/translations',
+      supportedLocales: EnumHelper.getLocales(),
+      fallbackLocale: Locale(LocaleEnum.en.name),
+      useFallbackTranslations: true,
+      child: const App(),
     ),
   );
 }
 
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ThemeModeState currentTheme = ref.watch(themeProvider);
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'More Useful Clash of Clans',
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
-      themeMode: currentTheme.themeMode,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      initialRoute: Routes.splash,
-      routes: Routes.routes,
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LocaleCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ThemeCubit(),
+        ),
+        BlocProvider(
+          create: (context) => BottomNavigationBarCubit(),
+        ),
+      ],
+      child: Builder(
+        builder: (context) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: tr(LocaleKey.appName),
+            theme: AppThemes.lightTheme,
+            darkTheme: AppThemes.darkTheme,
+            themeMode: context.watch<ThemeCubit>().state,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.watch<LocaleCubit>().state,
+            initialRoute: Routes.splash,
+            routes: Routes.routes,
+          );
+        },
+      ),
     );
   }
 }

@@ -1,32 +1,33 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:more_useful_clash_of_clans/ui/widgets/header.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../utils/constants/localization.dart';
-import '../../utils/enums/localization_enum.dart';
+import '../../bloc/locale/locale_cubit.dart';
+import '../../core/constants/locale_keys.dart';
+import '../../core/enums/locale_enum.dart';
 import '../widgets/first_screen/theme_card.dart';
 
-class SettingScreen extends ConsumerWidget {
+class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Material(
       child: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           physics: const BouncingScrollPhysics(),
-          children: <Widget>[
+          children: [
             ElevatedButton(
               child: const Icon(Icons.arrow_back),
               onPressed: () {
                 finish(context);
               },
             ),
-            const Header(text: Localization.settings),
+            const Header(text: LocaleKey.settings),
             Card(
               elevation: 2,
               shape: const RoundedRectangleBorder(
@@ -34,20 +35,21 @@ class SettingScreen extends ConsumerWidget {
               ),
               child: SwitchListTile(
                 onChanged: (bool newValue) {
-                  context.setLocale(newValue
-                      ? Locale(LocalizationEnum.tr.name)
-                      : Locale(LocalizationEnum.en.name));
+                  LocaleEnum localType =
+                      newValue ? LocaleEnum.tr : LocaleEnum.en;
+                  context.setLocale(Locale(localType.name));
+                  BlocProvider.of<LocaleCubit>(context).changeLocale(localType);
                 },
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
-                value: context.locale == Locale(LocalizationEnum.tr.name),
+                value: context.locale == Locale(LocaleEnum.tr.name),
                 title: Row(
-                  children: <Widget>[
+                  children: [
                     const Icon(Ionicons.language_outline),
                     const SizedBox(width: 16),
                     Text(
-                      tr(Localization.language),
+                      tr(LocaleKey.language),
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!
@@ -66,17 +68,17 @@ class SettingScreen extends ConsumerWidget {
               mainAxisSpacing: 8,
               childAspectRatio: 1.75 / 1,
               padding: EdgeInsets.zero,
-              children: const <ThemeCard>[
+              children: const [
                 ThemeCard(
-                  mode: ThemeMode.system,
+                  themeMode: ThemeMode.system,
                   icon: Ionicons.contrast_outline,
                 ),
                 ThemeCard(
-                  mode: ThemeMode.light,
+                  themeMode: ThemeMode.light,
                   icon: Ionicons.sunny_outline,
                 ),
                 ThemeCard(
-                  mode: ThemeMode.dark,
+                  themeMode: ThemeMode.dark,
                   icon: Ionicons.moon_outline,
                 ),
               ],

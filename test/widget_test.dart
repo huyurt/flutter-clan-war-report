@@ -13,7 +13,7 @@ import 'package:more_useful_clash_of_clans/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp(
+    await tester.pumpWidget(const App(
       key: Key('test'),
     ));
 

@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../states/widgets/bottom_nav_bar/bottom_nav_bar_state.dart';
-import '../../utils/constants/localization.dart';
-import '../../utils/enums/screen_enum.dart';
-import '../screens/setting_screen.dart';
+import '../../core/constants/locale_keys.dart';
+import '../../core/enums/screen_enum.dart';
+import '../view/setting_screen.dart';
 import 'app_bar_widget.dart';
 import 'app_bar_gone.dart';
 
-PreferredSizeWidget appBarBuilder(BuildContext context, WidgetRef ref) {
-  final ScreenEnum? navScreen = ref.watch(bottomNavProvider) as ScreenEnum?;
-
-  switch (navScreen) {
+PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
+  switch (screenType) {
     case ScreenEnum.wars:
       return AppBarWidget(
-        title: Localization.wars,
+        title: LocaleKey.wars,
         actions: [
           IconButton(
             icon: Icon(
@@ -31,15 +27,14 @@ PreferredSizeWidget appBarBuilder(BuildContext context, WidgetRef ref) {
       );
     case ScreenEnum.clans:
       return AppBarWidget(
-        title: Localization.clans,
+        title: LocaleKey.clans,
         actions: [
           IconButton(
             icon: Icon(
               Ionicons.reload,
               color: context.theme.accentColor,
             ),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
         ],
       );

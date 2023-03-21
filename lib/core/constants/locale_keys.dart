@@ -1,4 +1,5 @@
-class Localization {
+class LocaleKey {
+  static const appName = 'AppName';
   static const theme = 'Theme';
   static const settings = 'Settings';
   static const language = 'Language';

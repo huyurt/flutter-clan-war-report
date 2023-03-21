@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../../utils/constants/app_constants.dart';
+import '../../core/constants/app_constants.dart';
 
 class CocApi {
   static Dio dio() {

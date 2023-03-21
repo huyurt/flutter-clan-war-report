@@ -1,24 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../states/widgets/bottom_nav_bar/bottom_nav_bar_state.dart';
-import '../../utils/constants/localization.dart';
-import '../../utils/enums/screen_enum.dart';
+import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
+import '../../core/constants/locale_keys.dart';
+import '../../core/enums/screen_enum.dart';
 import 'clans_screen/search_clan_screen.dart';
 
-class AppFloatingActionButton extends ConsumerWidget {
+class AppFloatingActionButton extends StatelessWidget {
   const AppFloatingActionButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ScreenEnum? navScreen = ref.watch(bottomNavProvider) as ScreenEnum?;
-
-    switch (navScreen) {
+  Widget build(BuildContext context) {
+    switch (context.read<BottomNavigationBarCubit>().state.screenType) {
       case ScreenEnum.clans:
         return FloatingActionButton.extended(
-          label: Text(tr(Localization.search)),
+          label: Text(tr(LocaleKey.search)),
           icon: const Icon(Icons.search),
           onPressed: () {
             const SearchClanScreen().launch(context);
@@ -26,7 +24,7 @@ class AppFloatingActionButton extends ConsumerWidget {
         );
       default:
         return FloatingActionButton.extended(
-          label: Text(tr(Localization.search)),
+          label: Text(tr(LocaleKey.search)),
           icon: const Icon(Icons.search),
           onPressed: () {
             toast('...Ekleniyor');

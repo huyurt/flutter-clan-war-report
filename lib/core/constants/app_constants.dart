@@ -1,6 +1,7 @@
 class AppConstants {
   static const hivePreferenceKey = 'preferences';
-  static const hiveThemeKey = 'themeMode';
+  static const hiveLocaleKey = 'localeKey';
+  static const hiveThemeKey = 'themeKey';
 
   static const envCocBaseUrlKey = 'COC_BASE_URL';
   static const envCocAuthTokenKey = 'COC_AUTH_TOKEN';

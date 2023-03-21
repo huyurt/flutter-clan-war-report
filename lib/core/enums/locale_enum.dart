@@ -1,0 +1,4 @@
+enum LocaleEnum {
+  en,
+  tr
+}

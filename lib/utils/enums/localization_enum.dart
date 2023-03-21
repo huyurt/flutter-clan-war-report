@@ -1,4 +1,0 @@
-enum LocalizationEnum {
-  en,
-  tr
-}
