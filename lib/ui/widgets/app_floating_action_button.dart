@@ -13,7 +13,7 @@ class AppFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (context.read<BottomNavigationBarCubit>().state.screenType) {
+    switch (context.watch<BottomNavigationBarCubit>().state.screenType) {
       case ScreenEnum.clans:
         return FloatingActionButton.extended(
           label: Text(tr(LocaleKey.search)),

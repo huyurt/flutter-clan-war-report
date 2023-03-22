@@ -24,13 +24,13 @@ class BottomNavBar extends StatelessWidget {
         ),
       ),
       child: BottomNavigationBar(
-        currentIndex: context.read<BottomNavigationBarCubit>().state.index,
+        currentIndex: context.watch<BottomNavigationBarCubit>().state.index,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         backgroundColor: Colors.transparent,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).textTheme.bodySmall!.color,
-        items: <BottomNavigationBarItem>[
+        items: [
           BottomNavigationBarItem(
             icon: const Icon(Ionicons.information_circle_outline),
             label: tr(LocaleKey.clans),

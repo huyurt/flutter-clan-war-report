@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const List<Widget> pageNavigation = <Widget>[
+    const List<Widget> pageNavigation = [
       ClansScreen(),
       WarsScreen(),
       FirstScreen(),
