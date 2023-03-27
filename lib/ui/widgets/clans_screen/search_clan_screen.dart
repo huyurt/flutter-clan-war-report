@@ -1,13 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:more_useful_clash_of_clans/core/constants/locale_key.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../../models/api/search_clans_request_model.dart';
-import '../../../models/api/search_clans_response_model.dart';
-import '../../../services/coc/coc_api_clans.dart';
+import '../../../bloc/widgets/search_clan/search_clan_bloc.dart';
+import '../../../bloc/widgets/search_clan/search_clan_event.dart';
+import '../../../bloc/widgets/search_clan/search_clan_state.dart';
+import '../bottom_loader.dart';
 
 class SearchClanScreen extends StatefulWidget {
   const SearchClanScreen({super.key});
@@ -17,56 +18,54 @@ class SearchClanScreen extends StatefulWidget {
 }
 
 class _SearchClanScreenState extends State<SearchClanScreen> {
+  late SearchClanBloc _searchClanBloc;
+
   late final TextEditingController _clanNameFilterController;
-  final PagingController<String, SearchedClanItem> _pagingController =
-      PagingController(firstPageKey: '');
   RangeValues _members = const RangeValues(2, 50);
   double _minClanLevel = 2.0;
 
   @override
   void initState() {
     super.initState();
+    _searchClanBloc = context.read<SearchClanBloc>();
     _clanNameFilterController = TextEditingController()
       ..addListener(() {
-        _pagingController.refresh();
-        performFilter();
+        _performSearch();
       });
-    _pagingController.addPageRequestListener((pageKey) {
-      performFilter();
-    });
   }
 
   @override
   void dispose() {
     _clanNameFilterController.dispose();
-    _pagingController.dispose();
     super.dispose();
-  }
-
-  void performFilter() {
-    Future.delayed(const Duration(milliseconds: 500), () async {
-      if (_clanNameFilterController.text.length > 2) {
-        SearchClansRequestModel input = SearchClansRequestModel(
-          clanName: _clanNameFilterController.text,
-          minMembers: _members.start.round(),
-          maxMembers: _members.end.round(),
-          minClanLevel: _minClanLevel.round(),
-          after: _pagingController.nextPageKey,
-        );
-        SearchClansResponseModel? clans = await CocApiClans.searchClans(input);
-
-        _pagingController.appendPage(clans?.items as List<SearchedClanItem>,
-            clans?.paging.cursors.after);
-      } else {
-        _pagingController.refresh();
-      }
-      setState(() {});
-    });
   }
 
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
+  }
+
+  void _performSearch() {
+    _searchClanBloc.add(
+      TextChanged(
+        clanName: _clanNameFilterController.text,
+        minMembers: _members.start.round(),
+        maxMembers: _members.end.round(),
+        minClanLevel: _minClanLevel.round(),
+      ),
+    );
+  }
+
+  void _onClearTapped() {
+    _clanNameFilterController.text = '';
+    _searchClanBloc.add(
+      TextChanged(
+        clanName: _clanNameFilterController.text,
+        minMembers: _members.start.round(),
+        maxMembers: _members.end.round(),
+        minClanLevel: _minClanLevel.round(),
+      ),
+    );
   }
 
   showFilter(BuildContext aContext) {
@@ -196,6 +195,10 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             hintText: tr(LocaleKey.search),
+            //suffixIcon: GestureDetector(
+            //  onTap: _onClearTapped,
+            //  child: const Icon(Icons.clear),
+            //),
           ),
           controller: _clanNameFilterController,
         ),
@@ -211,67 +214,78 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
           ),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          (_pagingController.itemList?.length ?? 0) == 0
-              ? SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.search, size: 50.0),
-                      const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5.0)),
-                      Center(
-                        child: Text(
-                          tr(LocaleKey.searchClan),
-                          style: const TextStyle(fontSize: 20.0),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15.0, horizontal: 75.0),
-                        child: Center(
-                          child: Text(
-                            tr(LocaleKey.searchClanMessage),
-                            textAlign: TextAlign.center,
+      body: BlocBuilder<SearchClanBloc, SearchClanState>(
+        builder: (context, state) {
+          if (state is SearchStateLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is SearchStateError) {
+            return Center(child: Text(tr('search_failed_message')));
+          }
+          if (state is SearchStateSuccess) {
+            if (state.items.isEmpty) {
+              return Center(child: Text(tr('search_no_result_message')));
+            }
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return index >= state.items.length
+                    ? const BottomLoader()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              if (!(state.items[index].badgeUrls?.small
+                                      ?.isEmptyOrNull ??
+                                  true))
+                                Image.network(
+                                  state.items[index].badgeUrls?.small ?? '',
+                                  fit: BoxFit.cover,
+                                ),
+                              Text(
+                                  '${state.items[index].tag} ${state.items[index].name} ${state.items[index].type}'),
+                              const Spacer(flex: 1),
+                              Text('${state.items[index].members}/50'),
+                              const Spacer(flex: 1),
+                              Text(
+                                '${state.items[index].clanPoints}',
+                                textAlign: TextAlign.right,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              : PagedSliverList<String, SearchedClanItem>(
-                  pagingController: _pagingController,
-                  builderDelegate: PagedChildBuilderDelegate<SearchedClanItem>(
-                      itemBuilder: (context, item, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      child: SizedBox(
-                        height: 50,
-                        child: Row(
-                          children: [
-                            if (!(item.badgeUrls?.small?.isEmptyOrNull ?? true))
-                              Image.network(
-                                item.badgeUrls?.small ?? '',
-                                fit: BoxFit.cover,
-                              ),
-                            Text('${item.tag} ${item.name} ${item.type}'),
-                            const Spacer(flex: 1),
-                            Text('${item.members}/50'),
-                            const Spacer(flex: 1),
-                            Text(
-                              '${item.clanPoints}',
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
+                      );
+              },
+              itemCount: state.items.length,
+              //controller: _scrollController,
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.search, size: 50.0),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
+              Center(
+                child: Text(
+                  tr(LocaleKey.searchClan),
+                  style: const TextStyle(fontSize: 20.0),
                 ),
-        ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 75.0),
+                child: Center(
+                  child: Text(
+                    tr(LocaleKey.searchClanMessage),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

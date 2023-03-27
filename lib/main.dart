@@ -13,6 +13,7 @@ import 'bloc/app_bloc_observer.dart';
 import 'bloc/locale/locale_cubit.dart';
 import 'bloc/theme/theme_cubit.dart';
 import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
+import 'bloc/widgets/search_clan/search_clan_bloc.dart';
 import 'core/constants/locale_key.dart';
 import 'core/enums/locale_enum.dart';
 import 'core/helpers/cache_helper.dart';
@@ -46,14 +47,15 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => LocaleCubit(),
+          create: (_) => LocaleCubit(),
         ),
         BlocProvider(
-          create: (context) => ThemeCubit(),
+          create: (_) => ThemeCubit(),
         ),
         BlocProvider(
-          create: (context) => BottomNavigationBarCubit(),
+          create: (_) => BottomNavigationBarCubit(),
         ),
+        BlocProvider<SearchClanBloc>(create: (_) => SearchClanBloc()),
       ],
       child: Builder(
         builder: (context) {

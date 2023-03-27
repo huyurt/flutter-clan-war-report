@@ -5,7 +5,7 @@ import '../../models/api/search_clans_request_model.dart';
 import '../../models/api/search_clans_response_model.dart';
 
 class CocApiClans {
-  static Future<SearchClansResponseModel>? searchClans(
+  static Future<SearchClansResponseModel> searchClans(
       SearchClansRequestModel input) async {
     Map<String, dynamic> parameters = {
       'limit': 20,
