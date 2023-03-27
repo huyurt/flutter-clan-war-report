@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/ui/view/second_screen.dart';
+import 'package:more_useful_clash_of_clans/ui/view/setting_screen.dart';
 import 'package:more_useful_clash_of_clans/ui/view/wars_screen.dart';
 
 import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       ClansScreen(),
       WarsScreen(),
       FirstScreen(),
-      SecondScreen(),
+      SettingScreen(),
     ];
 
     return BlocBuilder<BottomNavigationBarCubit, BottomNavigationBarState>(

@@ -13,7 +13,7 @@ import 'bloc/app_bloc_observer.dart';
 import 'bloc/locale/locale_cubit.dart';
 import 'bloc/theme/theme_cubit.dart';
 import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
-import 'core/constants/locale_keys.dart';
+import 'core/constants/locale_key.dart';
 import 'core/enums/locale_enum.dart';
 import 'core/helpers/cache_helper.dart';
 

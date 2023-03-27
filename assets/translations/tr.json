@@ -1,5 +1,7 @@
 {
   "AppName": "More Useful Clash of Clans",
+  "en": "İngilizce",
+  "tr": "Türkçe",
   "Theme": "Tema",
   "Settings": "Ayarlar",
   "Language": "Dil",
@@ -15,5 +17,6 @@
   "Location": "Konum",
   "Members": "Üyeler",
   "Minimum Level": "Minimum Seviye",
-  "Member": "Üye"
+  "Member": "Üye",
+  "SelectALanguage": "Bir dil seçiniz"
 }

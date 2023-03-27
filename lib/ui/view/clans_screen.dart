@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/core/constants/locale_keys.dart';
+import 'package:more_useful_clash_of_clans/core/constants/locale_key.dart';
 
 class ClansScreen extends StatefulWidget {
   const ClansScreen({super.key});

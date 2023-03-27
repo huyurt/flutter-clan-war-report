@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:more_useful_clash_of_clans/core/enums/locale_enum.dart';
 
+import '../constants/app_constants.dart';
 import '../enums/theme_enum.dart';
 
 class EnumHelper {
@@ -33,9 +34,23 @@ class EnumHelper {
     return Locale(localeType.name);
   }
 
+  static LocaleEnum getLocaleType(Locale locale) {
+    return LocaleEnum.values
+        .firstWhere((element) => element.name == locale.languageCode);
+  }
+
   static List<Locale> getLocales() {
     return LocaleEnum.values
         .map((localeType) => Locale(localeType.name))
         .toList();
+  }
+
+  static String getCountryCode(LocaleEnum localeType) {
+    switch (localeType) {
+      case LocaleEnum.en:
+        return AppConstants.englishFlagCode;
+      default:
+        return localeType.name;
+    }
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
-import '../../core/constants/locale_keys.dart';
+import '../../core/constants/locale_key.dart';
 import '../../core/enums/screen_enum.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -40,12 +40,12 @@ class BottomNavBar extends StatelessWidget {
             label: tr(LocaleKey.wars),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Ionicons.information_circle_outline),
-            label: tr(LocaleKey.clans),
+            icon: const Icon(Ionicons.planet_outline),
+            label: tr(LocaleKey.players),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Ionicons.planet),
-            label: tr(LocaleKey.players),
+            icon: const Icon(Ionicons.settings_outline),
+            label: tr(LocaleKey.settings),
           ),
         ],
         onTap: (int index) {

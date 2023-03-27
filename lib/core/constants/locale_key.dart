@@ -16,4 +16,7 @@ class LocaleKey {
   static const members = 'Members';
   static const minimumLevel = 'Minimum Level';
   static const member = 'Member';
+  static const en = 'en';
+  static const tr = 'tr';
+  static const selectALanguage = 'SelectALanguage';
 }

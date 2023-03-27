@@ -1,4 +1,7 @@
 {
   "AppName": "More Useful Clash of Clans",
-  "SearchClanMessage": "Enter the clan name or clan tag in the search field above."
+  "en": "English",
+  "tr": "Turkish",
+  "SearchClanMessage": "Enter the clan name or clan tag in the search field above.",
+  "SelectALanguage": "Select a language"
 }
