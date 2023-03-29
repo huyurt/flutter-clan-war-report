@@ -6,7 +6,7 @@ abstract class SearchClanState extends Equatable {
   const SearchClanState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class SearchStateEmpty extends SearchClanState {}
@@ -14,15 +14,17 @@ class SearchStateEmpty extends SearchClanState {}
 class SearchStateLoading extends SearchClanState {}
 
 class SearchStateSuccess extends SearchClanState {
-  const SearchStateSuccess(this.items);
+  const SearchStateSuccess({this.after, required this.items});
 
+  final String? after;
   final List<SearchedClanItem> items;
 
   @override
-  List<Object> get props => [items];
+  List<Object?> get props => [after, items];
 
   @override
-  String toString() => 'SearchStateSuccess { items: ${items.length} }';
+  String toString() =>
+      'SearchStateSuccess { after: $after, items: ${items.length} }';
 }
 
 class SearchStateError extends SearchClanState {
@@ -31,5 +33,5 @@ class SearchStateError extends SearchClanState {
   final String error;
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [error];
 }

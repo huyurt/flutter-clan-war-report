@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/core/enums/locale_enum.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/locale_enum.dart';
 
 import '../constants/app_constants.dart';
 import '../enums/theme_enum.dart';

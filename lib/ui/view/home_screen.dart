@@ -4,7 +4,7 @@ import 'package:more_useful_clash_of_clans/ui/view/setting_screen.dart';
 import 'package:more_useful_clash_of_clans/ui/view/wars_screen.dart';
 
 import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
-import '../../core/enums/screen_enum.dart';
+import '../../utils/enums/screen_enum.dart';
 import '../widgets/app_bar_builder.dart';
 import '../widgets/app_floating_action_button.dart';
 import '../widgets/bottom_nav_bar.dart';

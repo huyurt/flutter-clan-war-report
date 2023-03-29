@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
-import '../../core/constants/locale_key.dart';
-import '../../core/enums/screen_enum.dart';
+import '../../utils/constants/locale_key.dart';
+import '../../utils/enums/screen_enum.dart';
 import 'clans_screen/search_clan_screen.dart';
 
 class AppFloatingActionButton extends StatelessWidget {

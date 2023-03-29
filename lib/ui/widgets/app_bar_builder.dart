@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../core/constants/locale_key.dart';
-import '../../core/enums/screen_enum.dart';
+import '../../utils/constants/locale_key.dart';
+import '../../utils/enums/screen_enum.dart';
 import 'app_bar_widget.dart';
 import 'app_bar_gone.dart';
 

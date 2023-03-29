@@ -3,8 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
-import '../../core/constants/locale_key.dart';
-import '../../core/helpers/enum_helper.dart';
+import '../../utils/constants/locale_key.dart';
+import '../../utils/helpers/enum_helper.dart';
 import '../widgets/first_screen/theme_card.dart';
 import '../widgets/setting_screen/grid_item.dart';
 import '../widgets/setting_screen/language_selector_dialog.dart';

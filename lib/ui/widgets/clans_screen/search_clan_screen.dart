@@ -2,12 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:more_useful_clash_of_clans/core/constants/locale_key.dart';
+import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../bloc/widgets/search_clan/search_clan_bloc.dart';
 import '../../../bloc/widgets/search_clan/search_clan_event.dart';
 import '../../../bloc/widgets/search_clan/search_clan_state.dart';
+import '../../../utils/constants/app_constants.dart';
+import '../../../models/api/search_clans_request_model.dart';
 import '../bottom_loader.dart';
 
 class SearchClanScreen extends StatefulWidget {
@@ -20,23 +22,36 @@ class SearchClanScreen extends StatefulWidget {
 class _SearchClanScreenState extends State<SearchClanScreen> {
   late SearchClanBloc _searchClanBloc;
 
-  late final TextEditingController _clanNameFilterController;
-  RangeValues _members = const RangeValues(2, 50);
-  double _minClanLevel = 2.0;
+  final _listController = ScrollController();
+  String? _after = '';
+
+  final TextEditingController _clanFilterController = TextEditingController();
+  RangeValues _members = const RangeValues(
+      AppConstants.minMembersFilter, AppConstants.maxMembersFilter);
+  double _minClanLevel = AppConstants.minClanLevelFilter;
+  String? _prevClanFilter;
 
   @override
   void initState() {
     super.initState();
     _searchClanBloc = context.read<SearchClanBloc>();
-    _clanNameFilterController = TextEditingController()
-      ..addListener(() {
-        _performSearch();
-      });
+    _searchClanBloc.add(ClearFilter());
+
+    _listController.addListener(_onScroll);
+    _clanFilterController.addListener(() {
+      if (_prevClanFilter != _clanFilterController.text) {
+        _prevClanFilter = _clanFilterController.text;
+        _performSearch(false);
+      }
+    });
   }
 
   @override
   void dispose() {
-    _clanNameFilterController.dispose();
+    _clanFilterController.dispose();
+    _listController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
@@ -45,28 +60,66 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
     if (mounted) super.setState(fn);
   }
 
-  void _performSearch() {
-    _searchClanBloc.add(
-      TextChanged(
-        clanName: _clanNameFilterController.text,
-        minMembers: _members.start.round(),
-        maxMembers: _members.end.round(),
-        minClanLevel: _minClanLevel.round(),
-      ),
-    );
+  void _onScroll() {
+    if (_isBottom) {
+      _searchClanBloc.add(
+        NextPageFetched(
+          searchTerm: SearchClansRequestModel(
+            clanName: _clanFilterController.text,
+            minMembers: _members.start.round(),
+            maxMembers: _members.end.round(),
+            minClanLevel: _minClanLevel.round(),
+            after: _after,
+          ),
+        ),
+      );
+    }
   }
 
-  void _onClearTapped() {
-    _clanNameFilterController.text = '';
-    _searchClanBloc.add(
-      TextChanged(
-        clanName: _clanNameFilterController.text,
-        minMembers: _members.start.round(),
-        maxMembers: _members.end.round(),
-        minClanLevel: _minClanLevel.round(),
-      ),
-    );
+  bool get _isBottom {
+    if (!_listController.hasClients) return false;
+    final maxScroll = _listController.position.maxScrollExtent;
+    final currentScroll = _listController.offset;
+    return currentScroll >= (maxScroll * 0.9);
   }
+
+  void _performSearch(bool isFilter) {
+    isFilter
+        ? _searchClanBloc.add(
+            FilterChanged(
+              searchTerm: SearchClansRequestModel(
+                clanName: _clanFilterController.text,
+                minMembers: _members.start.round(),
+                maxMembers: _members.end.round(),
+                minClanLevel: _minClanLevel.round(),
+              ),
+            ),
+          )
+        : _searchClanBloc.add(
+            TextChanged(
+              searchTerm: SearchClansRequestModel(
+                clanName: _clanFilterController.text,
+                minMembers: _members.start.round(),
+                maxMembers: _members.end.round(),
+                minClanLevel: _minClanLevel.round(),
+              ),
+            ),
+          );
+  }
+
+  //void _onClearTapped() {
+  //  _clanFilterController.text = '';
+  //  _searchClanBloc.add(
+  //    FilterChanged(
+  //      searchTerm: SearchClansRequestModel(
+  //        clanName: '',
+  //        minMembers: _members.start.round(),
+  //        maxMembers: _members.end.round(),
+  //        minClanLevel: _minClanLevel.round(),
+  //      ),
+  //    ),
+  //  );
+  //}
 
   showFilter(BuildContext aContext) {
     showModalBottomSheet(
@@ -121,9 +174,9 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                     ),
                     child: RangeSlider(
                       values: _members,
-                      min: 2,
-                      max: 50,
-                      divisions: 50,
+                      min: AppConstants.minMembersFilter,
+                      max: AppConstants.maxMembersFilter,
+                      divisions: AppConstants.maxMembersFilter.round(),
                       onChanged: (RangeValues values) {
                         setState(() {
                           _members = values;
@@ -164,9 +217,9 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                       ),
                     ),
                     child: Slider(
-                      min: 2,
-                      max: 20,
-                      divisions: 20,
+                      min: AppConstants.minClanLevelFilter,
+                      max: AppConstants.maxClanLevelFilter,
+                      divisions: AppConstants.maxClanLevelFilter.round(),
                       value: _minClanLevel.toDouble(),
                       onChanged: (value) {
                         setState(() {
@@ -181,7 +234,9 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
           },
         );
       },
-    );
+    ).whenComplete(() {
+      _performSearch(true);
+    });
   }
 
   @override
@@ -200,7 +255,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
             //  child: const Icon(Icons.clear),
             //),
           ),
-          controller: _clanNameFilterController,
+          controller: _clanFilterController,
         ),
         actions: [
           IconButton(
@@ -223,8 +278,32 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
             return Center(child: Text(tr('search_failed_message')));
           }
           if (state is SearchStateSuccess) {
+            _after = state.after;
             if (state.items.isEmpty) {
-              return Center(child: Text(tr('search_no_result_message')));
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.search_off, size: 50.0),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
+                  Center(
+                    child: Text(
+                      tr(LocaleKey.noClanFound),
+                      style: const TextStyle(fontSize: 20.0),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15.0, horizontal: 75.0),
+                    child: Center(
+                      child: Text(
+                        tr(LocaleKey.searchClanMessage),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              );
             }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
@@ -257,8 +336,10 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                         ),
                       );
               },
-              itemCount: state.items.length,
-              //controller: _scrollController,
+              itemCount: state.after.isEmptyOrNull
+                  ? state.items.length
+                  : state.items.length + 1,
+              controller: _listController,
             );
           }
           return Column(

@@ -1,20 +1,42 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../models/api/search_clans_request_model.dart';
+
 abstract class SearchClanEvent extends Equatable {
-  const SearchClanEvent();
 }
 
-class TextChanged extends SearchClanEvent {
-  const TextChanged({required this.clanName, required this.minClanLevel, required this.maxMembers, required this.minMembers});
+abstract class SearchClanBaseEvent extends SearchClanEvent {
+  SearchClanBaseEvent({required this.searchTerm});
 
-  final String clanName;
-  final int minMembers;
-  final int maxMembers;
-  final int minClanLevel;
+  final SearchClansRequestModel searchTerm;
 
   @override
-  List<Object> get props => [clanName, minMembers, maxMembers, minClanLevel];
+  List<Object> get props => [searchTerm];
+}
+
+class ClearFilter extends SearchClanEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class TextChanged extends SearchClanBaseEvent {
+  TextChanged({required super.searchTerm});
 
   @override
-  String toString() => 'TextChanged { clanName: $clanName }';
+  String toString() => 'TextChanged { clanName: ${searchTerm.clanName} }';
+}
+
+class FilterChanged extends SearchClanBaseEvent {
+  FilterChanged({required super.searchTerm});
+
+  @override
+  String toString() =>
+      'FilterChanged { minMembers: ${searchTerm.minMembers}, maxMembers: ${searchTerm.maxMembers}, minClanLevel: ${searchTerm.minClanLevel} }';
+}
+
+class NextPageFetched extends SearchClanBaseEvent {
+  NextPageFetched({required super.searchTerm});
+
+  @override
+  String toString() => 'NextPageFetched { after: ${searchTerm.after} }';
 }

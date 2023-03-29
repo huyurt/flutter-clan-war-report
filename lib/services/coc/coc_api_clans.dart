@@ -1,19 +1,26 @@
-import 'package:more_useful_clash_of_clans/services/coc/coc_api_connector.dart';
+import 'package:more_useful_clash_of_clans/utils/constants/app_constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../models/api/search_clans_request_model.dart';
 import '../../models/api/search_clans_response_model.dart';
+import 'coc_api_connector.dart';
 
 class CocApiClans {
   static Future<SearchClansResponseModel> searchClans(
       SearchClansRequestModel input) async {
     Map<String, dynamic> parameters = {
-      'limit': 20,
+      'limit': AppConstants.pageSize,
       'name': input.clanName,
-      'minMembers': input.minMembers,
-      'maxMembers': input.maxMembers,
-      'minClanLevel': input.minClanLevel,
     };
+    if (input.minMembers! > 1) {
+      parameters['minMembers'] = input.minMembers;
+    }
+    if (input.maxMembers! > 0) {
+      parameters['maxMembers'] = input.maxMembers;
+    }
+    if (input.minClanLevel! > 1) {
+      parameters['minClanLevel'] = input.minClanLevel;
+    }
     if (!input.after.isEmptyOrNull) {
       parameters['after'] = input.after;
     }
@@ -21,7 +28,7 @@ class CocApiClans {
       parameters['before'] = input.before;
     }
 
-    final response = await CocApi.dio().get(
+    final response = await CocApiConnector.dio.get(
       '/clans',
       queryParameters: parameters,
     );

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/constants/locale_key.dart';
+import '../../utils/constants/locale_key.dart';
 
 class WarsScreen extends StatelessWidget {
   const WarsScreen({super.key});

@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:more_useful_clash_of_clans/core/helpers/enum_helper.dart';
+import 'package:more_useful_clash_of_clans/repositories/search_clan/search_clan_cache.dart';
+import 'package:more_useful_clash_of_clans/repositories/search_clan/search_clan_repository.dart';
+import 'package:more_useful_clash_of_clans/utils/helpers/enum_helper.dart';
 import 'package:more_useful_clash_of_clans/routes.dart';
-import 'package:more_useful_clash_of_clans/core/themes/app_themes.dart';
+import 'package:more_useful_clash_of_clans/utils/themes/app_themes.dart';
 
 import 'bloc/app_bloc_observer.dart';
 import 'bloc/locale/locale_cubit.dart';
 import 'bloc/theme/theme_cubit.dart';
 import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import 'bloc/widgets/search_clan/search_clan_bloc.dart';
-import 'core/constants/locale_key.dart';
-import 'core/enums/locale_enum.dart';
-import 'core/helpers/cache_helper.dart';
+import 'utils/constants/locale_key.dart';
+import 'utils/enums/locale_enum.dart';
+import 'utils/helpers/cache_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +57,12 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (_) => BottomNavigationBarCubit(),
         ),
-        BlocProvider<SearchClanBloc>(create: (_) => SearchClanBloc()),
+        BlocProvider<SearchClanBloc>(
+            create: (_) => SearchClanBloc(
+                  searchClanRepository: SearchClanRepository(
+                    cache: SearchClanCache(),
+                  ),
+                )),
       ],
       child: Builder(
         builder: (context) {

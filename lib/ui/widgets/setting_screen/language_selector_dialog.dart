@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../bloc/locale/locale_cubit.dart';
-import '../../../core/constants/locale_key.dart';
-import '../../../core/enums/locale_enum.dart';
-import '../../../core/helpers/enum_helper.dart';
+import '../../../utils/constants/locale_key.dart';
+import '../../../utils/enums/locale_enum.dart';
+import '../../../utils/helpers/enum_helper.dart';
 import '../app_dialog.dart';
 
 class LanguageSelectorDialog extends StatelessWidget {

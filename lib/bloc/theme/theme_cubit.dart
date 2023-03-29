@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/core/enums/theme_enum.dart';
-import 'package:more_useful_clash_of_clans/core/helpers/enum_helper.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/theme_enum.dart';
+import 'package:more_useful_clash_of_clans/utils/helpers/enum_helper.dart';
 
-import '../../core/helpers/cache_helper.dart';
+import '../../utils/helpers/cache_helper.dart';
 
 class ThemeCubit extends Cubit<ThemeMode> {
   ThemeCubit() : super(EnumHelper.getThemeMode(CacheHelper.getCachedTheme()));

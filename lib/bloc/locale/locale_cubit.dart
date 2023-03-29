@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/core/enums/locale_enum.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/locale_enum.dart';
 
-import '../../core/helpers/cache_helper.dart';
-import '../../core/helpers/enum_helper.dart';
+import '../../utils/helpers/cache_helper.dart';
+import '../../utils/helpers/enum_helper.dart';
 
 class LocaleCubit extends Cubit<Locale?> {
   LocaleCubit() : super(EnumHelper.getLocale(CacheHelper.getCachedLocale()));

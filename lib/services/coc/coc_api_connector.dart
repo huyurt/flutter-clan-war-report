@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../../core/constants/app_constants.dart';
+import '../../utils/constants/app_constants.dart';
 
-class CocApi {
-  static Dio dio() {
+class CocApiConnector {
+  static Dio get dio {
     BaseOptions options = BaseOptions(
       baseUrl: dotenv.env[AppConstants.envCocBaseUrlKey]!,
       headers: {

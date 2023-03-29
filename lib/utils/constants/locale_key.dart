@@ -11,6 +11,7 @@ class LocaleKey {
   static const activity = 'Activity';
   static const search = 'Search';
   static const searchClan = 'Search Clan';
+  static const noClanFound = 'No Clan Found';
   static const searchClanMessage = 'SearchClanMessage';
   static const location = 'Location';
   static const members = 'Members';
