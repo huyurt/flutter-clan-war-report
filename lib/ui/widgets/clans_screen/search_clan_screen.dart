@@ -30,6 +30,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
       AppConstants.minMembersFilter, AppConstants.maxMembersFilter);
   double _minClanLevel = AppConstants.minClanLevelFilter;
   String? _prevClanFilter;
+  bool _filterChanged = false;
 
   @override
   void initState() {
@@ -84,27 +85,32 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   }
 
   void _performSearch(bool isFilter) {
-    isFilter
-        ? _searchClanBloc.add(
-            FilterChanged(
-              searchTerm: SearchClansRequestModel(
-                clanName: _clanFilterController.text,
-                minMembers: _members.start.round(),
-                maxMembers: _members.end.round(),
-                minClanLevel: _minClanLevel.round(),
-              ),
+    if (isFilter) {
+      if (_filterChanged) {
+        _searchClanBloc.add(
+          FilterChanged(
+            searchTerm: SearchClansRequestModel(
+              clanName: _clanFilterController.text,
+              minMembers: _members.start.round(),
+              maxMembers: _members.end.round(),
+              minClanLevel: _minClanLevel.round(),
             ),
-          )
-        : _searchClanBloc.add(
-            TextChanged(
-              searchTerm: SearchClansRequestModel(
-                clanName: _clanFilterController.text,
-                minMembers: _members.start.round(),
-                maxMembers: _members.end.round(),
-                minClanLevel: _minClanLevel.round(),
-              ),
-            ),
-          );
+          ),
+        );
+        _filterChanged = false;
+      }
+    } else {
+      _searchClanBloc.add(
+        TextChanged(
+          searchTerm: SearchClansRequestModel(
+            clanName: _clanFilterController.text,
+            minMembers: _members.start.round(),
+            maxMembers: _members.end.round(),
+            minClanLevel: _minClanLevel.round(),
+          ),
+        ),
+      );
+    }
   }
 
   //void _onClearTapped() {
@@ -179,6 +185,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                       divisions: AppConstants.maxMembersFilter.round(),
                       onChanged: (RangeValues values) {
                         setState(() {
+                          _filterChanged = true;
                           _members = values;
                         });
                       },
@@ -223,6 +230,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                       value: _minClanLevel.toDouble(),
                       onChanged: (value) {
                         setState(() {
+                          _filterChanged = true;
                           _minClanLevel = value;
                         });
                       },
@@ -306,40 +314,118 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
               );
             }
             return ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return index >= state.items.length
-                    ? const BottomLoader()
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: SizedBox(
-                          height: 50,
-                          child: Row(
-                            children: [
-                              if (!(state.items[index].badgeUrls?.small
-                                      ?.isEmptyOrNull ??
-                                  true))
-                                Image.network(
-                                  state.items[index].badgeUrls?.small ?? '',
-                                  fit: BoxFit.cover,
-                                ),
-                              Text(
-                                  '${state.items[index].tag} ${state.items[index].name} ${state.items[index].type}'),
-                              const Spacer(flex: 1),
-                              Text('${state.items[index].members}/50'),
-                              const Spacer(flex: 1),
-                              Text(
-                                '${state.items[index].clanPoints}',
-                                textAlign: TextAlign.right,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-              },
+              controller: _listController,
               itemCount: state.after.isEmptyOrNull
                   ? state.items.length
                   : state.items.length + 1,
-              controller: _listController,
+              itemBuilder: (BuildContext context, int index) {
+                if (index >= state.items.length) {
+                  return const BottomLoader();
+                }
+                return Card(
+                  margin: const EdgeInsets.all(0.0),
+                  elevation: 0.0,
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: SizedBox(
+                        height: 60,
+                        child: Row(
+                          children: [
+                            FadeInImage.assetNetwork(
+                              height: 60,
+                              width: 60,
+                              image: state.items[index].badgeUrls?.small ??
+                                  AppConstants.placeholderImage,
+                              placeholder: AppConstants.placeholderImage,
+                              fit: BoxFit.cover,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    //SizedBox(
+                                    //  height: 40,
+                                    //  child: marquee.Marquee(
+                                    //    text: state.items[index].name,
+                                    //    style: const TextStyle(fontSize: 15),
+                                    //    startPadding: 10.0,
+                                    //    blankSpace: 20.0,
+                                    //  ),
+                                    //),
+                                    Flexible(
+                                      child: Text(
+                                        state.items[index].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Text(state.items[index].tag),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 100,
+                              child: Column(
+                                children: [
+                                  Text(tr(LocaleKey.members)),
+                                  Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(
+                                          '${state.items[index].members}/50'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 60,
+                              child: Card(
+                                margin: const EdgeInsets.all(0.0),
+                                child: GridView.count(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 2.0,
+                                  crossAxisSpacing: 2.0,
+                                  padding: const EdgeInsets.all(5.0),
+                                  children: state.items[index].labels
+                                          ?.map((label) =>
+                                              FadeInImage.assetNetwork(
+                                                height: 5,
+                                                width: 5,
+                                                image: label.iconUrls?.small ??
+                                                    AppConstants
+                                                        .placeholderImage,
+                                                placeholder: AppConstants
+                                                    .placeholderImage,
+                                                fit: BoxFit.cover,
+                                              ))
+                                          .toList() ??
+                                      [],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             );
           }
           return Column(

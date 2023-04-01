@@ -23,6 +23,13 @@ class LanguageSelectorDialog extends StatelessWidget {
               margin: const EdgeInsets.all(0.0),
               elevation: 0.0,
               child: InkWell(
+                onTap: () {
+                  finish(context);
+                  LocaleEnum localeType = EnumHelper.getLocaleType(locale);
+                  context.setLocale(locale);
+                  BlocProvider.of<LocaleCubit>(context)
+                      .changeLocale(localeType);
+                },
                 child: SizedBox(
                   height: 60.0,
                   child: Padding(
@@ -45,13 +52,6 @@ class LanguageSelectorDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-                onTap: () {
-                  finish(context);
-                  LocaleEnum localeType = EnumHelper.getLocaleType(locale);
-                  context.setLocale(locale);
-                  BlocProvider.of<LocaleCubit>(context)
-                      .changeLocale(localeType);
-                },
               ),
             ),
           )

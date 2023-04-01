@@ -10,6 +10,8 @@ class AppConstants {
 
   static const pageSize = 20;
 
+  static const placeholderImage = 'assets/images/placeholder.png';
+
   static const minMembersFilter = 1.0;
   static const maxMembersFilter = 50.0;
   static const minClanLevelFilter = 1.0;

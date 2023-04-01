@@ -126,6 +126,7 @@ flutter:
   assets:
     - .env
     - assets/translations/
+    - assets/images/
     - images/
     - images/app/icons/
     - images/app/
