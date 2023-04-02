@@ -11,6 +11,9 @@ class AppConstants {
   static const pageSize = 20;
 
   static const placeholderImage = 'assets/images/placeholder.png';
+  static const cwlImagePath = 'assets/images/clash-resource/0_Logos/2_cwl/';
+
+  static const warLeagueUnranked = 48000000;
 
   static const minMembersFilter = 1.0;
   static const maxMembersFilter = 50.0;

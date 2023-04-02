@@ -15,7 +15,7 @@ class CocApiClans {
     if (input.minMembers! > 1) {
       parameters['minMembers'] = input.minMembers;
     }
-    if (input.maxMembers! > 0) {
+    if (input.maxMembers! > 0 && input.maxMembers! < 50) {
       parameters['maxMembers'] = input.maxMembers;
     }
     if (input.minClanLevel! > 1) {

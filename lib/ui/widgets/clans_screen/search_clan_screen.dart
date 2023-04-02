@@ -1,7 +1,9 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:more_useful_clash_of_clans/models/api/search_clans_response_model.dart';
 import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -315,6 +317,9 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
             }
             return ListView.builder(
               controller: _listController,
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
               itemCount: state.after.isEmptyOrNull
                   ? state.items.length
                   : state.items.length + 1,
@@ -322,6 +327,8 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                 if (index >= state.items.length) {
                   return const BottomLoader();
                 }
+                SearchedClanItem clan = state.items[index];
+                Location? location = clan.location;
                 return Card(
                   margin: const EdgeInsets.all(0.0),
                   elevation: 0.0,
@@ -329,15 +336,14 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                   child: InkWell(
                     onTap: () {},
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 5.0),
                       child: SizedBox(
-                        height: 60,
+                        height: 75,
                         child: Row(
                           children: [
                             FadeInImage.assetNetwork(
-                              height: 60,
-                              width: 60,
-                              image: state.items[index].badgeUrls?.small ??
+                              image: clan.badgeUrls?.small ??
                                   AppConstants.placeholderImage,
                               placeholder: AppConstants.placeholderImage,
                               fit: BoxFit.cover,
@@ -349,19 +355,11 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    //SizedBox(
-                                    //  height: 40,
-                                    //  child: marquee.Marquee(
-                                    //    text: state.items[index].name,
-                                    //    style: const TextStyle(fontSize: 15),
-                                    //    startPadding: 10.0,
-                                    //    blankSpace: 20.0,
-                                    //  ),
-                                    //),
                                     Flexible(
                                       child: Text(
-                                        state.items[index].name,
+                                        clan.name,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: const TextStyle(fontSize: 18),
@@ -371,7 +369,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 8.0),
-                                        child: Text(state.items[index].tag),
+                                        child: Text(clan.tag),
                                       ),
                                     ),
                                   ],
@@ -381,41 +379,78 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                             SizedBox(
                               width: 100,
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(tr(LocaleKey.members)),
                                   Card(
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
-                                          '${state.items[index].members}/50'),
+                                          '${clan.members.toString().padLeft(2, '0')}/50'),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             SizedBox(
-                              width: 60,
+                              width: 80,
+                              height: 50,
                               child: Card(
                                 margin: const EdgeInsets.all(0.0),
-                                child: GridView.count(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 2.0,
-                                  crossAxisSpacing: 2.0,
+                                child: Padding(
                                   padding: const EdgeInsets.all(5.0),
-                                  children: state.items[index].labels
-                                          ?.map((label) =>
-                                              FadeInImage.assetNetwork(
-                                                height: 5,
-                                                width: 5,
-                                                image: label.iconUrls?.small ??
-                                                    AppConstants
-                                                        .placeholderImage,
-                                                placeholder: AppConstants
-                                                    .placeholderImage,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      if (location != null ||
+                                          (clan.warLeague?.id ?? 0) >
+                                              AppConstants.warLeagueUnranked)
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            (location?.isCountry ?? false)
+                                                ? CountryFlags.flag(
+                                                    location?.countryCode ?? '',
+                                                    height: 16.0,
+                                                    width: 24.0,
+                                                    borderRadius: 4.0,
+                                                  )
+                                                : const Icon(
+                                                    Icons.public,
+                                                    size: 18,
+                                                    color: Colors.blue,
+                                                  ),
+                                            if ((clan.warLeague?.id ?? 0) >
+                                                AppConstants.warLeagueUnranked)
+                                              Image.asset(
+                                                '${AppConstants.cwlImagePath}${clan.warLeague?.id}.png',
+                                                height: 18,
                                                 fit: BoxFit.cover,
-                                              ))
-                                          .toList() ??
-                                      [],
+                                              ),
+                                          ],
+                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: clan.labels
+                                                ?.map((label) =>
+                                                    FadeInImage.assetNetwork(
+                                                      width: 22,
+                                                      image: label.iconUrls
+                                                              ?.small ??
+                                                          AppConstants
+                                                              .placeholderImage,
+                                                      placeholder: AppConstants
+                                                          .placeholderImage,
+                                                      fit: BoxFit.cover,
+                                                    ))
+                                                .toList() ??
+                                            [],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
