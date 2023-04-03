@@ -13,6 +13,7 @@ import '../../../bloc/widgets/search_clan/search_clan_state.dart';
 import '../../../utils/constants/app_constants.dart';
 import '../../../models/api/search_clans_request_model.dart';
 import '../bottom_loader.dart';
+import 'clan_detail_screen.dart';
 
 class SearchClanScreen extends StatefulWidget {
   const SearchClanScreen({super.key});
@@ -27,7 +28,8 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   final _listController = ScrollController();
   String? _after = '';
 
-  final TextEditingController _clanFilterController = TextEditingController();
+  final TextEditingController _clanFilterController =
+      TextEditingController(text: 'kusur');
   RangeValues _members = const RangeValues(
       AppConstants.minMembersFilter, AppConstants.maxMembersFilter);
   double _minClanLevel = AppConstants.minClanLevelFilter;
@@ -334,16 +336,22 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                   elevation: 0.0,
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      ClanDetailScreen(
+                        clanTag: clan.tag,
+                      ).launch(context);
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 5.0),
                       child: SizedBox(
-                        height: 75,
+                        height: 70,
                         child: Row(
                           children: [
                             FadeInImage.assetNetwork(
-                              image: clan.badgeUrls?.small ??
+                              height: 60,
+                              width: 60,
+                              image: clan.badgeUrls?.large ??
                                   AppConstants.placeholderImage,
                               placeholder: AppConstants.placeholderImage,
                               fit: BoxFit.cover,
@@ -357,20 +365,16 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Flexible(
-                                      child: Text(
-                                        clan.name,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
+                                    Text(
+                                      clan.name,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: const TextStyle(fontSize: 16),
                                     ),
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0),
-                                        child: Text(clan.tag),
-                                      ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0),
+                                      child: Text(clan.tag),
                                     ),
                                   ],
                                 ),
@@ -384,7 +388,8 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                   Text(tr(LocaleKey.members)),
                                   Card(
                                     child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5.0, horizontal: 12.0),
                                       child: Text(
                                           '${clan.members.toString().padLeft(2, '0')}/50'),
                                     ),
@@ -439,7 +444,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                                     FadeInImage.assetNetwork(
                                                       width: 22,
                                                       image: label.iconUrls
-                                                              ?.small ??
+                                                              ?.medium ??
                                                           AppConstants
                                                               .placeholderImage,
                                                       placeholder: AppConstants

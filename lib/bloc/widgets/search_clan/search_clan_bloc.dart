@@ -30,6 +30,8 @@ class SearchClanBloc extends Bloc<SearchClanEvent, SearchClanState> {
         transformer: throttleDroppable(const Duration(milliseconds: 100)));
   }
 
+  // TODO: copyWith
+
   final SearchClanRepository searchClanRepository;
 
   Future<void> _onClearFilter(

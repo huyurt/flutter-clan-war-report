@@ -17,6 +17,23 @@ class SearchClansRequestModel extends Equatable {
   final String? after;
   final String? before;
 
+  SearchClansRequestModel copyWith({
+    String? clanName,
+    int? minMembers,
+    int? maxMembers,
+    int? minClanLevel,
+    String? after,
+    String? before,
+  }) =>
+      SearchClansRequestModel(
+        clanName: clanName ?? this.clanName,
+        minMembers: minMembers ?? this.minMembers,
+        maxMembers: maxMembers ?? this.maxMembers,
+        minClanLevel: minClanLevel ?? this.minClanLevel,
+        after: after ?? this.after,
+        before: before ?? this.before,
+      );
+
   @override
   List<Object?> get props =>
       [clanName, minMembers, maxMembers, minClanLevel, after];
