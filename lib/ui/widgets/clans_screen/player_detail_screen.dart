@@ -205,15 +205,22 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        FadeInImage.assetNetwork(
-                                          height: 20,
-                                          image:
-                                              player.league?.iconUrls?.medium ??
-                                                  AppConstants.placeholderImage,
-                                          placeholder:
-                                              AppConstants.placeholderImage,
-                                          fit: BoxFit.cover,
-                                        ),
+                                        player.league?.iconUrls?.medium != null
+                                            ? FadeInImage.assetNetwork(
+                                                height: 20,
+                                                image: player.league?.iconUrls
+                                                        ?.medium ??
+                                                    AppConstants
+                                                        .placeholderImage,
+                                                placeholder: AppConstants
+                                                    .placeholderImage,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
+                                                height: 18,
+                                                fit: BoxFit.cover,
+                                              ),
                                         Text(' ${player.trophies ?? 0}'),
                                       ],
                                     ),
@@ -226,429 +233,413 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                       ),
                     ),
                   ),
-                  if (heroes.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(tr(LocaleKey.heroes)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 4.0,
-                        children: ImageHelper.getHeroes().map(
-                          (heroImage) {
-                            PlayerItemLevel? hero = heroes.firstWhereOrNull(
-                                (element) => element.name == heroImage);
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 4.0, bottom: 8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 3,
-                                    color: Colors.white24,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(tr(LocaleKey.heroes)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 4.0,
+                      children: ImageHelper.getHeroes().map(
+                        (heroImage) {
+                          PlayerItemLevel? hero = heroes.firstWhereOrNull(
+                              (element) => element.name == heroImage);
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, bottom: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 3,
+                                  color: Colors.white24,
                                 ),
-                                child: Stack(
-                                  children: [
-                                    if (hero != null) ...[
-                                      Image.asset(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Stack(
+                                children: [
+                                  if (hero != null) ...[
+                                    Image.asset(
+                                      '${AppConstants.heroesImagePath}$heroImage.png',
+                                      height: 42,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2.0,
+                                              horizontal:
+                                                  hero.level < 10 ? 4.0 : 2.0),
+                                          decoration: BoxDecoration(
+                                            color: hero.level == hero.maxLevel
+                                                ? Colors.amber
+                                                : Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
+                                          ),
+                                          child: Text(
+                                            hero.level.toString(),
+                                            style: TextStyle(
+                                              fontSize: 8.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: hero.level == hero.maxLevel
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ] else
+                                    ColorFiltered(
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.black,
+                                        BlendMode.saturation,
+                                      ),
+                                      child: Image.asset(
                                         '${AppConstants.heroesImagePath}$heroImage.png',
                                         height: 42,
                                         fit: BoxFit.cover,
                                       ),
-                                      Positioned.fill(
-                                        child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 2.0,
-                                                horizontal: hero.level < 10
-                                                    ? 4.0
-                                                    : 2.0),
-                                            decoration: BoxDecoration(
-                                              color: hero.level == hero.maxLevel
-                                                  ? Colors.amber
-                                                  : Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(4.0),
-                                            ),
-                                            child: Text(
-                                              hero.level.toString(),
-                                              style: TextStyle(
-                                                fontSize: 8.0,
-                                                fontWeight: FontWeight.bold,
-                                                color:
-                                                    hero.level == hero.maxLevel
-                                                        ? Colors.black
-                                                        : Colors.white,
-                                              ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(tr(LocaleKey.pets)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 4.0,
+                      children: ImageHelper.getPets().map(
+                        (petImage) {
+                          PlayerItemLevel? pet = pets.firstWhereOrNull(
+                              (element) => element.name == petImage);
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, bottom: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 3,
+                                  color: Colors.white24,
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Stack(
+                                children: [
+                                  if (pet != null) ...[
+                                    Image.asset(
+                                      '${AppConstants.petsImagePath}$petImage.png',
+                                      height: 42,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2.0,
+                                              horizontal:
+                                                  pet.level < 10 ? 4.0 : 2.0),
+                                          decoration: BoxDecoration(
+                                            color: pet.level == pet.maxLevel
+                                                ? Colors.amber
+                                                : Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
+                                          ),
+                                          child: Text(
+                                            pet.level.toString(),
+                                            style: TextStyle(
+                                              fontSize: 8.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: pet.level == pet.maxLevel
+                                                  ? Colors.black
+                                                  : Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ] else
-                                      ColorFiltered(
-                                        colorFilter: const ColorFilter.mode(
-                                          Colors.black,
-                                          BlendMode.saturation,
-                                        ),
-                                        child: Image.asset(
-                                          '${AppConstants.petsImagePath}$heroImage.png',
-                                          height: 42,
-                                          fit: BoxFit.cover,
-                                        ),
+                                    ),
+                                  ] else
+                                    ColorFiltered(
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.black,
+                                        BlendMode.saturation,
                                       ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                  ],
-                  if (pets.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(tr(LocaleKey.pets)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 4.0,
-                        children: ImageHelper.getPets().map(
-                          (petImage) {
-                            PlayerItemLevel? pet = pets.firstWhereOrNull(
-                                (element) => element.name == petImage);
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 4.0, bottom: 8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 3,
-                                    color: Colors.white24,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    if (pet != null) ...[
-                                      Image.asset(
+                                      child: Image.asset(
                                         '${AppConstants.petsImagePath}$petImage.png',
                                         height: 42,
                                         fit: BoxFit.cover,
                                       ),
-                                      Positioned.fill(
-                                        child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 2.0,
-                                                horizontal:
-                                                    pet.level < 10 ? 4.0 : 2.0),
-                                            decoration: BoxDecoration(
-                                              color: pet.level == pet.maxLevel
-                                                  ? Colors.amber
-                                                  : Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(4.0),
-                                            ),
-                                            child: Text(
-                                              pet.level.toString(),
-                                              style: TextStyle(
-                                                fontSize: 8.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: pet.level == pet.maxLevel
-                                                    ? Colors.black
-                                                    : Colors.white,
-                                              ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(tr(LocaleKey.troops)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 4.0,
+                      children: ImageHelper.getTroops().map(
+                        (troopImage) {
+                          PlayerItemLevel? troop = troops.firstWhereOrNull(
+                              (element) => element.name == troopImage);
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, bottom: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 3,
+                                  color: Colors.white24,
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Stack(
+                                children: [
+                                  if (troop != null) ...[
+                                    Image.asset(
+                                      '${AppConstants.troopsImagePath}$troopImage.png',
+                                      height: 42,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2.0,
+                                              horizontal:
+                                                  troop.level < 10 ? 4.0 : 2.0),
+                                          decoration: BoxDecoration(
+                                            color: troop.level == troop.maxLevel
+                                                ? Colors.amber
+                                                : Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
+                                          ),
+                                          child: Text(
+                                            troop.level.toString(),
+                                            style: TextStyle(
+                                              fontSize: 8.0,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  troop.level == troop.maxLevel
+                                                      ? Colors.black
+                                                      : Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ] else
-                                      ColorFiltered(
-                                        colorFilter: const ColorFilter.mode(
-                                          Colors.black,
-                                          BlendMode.saturation,
-                                        ),
-                                        child: Image.asset(
-                                          '${AppConstants.petsImagePath}$petImage.png',
-                                          height: 42,
-                                          fit: BoxFit.cover,
-                                        ),
+                                    ),
+                                  ] else
+                                    ColorFiltered(
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.black,
+                                        BlendMode.saturation,
                                       ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                  ],
-                  if (troops.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(tr(LocaleKey.troops)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 4.0,
-                        children: ImageHelper.getTroops().map(
-                          (troopImage) {
-                            PlayerItemLevel? troop = troops.firstWhereOrNull(
-                                (element) => element.name == troopImage);
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 4.0, bottom: 8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 3,
-                                    color: Colors.white24,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    if (troop != null) ...[
-                                      Image.asset(
+                                      child: Image.asset(
                                         '${AppConstants.troopsImagePath}$troopImage.png',
                                         height: 42,
                                         fit: BoxFit.cover,
                                       ),
-                                      Positioned.fill(
-                                        child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 2.0,
-                                                horizontal: troop.level < 10
-                                                    ? 4.0
-                                                    : 2.0),
-                                            decoration: BoxDecoration(
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(tr(LocaleKey.spells)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 4.0,
+                      children: ImageHelper.getSpells().map(
+                        (spellImage) {
+                          PlayerItemLevel? spell = spells.firstWhereOrNull(
+                              (element) => element.name == spellImage);
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, bottom: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 3,
+                                  color: Colors.white24,
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Stack(
+                                children: [
+                                  if (spell != null) ...[
+                                    Image.asset(
+                                      '${AppConstants.spellsImagePath}$spellImage.png',
+                                      height: 42,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2.0,
+                                              horizontal:
+                                                  spell.level < 10 ? 4.0 : 2.0),
+                                          decoration: BoxDecoration(
+                                            color: spell.level == spell.maxLevel
+                                                ? Colors.amber
+                                                : Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
+                                          ),
+                                          child: Text(
+                                            spell.level.toString(),
+                                            style: TextStyle(
+                                              fontSize: 8.0,
+                                              fontWeight: FontWeight.bold,
                                               color:
-                                                  troop.level == troop.maxLevel
-                                                      ? Colors.amber
-                                                      : Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(4.0),
-                                            ),
-                                            child: Text(
-                                              troop.level.toString(),
-                                              style: TextStyle(
-                                                fontSize: 8.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: troop.level ==
-                                                        troop.maxLevel
-                                                    ? Colors.black
-                                                    : Colors.white,
-                                              ),
+                                                  spell.level == spell.maxLevel
+                                                      ? Colors.black
+                                                      : Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ] else
-                                      ColorFiltered(
-                                        colorFilter: const ColorFilter.mode(
-                                          Colors.black,
-                                          BlendMode.saturation,
-                                        ),
-                                        child: Image.asset(
-                                          '${AppConstants.petsImagePath}$troopImage.png',
-                                          height: 42,
-                                          fit: BoxFit.cover,
-                                        ),
+                                    ),
+                                  ] else
+                                    ColorFiltered(
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.black,
+                                        BlendMode.saturation,
                                       ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                  ],
-                  if (spells.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(tr(LocaleKey.spells)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 4.0,
-                        children: ImageHelper.getSpells().map(
-                          (spellImage) {
-                            PlayerItemLevel? spell = spells.firstWhereOrNull(
-                                (element) => element.name == spellImage);
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 4.0, bottom: 8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 3,
-                                    color: Colors.white24,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    if (spell != null) ...[
-                                      Image.asset(
+                                      child: Image.asset(
                                         '${AppConstants.spellsImagePath}$spellImage.png',
                                         height: 42,
                                         fit: BoxFit.cover,
                                       ),
-                                      Positioned.fill(
-                                        child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 2.0,
-                                                horizontal: spell.level < 10
-                                                    ? 4.0
-                                                    : 2.0),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  spell.level == spell.maxLevel
-                                                      ? Colors.amber
-                                                      : Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(4.0),
-                                            ),
-                                            child: Text(
-                                              spell.level.toString(),
-                                              style: TextStyle(
-                                                fontSize: 8.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: spell.level ==
-                                                        spell.maxLevel
-                                                    ? Colors.black
-                                                    : Colors.white,
-                                              ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(tr(LocaleKey.siegeMachines)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 4.0,
+                      children: ImageHelper.getSiegeMachines().map(
+                        (siegeMachineImage) {
+                          PlayerItemLevel? siegeMachine =
+                              siegeMachines.firstWhereOrNull((element) =>
+                                  element.name == siegeMachineImage);
+                          return Padding(
+                            padding:
+                                const EdgeInsets.only(right: 4.0, bottom: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 3,
+                                  color: Colors.white24,
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Stack(
+                                children: [
+                                  if (siegeMachine != null) ...[
+                                    Image.asset(
+                                      '${AppConstants.siegeMachinesImagePath}$siegeMachineImage.png',
+                                      height: 42,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Positioned.fill(
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2.0,
+                                              horizontal:
+                                                  siegeMachine.level < 10
+                                                      ? 4.0
+                                                      : 2.0),
+                                          decoration: BoxDecoration(
+                                            color: siegeMachine.level ==
+                                                    siegeMachine.maxLevel
+                                                ? Colors.amber
+                                                : Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
+                                          ),
+                                          child: Text(
+                                            siegeMachine.level.toString(),
+                                            style: TextStyle(
+                                              fontSize: 8.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: siegeMachine.level ==
+                                                      siegeMachine.maxLevel
+                                                  ? Colors.black
+                                                  : Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ] else
-                                      ColorFiltered(
-                                        colorFilter: const ColorFilter.mode(
-                                          Colors.black,
-                                          BlendMode.saturation,
-                                        ),
-                                        child: Image.asset(
-                                          '${AppConstants.spellsImagePath}$spellImage.png',
-                                          height: 42,
-                                          fit: BoxFit.cover,
-                                        ),
+                                    ),
+                                  ] else
+                                    ColorFiltered(
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.black,
+                                        BlendMode.saturation,
                                       ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                  ],
-                  if (siegeMachines.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(tr(LocaleKey.siegeMachines)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 4.0,
-                        children: ImageHelper.getSiegeMachines().map(
-                          (siegeMachineImage) {
-                            PlayerItemLevel? siegeMachine =
-                                siegeMachines.firstWhereOrNull((element) =>
-                                    element.name == siegeMachineImage);
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 4.0, bottom: 8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 3,
-                                    color: Colors.white24,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    if (siegeMachine != null) ...[
-                                      Image.asset(
+                                      child: Image.asset(
                                         '${AppConstants.siegeMachinesImagePath}$siegeMachineImage.png',
                                         height: 42,
                                         fit: BoxFit.cover,
                                       ),
-                                      Positioned.fill(
-                                        child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 2.0,
-                                                horizontal:
-                                                    siegeMachine.level < 10
-                                                        ? 4.0
-                                                        : 2.0),
-                                            decoration: BoxDecoration(
-                                              color: siegeMachine.level ==
-                                                      siegeMachine.maxLevel
-                                                  ? Colors.amber
-                                                  : Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(4.0),
-                                            ),
-                                            child: Text(
-                                              siegeMachine.level.toString(),
-                                              style: TextStyle(
-                                                fontSize: 8.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: siegeMachine.level ==
-                                                        siegeMachine.maxLevel
-                                                    ? Colors.black
-                                                    : Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ] else
-                                      ColorFiltered(
-                                        colorFilter: const ColorFilter.mode(
-                                          Colors.black,
-                                          BlendMode.saturation,
-                                        ),
-                                        child: Image.asset(
-                                          '${AppConstants.siegeMachinesImagePath}$siegeMachineImage.png',
-                                          height: 42,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                  ],
-                                ),
+                                    ),
+                                ],
                               ),
-                            );
-                          },
-                        ).toList(),
-                      ),
+                            ),
+                          );
+                        },
+                      ).toList(),
                     ),
-                  ],
+                  ),
                 ],
               ),
             );
