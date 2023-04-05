@@ -11,7 +11,22 @@ class AppConstants {
   static const pageSize = 20;
 
   static const placeholderImage = 'assets/images/placeholder.png';
-  static const cwlImagePath = 'assets/images/clash-resource/0_Logos/2_cwl/';
+  static const unrankedImage = '0_unranked.png';
+  static const cup1Image = 'cup_1.png';
+  static const star0Image = 'star_0.png';
+  static const star2Image = 'star_2.png';
+
+  static const clashResourceImagePath = 'assets/images/clash-resource/';
+  static const clanWarLeaguesImagePath = 'assets/images/clash-resource/clan-war-leagues/';
+
+  static const heroesImagePath = 'assets/images/clash-resource/home-heroes/';
+  static const petsImagePath = 'assets/images/clash-resource/home-pets/';
+  static const siegeMachinesImagePath = 'assets/images/clash-resource/home-siege-machines/';
+  static const spellsImagePath = 'assets/images/clash-resource/home-spells/';
+  static const troopsImagePath = 'assets/images/clash-resource/home-troops/';
+
+  static const leaguesImagePath = 'assets/images/clash-resource/leagues/';
+  static const townHallsImagePath = 'assets/images/clash-resource/town-halls/';
 
   static const warLeagueUnranked = 48000000;
 

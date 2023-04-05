@@ -372,8 +372,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                       style: const TextStyle(fontSize: 16),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 8.0),
+                                      padding: const EdgeInsets.only(top: 8.0),
                                       child: Text(clan.tag),
                                     ),
                                   ],
@@ -430,7 +429,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                             if ((clan.warLeague?.id ?? 0) >
                                                 AppConstants.warLeagueUnranked)
                                               Image.asset(
-                                                '${AppConstants.cwlImagePath}${clan.warLeague?.id}.png',
+                                                '${AppConstants.clanWarLeaguesImagePath}${clan.warLeague?.id}.png',
                                                 height: 18,
                                                 fit: BoxFit.cover,
                                               ),

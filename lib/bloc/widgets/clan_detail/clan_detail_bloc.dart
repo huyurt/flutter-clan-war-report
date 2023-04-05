@@ -16,7 +16,7 @@ class ClanDetailBloc extends Bloc<ClanDetailEvent, ClanDetailState> {
   ClanDetailBloc() : super(ClanDetailStateEmpty()) {
     on<ClearFilter>(_onClearFilter,
         transformer: throttleDroppable(const Duration(milliseconds: 0)));
-    on<GetClanDetail>(_performFilter,
+    on<GetClanDetail>(_onGetClanDetail,
         transformer: throttleDroppable(const Duration(milliseconds: 1000)));
   }
 
@@ -27,7 +27,7 @@ class ClanDetailBloc extends Bloc<ClanDetailEvent, ClanDetailState> {
     return emit(ClanDetailStateEmpty());
   }
 
-  Future<void> _performFilter(
+  Future<void> _onGetClanDetail(
     GetClanDetail event,
     Emitter<ClanDetailState> emit,
   ) async {

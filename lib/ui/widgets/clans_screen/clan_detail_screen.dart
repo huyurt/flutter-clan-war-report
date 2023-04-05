@@ -215,60 +215,74 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Column(
-                            children: [
-                              Text(tr(LocaleKey.country)),
-                              Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      (clan.location != null &&
-                                              (clan.location?.isCountry ??
-                                                  false))
-                                          ? CountryFlags.flag(
-                                              clan.location?.countryCode ?? '',
-                                              height: 16.0,
-                                              width: 24.0,
-                                              borderRadius: 4.0,
-                                            )
-                                          : const Icon(
-                                              Icons.public,
-                                              size: 18,
-                                              color: Colors.blue,
-                                            ),
-                                      const SizedBox(width: 5),
-                                      Text(clan.location?.name ??
-                                          tr(LocaleKey.notSet)),
-                                    ],
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Column(
+                              children: [
+                                Text(tr(LocaleKey.country)),
+                                Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        (clan.location != null &&
+                                                (clan.location?.isCountry ??
+                                                    false))
+                                            ? CountryFlags.flag(
+                                                clan.location?.countryCode ??
+                                                    '',
+                                                height: 16.0,
+                                                width: 24.0,
+                                                borderRadius: 4.0,
+                                              )
+                                            : const Icon(
+                                                Icons.public,
+                                                size: 18,
+                                                color: Colors.blue,
+                                              ),
+                                        Text(
+                                            ' ${tr(clan.location?.name ?? LocaleKey.notSet)}'),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 10),
-                          Column(
-                            children: [
-                              Text(tr(LocaleKey.warLeague)),
-                              Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      if ((clan.warLeague?.id ?? 0) >
-                                          AppConstants.warLeagueUnranked)
-                                        Image.asset(
-                                          '${AppConstants.cwlImagePath}${clan.warLeague?.id}.png',
-                                          height: 18,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      const SizedBox(width: 5),
-                                      Text(clan.warLeague?.name ?? ''),
-                                    ],
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Column(
+                              children: [
+                                Text(tr(LocaleKey.warLeague)),
+                                Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        if ((clan.warLeague?.id ?? 0) >
+                                            AppConstants.warLeagueUnranked)
+                                          Image.asset(
+                                            '${AppConstants.clanWarLeaguesImagePath}${clan.warLeague?.id}.png',
+                                            height: 18,
+                                            fit: BoxFit.cover,
+                                          )
+                                        else if (clan.warLeague?.id ==
+                                            AppConstants.warLeagueUnranked)
+                                          Image.asset(
+                                            '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
+                                            height: 18,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        Text(
+                                            ' ${tr(clan.warLeague?.name ?? '')}'),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -288,132 +302,108 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                   if (members.isNotEmpty) ...[
                     const SizedBox(height: 14),
                     ...members
-                        .map((member) => SizedBox(
-                              height: 70,
-                              child: Card(
-                                margin: const EdgeInsets.all(0.0),
-                                elevation: 0.0,
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {
-                                    PlayerDetailScreen(
-                                      playerTag: member.tag,
-                                    ).launch(context);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 5.0),
-                                    child: SizedBox(
-                                      height: 70,
-                                      child: Row(
-                                        children: [
-                                          member.league?.iconUrls?.medium !=
-                                                  null
-                                              ? FadeInImage.assetNetwork(
-                                                  height: 60,
-                                                  width: 60,
-                                                  image: member.league?.iconUrls
-                                                          ?.medium ??
-                                                      AppConstants
-                                                          .placeholderImage,
-                                                  placeholder: AppConstants
-                                                      .placeholderImage,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image.asset(
-                                                  AppConstants.placeholderImage,
-                                                  height: 60,
-                                                  width: 60,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    member.name,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 8.0),
-                                                    child: Text(member.tag),
-                                                  ),
-                                                ],
+                        .map(
+                          (member) => SizedBox(
+                            height: 70,
+                            child: Card(
+                              margin: const EdgeInsets.all(0.0),
+                              elevation: 0.0,
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  PlayerDetailScreen(
+                                    playerTag: member.tag,
+                                  ).launch(context);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 5.0),
+                                  child: SizedBox(
+                                    height: 70,
+                                    child: Row(
+                                      children: [
+                                        member.league?.iconUrls?.medium != null
+                                            ? FadeInImage.assetNetwork(
+                                                height: 60,
+                                                width: 60,
+                                                image: member.league?.iconUrls
+                                                        ?.medium ??
+                                                    AppConstants
+                                                        .placeholderImage,
+                                                placeholder: AppConstants
+                                                    .placeholderImage,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
+                                                height: 60,
+                                                width: 60,
+                                                fit: BoxFit.cover,
                                               ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 100,
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
                                             child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text(tr(LocaleKey.members)),
-                                                Card(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 5.0,
-                                                        horizontal: 12.0),
-                                                    child: Text(member.trophies
-                                                            .toString() ??
-                                                        ''),
-                                                  ),
+                                                Text(
+                                                  member.name,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                      fontSize: 16),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
+                                                  child: Text(member.tag),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        SizedBox(
+                                          width: 100,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Card(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 5.0,
+                                                      horizontal: 12.0),
+                                                  child: Text(member.trophies
+                                                          .toString() ??
+                                                      ''),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
-                            ))
+                            ),
+                          ),
+                        )
                         .toList(),
                   ],
                 ],
               ),
             );
           }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.search, size: 50.0),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
-              Center(
-                child: Text(
-                  tr(LocaleKey.searchClan),
-                  style: const TextStyle(fontSize: 20.0),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 75.0),
-                child: Center(
-                  child: Text(
-                    tr(LocaleKey.searchClanMessage),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ],
-          );
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );

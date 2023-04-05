@@ -127,7 +127,15 @@ flutter:
     - .env
     - assets/translations/
     - assets/images/
-    - assets/images/clash-resource/0_Logos/2_cwl/
+    - assets/images/clash-resource/
+    - assets/images/clash-resource/clan-war-leagues/
+    - assets/images/clash-resource/home-heroes/
+    - assets/images/clash-resource/leagues/
+    - assets/images/clash-resource/home-pets/
+    - assets/images/clash-resource/home-siege-machines/
+    - assets/images/clash-resource/home-spells/
+    - assets/images/clash-resource/town-halls/
+    - assets/images/clash-resource/home-troops/
     - images/
     - images/app/icons/
     - images/app/

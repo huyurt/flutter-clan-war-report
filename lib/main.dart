@@ -16,6 +16,7 @@ import 'bloc/locale/locale_cubit.dart';
 import 'bloc/theme/theme_cubit.dart';
 import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import 'bloc/widgets/clan_detail/clan_detail_bloc.dart';
+import 'bloc/widgets/player_detail/player_detail_bloc.dart';
 import 'bloc/widgets/search_clan/search_clan_bloc.dart';
 import 'utils/constants/locale_key.dart';
 import 'utils/enums/locale_enum.dart';
@@ -66,6 +67,9 @@ class App extends StatelessWidget {
                 )),
         BlocProvider(
           create: (_) => ClanDetailBloc(),
+        ),
+        BlocProvider(
+          create: (_) => PlayerDetailBloc(),
         ),
       ],
       child: Builder(
