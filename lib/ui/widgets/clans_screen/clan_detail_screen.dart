@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:more_useful_clash_of_clans/ui/widgets/clans_screen/player_detail_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
+import '../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
 import '../../../bloc/widgets/clan_detail/clan_detail_bloc.dart';
 import '../../../bloc/widgets/clan_detail/clan_detail_event.dart';
 import '../../../bloc/widgets/clan_detail/clan_detail_state.dart';
@@ -22,11 +24,13 @@ class ClanDetailScreen extends StatefulWidget {
 }
 
 class _ClanDetailScreenState extends State<ClanDetailScreen> {
+  late BookmarkedClanTagsCubit _bookmarkedClanTagsCubit;
   late ClanDetailBloc _clanDetailBloc;
 
   @override
   void initState() {
     super.initState();
+    _bookmarkedClanTagsCubit = context.read<BookmarkedClanTagsCubit>();
     _clanDetailBloc = context.read<ClanDetailBloc>();
     _clanDetailBloc.add(
       GetClanDetail(
@@ -41,8 +45,15 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: const Icon(Icons.bookmark_outline),
-            onPressed: () {},
+            icon: Icon(context
+                    .watch<BookmarkedClanTagsCubit>()
+                    .state
+                    .clanTags
+                    .contains(widget.clanTag)
+                ? Icons.bookmark
+                : Icons.bookmark_outline),
+            onPressed: () async => await _bookmarkedClanTagsCubit
+                .changeBookmarkedClanTags(widget.clanTag),
           ),
           PopupMenuButton(
             itemBuilder: (context) {
@@ -308,7 +319,16 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                             child: Card(
                               margin: const EdgeInsets.all(0.0),
                               elevation: 0.0,
-                              color: Colors.transparent,
+                              color: context
+                                      .watch<BookmarkedPlayerTagsCubit>()
+                                      .state
+                                      .playerTags
+                                      .contains(member.tag)
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
                               child: InkWell(
                                 onTap: () {
                                   PlayerDetailScreen(
@@ -382,8 +402,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                       vertical: 5.0,
                                                       horizontal: 12.0),
                                                   child: Text(member.trophies
-                                                          .toString() ??
-                                                      ''),
+                                                      .toString()),
                                                 ),
                                               ),
                                             ],

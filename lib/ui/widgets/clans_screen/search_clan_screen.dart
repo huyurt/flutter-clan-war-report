@@ -7,6 +7,7 @@ import 'package:more_useful_clash_of_clans/models/api/search_clans_response_mode
 import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import '../../../bloc/widgets/search_clan/search_clan_bloc.dart';
 import '../../../bloc/widgets/search_clan/search_clan_event.dart';
 import '../../../bloc/widgets/search_clan/search_clan_state.dart';
@@ -334,7 +335,16 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                 return Card(
                   margin: const EdgeInsets.all(0.0),
                   elevation: 0.0,
-                  color: Colors.transparent,
+                  color: context
+                          .watch<BookmarkedClanTagsCubit>()
+                          .state
+                          .clanTags
+                          .contains(clan.tag)
+                      ? Theme.of(context).colorScheme.secondary
+                      : Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0),
+                  ),
                   child: InkWell(
                     onTap: () {
                       ClanDetailScreen(

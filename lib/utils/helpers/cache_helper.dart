@@ -31,4 +31,21 @@ class CacheHelper {
   static Future<void> setCachedTheme(ThemeEnum themeType) async {
     await prefs.setInt(AppConstants.hiveThemeKey, themeType.index);
   }
+
+  static List<String> getCachedBookmarkedClanTags() {
+    return prefs.getStringList(AppConstants.hiveClanTagsKey) ?? <String>[];
+  }
+
+  static Future<void> setCachedBookmarkedClanTags(List<String> clanTags) async {
+    await prefs.setStringList(AppConstants.hiveClanTagsKey, clanTags);
+  }
+
+  static List<String> getCachedBookmarkedPlayerTags() {
+    return prefs.getStringList(AppConstants.hivePlayerTagsKey) ?? <String>[];
+  }
+
+  static Future<void> setCachedBookmarkedPlayerTags(
+      List<String> playerTags) async {
+    await prefs.setStringList(AppConstants.hivePlayerTagsKey, playerTags);
+  }
 }
