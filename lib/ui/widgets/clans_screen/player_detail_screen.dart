@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
 import '../../../bloc/widgets/player_detail/player_detail_bloc.dart';
 import '../../../bloc/widgets/player_detail/player_detail_event.dart';
 import '../../../bloc/widgets/player_detail/player_detail_state.dart';
@@ -22,11 +23,13 @@ class PlayerDetailScreen extends StatefulWidget {
 }
 
 class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
+  late BookmarkedPlayerTagsCubit _bookmarkedPlayerTagsCubit;
   late PlayerDetailBloc _playerDetailBloc;
 
   @override
   void initState() {
     super.initState();
+    _bookmarkedPlayerTagsCubit = context.read<BookmarkedPlayerTagsCubit>();
     _playerDetailBloc = context.read<PlayerDetailBloc>();
     _playerDetailBloc.add(
       GetPlayerDetail(
@@ -41,8 +44,15 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: const Icon(Icons.bookmark_outline),
-            onPressed: () {},
+            icon: Icon(context
+                    .watch<BookmarkedPlayerTagsCubit>()
+                    .state
+                    .playerTags
+                    .contains(widget.playerTag)
+                ? Icons.bookmark
+                : Icons.bookmark_outline),
+            onPressed: () async => await _bookmarkedPlayerTagsCubit
+                .changeBookmarkedPlayerTags(widget.playerTag),
           ),
           PopupMenuButton(
             itemBuilder: (context) {
