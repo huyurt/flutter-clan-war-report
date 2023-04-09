@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
 
   # COMMON
+  animate_do: ^3.0.2
   dio: ^5.0.2
   easy_localization: ^3.0.1
   equatable: ^2.0.5
