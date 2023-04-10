@@ -10,7 +10,7 @@ class ClanDetailResponseModel {
   ClanDetailResponseModel({
     required this.tag,
     required this.name,
-    this.type,
+    required this.type,
     this.description,
     this.location,
     this.isFamilyFriendly,
@@ -39,7 +39,7 @@ class ClanDetailResponseModel {
 
   final String tag;
   final String name;
-  final String? type;
+  final String type;
   final String? description;
   final Location? location;
   final bool? isFamilyFriendly;

@@ -7,6 +7,8 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_clan_tags/bookmarked_clan_tags_cache.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
+import 'package:more_useful_clash_of_clans/repositories/bookmarked_clans/bookmarked_clans_cache.dart';
+import 'package:more_useful_clash_of_clans/repositories/bookmarked_clans/bookmarked_clans_repository.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_player_tags/bookmarked_player_tags_cache.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_player_tags/bookmarked_player_tags_repository.dart';
 import 'package:more_useful_clash_of_clans/repositories/search_clan/search_clan_cache.dart';
@@ -19,6 +21,7 @@ import 'bloc/app_bloc_observer.dart';
 import 'bloc/locale/locale_cubit.dart';
 import 'bloc/theme/theme_cubit.dart';
 import 'bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
+import 'bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
 import 'bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
 import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import 'bloc/widgets/clan_detail/clan_detail_bloc.dart';
@@ -71,17 +74,22 @@ class App extends StatelessWidget {
             cache: BookmarkedPlayerTagsCache(),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => BookmarkedClansRepository(
+            cache: BookmarkedClansCache(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) => LocaleCubit(),
+            create: (context) => LocaleCubit(),
           ),
           BlocProvider(
-            create: (_) => ThemeCubit(),
+            create: (context) => ThemeCubit(),
           ),
           BlocProvider(
-            create: (_) => BottomNavigationBarCubit(),
+            create: (context) => BottomNavigationBarCubit(),
           ),
           BlocProvider(
             create: (context) => SearchClanBloc(
@@ -89,10 +97,10 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (_) => ClanDetailBloc(),
+            create: (context) => ClanDetailBloc(),
           ),
           BlocProvider(
-            create: (_) => PlayerDetailBloc(),
+            create: (context) => PlayerDetailBloc(),
           ),
           BlocProvider(
             create: (context) => BookmarkedClanTagsCubit(
@@ -104,6 +112,12 @@ class App extends StatelessWidget {
             create: (context) => BookmarkedPlayerTagsCubit(
               bookmarkedPlayerTagsRepository:
                   context.read<BookmarkedPlayerTagsRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => BookmarkedClansBloc(
+              bookmarkedClansRepository:
+                  context.read<BookmarkedClansRepository>(),
             ),
           ),
         ],
