@@ -3,6 +3,8 @@ import 'dart:async';
 import '../../utils/helpers/cache_helper.dart';
 import 'bookmarked_clan_tags_cache.dart';
 
+// TODO: Use single repository! Merge this repo to BookmarkedClansRepository.
+
 class BookmarkedClanTagsRepository {
   const BookmarkedClanTagsRepository({required this.cache});
 
