@@ -9,7 +9,7 @@ import '../widgets/app_bar_builder.dart';
 import '../widgets/app_floating_action_button.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'clans_screen.dart';
-import 'first_screen.dart';
+import 'players_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -17,9 +17,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const List<Widget> pageNavigation = [
-      ClansScreen(),
       WarsScreen(),
-      FirstScreen(),
+      ClansScreen(),
+      PlayersScreen(),
       SettingScreen(),
     ];
 

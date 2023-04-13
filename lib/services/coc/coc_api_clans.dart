@@ -43,7 +43,7 @@ class CocApiClans {
       '/clans/${Uri.encodeComponent(clanTag)}',
     );
     ClanDetailResponseModel result =
-        ClanDetailResponseModel.fromJson(response.data);
+        ClanDetailResponseModel.fromMap(response.data);
     return result;
   }
 }

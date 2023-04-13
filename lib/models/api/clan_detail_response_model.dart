@@ -1,10 +1,8 @@
+// To parse this JSON data, do
+//
+//     final clanDetailResponseModel = clanDetailResponseModelFromMap(jsonString);
+
 import 'dart:convert';
-
-ClanDetailResponseModel clanDetailResponseFromJson(String str) =>
-    ClanDetailResponseModel.fromJson(json.decode(str));
-
-String clanDetailResponseToJson(ClanDetailResponseModel data) =>
-    json.encode(data.toJson());
 
 class ClanDetailResponseModel {
   ClanDetailResponseModel({
@@ -29,7 +27,7 @@ class ClanDetailResponseModel {
     this.isWarLogPublic,
     this.warLeague,
     this.members,
-    this.memberList,
+    required this.memberList,
     this.labels,
     this.requiredVersusTrophies,
     this.requiredTownhallLevel,
@@ -58,7 +56,7 @@ class ClanDetailResponseModel {
   final bool? isWarLogPublic;
   final League? warLeague;
   final int? members;
-  final List<Member>? memberList;
+  final List<MemberList> memberList;
   final List<Label>? labels;
   final int? requiredVersusTrophies;
   final int? requiredTownhallLevel;
@@ -87,7 +85,7 @@ class ClanDetailResponseModel {
     bool? isWarLogPublic,
     League? warLeague,
     int? members,
-    List<Member>? memberList,
+    List<MemberList>? memberList,
     List<Label>? labels,
     int? requiredVersusTrophies,
     int? requiredTownhallLevel,
@@ -118,95 +116,75 @@ class ClanDetailResponseModel {
         members: members ?? this.members,
         memberList: memberList ?? this.memberList,
         labels: labels ?? this.labels,
-        requiredVersusTrophies:
-            requiredVersusTrophies ?? this.requiredVersusTrophies,
-        requiredTownhallLevel:
-            requiredTownhallLevel ?? this.requiredTownhallLevel,
+        requiredVersusTrophies: requiredVersusTrophies ?? this.requiredVersusTrophies,
+        requiredTownhallLevel: requiredTownhallLevel ?? this.requiredTownhallLevel,
         clanCapital: clanCapital ?? this.clanCapital,
         chatLanguage: chatLanguage ?? this.chatLanguage,
       );
 
-  factory ClanDetailResponseModel.fromJson(Map<String, dynamic> json) =>
-      ClanDetailResponseModel(
-        tag: json["tag"],
-        name: json["name"],
-        type: json["type"],
-        description: json["description"],
-        location: json["location"] == null
-            ? null
-            : Location.fromJson(json["location"]),
-        isFamilyFriendly: json["isFamilyFriendly"],
-        badgeUrls: json["badgeUrls"] == null
-            ? null
-            : BadgeUrls.fromJson(json["badgeUrls"]),
-        clanLevel: json["clanLevel"],
-        clanPoints: json["clanPoints"],
-        clanVersusPoints: json["clanVersusPoints"],
-        clanCapitalPoints: json["clanCapitalPoints"],
-        capitalLeague: json["capitalLeague"] == null
-            ? null
-            : League.fromJson(json["capitalLeague"]),
-        requiredTrophies: json["requiredTrophies"],
-        warFrequency: json["warFrequency"],
-        warWinStreak: json["warWinStreak"],
-        warWins: json["warWins"],
-        warTies: json["warTies"],
-        warLosses: json["warLosses"],
-        isWarLogPublic: json["isWarLogPublic"],
-        warLeague: json["warLeague"] == null
-            ? null
-            : League.fromJson(json["warLeague"]),
-        members: json["members"],
-        memberList: json["memberList"] == null
-            ? []
-            : List<Member>.from(
-                json["memberList"]!.map((x) => Member.fromJson(x))),
-        labels: json["labels"] == null
-            ? []
-            : List<Label>.from(json["labels"]!.map((x) => Label.fromJson(x))),
-        requiredVersusTrophies: json["requiredVersusTrophies"],
-        requiredTownhallLevel: json["requiredTownhallLevel"],
-        clanCapital: json["clanCapital"] == null
-            ? null
-            : ClanCapital.fromJson(json["clanCapital"]),
-        chatLanguage: json["chatLanguage"] == null
-            ? null
-            : ChatLanguage.fromJson(json["chatLanguage"]),
-      );
+  factory ClanDetailResponseModel.fromJson(String str) => ClanDetailResponseModel.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "tag": tag,
-        "name": name,
-        "type": type,
-        "description": description,
-        "location": location?.toJson(),
-        "isFamilyFriendly": isFamilyFriendly,
-        "badgeUrls": badgeUrls?.toJson(),
-        "clanLevel": clanLevel,
-        "clanPoints": clanPoints,
-        "clanVersusPoints": clanVersusPoints,
-        "clanCapitalPoints": clanCapitalPoints,
-        "capitalLeague": capitalLeague?.toJson(),
-        "requiredTrophies": requiredTrophies,
-        "warFrequency": warFrequency,
-        "warWinStreak": warWinStreak,
-        "warWins": warWins,
-        "warTies": warTies,
-        "warLosses": warLosses,
-        "isWarLogPublic": isWarLogPublic,
-        "warLeague": warLeague?.toJson(),
-        "members": members,
-        "memberList": memberList == null
-            ? []
-            : List<dynamic>.from(memberList!.map((x) => x.toJson())),
-        "labels": labels == null
-            ? []
-            : List<dynamic>.from(labels!.map((x) => x.toJson())),
-        "requiredVersusTrophies": requiredVersusTrophies,
-        "requiredTownhallLevel": requiredTownhallLevel,
-        "clanCapital": clanCapital?.toJson(),
-        "chatLanguage": chatLanguage?.toJson(),
-      };
+  String toJson() => json.encode(toMap());
+
+  factory ClanDetailResponseModel.fromMap(Map<String, dynamic> json) => ClanDetailResponseModel(
+    tag: json["tag"],
+    name: json["name"],
+    type: json["type"],
+    description: json["description"],
+    location: json["location"] == null ? null : Location.fromMap(json["location"]),
+    isFamilyFriendly: json["isFamilyFriendly"],
+    badgeUrls: json["badgeUrls"] == null ? null : BadgeUrls.fromMap(json["badgeUrls"]),
+    clanLevel: json["clanLevel"],
+    clanPoints: json["clanPoints"],
+    clanVersusPoints: json["clanVersusPoints"],
+    clanCapitalPoints: json["clanCapitalPoints"],
+    capitalLeague: json["capitalLeague"] == null ? null : League.fromMap(json["capitalLeague"]),
+    requiredTrophies: json["requiredTrophies"],
+    warFrequency: json["warFrequency"],
+    warWinStreak: json["warWinStreak"],
+    warWins: json["warWins"],
+    warTies: json["warTies"],
+    warLosses: json["warLosses"],
+    isWarLogPublic: json["isWarLogPublic"],
+    warLeague: json["warLeague"] == null ? null : League.fromMap(json["warLeague"]),
+    members: json["members"],
+    memberList: json["memberList"] == null ? [] : List<MemberList>.from(json["memberList"]!.map((x) => MemberList.fromMap(x))),
+    labels: json["labels"] == null ? [] : List<Label>.from(json["labels"]!.map((x) => Label.fromMap(x))),
+    requiredVersusTrophies: json["requiredVersusTrophies"],
+    requiredTownhallLevel: json["requiredTownhallLevel"],
+    clanCapital: json["clanCapital"] == null ? null : ClanCapital.fromMap(json["clanCapital"]),
+    chatLanguage: json["chatLanguage"] == null ? null : ChatLanguage.fromMap(json["chatLanguage"]),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "tag": tag,
+    "name": name,
+    "type": type,
+    "description": description,
+    "location": location?.toMap(),
+    "isFamilyFriendly": isFamilyFriendly,
+    "badgeUrls": badgeUrls?.toMap(),
+    "clanLevel": clanLevel,
+    "clanPoints": clanPoints,
+    "clanVersusPoints": clanVersusPoints,
+    "clanCapitalPoints": clanCapitalPoints,
+    "capitalLeague": capitalLeague?.toMap(),
+    "requiredTrophies": requiredTrophies,
+    "warFrequency": warFrequency,
+    "warWinStreak": warWinStreak,
+    "warWins": warWins,
+    "warTies": warTies,
+    "warLosses": warLosses,
+    "isWarLogPublic": isWarLogPublic,
+    "warLeague": warLeague?.toMap(),
+    "members": members,
+    "memberList": memberList == null ? [] : List<dynamic>.from(memberList!.map((x) => x.toMap())),
+    "labels": labels == null ? [] : List<dynamic>.from(labels!.map((x) => x.toMap())),
+    "requiredVersusTrophies": requiredVersusTrophies,
+    "requiredTownhallLevel": requiredTownhallLevel,
+    "clanCapital": clanCapital?.toMap(),
+    "chatLanguage": chatLanguage?.toMap(),
+  };
 }
 
 class BadgeUrls {
@@ -231,17 +209,21 @@ class BadgeUrls {
         medium: medium ?? this.medium,
       );
 
-  factory BadgeUrls.fromJson(Map<String, dynamic> json) => BadgeUrls(
-        small: json["small"],
-        large: json["large"],
-        medium: json["medium"],
-      );
+  factory BadgeUrls.fromJson(String str) => BadgeUrls.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "small": small,
-        "large": large,
-        "medium": medium,
-      };
+  String toJson() => json.encode(toMap());
+
+  factory BadgeUrls.fromMap(Map<String, dynamic> json) => BadgeUrls(
+    small: json["small"],
+    large: json["large"],
+    medium: json["medium"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "small": small,
+    "large": large,
+    "medium": medium,
+  };
 }
 
 class League {
@@ -262,15 +244,19 @@ class League {
         name: name ?? this.name,
       );
 
-  factory League.fromJson(Map<String, dynamic> json) => League(
-        id: json["id"],
-        name: json["name"],
-      );
+  factory League.fromJson(String str) => League.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-      };
+  String toJson() => json.encode(toMap());
+
+  factory League.fromMap(Map<String, dynamic> json) => League(
+    id: json["id"],
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+  };
 }
 
 class ChatLanguage {
@@ -295,17 +281,21 @@ class ChatLanguage {
         languageCode: languageCode ?? this.languageCode,
       );
 
-  factory ChatLanguage.fromJson(Map<String, dynamic> json) => ChatLanguage(
-        id: json["id"],
-        name: json["name"],
-        languageCode: json["languageCode"],
-      );
+  factory ChatLanguage.fromJson(String str) => ChatLanguage.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "languageCode": languageCode,
-      };
+  String toJson() => json.encode(toMap());
+
+  factory ChatLanguage.fromMap(Map<String, dynamic> json) => ChatLanguage(
+    id: json["id"],
+    name: json["name"],
+    languageCode: json["languageCode"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+    "languageCode": languageCode,
+  };
 }
 
 class ClanCapital {
@@ -326,20 +316,19 @@ class ClanCapital {
         districts: districts ?? this.districts,
       );
 
-  factory ClanCapital.fromJson(Map<String, dynamic> json) => ClanCapital(
-        capitalHallLevel: json["capitalHallLevel"],
-        districts: json["districts"] == null
-            ? []
-            : List<District>.from(
-                json["districts"]!.map((x) => District.fromJson(x))),
-      );
+  factory ClanCapital.fromJson(String str) => ClanCapital.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "capitalHallLevel": capitalHallLevel,
-        "districts": districts == null
-            ? []
-            : List<dynamic>.from(districts!.map((x) => x.toJson())),
-      };
+  String toJson() => json.encode(toMap());
+
+  factory ClanCapital.fromMap(Map<String, dynamic> json) => ClanCapital(
+    capitalHallLevel: json["capitalHallLevel"],
+    districts: json["districts"] == null ? [] : List<District>.from(json["districts"]!.map((x) => District.fromMap(x))),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "capitalHallLevel": capitalHallLevel,
+    "districts": districts == null ? [] : List<dynamic>.from(districts!.map((x) => x.toMap())),
+  };
 }
 
 class District {
@@ -364,17 +353,21 @@ class District {
         districtHallLevel: districtHallLevel ?? this.districtHallLevel,
       );
 
-  factory District.fromJson(Map<String, dynamic> json) => District(
-        id: json["id"],
-        name: json["name"],
-        districtHallLevel: json["districtHallLevel"],
-      );
+  factory District.fromJson(String str) => District.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "districtHallLevel": districtHallLevel,
-      };
+  String toJson() => json.encode(toMap());
+
+  factory District.fromMap(Map<String, dynamic> json) => District(
+    id: json["id"],
+    name: json["name"],
+    districtHallLevel: json["districtHallLevel"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+    "districtHallLevel": districtHallLevel,
+  };
 }
 
 class Label {
@@ -399,19 +392,21 @@ class Label {
         iconUrls: iconUrls ?? this.iconUrls,
       );
 
-  factory Label.fromJson(Map<String, dynamic> json) => Label(
-        id: json["id"],
-        name: json["name"],
-        iconUrls: json["iconUrls"] == null
-            ? null
-            : LabelIconUrls.fromJson(json["iconUrls"]),
-      );
+  factory Label.fromJson(String str) => Label.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "iconUrls": iconUrls?.toJson(),
-      };
+  String toJson() => json.encode(toMap());
+
+  factory Label.fromMap(Map<String, dynamic> json) => Label(
+    id: json["id"],
+    name: json["name"],
+    iconUrls: json["iconUrls"] == null ? null : LabelIconUrls.fromMap(json["iconUrls"]),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+    "iconUrls": iconUrls?.toMap(),
+  };
 }
 
 class LabelIconUrls {
@@ -432,15 +427,19 @@ class LabelIconUrls {
         medium: medium ?? this.medium,
       );
 
-  factory LabelIconUrls.fromJson(Map<String, dynamic> json) => LabelIconUrls(
-        small: json["small"],
-        medium: json["medium"],
-      );
+  factory LabelIconUrls.fromJson(String str) => LabelIconUrls.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "small": small,
-        "medium": medium,
-      };
+  String toJson() => json.encode(toMap());
+
+  factory LabelIconUrls.fromMap(Map<String, dynamic> json) => LabelIconUrls(
+    small: json["small"],
+    medium: json["medium"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "small": small,
+    "medium": medium,
+  };
 }
 
 class Location {
@@ -469,26 +468,30 @@ class Location {
         countryCode: countryCode ?? this.countryCode,
       );
 
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
-        id: json["id"],
-        name: json["name"],
-        isCountry: json["isCountry"],
-        countryCode: json["countryCode"],
-      );
+  factory Location.fromJson(String str) => Location.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "isCountry": isCountry,
-        "countryCode": countryCode,
-      };
+  String toJson() => json.encode(toMap());
+
+  factory Location.fromMap(Map<String, dynamic> json) => Location(
+    id: json["id"],
+    name: json["name"],
+    isCountry: json["isCountry"],
+    countryCode: json["countryCode"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+    "isCountry": isCountry,
+    "countryCode": countryCode,
+  };
 }
 
-class Member {
-  Member({
+class MemberList {
+  MemberList({
     required this.tag,
     required this.name,
-    this.role,
+    required this.role,
     this.expLevel,
     this.league,
     this.trophies,
@@ -502,7 +505,7 @@ class Member {
 
   final String tag;
   final String name;
-  final String? role;
+  final Role role;
   final int? expLevel;
   final LeagueClass? league;
   final int? trophies;
@@ -513,10 +516,10 @@ class Member {
   final int? donationsReceived;
   final PlayerHouse? playerHouse;
 
-  Member copyWith({
+  MemberList copyWith({
     String? tag,
     String? name,
-    String? role,
+    Role? role,
     int? expLevel,
     LeagueClass? league,
     int? trophies,
@@ -527,7 +530,7 @@ class Member {
     int? donationsReceived,
     PlayerHouse? playerHouse,
   }) =>
-      Member(
+      MemberList(
         tag: tag ?? this.tag,
         name: name ?? this.name,
         role: role ?? this.role,
@@ -542,39 +545,39 @@ class Member {
         playerHouse: playerHouse ?? this.playerHouse,
       );
 
-  factory Member.fromJson(Map<String, dynamic> json) => Member(
-        tag: json["tag"],
-        name: json["name"],
-        role: json["role"],
-        expLevel: json["expLevel"],
-        league: json["league"] == null
-            ? null
-            : LeagueClass.fromJson(json["league"]),
-        trophies: json["trophies"],
-        versusTrophies: json["versusTrophies"],
-        clanRank: json["clanRank"],
-        previousClanRank: json["previousClanRank"],
-        donations: json["donations"],
-        donationsReceived: json["donationsReceived"],
-        playerHouse: json["playerHouse"] == null
-            ? null
-            : PlayerHouse.fromJson(json["playerHouse"]),
-      );
+  factory MemberList.fromJson(String str) => MemberList.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "tag": tag,
-        "name": name,
-        "role": role,
-        "expLevel": expLevel,
-        "league": league?.toJson(),
-        "trophies": trophies,
-        "versusTrophies": versusTrophies,
-        "clanRank": clanRank,
-        "previousClanRank": previousClanRank,
-        "donations": donations,
-        "donationsReceived": donationsReceived,
-        "playerHouse": playerHouse?.toJson(),
-      };
+  String toJson() => json.encode(toMap());
+
+  factory MemberList.fromMap(Map<String, dynamic> json) => MemberList(
+    tag: json["tag"],
+    name: json["name"],
+    role: roleValues.map[json["role"]]!,
+    expLevel: json["expLevel"],
+    league: json["league"] == null ? null : LeagueClass.fromMap(json["league"]),
+    trophies: json["trophies"],
+    versusTrophies: json["versusTrophies"],
+    clanRank: json["clanRank"],
+    previousClanRank: json["previousClanRank"],
+    donations: json["donations"],
+    donationsReceived: json["donationsReceived"],
+    playerHouse: json["playerHouse"] == null ? null : PlayerHouse.fromMap(json["playerHouse"]),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "tag": tag,
+    "name": name,
+    "role": roleValues.reverse[role],
+    "expLevel": expLevel,
+    "league": league?.toMap(),
+    "trophies": trophies,
+    "versusTrophies": versusTrophies,
+    "clanRank": clanRank,
+    "previousClanRank": previousClanRank,
+    "donations": donations,
+    "donationsReceived": donationsReceived,
+    "playerHouse": playerHouse?.toMap(),
+  };
 }
 
 class LeagueClass {
@@ -599,19 +602,21 @@ class LeagueClass {
         iconUrls: iconUrls ?? this.iconUrls,
       );
 
-  factory LeagueClass.fromJson(Map<String, dynamic> json) => LeagueClass(
-        id: json["id"],
-        name: json["name"],
-        iconUrls: json["iconUrls"] == null
-            ? null
-            : LeagueIconUrls.fromJson(json["iconUrls"]),
-      );
+  factory LeagueClass.fromJson(String str) => LeagueClass.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "iconUrls": iconUrls?.toJson(),
-      };
+  String toJson() => json.encode(toMap());
+
+  factory LeagueClass.fromMap(Map<String, dynamic> json) => LeagueClass(
+    id: json["id"],
+    name: json["name"],
+    iconUrls: json["iconUrls"] == null ? null : LeagueIconUrls.fromMap(json["iconUrls"]),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+    "iconUrls": iconUrls?.toMap(),
+  };
 }
 
 class LeagueIconUrls {
@@ -636,17 +641,21 @@ class LeagueIconUrls {
         medium: medium ?? this.medium,
       );
 
-  factory LeagueIconUrls.fromJson(Map<String, dynamic> json) => LeagueIconUrls(
-        small: json["small"],
-        tiny: json["tiny"],
-        medium: json["medium"],
-      );
+  factory LeagueIconUrls.fromJson(String str) => LeagueIconUrls.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "small": small,
-        "tiny": tiny,
-        "medium": medium,
-      };
+  String toJson() => json.encode(toMap());
+
+  factory LeagueIconUrls.fromMap(Map<String, dynamic> json) => LeagueIconUrls(
+    small: json["small"],
+    tiny: json["tiny"],
+    medium: json["medium"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "small": small,
+    "tiny": tiny,
+    "medium": medium,
+  };
 }
 
 class PlayerHouse {
@@ -663,18 +672,17 @@ class PlayerHouse {
         elements: elements ?? this.elements,
       );
 
-  factory PlayerHouse.fromJson(Map<String, dynamic> json) => PlayerHouse(
-        elements: json["elements"] == null
-            ? []
-            : List<Element>.from(
-                json["elements"]!.map((x) => Element.fromJson(x))),
-      );
+  factory PlayerHouse.fromJson(String str) => PlayerHouse.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "elements": elements == null
-            ? []
-            : List<dynamic>.from(elements!.map((x) => x.toJson())),
-      };
+  String toJson() => json.encode(toMap());
+
+  factory PlayerHouse.fromMap(Map<String, dynamic> json) => PlayerHouse(
+    elements: json["elements"] == null ? [] : List<Element>.from(json["elements"]!.map((x) => Element.fromMap(x))),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "elements": elements == null ? [] : List<dynamic>.from(elements!.map((x) => x.toMap())),
+  };
 }
 
 class Element {
@@ -683,11 +691,11 @@ class Element {
     this.id,
   });
 
-  final String? type;
+  final Type? type;
   final int? id;
 
   Element copyWith({
-    String? type,
+    Type? type,
     int? id,
   }) =>
       Element(
@@ -695,13 +703,47 @@ class Element {
         id: id ?? this.id,
       );
 
-  factory Element.fromJson(Map<String, dynamic> json) => Element(
-        type: json["type"],
-        id: json["id"],
-      );
+  factory Element.fromJson(String str) => Element.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() => {
-        "type": type,
-        "id": id,
-      };
+  String toJson() => json.encode(toMap());
+
+  factory Element.fromMap(Map<String, dynamic> json) => Element(
+    type: typeValues.map[json["type"]]!,
+    id: json["id"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "type": typeValues.reverse[type],
+    "id": id,
+  };
+}
+
+enum Type { GROUND, WALLS, ROOF, DECORATION }
+
+final typeValues = EnumValues({
+  "decoration": Type.DECORATION,
+  "ground": Type.GROUND,
+  "roof": Type.ROOF,
+  "walls": Type.WALLS
+});
+
+enum Role { ADMIN, MEMBER, CO_LEADER, LEADER }
+
+final roleValues = EnumValues({
+  "admin": Role.ADMIN,
+  "coLeader": Role.CO_LEADER,
+  "leader": Role.LEADER,
+  "member": Role.MEMBER
+});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }

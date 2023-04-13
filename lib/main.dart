@@ -11,8 +11,12 @@ import 'package:more_useful_clash_of_clans/repositories/bookmarked_clans/bookmar
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_clans/bookmarked_clans_repository.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_player_tags/bookmarked_player_tags_cache.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_player_tags/bookmarked_player_tags_repository.dart';
+import 'package:more_useful_clash_of_clans/repositories/bookmarked_players/bookmarked_players_cache.dart';
+import 'package:more_useful_clash_of_clans/repositories/bookmarked_players/bookmarked_players_repository.dart';
 import 'package:more_useful_clash_of_clans/repositories/search_clan/search_clan_cache.dart';
 import 'package:more_useful_clash_of_clans/repositories/search_clan/search_clan_repository.dart';
+import 'package:more_useful_clash_of_clans/repositories/search_player/search_player_cache.dart';
+import 'package:more_useful_clash_of_clans/repositories/search_player/search_player_repository.dart';
 import 'package:more_useful_clash_of_clans/utils/helpers/enum_helper.dart';
 import 'package:more_useful_clash_of_clans/routes.dart';
 import 'package:more_useful_clash_of_clans/utils/themes/app_themes.dart';
@@ -23,10 +27,12 @@ import 'bloc/theme/theme_cubit.dart';
 import 'bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import 'bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
 import 'bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
+import 'bloc/widgets/bookmarked_players/bookmarked_players_bloc.dart';
 import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import 'bloc/widgets/clan_detail/clan_detail_bloc.dart';
 import 'bloc/widgets/player_detail/player_detail_bloc.dart';
 import 'bloc/widgets/search_clan/search_clan_bloc.dart';
+import 'bloc/widgets/search_player/search_player_bloc.dart';
 import 'utils/constants/locale_key.dart';
 import 'utils/enums/locale_enum.dart';
 import 'utils/helpers/cache_helper.dart';
@@ -65,6 +71,11 @@ class App extends StatelessWidget {
           ),
         ),
         RepositoryProvider(
+          create: (context) => SearchPlayerRepository(
+            cache: SearchPlayerCache(),
+          ),
+        ),
+        RepositoryProvider(
           create: (context) => BookmarkedClanTagsRepository(
             cache: BookmarkedClanTagsCache(),
           ),
@@ -77,6 +88,11 @@ class App extends StatelessWidget {
         RepositoryProvider(
           create: (context) => BookmarkedClansRepository(
             cache: BookmarkedClansCache(),
+          ),
+        ),
+        RepositoryProvider(
+          create: (context) => BookmarkedPlayersRepository(
+            cache: BookmarkedPlayersCache(),
           ),
         ),
       ],
@@ -94,6 +110,11 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) => SearchClanBloc(
               searchClanRepository: context.read<SearchClanRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => SearchPlayerBloc(
+              searchPlayerRepository: context.read<SearchPlayerRepository>(),
             ),
           ),
           BlocProvider(
@@ -118,6 +139,12 @@ class App extends StatelessWidget {
             create: (context) => BookmarkedClansBloc(
               bookmarkedClansRepository:
                   context.read<BookmarkedClansRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => BookmarkedPlayersBloc(
+              bookmarkedPlayersRepository:
+              context.read<BookmarkedPlayersRepository>(),
             ),
           ),
         ],

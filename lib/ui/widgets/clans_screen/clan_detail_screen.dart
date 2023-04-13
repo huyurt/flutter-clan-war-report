@@ -101,7 +101,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
           }
           if (state is ClanDetailStateSuccess) {
             ClanDetailResponseModel clan = state.clanDetail;
-            List<Member> members = clan.memberList ?? <Member>[];
+            List<MemberList> members = clan.memberList ?? <MemberList>[];
             return SingleChildScrollView(
               child: Column(
                 children: [

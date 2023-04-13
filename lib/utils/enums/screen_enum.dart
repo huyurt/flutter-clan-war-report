@@ -1,6 +1,6 @@
 enum ScreenEnum {
-  clans,
   wars,
+  clans,
   players,
   setting,
 }

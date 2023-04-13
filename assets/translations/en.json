@@ -3,5 +3,9 @@
   "en": "English",
   "tr": "Turkish",
   "SearchClanMessage": "Enter the clan name or clan tag in the search field above.",
-  "SelectALanguage": "Select a language"
+  "SearchPlayerMessage": "Enter the player tag in the search field above.",
+  "SelectALanguage": "Select a language",
+  "open_clan_type": "Anyone Can Join",
+  "inviteOnly_clan_type": "Invite Only",
+  "closed_clan_type": "Closed"
 }
