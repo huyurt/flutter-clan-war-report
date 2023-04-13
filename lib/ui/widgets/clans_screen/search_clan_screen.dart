@@ -29,8 +29,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   final _listController = ScrollController();
   String? _after = '';
 
-  final TextEditingController _clanFilterController =
-      TextEditingController(text: 'kusur');
+  final TextEditingController _clanFilterController = TextEditingController();
   RangeValues _members = const RangeValues(
       AppConstants.minMembersFilter, AppConstants.maxMembersFilter);
   double _minClanLevel = AppConstants.minClanLevelFilter;

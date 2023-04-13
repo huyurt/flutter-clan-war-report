@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:more_useful_clash_of_clans/ui/widgets/players_screen/search_player_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
@@ -22,14 +23,16 @@ class AppFloatingActionButton extends StatelessWidget {
             const SearchClanScreen().launch(context);
           },
         );
-      default:
+      case ScreenEnum.players:
         return FloatingActionButton.extended(
           label: Text(tr(LocaleKey.search)),
           icon: const Icon(Icons.search),
           onPressed: () {
-            toast('...Ekleniyor');
+            const SearchPlayerScreen().launch(context);
           },
         );
+      default:
+        return Container();
     }
   }
 }

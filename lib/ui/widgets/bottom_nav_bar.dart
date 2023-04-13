@@ -32,12 +32,12 @@ class BottomNavBar extends StatelessWidget {
         unselectedItemColor: Theme.of(context).textTheme.bodySmall!.color,
         items: [
           BottomNavigationBarItem(
-            icon: const Icon(Ionicons.information_circle_outline),
-            label: tr(LocaleKey.clans),
-          ),
-          BottomNavigationBarItem(
             icon: const Icon(Ionicons.home_outline),
             label: tr(LocaleKey.wars),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Ionicons.information_circle_outline),
+            label: tr(LocaleKey.clans),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Ionicons.planet_outline),

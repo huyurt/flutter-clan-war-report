@@ -13,6 +13,9 @@ class LocaleKey {
   static const searchClan = 'Search Clan';
   static const noClanFound = 'No Clan Found';
   static const searchClanMessage = 'SearchClanMessage';
+  static const searchPlayer = 'Search Player';
+  static const noPlayerFound = 'No Player Found';
+  static const searchPlayerMessage = 'SearchPlayerMessage';
   static const location = 'Location';
   static const members = 'Members';
   static const minimumLevel = 'Minimum Level';
@@ -126,4 +129,7 @@ class LocaleKey {
   static const logLauncher = 'Log Launcher';
   static const flameFlinger = 'Flame Flinger';
   static const battleDrill = 'Battle Drill';
+  static const openClanType = 'open_clan_type';
+  static const inviteOnlyClanType = 'inviteOnly_clan_type';
+  static const closedClanType = 'closed_clan_type';
 }

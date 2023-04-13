@@ -3,35 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
-import '../../bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
-import '../../bloc/widgets/bookmarked_clans/bookmarked_clans_event.dart';
-import '../../bloc/widgets/bookmarked_clans/bookmarked_clans_state.dart';
-import '../../models/api/clan_detail_response_model.dart';
+import '../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
+import '../../bloc/widgets/bookmarked_players/bookmarked_players_event.dart';
+import '../../bloc/widgets/bookmarked_players/bookmarked_players_bloc.dart';
+import '../../bloc/widgets/bookmarked_players/bookmarked_players_state.dart';
+import '../../models/api/player_detail_response_model.dart';
 import '../../utils/constants/app_constants.dart';
-import '../widgets/clans_screen/clan_detail_screen.dart';
+import '../widgets/clans_screen/player_detail_screen.dart';
 
-class ClansScreen extends StatefulWidget {
-  const ClansScreen({super.key});
+class PlayersScreen extends StatefulWidget {
+  const PlayersScreen({super.key});
 
   @override
-  State<ClansScreen> createState() => _ClansScreenState();
+  State<PlayersScreen> createState() => _PlayersScreenState();
 }
 
-class _ClansScreenState extends State<ClansScreen> {
-  late BookmarkedClansBloc _bookmarkedClansBloc;
+class _PlayersScreenState extends State<PlayersScreen> {
+  late BookmarkedPlayersBloc _bookmarkedPlayersBloc;
 
   @override
   void initState() {
     super.initState();
-    _bookmarkedClansBloc = context.read<BookmarkedClansBloc>();
+    _bookmarkedPlayersBloc = context.read<BookmarkedPlayersBloc>();
   }
 
   @override
   void didChangeDependencies() {
-    _bookmarkedClansBloc.add(
-      GetBookmarkedClanDetail(
-        clanTagList: context.watch<BookmarkedClanTagsCubit>().state.clanTags,
+    _bookmarkedPlayersBloc.add(
+      GetBookmarkedPlayerDetail(
+        playerTagList: context.watch<BookmarkedPlayerTagsCubit>().state.playerTags,
       ),
     );
     super.didChangeDependencies();
@@ -45,23 +45,23 @@ class _ClansScreenState extends State<ClansScreen> {
           parent: AlwaysScrollableScrollPhysics(),
         ),
         itemCount:
-            context.watch<BookmarkedClanTagsCubit>().state.clanTags.length,
+            context.watch<BookmarkedPlayerTagsCubit>().state.playerTags.length,
         itemBuilder: (BuildContext context, int index) {
-          return BlocBuilder<BookmarkedClansBloc, BookmarkedClansState>(
+          return BlocBuilder<BookmarkedPlayersBloc, BookmarkedPlayersState>(
             builder: (context, state) {
-              if (state is BookmarkedClansStateLoading) {
+              if (state is BookmarkedPlayersStateLoading) {
                 return Container();
                 return const Center(child: CircularProgressIndicator());
               }
-              if (state is BookmarkedClansStateError) {
+              if (state is BookmarkedPlayersStateError) {
                 return Container();
                 return Center(child: Text(tr('search_failed_message')));
               }
-              if (state is BookmarkedClansStateSuccess) {
-                if (state.clanDetailList.length - 1 < index) {
+              if (state is BookmarkedPlayersStateSuccess) {
+                if (state.playerDetailList.length - 1 < index) {
                   return Container();
                 }
-                ClanDetailResponseModel clan = state.clanDetailList[index];
+                PlayerDetailResponseModel player = state.playerDetailList[index];
                 return Card(
                   margin: const EdgeInsets.all(0.0),
                   elevation: 0.0,
@@ -71,8 +71,8 @@ class _ClansScreenState extends State<ClansScreen> {
                   ),
                   child: InkWell(
                     onTap: () {
-                      ClanDetailScreen(
-                        clanTag: clan.tag,
+                      PlayerDetailScreen(
+                        playerTag: player.tag,
                       ).launch(context);
                     },
                     child: Padding(
@@ -85,7 +85,7 @@ class _ClansScreenState extends State<ClansScreen> {
                             FadeInImage.assetNetwork(
                               height: 60,
                               width: 60,
-                              image: clan.badgeUrls?.large ??
+                              image: player.league?.iconUrls?.medium ??
                                   AppConstants.placeholderImage,
                               placeholder: AppConstants.placeholderImage,
                               fit: BoxFit.cover,
@@ -100,14 +100,14 @@ class _ClansScreenState extends State<ClansScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      clan.name,
+                                      player.name,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: const TextStyle(fontSize: 16),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(tr("${clan.type}_clan_type")),
+                                      child: Text(player.clan?.name ?? ''),
                                     ),
                                   ],
                                 ),
@@ -124,7 +124,7 @@ class _ClansScreenState extends State<ClansScreen> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                          '${(clan.clanPoints ?? 0).toString()} '),
+                                          '${(player.trophies ?? 0).toString()} '),
                                       Image.asset(
                                         '${AppConstants.clashResourceImagePath}${AppConstants.cup1Image}',
                                         height: 20,

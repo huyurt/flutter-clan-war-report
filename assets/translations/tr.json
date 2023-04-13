@@ -15,6 +15,9 @@
   "Search Clan": "Klan Ara",
   "No Clan Found": "Klan Bulunamadı",
   "SearchClanMessage": "Yukarıdaki arama kutusuna klan adı ya da klan etiketi girin.",
+  "Search Player": "Oyuncu Ara",
+  "No Player Found": "Oyuncu Bulunamadı",
+  "SearchPlayerMessage": "Yukarıdaki arama kutusuna oyuncu etiketi girin.",
   "Location": "Konum",
   "Members": "Üyeler",
   "Minimum Level": "Minimum Seviye",
@@ -125,5 +128,8 @@
   "Spells": "Büyüler",
   "Siege Machines": "Kuşatma Makineleri",
   "Level": "Seviye",
-  "Not unlocked": "Kilidi açılmamış"
+  "Not unlocked": "Kilidi açılmamış",
+  "open_clan_type": "Herkese Açık",
+  "inviteOnly_clan_type": "Yalnızca Davetle",
+  "closed_clan_type": "Kapalı"
 }
