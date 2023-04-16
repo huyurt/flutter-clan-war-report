@@ -17,6 +17,9 @@ class AppConstants {
   static const cup1Image = 'cup_1.png';
   static const star0Image = 'star_0.png';
   static const star2Image = 'star_2.png';
+  static const star3_0Image = 'star_3_0.png';
+  static const star3_1Image = 'star_3_1.png';
+  static const star3_2Image = 'star_3_2.png';
 
   static const clashResourceImagePath = 'assets/images/clash-resource/';
   static const clanWarLeaguesImagePath = 'assets/images/clash-resource/clan-war-leagues/';

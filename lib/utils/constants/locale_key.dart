@@ -132,4 +132,18 @@ class LocaleKey {
   static const openClanType = 'open_clan_type';
   static const inviteOnlyClanType = 'inviteOnly_clan_type';
   static const closedClanType = 'closed_clan_type';
+  static const notInWarDescription = 'notInWar_description';
+  static const inWarDescription = 'inWar_description';
+  static const preparationDescription = 'preparation_description';
+  static const warEndedDescription = 'warEnded_description';
+  static const tabStatsTitle = 'tab_stats_title';
+  static const tabEventsTitle = 'tab_events_title';
+  static const tabMyTeamTitle = 'tab_my_team_title';
+  static const tabEnemyTeamTitle = 'tab_enemy_team_title';
+  static const stars = 'Stars';
+  static const totalDestruction = 'Total Destruction';
+  static const attacksUsed = 'Attacks Used';
+  static const averageStars = 'Average Stars';
+  static const averageDestruction = 'Average Destruction';
+  static const averageAttackDuration = 'Average Attack Duration';
 }

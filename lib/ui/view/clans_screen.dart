@@ -61,7 +61,7 @@ class _ClansScreenState extends State<ClansScreen> {
                 if (state.clanDetailList.length - 1 < index) {
                   return Container();
                 }
-                ClanDetailResponseModel clan = state.clanDetailList[index];
+                final clan = state.clanDetailList[index];
                 return Card(
                   margin: const EdgeInsets.all(0.0),
                   elevation: 0.0,

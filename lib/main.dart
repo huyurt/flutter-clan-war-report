@@ -9,6 +9,8 @@ import 'package:more_useful_clash_of_clans/repositories/bookmarked_clan_tags/boo
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_clans/bookmarked_clans_cache.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_clans/bookmarked_clans_repository.dart';
+import 'package:more_useful_clash_of_clans/repositories/bookmarked_clans_current_war/bookmarked_clans_current_war_cache.dart';
+import 'package:more_useful_clash_of_clans/repositories/bookmarked_clans_current_war/bookmarked_clans_current_war_repository.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_player_tags/bookmarked_player_tags_cache.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_player_tags/bookmarked_player_tags_repository.dart';
 import 'package:more_useful_clash_of_clans/repositories/bookmarked_players/bookmarked_players_cache.dart';
@@ -26,6 +28,7 @@ import 'bloc/locale/locale_cubit.dart';
 import 'bloc/theme/theme_cubit.dart';
 import 'bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import 'bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
+import 'bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current_war_bloc.dart';
 import 'bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
 import 'bloc/widgets/bookmarked_players/bookmarked_players_bloc.dart';
 import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
@@ -95,6 +98,11 @@ class App extends StatelessWidget {
             cache: BookmarkedPlayersCache(),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => BookmarkedClansCurrentWarRepository(
+            cache: BookmarkedClansCurrentWarCache(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -144,7 +152,15 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) => BookmarkedPlayersBloc(
               bookmarkedPlayersRepository:
-              context.read<BookmarkedPlayersRepository>(),
+                  context.read<BookmarkedPlayersRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => BookmarkedClansCurrentWarBloc(
+              bookmarkedClanTagsRepository:
+                  context.read<BookmarkedClanTagsRepository>(),
+              bookmarkedClansCurrentWarRepository:
+                  context.read<BookmarkedClansCurrentWarRepository>(),
             ),
           ),
         ],

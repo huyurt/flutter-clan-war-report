@@ -131,5 +131,19 @@
   "Not unlocked": "Kilidi açılmamış",
   "open_clan_type": "Herkese Açık",
   "inviteOnly_clan_type": "Yalnızca Davetle",
-  "closed_clan_type": "Kapalı"
+  "closed_clan_type": "Kapalı",
+  "notInWar_description": "Savaşta Değil",
+  "inWar_description": "Savaş Günü",
+  "preparation_description": "Hazırlık Günü",
+  "warEnded_description": "Savaş Sona Erdi",
+  "tab_stats_title": "İstatistikler",
+  "tab_events_title": "Savaş Etkinlikleri",
+  "tab_my_team_title": "Benim Takımım",
+  "tab_enemy_team_title": "Düşman Takım",
+  "Stars": "Yıldızlar",
+  "Total Destruction": "Toplam Yıkım",
+  "Attacks Used": "Yapılan Saldırılar",
+  "Average Stars": "Ortalama Yıldızlar",
+  "Average Destruction": "Ortalama Yıkım",
+  "Average Attack Duration": "Ortalama Saldırı Süresi"
 }

@@ -99,26 +99,26 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
             return Center(child: Text(tr('search_failed_message')));
           }
           if (state is PlayerDetailStateSuccess) {
-            PlayerDetailResponseModel player = state.playerDetail;
-            Iterable<PlayerItemLevel> heroes = player.heroes
+            final player = state.playerDetail;
+            final heroes = player.heroes
                     ?.where((element) => element.village == Village.HOME) ??
                 <PlayerItemLevel>[].where((element) =>
                     ImageHelper.getHeroes().contains(element.name));
-            Iterable<PlayerItemLevel> troops = (player.troops
+            final troops = (player.troops
                         ?.where((element) => element.village == Village.HOME) ??
                     <PlayerItemLevel>[])
                 .where((element) =>
                     ImageHelper.getTroops().contains(element.name));
-            Iterable<PlayerItemLevel> pets = (player.troops
+            final pets = (player.troops
                         ?.where((element) => element.village == Village.HOME) ??
                     <PlayerItemLevel>[])
                 .where(
                     (element) => ImageHelper.getPets().contains(element.name));
-            Iterable<PlayerItemLevel> spells = player.spells
+            final spells = player.spells
                     ?.where((element) => element.village == Village.HOME) ??
                 <PlayerItemLevel>[].where((element) =>
                     ImageHelper.getSpells().contains(element.name));
-            Iterable<PlayerItemLevel> siegeMachines = player.troops
+            final siegeMachines = player.troops
                     ?.where((element) => element.village == Village.HOME) ??
                 <PlayerItemLevel>[].where((element) =>
                     ImageHelper.getSiegeMachines().contains(element.name));

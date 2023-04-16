@@ -34,6 +34,7 @@ dependencies:
   # COMMON
   animate_do: ^3.0.2
   dio: ^5.0.2
+  duration: ^3.0.12
   easy_localization: ^3.0.1
   equatable: ^2.0.5
   flutter_displaymode: ^0.5.0
