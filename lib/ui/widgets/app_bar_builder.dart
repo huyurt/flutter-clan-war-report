@@ -36,7 +36,7 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
               bookmarkedClansCurrentWarBloc.add(
                 GetBookmarkedClansCurrentWar(
                   clanTagList:
-                      context.watch<BookmarkedClanTagsCubit>().state.clanTags,
+                      context.read<BookmarkedClanTagsCubit>().state.clanTags,
                 ),
               );
             },
