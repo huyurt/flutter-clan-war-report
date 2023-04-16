@@ -1,8 +1,7 @@
-import 'package:duration/duration.dart';
-import 'package:duration/locale.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
@@ -13,6 +12,7 @@ import '../../models/api/clan_war_response_model.dart';
 import '../../utils/constants/app_constants.dart';
 import '../../utils/enums/war_state_enum.dart';
 import '../widgets/clans_current_war_screen/war_detail_screen.dart';
+import '../widgets/countdown_timer/countdown_timer_widget.dart';
 
 class ClansCurrentWarScreen extends StatefulWidget {
   const ClansCurrentWarScreen({super.key});
@@ -23,12 +23,19 @@ class ClansCurrentWarScreen extends StatefulWidget {
 
 class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
   late BookmarkedClansCurrentWarBloc _bookmarkedClansCurrentWarBloc;
+  late CountdownTimerController controller;
 
   @override
   void initState() {
     super.initState();
     _bookmarkedClansCurrentWarBloc =
         context.read<BookmarkedClansCurrentWarBloc>();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -73,38 +80,16 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                   return Container();
                 }
 
+                DateTime? remainingDateTime;
                 final startTime =
                     DateTime.tryParse(clanCurrentWar.startTime ?? '');
                 final endTime = DateTime.tryParse(clanCurrentWar.endTime ?? '');
-                String? remainingTimeText;
-                Duration? remainingEndTime;
                 if (endTime != null &&
                     clanCurrentWar.state == WarStateEnum.inWar.name) {
-                  remainingEndTime = endTime.difference(DateTime.now().toUtc());
+                  remainingDateTime = endTime;
                 } else if (startTime != null &&
                     clanCurrentWar.state == WarStateEnum.preparation.name) {
-                  remainingEndTime =
-                      startTime.difference(DateTime.now().toUtc());
-                }
-                if (remainingEndTime != null) {
-                  final durationLocale = DurationLocale.fromLanguageCode(
-                      context.locale.languageCode);
-                  remainingTimeText = durationLocale != null
-                      ? printDuration(
-                          remainingEndTime,
-                          abbreviated: true,
-                          tersity: DurationTersity.minute,
-                          upperTersity: DurationTersity.hour,
-                          conjugation: ' ',
-                          locale: durationLocale,
-                        )
-                      : printDuration(
-                          remainingEndTime,
-                          abbreviated: true,
-                          tersity: DurationTersity.minute,
-                          upperTersity: DurationTersity.hour,
-                          conjugation: ' ',
-                        );
+                  remainingDateTime = startTime;
                 }
 
                 Clan clan;
@@ -124,6 +109,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                             clan.destructionPercentage >
                                 opponent.destructionPercentage))
                     : null;
+
                 return Card(
                   margin: const EdgeInsets.all(0.0),
                   elevation: 0.0,
@@ -175,8 +161,10 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    if (!remainingTimeText.isEmptyOrNull)
-                                      Text(remainingTimeText!),
+                                    if (remainingDateTime != null)
+                                      CountdownTimerWidget(
+                                        remainingDateTime: remainingDateTime,
+                                      ),
                                     Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,

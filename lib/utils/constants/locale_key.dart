@@ -146,4 +146,7 @@ class LocaleKey {
   static const averageStars = 'Average Stars';
   static const averageDestruction = 'Average Destruction';
   static const averageAttackDuration = 'Average Attack Duration';
+  static const hourShort = 'hour_short';
+  static const minuteShort = 'minute_short';
+  static const secondShort = 'second_short';
 }

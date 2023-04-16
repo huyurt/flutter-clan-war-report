@@ -8,6 +8,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../../models/api/clan_war_response_model.dart';
 import '../../../utils/constants/app_constants.dart';
 import '../../../utils/enums/war_state_enum.dart';
+import '../countdown_timer/countdown_timer_widget.dart';
 
 class WarDetailStatsScreen extends StatefulWidget {
   const WarDetailStatsScreen(
@@ -34,6 +35,15 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
       opponent = clanCurrentWar.clan;
     }
 
+    final starsTotalCount = clan.stars + opponent.stars;
+    final starsRatio =
+        clan.stars / (starsTotalCount == 0 ? 1 : starsTotalCount);
+
+    final destructionPercentageTotal =
+        clan.destructionPercentage + opponent.destructionPercentage;
+    final destructionPercentageRatio = clan.destructionPercentage /
+        (destructionPercentageTotal == 0 ? 1 : destructionPercentageTotal);
+
     int clan3StarCount = 0;
     int clan2StarCount = 0;
     int clan1StarCount = 0;
@@ -49,11 +59,16 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
           e.attacks.sumBy((e) => e.destructionPercentage ?? 0);
       clanTotalDuration += e.attacks.sumBy((e) => e.duration ?? 0);
     });
+    final clanStarsTotalCount =
+        clan3StarCount + clan2StarCount + clan1StarCount + clan0StarCount;
     final clanAverageStars =
         (clan3StarCount * 3 + clan2StarCount * 2 + clan1StarCount * 1) /
-            (clan3StarCount + clan2StarCount + clan1StarCount + clan0StarCount);
-    final clanAverageDuration =
-        Duration(seconds: (clanTotalDuration / clan.attacks).floor());
+            (clanStarsTotalCount == 0 ? 1 : clanStarsTotalCount);
+    final clanAverageDestruction =
+        clanTotalDestruction / (clan.attacks == 0 ? 1 : clan.attacks);
+    final clanAverageDuration = clan.attacks == 0
+        ? const Duration(seconds: 0)
+        : Duration(seconds: (clanTotalDuration / clan.attacks).floor());
 
     int opponent3StarCount = 0;
     int opponent2StarCount = 0;
@@ -70,15 +85,19 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
           e.attacks.sumBy((e) => e.destructionPercentage ?? 0);
       opponentTotalDuration += e.attacks.sumBy((e) => e.duration ?? 0);
     });
+    final opponentStarsTotalCount = opponent3StarCount +
+        opponent2StarCount +
+        opponent1StarCount +
+        opponent0StarCount;
     final opponentAverageStars = (opponent3StarCount * 3 +
             opponent2StarCount * 2 +
             opponent1StarCount * 1) /
-        (opponent3StarCount +
-            opponent2StarCount +
-            opponent1StarCount +
-            opponent0StarCount);
-    final opponentAverageDuration =
-        Duration(seconds: (opponentTotalDuration / opponent.attacks).floor());
+        (opponentStarsTotalCount == 0 ? 1 : opponentStarsTotalCount);
+    final opponentAverageDestruction = opponentTotalDestruction /
+        (opponent.attacks == 0 ? 1 : opponent.attacks);
+    final opponentAverageDuration = opponent.attacks == 0
+        ? const Duration(seconds: 0)
+        : Duration(seconds: (opponentTotalDuration / opponent.attacks).floor());
 
     final durationLocale =
         DurationLocale.fromLanguageCode(context.locale.languageCode);
@@ -111,35 +130,14 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
             conjugation: ' ',
           );
 
+    DateTime? remainingDateTime;
     final startTime = DateTime.tryParse(clanCurrentWar.startTime ?? '');
     final endTime = DateTime.tryParse(clanCurrentWar.endTime ?? '');
-    String? remainingTimeText;
-    Duration? remainingEndTime;
     if (endTime != null && clanCurrentWar.state == WarStateEnum.inWar.name) {
-      remainingEndTime = endTime.difference(DateTime.now().toUtc());
+      remainingDateTime = endTime;
     } else if (startTime != null &&
         clanCurrentWar.state == WarStateEnum.preparation.name) {
-      remainingEndTime = startTime.difference(DateTime.now().toUtc());
-    }
-    if (remainingEndTime != null) {
-      final durationLocale =
-          DurationLocale.fromLanguageCode(context.locale.languageCode);
-      remainingTimeText = durationLocale != null
-          ? printDuration(
-              remainingEndTime,
-              abbreviated: true,
-              tersity: DurationTersity.minute,
-              upperTersity: DurationTersity.hour,
-              conjugation: ' ',
-              locale: durationLocale,
-            )
-          : printDuration(
-              remainingEndTime,
-              abbreviated: true,
-              tersity: DurationTersity.minute,
-              upperTersity: DurationTersity.hour,
-              conjugation: ' ',
-            );
+      remainingDateTime = startTime;
     }
 
     return Column(
@@ -167,8 +165,10 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                       tr('${clanCurrentWar.state}_description'),
                       style: const TextStyle(fontSize: 18.0),
                     ),
-                    if (!remainingTimeText.isEmptyOrNull)
-                      Text(remainingTimeText!),
+                    if (remainingDateTime != null)
+                      CountdownTimerWidget(
+                        remainingDateTime: remainingDateTime,
+                      ),
                   ],
                 ),
               ),
@@ -201,7 +201,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: LinearProgressIndicator(
-                        value: clan.stars / (clan.stars + opponent.stars),
+                        value: starsRatio,
                         backgroundColor: Colors.red,
                         valueColor:
                             const AlwaysStoppedAnimation<Color>(Colors.green),
@@ -240,9 +240,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: LinearProgressIndicator(
-                        value: clan.destructionPercentage /
-                            (clan.destructionPercentage +
-                                opponent.destructionPercentage),
+                        value: destructionPercentageRatio,
                         backgroundColor: Colors.red,
                         valueColor:
                             const AlwaysStoppedAnimation<Color>(Colors.green),
@@ -273,7 +271,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                          '${clan.attacks}/${(clanCurrentWar.teamSize ?? 0) * (clanCurrentWar.attacksPerMember ?? 0)}'),
+                          '${clan.attacks}/${(clanCurrentWar.teamSize ?? 0) * (clanCurrentWar.attacksPerMember ?? 1)}'),
                     ),
                   ),
                   Expanded(
@@ -291,7 +289,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                          '${opponent.attacks}/${(clanCurrentWar.teamSize ?? 0) * (clanCurrentWar.attacksPerMember ?? 0)}'),
+                          '${opponent.attacks}/${(clanCurrentWar.teamSize ?? 0) * (clanCurrentWar.attacksPerMember ?? 1)}'),
                     ),
                   ),
                 ],
@@ -539,7 +537,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                            '%${(clanTotalDestruction / clan.attacks).toStringAsFixed(2).padLeft(2, '0')}'),
+                            '%${clanAverageDestruction.toStringAsFixed(2).padLeft(2, '0')}'),
                       ),
                     ),
                     Expanded(
@@ -557,7 +555,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                            '%${(opponentTotalDestruction / opponent.attacks).toStringAsFixed(2).padLeft(2, '0')}'),
+                            '%${opponentAverageDestruction.toStringAsFixed(2).padLeft(2, '0')}'),
                       ),
                     ),
                   ],

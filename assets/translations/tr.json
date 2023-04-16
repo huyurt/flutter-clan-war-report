@@ -145,5 +145,8 @@
   "Attacks Used": "Yapılan Saldırılar",
   "Average Stars": "Ortalama Yıldızlar",
   "Average Destruction": "Ortalama Yıkım",
-  "Average Attack Duration": "Ortalama Saldırı Süresi"
+  "Average Attack Duration": "Ortalama Saldırı Süresi",
+  "hour_short": "s",
+  "minute_short": "d",
+  "second_short": "sn"
 }
