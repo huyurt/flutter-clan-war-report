@@ -10,7 +10,6 @@ import '../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubi
 import '../../../bloc/widgets/clan_detail/clan_detail_bloc.dart';
 import '../../../bloc/widgets/clan_detail/clan_detail_event.dart';
 import '../../../bloc/widgets/clan_detail/clan_detail_state.dart';
-import '../../../models/api/clan_detail_response_model.dart';
 import '../../../utils/constants/app_constants.dart';
 import '../../../utils/constants/locale_key.dart';
 
@@ -100,8 +99,8 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
             return Center(child: Text(tr('search_failed_message')));
           }
           if (state is ClanDetailStateSuccess) {
-            ClanDetailResponseModel clan = state.clanDetail;
-            List<MemberList> members = clan.memberList ?? <MemberList>[];
+            final clan = state.clanDetail;
+            final members = clan.memberList;
             return SingleChildScrollView(
               child: Column(
                 children: [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:more_useful_clash_of_clans/ui/view/setting_screen.dart';
-import 'package:more_useful_clash_of_clans/ui/view/wars_screen.dart';
+import 'package:more_useful_clash_of_clans/ui/view/clans_current_war_screen.dart';
 
 import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import '../../utils/enums/screen_enum.dart';
@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const List<Widget> pageNavigation = [
-      WarsScreen(),
+      ClansCurrentWarScreen(),
       ClansScreen(),
       PlayersScreen(),
       SettingScreen(),

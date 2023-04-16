@@ -5,13 +5,21 @@ class BookmarkedClanTagsCache {
 
   List<String> get() => _cache;
 
-  void add(String clanTag) async {
+  Future<void> add(String clanTag) async {
     if (!_cache.contains(clanTag)) {
       _cache.add(clanTag);
+      final clanTags = get();
+      await CacheHelper.setCachedBookmarkedClanTags(clanTags);
     }
   }
 
   bool contains(String clanTag) => _cache.contains(clanTag);
 
-  void remove(String clanTag) => _cache.remove(clanTag);
+  Future<void> remove(String clanTag) async {
+    if (_cache.contains(clanTag)) {
+      _cache.remove(clanTag);
+      final clanTags = get();
+      await CacheHelper.setCachedBookmarkedClanTags(clanTags);
+    }
+  }
 }

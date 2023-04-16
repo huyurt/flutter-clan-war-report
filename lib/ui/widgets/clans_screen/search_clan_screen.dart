@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:more_useful_clash_of_clans/models/api/search_clans_response_model.dart';
 import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -329,8 +328,8 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                 if (index >= state.items.length) {
                   return const BottomLoader();
                 }
-                SearchedClanItem clan = state.items[index];
-                Location? location = clan.location;
+                final clan = state.items[index];
+                final location = clan.location;
                 return Card(
                   margin: const EdgeInsets.all(0.0),
                   elevation: 0.0,

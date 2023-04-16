@@ -7,5 +7,16 @@
   "SelectALanguage": "Select a language",
   "open_clan_type": "Anyone Can Join",
   "inviteOnly_clan_type": "Invite Only",
-  "closed_clan_type": "Closed"
+  "closed_clan_type": "Closed",
+  "notInWar_description": "Not In War",
+  "inWar_description": "Battle Day",
+  "preparation_description": "Preparation Day",
+  "warEnded_description": "War Ended",
+  "tab_stats_title": "Stats",
+  "tab_events_title": "Events",
+  "tab_my_team_title": "My Team",
+  "tab_enemy_team_title": "Enemy Team",
+  "hour_short": "h",
+  "minute_short": "m",
+  "second_short": "s"
 }

@@ -61,7 +61,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                 if (state.playerDetailList.length - 1 < index) {
                   return Container();
                 }
-                PlayerDetailResponseModel player = state.playerDetailList[index];
+                final player = state.playerDetailList[index];
                 return Card(
                   margin: const EdgeInsets.all(0.0),
                   elevation: 0.0,
