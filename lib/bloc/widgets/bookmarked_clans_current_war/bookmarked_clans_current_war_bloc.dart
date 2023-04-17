@@ -40,35 +40,32 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
 
     for (String clanTag in event.clanTagList) {
       try {
-        if (!bookmarkedClansCurrentWarRepository.contains(clanTag)) {
-          bool clanFound = false;
-          ClanWarResponseModel? clanCurrentWar;
-          try {
-            clanCurrentWar = await CocApiClans.getClanCurrentWar(clanTag);
-          } catch (e) {}
-          if (clanCurrentWar == null ||
-              clanCurrentWar.state == WarStateEnum.notInWar.name) {
-            final clanLeague = await CocApiClans.getClanLeagueGroup(clanTag);
-            final lastRound = clanLeague.rounds
-                ?.lastWhere((element) => element.warTags?.isNotEmpty ?? false);
-            if (lastRound?.warTags?.isNotEmpty ?? false) {
-              for (String warTag in (lastRound?.warTags ?? <String>[])) {
-                clanCurrentWar =
-                    await CocApiClans.getClanLeagueGroupWar(warTag);
-                if (clanCurrentWar.clan.tag == clanTag ||
-                    clanCurrentWar.opponent.tag == clanTag) {
-                  clanFound = true;
-                  break;
-                }
+        bool clanFound = false;
+        ClanWarResponseModel? clanCurrentWar;
+        try {
+          clanCurrentWar = await CocApiClans.getClanCurrentWar(clanTag);
+        } catch (e) {}
+        if (clanCurrentWar == null ||
+            clanCurrentWar.state == WarStateEnum.notInWar.name) {
+          final clanLeague = await CocApiClans.getClanLeagueGroup(clanTag);
+          final lastRound = clanLeague.rounds
+              ?.lastWhere((element) => element.warTags?.isNotEmpty ?? false);
+          if (lastRound?.warTags?.isNotEmpty ?? false) {
+            for (String warTag in (lastRound?.warTags ?? <String>[])) {
+              clanCurrentWar = await CocApiClans.getClanLeagueGroupWar(warTag);
+              if (clanCurrentWar.clan.tag == clanTag ||
+                  clanCurrentWar.opponent.tag == clanTag) {
+                clanFound = true;
+                break;
               }
             }
-          } else {
-            clanFound = true;
           }
-          clanCurrentWar = clanFound ? clanCurrentWar : null;
-          bookmarkedClansCurrentWarRepository
-              .addOrUpdateBookmarkedClansCurrentWar(clanTag, clanCurrentWar);
+        } else {
+          clanFound = true;
         }
+        clanCurrentWar = clanFound ? clanCurrentWar : null;
+        bookmarkedClansCurrentWarRepository
+            .addOrUpdateBookmarkedClansCurrentWar(clanTag, clanCurrentWar);
       } catch (e) {
         emit(const BookmarkedClansCurrentWarStateError('something went wrong'));
       }
