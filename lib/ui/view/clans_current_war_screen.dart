@@ -121,7 +121,8 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                     onTap: () {
                       WarDetailScreen(
                         clanTag: clanTag,
-                        clanCurrentWar: clanCurrentWar,
+                        clanName: clan.name ?? '',
+                        opponentName: opponent.name ?? '',
                       ).launch(context);
                     },
                     child: Padding(

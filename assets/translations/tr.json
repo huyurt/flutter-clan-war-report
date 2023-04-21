@@ -148,5 +148,6 @@
   "Average Attack Duration": "Ortalama Saldırı Süresi",
   "hour_short": "s",
   "minute_short": "d",
-  "second_short": "sn"
+  "second_short": "sn",
+  "Current War": "Mevcut Savaş"
 }

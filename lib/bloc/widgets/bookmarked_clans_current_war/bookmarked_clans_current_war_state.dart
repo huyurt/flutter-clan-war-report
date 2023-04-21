@@ -29,11 +29,11 @@ class BookmarkedClansCurrentWarStateSuccess
   final List<ClanWarResponseModel?> clansCurrentWar;
 
   @override
-  List<Object?> get props => [clansCurrentWar];
+  List<Object?> get props => [clanTags, clansCurrentWar];
 
   @override
   String toString() =>
-      'BookmarkedClansCurrentWarStateSuccess { clansCurrentWar: $clansCurrentWar }';
+      'BookmarkedClansCurrentWarStateSuccess { clanTags: $clanTags, clansCurrentWar: $clansCurrentWar }';
 }
 
 class BookmarkedClansCurrentWarStateError

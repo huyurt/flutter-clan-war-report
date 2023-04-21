@@ -11,11 +11,18 @@ import '../../../utils/enums/war_state_enum.dart';
 import '../countdown_timer/countdown_timer_widget.dart';
 
 class WarDetailStatsScreen extends StatefulWidget {
-  const WarDetailStatsScreen(
-      {super.key, required this.clanTag, required this.clanCurrentWar});
+  const WarDetailStatsScreen({
+    super.key,
+    required this.clanTag,
+    required this.clanCurrentWar,
+    required this.clan,
+    required this.opponent,
+  });
 
   final String clanTag;
   final ClanWarResponseModel clanCurrentWar;
+  final Clan clan;
+  final Clan opponent;
 
   @override
   State<WarDetailStatsScreen> createState() => _WarDetailStatsScreenState();
@@ -24,16 +31,9 @@ class WarDetailStatsScreen extends StatefulWidget {
 class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
   @override
   Widget build(BuildContext context) {
-    final clanCurrentWar = widget.clanCurrentWar;
-    Clan clan;
-    Clan opponent;
-    if (clanCurrentWar.clan.tag == widget.clanTag) {
-      clan = clanCurrentWar.clan;
-      opponent = clanCurrentWar.opponent;
-    } else {
-      clan = clanCurrentWar.opponent;
-      opponent = clanCurrentWar.clan;
-    }
+    ClanWarResponseModel clanCurrentWar = widget.clanCurrentWar;
+    Clan clan = widget.clan;
+    Clan opponent = widget.opponent;
 
     final starsTotalCount = clan.stars + opponent.stars;
     final starsRatio =
@@ -148,12 +148,17 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FadeInImage.assetNetwork(
-                height: 50,
-                width: 50,
-                image: clan.badgeUrls.large,
-                placeholder: AppConstants.placeholderImage,
-                fit: BoxFit.cover,
+              Tooltip(
+                message: clan.name,
+                triggerMode: TooltipTriggerMode.tap,
+                preferBelow: true,
+                child: FadeInImage.assetNetwork(
+                  height: 50,
+                  width: 50,
+                  image: clan.badgeUrls.large,
+                  placeholder: AppConstants.placeholderImage,
+                  fit: BoxFit.cover,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -172,12 +177,17 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                   ],
                 ),
               ),
-              FadeInImage.assetNetwork(
-                height: 50,
-                width: 50,
-                image: opponent.badgeUrls.large,
-                placeholder: AppConstants.placeholderImage,
-                fit: BoxFit.cover,
+              Tooltip(
+                message: opponent.name,
+                triggerMode: TooltipTriggerMode.tap,
+                preferBelow: true,
+                child: FadeInImage.assetNetwork(
+                  height: 50,
+                  width: 50,
+                  image: opponent.badgeUrls.large,
+                  placeholder: AppConstants.placeholderImage,
+                  fit: BoxFit.cover,
+                ),
               ),
             ],
           ),

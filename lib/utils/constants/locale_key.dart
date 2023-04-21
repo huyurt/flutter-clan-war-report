@@ -149,4 +149,5 @@ class LocaleKey {
   static const hourShort = 'hour_short';
   static const minuteShort = 'minute_short';
   static const secondShort = 'second_short';
+  static const currentWar = 'Current War';
 }
