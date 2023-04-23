@@ -31,7 +31,8 @@ class _PlayersScreenState extends State<PlayersScreen> {
   void didChangeDependencies() {
     _bookmarkedPlayersBloc.add(
       GetBookmarkedPlayerDetail(
-        playerTagList: context.watch<BookmarkedPlayerTagsCubit>().state.playerTags,
+        playerTagList:
+            context.watch<BookmarkedPlayerTagsCubit>().state.playerTags,
       ),
     );
     super.didChangeDependencies();
@@ -41,9 +42,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: ListView.builder(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-        ),
+        padding: const EdgeInsets.only(bottom: 75),
         itemCount:
             context.watch<BookmarkedPlayerTagsCubit>().state.playerTags.length,
         itemBuilder: (BuildContext context, int index) {
@@ -63,7 +62,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                 }
                 final player = state.playerDetailList[index];
                 return Card(
-                  margin: const EdgeInsets.all(0.0),
+                  margin: EdgeInsetsDirectional.zero,
                   elevation: 0.0,
                   color: Colors.transparent,
                   shape: RoundedRectangleBorder(

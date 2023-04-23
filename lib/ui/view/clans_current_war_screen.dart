@@ -52,9 +52,6 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: ListView.builder(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-        ),
         itemCount:
             context.watch<BookmarkedClanTagsCubit>().state.clanTags.length,
         itemBuilder: (BuildContext context, int index) {
@@ -111,7 +108,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                     : null;
 
                 return Card(
-                  margin: const EdgeInsets.all(0.0),
+                  margin: EdgeInsetsDirectional.zero,
                   elevation: 0.0,
                   color: Colors.transparent,
                   shape: RoundedRectangleBorder(

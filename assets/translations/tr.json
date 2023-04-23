@@ -149,5 +149,8 @@
   "hour_short": "s",
   "minute_short": "d",
   "second_short": "sn",
-  "Current War": "Mevcut Savaş"
+  "Current War": "Mevcut Savaş",
+  "Attack": "Saldırı",
+  "Defence": "Savunma",
+  "Not used": "Kullanılmadı"
 }

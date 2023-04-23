@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppConstants {
   static const hivePreferenceKey = 'preferences';
   static const hiveLocaleKey = 'localeKey';
@@ -22,11 +24,13 @@ class AppConstants {
   static const star3_2Image = 'star_3_2.png';
 
   static const clashResourceImagePath = 'assets/images/clash-resource/';
-  static const clanWarLeaguesImagePath = 'assets/images/clash-resource/clan-war-leagues/';
+  static const clanWarLeaguesImagePath =
+      'assets/images/clash-resource/clan-war-leagues/';
 
   static const heroesImagePath = 'assets/images/clash-resource/home-heroes/';
   static const petsImagePath = 'assets/images/clash-resource/home-pets/';
-  static const siegeMachinesImagePath = 'assets/images/clash-resource/home-siege-machines/';
+  static const siegeMachinesImagePath =
+      'assets/images/clash-resource/home-siege-machines/';
   static const spellsImagePath = 'assets/images/clash-resource/home-spells/';
   static const troopsImagePath = 'assets/images/clash-resource/home-troops/';
 
@@ -39,6 +43,10 @@ class AppConstants {
   static const maxMembersFilter = 50.0;
   static const minClanLevelFilter = 1.0;
   static const maxClanLevelFilter = 20.0;
+
+  static const attackerDefaultBackgroundColor = Color.fromARGB(150, 75, 75, 75);
+  static const attackerClanBackgroundColor = Color.fromARGB(50, 0, 255, 0);
+  static const attackerOpponentBackgroundColor = Color.fromARGB(75, 255, 50, 50);
 
   static const playStoreUrl = 'https://play.google.com/store/apps/details?id=';
 }

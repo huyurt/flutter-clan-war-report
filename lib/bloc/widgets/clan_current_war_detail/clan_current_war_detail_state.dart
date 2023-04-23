@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/api/clan_war_response_model.dart';
+import '../../../utils/enums/war_type_enum.dart';
 
 abstract class ClanCurrentWarDetailState extends Equatable {
   const ClanCurrentWarDetailState();
@@ -14,16 +15,18 @@ class ClanCurrentWarDetailStateEmpty extends ClanCurrentWarDetailState {}
 class ClanCurrentWarDetailStateLoading extends ClanCurrentWarDetailState {}
 
 class ClanCurrentWarDetailStateSuccess extends ClanCurrentWarDetailState {
-  const ClanCurrentWarDetailStateSuccess({required this.clanCurrentWarDetail});
+  const ClanCurrentWarDetailStateSuccess(
+      {required this.warType, required this.clanCurrentWarDetail});
 
+  final WarTypeEnum warType;
   final ClanWarResponseModel clanCurrentWarDetail;
 
   @override
-  List<Object?> get props => [clanCurrentWarDetail];
+  List<Object?> get props => [warType, clanCurrentWarDetail];
 
   @override
   String toString() =>
-      'ClanCurrentWarDetailStateSuccess { clanCurrentWarDetail: $clanCurrentWarDetail }';
+      'ClanCurrentWarDetailStateSuccess { warType: $warType, clanCurrentWarDetail: $clanCurrentWarDetail }';
 }
 
 class ClanCurrentWarDetailStateError extends ClanCurrentWarDetailState {

@@ -140,7 +140,9 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
       remainingDateTime = startTime;
     }
 
-    return Column(
+    return ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0, bottom: 24.0),

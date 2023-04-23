@@ -318,9 +318,6 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
             }
             return ListView.builder(
               controller: _listController,
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
               itemCount: state.after.isEmptyOrNull
                   ? state.items.length
                   : state.items.length + 1,
@@ -331,7 +328,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                 final clan = state.items[index];
                 final location = clan.location;
                 return Card(
-                  margin: const EdgeInsets.all(0.0),
+                  margin: EdgeInsetsDirectional.zero,
                   elevation: 0.0,
                   color: context
                           .watch<BookmarkedClanTagsCubit>()
@@ -408,7 +405,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                               width: 80,
                               height: 50,
                               child: Card(
-                                margin: const EdgeInsets.all(0.0),
+                                margin: EdgeInsetsDirectional.zero,
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
                                   child: Column(

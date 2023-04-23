@@ -19,9 +19,6 @@ class SettingScreen extends StatelessWidget {
     return Material(
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-        ),
         children: [
           TextDivider(text: tr(LocaleKey.language)),
           Card(

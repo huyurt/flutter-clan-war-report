@@ -76,6 +76,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   flutter_vector_icons: ^2.0.0
   ionicons: ^0.2.2
+  material_design_icons_flutter: ^6.0.7096
 
   # UI
   animations: ^2.0.7

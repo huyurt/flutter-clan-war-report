@@ -316,7 +316,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                           (member) => SizedBox(
                             height: 70,
                             child: Card(
-                              margin: const EdgeInsets.all(0.0),
+                              margin: EdgeInsetsDirectional.zero,
                               elevation: 0.0,
                               color: context
                                       .watch<BookmarkedPlayerTagsCubit>()

@@ -150,4 +150,7 @@ class LocaleKey {
   static const minuteShort = 'minute_short';
   static const secondShort = 'second_short';
   static const currentWar = 'Current War';
+  static const attack = 'Attack';
+  static const defence = 'Defence';
+  static const notUsed = 'Not used';
 }

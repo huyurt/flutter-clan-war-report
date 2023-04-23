@@ -1,0 +1,4 @@
+enum WarTypeEnum {
+  clanWar,
+  leagueWar,
+}

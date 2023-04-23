@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:more_useful_clash_of_clans/ui/widgets/clans_current_war_screen/war_detail_attacks_screen.dart';
+import 'package:more_useful_clash_of_clans/ui/widgets/clans_current_war_screen/war_detail_events_screen.dart';
 import 'package:more_useful_clash_of_clans/ui/widgets/clans_current_war_screen/war_detail_stats_screen.dart';
 
 import '../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_bloc.dart';
@@ -8,6 +10,7 @@ import '../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_ev
 import '../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_state.dart';
 import '../../../models/api/clan_war_response_model.dart';
 import '../../../utils/constants/locale_key.dart';
+import '../../../utils/enums/war_type_enum.dart';
 
 class WarDetailScreen extends StatefulWidget {
   const WarDetailScreen({
@@ -71,29 +74,59 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
                 children: [
                   TabBar(
                     tabs: [
-                      Tab(child: Text(tr(LocaleKey.tabStatsTitle))),
-                      Tab(child: Text(tr(LocaleKey.tabEventsTitle))),
-                      Tab(child: Text(tr(LocaleKey.tabMyTeamTitle))),
-                      Tab(child: Text(tr(LocaleKey.tabEnemyTeamTitle))),
+                      Tab(
+                        child: Text(
+                          tr(LocaleKey.tabStatsTitle),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          tr(LocaleKey.tabEventsTitle),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          tr(LocaleKey.tabMyTeamTitle),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          tr(LocaleKey.tabEnemyTeamTitle),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ],
                   ),
                   Expanded(
                     flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: TabBarView(
-                        children: [
-                          WarDetailStatsScreen(
-                            clanTag: widget.clanTag,
-                            clanCurrentWar: state.clanCurrentWarDetail,
-                            clan: clan,
-                            opponent: opponent,
-                          ),
-                          Container(),
-                          Container(),
-                          Container(),
-                        ],
-                      ),
+                    child: TabBarView(
+                      children: [
+                        WarDetailStatsScreen(
+                          clanTag: widget.clanTag,
+                          clanCurrentWar: state.clanCurrentWarDetail,
+                          clan: clan,
+                          opponent: opponent,
+                        ),
+                        WarDetailEventsScreen(
+                          clan: clan,
+                          opponent: opponent,
+                        ),
+                        WarDetailAttacksScreen(
+                          warType: state.warType,
+                          clanCurrentWar: state.clanCurrentWarDetail,
+                          clan: clan,
+                          opponent: opponent,
+                        ),
+                        WarDetailAttacksScreen(
+                          warType: state.warType,
+                          clanCurrentWar: state.clanCurrentWarDetail,
+                          clan: opponent,
+                          opponent: clan,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -103,6 +136,16 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
           return const Center(child: CircularProgressIndicator());
         },
       ),
+      //floatingActionButton: Visibility(
+      //  visible: warType == WarTypeEnum.leagueWar,
+      //  child: FloatingActionButton.extended(
+      //    label: Text(tr(LocaleKey.search)),
+      //    icon: const Icon(Icons.search),
+      //    onPressed: () {
+      //      //const SearchPlayerScreen().launch(context);
+      //    },
+      //  ),
+      //),
     );
   }
 }

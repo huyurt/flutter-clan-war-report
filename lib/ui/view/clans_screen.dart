@@ -7,7 +7,6 @@ import '../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart'
 import '../../bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
 import '../../bloc/widgets/bookmarked_clans/bookmarked_clans_event.dart';
 import '../../bloc/widgets/bookmarked_clans/bookmarked_clans_state.dart';
-import '../../models/api/clan_detail_response_model.dart';
 import '../../utils/constants/app_constants.dart';
 import '../widgets/clans_screen/clan_detail_screen.dart';
 
@@ -41,9 +40,7 @@ class _ClansScreenState extends State<ClansScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: ListView.builder(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-        ),
+        padding: const EdgeInsets.only(bottom: 75),
         itemCount:
             context.watch<BookmarkedClanTagsCubit>().state.clanTags.length,
         itemBuilder: (BuildContext context, int index) {
@@ -63,7 +60,7 @@ class _ClansScreenState extends State<ClansScreen> {
                 }
                 final clan = state.clanDetailList[index];
                 return Card(
-                  margin: const EdgeInsets.all(0.0),
+                  margin: EdgeInsetsDirectional.zero,
                   elevation: 0.0,
                   color: Colors.transparent,
                   shape: RoundedRectangleBorder(

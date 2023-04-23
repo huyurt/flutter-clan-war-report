@@ -128,9 +128,6 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
               );
             }
             return ListView.builder(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
               itemCount: state.items.length,
               itemBuilder: (BuildContext context, int index) {
                 if (index >= state.items.length) {
@@ -138,7 +135,7 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                 }
                 PlayerDetailResponseModel player = state.items[index];
                 return Card(
-                  margin: const EdgeInsets.all(0.0),
+                  margin: EdgeInsetsDirectional.zero,
                   elevation: 0.0,
                   color: context
                           .watch<BookmarkedClanTagsCubit>()

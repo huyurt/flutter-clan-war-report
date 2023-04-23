@@ -6,6 +6,7 @@ import 'package:stream_transform/stream_transform.dart';
 import '../../../models/api/clan_war_response_model.dart';
 import '../../../services/coc/coc_api_clans.dart';
 import '../../../utils/enums/war_state_enum.dart';
+import '../../../utils/enums/war_type_enum.dart';
 import 'clan_current_war_detail_event.dart';
 import 'clan_current_war_detail_state.dart';
 
@@ -32,6 +33,7 @@ class ClanCurrentWarDetailBloc
     emit(ClanCurrentWarDetailStateLoading());
 
     try {
+      WarTypeEnum warType = WarTypeEnum.clanWar;
       ClanWarResponseModel? clanCurrentWar;
       try {
         clanCurrentWar = await CocApiClans.getClanCurrentWar(event.clanTag);
@@ -39,6 +41,7 @@ class ClanCurrentWarDetailBloc
 
       if (clanCurrentWar == null ||
           clanCurrentWar.state == WarStateEnum.notInWar.name) {
+        warType = WarTypeEnum.leagueWar;
         final clanLeague = await CocApiClans.getClanLeagueGroup(event.clanTag);
         final lastRound = clanLeague.rounds
             ?.lastWhere((element) => element.warTags?.isNotEmpty ?? false);
@@ -57,7 +60,7 @@ class ClanCurrentWarDetailBloc
         emit(ClanCurrentWarDetailStateEmpty());
       } else {
         emit(ClanCurrentWarDetailStateSuccess(
-            clanCurrentWarDetail: clanCurrentWar));
+            warType: warType, clanCurrentWarDetail: clanCurrentWar));
       }
     } catch (error) {
       emit(const ClanCurrentWarDetailStateError('something went wrong'));
