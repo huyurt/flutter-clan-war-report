@@ -34,7 +34,7 @@ class ClanLeagueWarsBloc
     emit(ClanLeagueWarsStateLoading());
 
     try {
-      final clanLeagueWars = <ClanWarResponseModel>[];
+      final clanLeagueWars = <ClanWarAndWarTypeResponseModel>[];
       final clanLeague = await CocApiClans.getClanLeagueGroup(event.clanTag);
       final rounds = clanLeague.rounds
           ?.where((element) => element.warTags?.isNotEmpty ?? false);
@@ -50,7 +50,7 @@ class ClanLeagueWarsBloc
 
         final allResponse = await futureGroup.future;
         for (ClanWarAndWarTypeResponseModel response in allResponse) {
-          clanLeagueWars.add(response.clanWarResponseModel);
+          clanLeagueWars.add(response);
         }
       }
 

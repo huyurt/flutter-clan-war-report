@@ -1,15 +1,15 @@
 import 'package:equatable/equatable.dart';
 
-abstract class ClanCurrentWarDetailEvent extends Equatable {
-}
+abstract class ClanCurrentWarDetailEvent extends Equatable {}
 
 abstract class ClanCurrentWarDetailBaseEvent extends ClanCurrentWarDetailEvent {
-  ClanCurrentWarDetailBaseEvent({required this.clanTag});
+  ClanCurrentWarDetailBaseEvent({required this.clanTag, this.warTag});
 
   final String clanTag;
+  final String? warTag;
 
   @override
-  List<Object?> get props => [clanTag];
+  List<Object?> get props => [clanTag, warTag];
 }
 
 class ClearFilter extends ClanCurrentWarDetailEvent {
@@ -18,8 +18,8 @@ class ClearFilter extends ClanCurrentWarDetailEvent {
 }
 
 class GetClanCurrentWarDetail extends ClanCurrentWarDetailBaseEvent {
-  GetClanCurrentWarDetail({required super.clanTag});
+  GetClanCurrentWarDetail({required super.clanTag, super.warTag});
 
   @override
-  String toString() => 'TextChanged { clanTag: $clanTag }';
+  String toString() => 'TextChanged { clanTag: $clanTag, warTag: $warTag }';
 }

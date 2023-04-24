@@ -5,6 +5,7 @@ import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../models/api/clan_detail_response_model.dart';
+import '../../../../models/api/clan_war_and_war_type_response_model.dart';
 import '../../../../models/api/clan_war_response_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
@@ -12,13 +13,13 @@ import 'league_war_detail_group_detail_screen.dart';
 
 class ClanLeagueWarsStats {
   ClanLeagueWarsStats({
-    required this.tag,
+    required this.clanTag,
     required this.stars,
     required this.destructionPercentage,
     required this.clan,
   });
 
-  final String? tag;
+  final String? clanTag;
   final int stars;
   final int destructionPercentage;
   final Clan? clan;
@@ -36,7 +37,7 @@ class LeagueWarDetailGroupScreen extends StatefulWidget {
   final String clanTag;
   final String warStartTime;
   final ClanDetailResponseModel clanDetail;
-  final List<ClanWarResponseModel> clanLeagueWars;
+  final List<ClanWarAndWarTypeResponseModel> clanLeagueWars;
 
   @override
   State<LeagueWarDetailGroupScreen> createState() =>
@@ -56,7 +57,8 @@ class _LeagueWarDetailGroupScreenState
 
     final winSeries = <String?, List<bool?>>{};
     final stats = <Clan>[];
-    for (ClanWarResponseModel war in widget.clanLeagueWars) {
+    for (ClanWarAndWarTypeResponseModel warModel in widget.clanLeagueWars) {
+      final war = warModel.clanWarResponseModel;
       winSeries[war.clan.tag] ??= <bool?>[];
       winSeries[war.opponent.tag] ??= <bool?>[];
 
@@ -93,7 +95,7 @@ class _LeagueWarDetailGroupScreenState
           (previousValue, element) =>
               (previousValue ?? 0) + element.destructionPercentage);
       totals.add(ClanLeagueWarsStats(
-          tag: clanTag,
+          clanTag: clanTag,
           stars: (totalStars ?? 0) + winCount * 10,
           destructionPercentage:
               ((totalDestructionPercentages ?? 0) * 15).round(),
@@ -162,9 +164,11 @@ class _LeagueWarDetailGroupScreenState
                     warStartTime: widget.warStartTime,
                     clan: clan,
                     clanLeagueWars: widget.clanLeagueWars
-                        .where((war) =>
-                            war.clan.tag == clan?.tag ||
-                            war.opponent.tag == clan?.tag)
+                        .where((warModel) =>
+                            warModel.clanWarResponseModel.clan.tag ==
+                                clan?.tag ||
+                            warModel.clanWarResponseModel.opponent.tag ==
+                                clan?.tag)
                         .toList(),
                   ).launch(context);
                 },
@@ -207,7 +211,7 @@ class _LeagueWarDetailGroupScreenState
                                 ),
                                 Row(
                                   children: [
-                                    ...winSeries[total.tag]?.map((win) {
+                                    ...winSeries[total.clanTag]?.map((win) {
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 2.0),

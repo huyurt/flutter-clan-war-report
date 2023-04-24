@@ -78,6 +78,7 @@ class CocApiClans {
     final result = ClanWarResponseModel.fromMap(response.data);
     return ClanWarAndWarTypeResponseModel(
       warType: WarTypeEnum.leagueWar,
+      warTag: warTag,
       clanWarResponseModel: result,
     );
   }

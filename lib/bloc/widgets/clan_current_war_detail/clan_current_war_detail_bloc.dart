@@ -34,7 +34,12 @@ class ClanCurrentWarDetailBloc
     try {
       ClanWarAndWarTypeResponseModel? clanCurrentWar;
       try {
-        clanCurrentWar = await CocApiClans.getClanCurrentWar(event.clanTag);
+        if (event.warTag.isEmptyOrNull) {
+          clanCurrentWar = await CocApiClans.getClanCurrentWar(event.clanTag);
+        } else {
+          clanCurrentWar =
+              await CocApiClans.getClanLeagueGroupWar(event.warTag!);
+        }
       } catch (e) {}
 
       if (clanCurrentWar == null ||

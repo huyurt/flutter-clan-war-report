@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/api/clan_war_response_model.dart';
+import '../../../models/api/clan_war_and_war_type_response_model.dart';
 
 abstract class ClanLeagueWarsState extends Equatable {
   const ClanLeagueWarsState();
@@ -16,7 +16,7 @@ class ClanLeagueWarsStateLoading extends ClanLeagueWarsState {}
 class ClanLeagueWarsStateSuccess extends ClanLeagueWarsState {
   const ClanLeagueWarsStateSuccess({required this.clanLeagueWars});
 
-  final List<ClanWarResponseModel> clanLeagueWars;
+  final List<ClanWarAndWarTypeResponseModel> clanLeagueWars;
 
   @override
   List<Object?> get props => [clanLeagueWars];

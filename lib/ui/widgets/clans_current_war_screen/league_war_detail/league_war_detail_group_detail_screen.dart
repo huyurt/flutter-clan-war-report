@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../../../models/api/clan_war_and_war_type_response_model.dart';
 import '../../../../models/api/clan_war_response_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
@@ -33,7 +34,7 @@ class LeagueWarDetailGroupDetailScreen extends StatefulWidget {
   final String clanTag;
   final String warStartTime;
   final Clan? clan;
-  final List<ClanWarResponseModel> clanLeagueWars;
+  final List<ClanWarAndWarTypeResponseModel> clanLeagueWars;
 
   @override
   State<LeagueWarDetailGroupDetailScreen> createState() =>
@@ -73,7 +74,8 @@ class _LeagueWarDetailGroupDetailScreenState
     }
 
     final stats = <Clan>[];
-    for (ClanWarResponseModel war in widget.clanLeagueWars) {
+    for (ClanWarAndWarTypeResponseModel warModel in widget.clanLeagueWars) {
+      final war = warModel.clanWarResponseModel;
       if (war.clan.tag == widget.clanTag) {
         stats.add(war.clan);
       } else {
@@ -216,7 +218,8 @@ class _LeagueWarDetailGroupDetailScreenState
               ],
             ),
           ),
-          ...widget.clanLeagueWars.map((war) {
+          ...widget.clanLeagueWars.map((warModel) {
+            final war = warModel.clanWarResponseModel;
             Clan clan;
             Clan opponent;
             if (war.clan.tag == widget.clanTag) {
@@ -228,8 +231,8 @@ class _LeagueWarDetailGroupDetailScreenState
             }
 
             final clanCurrentWar = widget.clanLeagueWars.first;
-            final warState = WarStateEnum.values
-                .firstWhere((element) => element.name == clanCurrentWar.state);
+            final warState = WarStateEnum.values.firstWhere((element) =>
+                element.name == clanCurrentWar.clanWarResponseModel.state);
             bool? clanWon = warState == WarStateEnum.warEnded
                 ? (clan.stars > opponent.stars ||
                     (clan.stars == opponent.stars &&
@@ -248,6 +251,7 @@ class _LeagueWarDetailGroupDetailScreenState
                 onTap: () {
                   WarDetailScreen(
                     clanTag: widget.clanTag,
+                    warTag: warModel.warTag,
                     warType: WarTypeEnum.leagueWar,
                     warStartTime: widget.warStartTime,
                     clanName: clan.name ?? '',

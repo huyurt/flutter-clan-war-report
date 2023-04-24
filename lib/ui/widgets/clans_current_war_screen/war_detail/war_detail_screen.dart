@@ -22,6 +22,7 @@ class WarDetailScreen extends StatefulWidget {
   const WarDetailScreen({
     super.key,
     required this.clanTag,
+    this.warTag,
     required this.warType,
     required this.warStartTime,
     required this.clanName,
@@ -29,6 +30,7 @@ class WarDetailScreen extends StatefulWidget {
   });
 
   final String clanTag;
+  final String? warTag;
   final WarTypeEnum warType;
   final String warStartTime;
   final String clanName;
@@ -49,6 +51,7 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
     _clanCurrentWarDetailBloc.add(
       GetClanCurrentWarDetail(
         clanTag: widget.clanTag,
+        warTag: widget.warTag,
       ),
     );
     _clanDetailBloc = context.read<ClanDetailBloc>();
