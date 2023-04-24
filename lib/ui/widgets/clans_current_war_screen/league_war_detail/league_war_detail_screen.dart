@@ -97,6 +97,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                     child: TabBarView(
                       children: [
                         LeagueWarDetailGroupScreen(
+                          key: const Key(LocaleKey.group),
                           clanTag: widget.clanTag,
                           warStartTime: widget.warStartTime,
                           clanDetail: widget.clanDetail,

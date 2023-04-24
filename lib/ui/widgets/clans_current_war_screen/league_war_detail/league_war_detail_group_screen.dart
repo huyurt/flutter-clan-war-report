@@ -108,6 +108,7 @@ class _LeagueWarDetailGroupScreenState
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
 
     return ListView(
+      key: PageStorageKey(widget.key),
       shrinkWrap: true,
       children: [
         Padding(

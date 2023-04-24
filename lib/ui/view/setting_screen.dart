@@ -18,6 +18,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: ListView(
+        key: PageStorageKey(key),
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         children: [
           TextDivider(text: tr(LocaleKey.language)),

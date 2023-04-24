@@ -368,7 +368,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
                                                 Text(
                                                   member.name,
@@ -378,12 +378,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                   style: const TextStyle(
                                                       fontSize: 16),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 8.0),
-                                                  child: Text(member.tag),
-                                                ),
+                                                Text(member.tag),
                                               ],
                                             ),
                                           ),

@@ -53,6 +53,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: ListView.builder(
+        key: PageStorageKey(widget.key),
         itemCount:
             context.watch<BookmarkedClanTagsCubit>().state.clanTags.length,
         itemBuilder: (BuildContext context, int index) {

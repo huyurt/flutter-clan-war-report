@@ -129,22 +129,26 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
                     child: TabBarView(
                       children: [
                         WarDetailStatsScreen(
+                          key: const Key(LocaleKey.tabStatsTitle),
                           clanTag: widget.clanTag,
                           clanCurrentWar: state.clanCurrentWarDetail,
                           clan: clan,
                           opponent: opponent,
                         ),
                         WarDetailEventsScreen(
+                          key: const Key(LocaleKey.tabEventsTitle),
                           clanCurrentWar: state.clanCurrentWarDetail,
                           clan: clan,
                           opponent: opponent,
                         ),
                         WarDetailAttacksScreen(
+                          key: const Key(LocaleKey.tabMyTeamTitle),
                           clanCurrentWar: state.clanCurrentWarDetail,
                           clan: clan,
                           opponent: opponent,
                         ),
                         WarDetailAttacksScreen(
+                          key: const Key(LocaleKey.tabEnemyTeamTitle),
                           clanCurrentWar: state.clanCurrentWarDetail,
                           clan: opponent,
                           opponent: clan,

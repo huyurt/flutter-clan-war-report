@@ -72,6 +72,8 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
       children: [
         Expanded(
           child: ListView(
+            key: PageStorageKey(widget.key),
+            shrinkWrap: true,
             children: [
               ...attacks.map(
                 (attack) {

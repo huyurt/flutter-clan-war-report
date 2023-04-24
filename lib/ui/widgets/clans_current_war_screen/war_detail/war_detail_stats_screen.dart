@@ -144,6 +144,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
     }
 
     return ListView(
+      key: PageStorageKey(widget.key),
       shrinkWrap: true,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       children: [

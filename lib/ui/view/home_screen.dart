@@ -16,11 +16,19 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const List<Widget> pageNavigation = [
-      ClansCurrentWarScreen(),
-      ClansScreen(),
-      PlayersScreen(),
-      SettingScreen(),
+    List<Widget> pageNavigation = [
+      ClansCurrentWarScreen(
+        key: PageStorageKey(ScreenEnum.wars.name),
+      ),
+      ClansScreen(
+        key: PageStorageKey(ScreenEnum.clans.name),
+      ),
+      PlayersScreen(
+        key: PageStorageKey(ScreenEnum.players.name),
+      ),
+      SettingScreen(
+        key: PageStorageKey(ScreenEnum.setting.name),
+      ),
     ];
 
     return BlocBuilder<BottomNavigationBarCubit, BottomNavigationBarState>(

@@ -70,6 +70,8 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
         .sort((item1, item2) => item1.mapPosition.compareTo(item2.mapPosition));
 
     return ListView(
+      key: PageStorageKey(widget.key),
+      shrinkWrap: true,
       children: [
         Card(
           margin: EdgeInsetsDirectional.zero,

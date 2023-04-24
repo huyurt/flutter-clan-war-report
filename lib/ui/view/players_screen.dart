@@ -42,7 +42,8 @@ class _PlayersScreenState extends State<PlayersScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: ListView.builder(
-        padding: const EdgeInsets.only(bottom: 75),
+        key: PageStorageKey(widget.key),
+        padding: const EdgeInsets.only(bottom: 75.0),
         itemCount:
             context.watch<BookmarkedPlayerTagsCubit>().state.playerTags.length,
         itemBuilder: (BuildContext context, int index) {

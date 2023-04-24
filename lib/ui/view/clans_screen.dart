@@ -40,6 +40,7 @@ class _ClansScreenState extends State<ClansScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: ListView.builder(
+        key: PageStorageKey(widget.key),
         padding: const EdgeInsets.only(bottom: 75),
         itemCount:
             context.watch<BookmarkedClanTagsCubit>().state.clanTags.length,

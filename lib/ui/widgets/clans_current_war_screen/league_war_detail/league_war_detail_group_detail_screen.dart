@@ -131,6 +131,7 @@ class _LeagueWarDetailGroupDetailScreenState
             '${tr(LocaleKey.clanWarLeague)} - $season ${tr(LocaleKey.season)}'),
       ),
       body: ListView(
+        key: PageStorageKey(widget.key),
         shrinkWrap: true,
         children: [
           Card(
