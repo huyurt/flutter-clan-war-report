@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/war_type_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
@@ -11,7 +12,7 @@ import '../../bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current
 import '../../models/api/clan_war_response_model.dart';
 import '../../utils/constants/app_constants.dart';
 import '../../utils/enums/war_state_enum.dart';
-import '../widgets/clans_current_war_screen/war_detail_screen.dart';
+import '../widgets/clans_current_war_screen/war_detail/war_detail_screen.dart';
 import '../widgets/countdown_timer/countdown_timer_widget.dart';
 
 class ClansCurrentWarScreen extends StatefulWidget {
@@ -71,7 +72,9 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                   return Container();
                 }
                 final clanTag = state.clanTags[index];
-                final clanCurrentWar = state.clansCurrentWar[index];
+                final warType = state.clansCurrentWar[index]?.warType;
+                final clanCurrentWar =
+                    state.clansCurrentWar[index]?.clanWarResponseModel;
                 if (clanCurrentWar == null ||
                     clanCurrentWar.state == WarStateEnum.notInWar.name) {
                   return Container();
@@ -118,6 +121,8 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                     onTap: () {
                       WarDetailScreen(
                         clanTag: clanTag,
+                        warType: warType ?? WarTypeEnum.clanWar,
+                        warStartTime: clanCurrentWar.warStartTime ?? '',
                         clanName: clan.name ?? '',
                         opponentName: opponent.name ?? '',
                       ).launch(context);

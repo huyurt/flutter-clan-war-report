@@ -1,4 +1,4 @@
-import '../../models/api/clan_war_response_model.dart';
+import '../../models/api/clan_war_and_war_type_response_model.dart';
 import 'bookmarked_clans_current_war_cache.dart';
 
 class BookmarkedClansCurrentWarRepository {
@@ -6,11 +6,11 @@ class BookmarkedClansCurrentWarRepository {
 
   final BookmarkedClansCurrentWarCache cache;
 
-  ClanWarResponseModel? getClanCurrentWar(String clanTag) {
+  ClanWarAndWarTypeResponseModel? getClanCurrentWar(String clanTag) {
     return cache.get(clanTag);
   }
 
-  List<ClanWarResponseModel?> getClansCurrentWar() {
+  List<ClanWarAndWarTypeResponseModel?> getClansCurrentWar() {
     final clansCurrentWar = cache.getValues();
     return List.of(clansCurrentWar);
   }
@@ -20,7 +20,7 @@ class BookmarkedClansCurrentWarRepository {
   }
 
   void addOrUpdateBookmarkedClansCurrentWar(
-      String clanTag, ClanWarResponseModel? clanCurrentWar) {
+      String clanTag, ClanWarAndWarTypeResponseModel? clanCurrentWar) {
     cache.addOrUpdate(clanTag, clanCurrentWar);
   }
 

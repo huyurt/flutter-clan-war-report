@@ -3,12 +3,14 @@ import 'package:duration/locale.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/war_type_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../../models/api/clan_war_response_model.dart';
-import '../../../utils/constants/app_constants.dart';
-import '../../../utils/enums/war_state_enum.dart';
-import '../countdown_timer/countdown_timer_widget.dart';
+import '../../../../models/api/clan_war_and_war_type_response_model.dart';
+import '../../../../models/api/clan_war_response_model.dart';
+import '../../../../utils/constants/app_constants.dart';
+import '../../../../utils/enums/war_state_enum.dart';
+import '../../countdown_timer/countdown_timer_widget.dart';
 
 class WarDetailStatsScreen extends StatefulWidget {
   const WarDetailStatsScreen({
@@ -20,7 +22,7 @@ class WarDetailStatsScreen extends StatefulWidget {
   });
 
   final String clanTag;
-  final ClanWarResponseModel clanCurrentWar;
+  final ClanWarAndWarTypeResponseModel clanCurrentWar;
   final Clan clan;
   final Clan opponent;
 
@@ -31,7 +33,8 @@ class WarDetailStatsScreen extends StatefulWidget {
 class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
   @override
   Widget build(BuildContext context) {
-    ClanWarResponseModel clanCurrentWar = widget.clanCurrentWar;
+    ClanWarResponseModel clanCurrentWar =
+        widget.clanCurrentWar.clanWarResponseModel;
     Clan clan = widget.clan;
     Clan opponent = widget.opponent;
 
@@ -142,7 +145,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
 
     return ListView(
       shrinkWrap: true,
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 12.0, bottom: 24.0),
@@ -607,6 +610,8 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
             ],
           ),
         ),
+        if (widget.clanCurrentWar.warType == WarTypeEnum.leagueWar)
+          const SizedBox(height: 64.0),
       ],
     );
   }

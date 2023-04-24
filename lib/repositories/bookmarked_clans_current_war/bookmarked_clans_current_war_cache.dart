@@ -1,15 +1,15 @@
-import '../../models/api/clan_war_response_model.dart';
+import '../../models/api/clan_war_and_war_type_response_model.dart';
 
 class BookmarkedClansCurrentWarCache {
-  final _cache = <String, ClanWarResponseModel?>{};
+  final _cache = <String, ClanWarAndWarTypeResponseModel?>{};
 
   List<String> getKeys() => _cache.keys.toList();
 
-  List<ClanWarResponseModel?> getValues() => _cache.values.toList();
+  List<ClanWarAndWarTypeResponseModel?> getValues() => _cache.values.toList();
 
-  ClanWarResponseModel? get(String clanTag) => _cache[clanTag];
+  ClanWarAndWarTypeResponseModel? get(String clanTag) => _cache[clanTag];
 
-  void addOrUpdate(String clanTag, ClanWarResponseModel? clanDetail) {
+  void addOrUpdate(String clanTag, ClanWarAndWarTypeResponseModel? clanDetail) {
     _cache[clanTag] = clanDetail;
   }
 

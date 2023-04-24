@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/api/clan_war_response_model.dart';
+import '../../../models/api/clan_war_and_war_type_response_model.dart';
 
 abstract class BookmarkedClansCurrentWarState extends Equatable {
   const BookmarkedClansCurrentWarState();
@@ -26,7 +26,7 @@ class BookmarkedClansCurrentWarStateSuccess
   });
 
   final List<String> clanTags;
-  final List<ClanWarResponseModel?> clansCurrentWar;
+  final List<ClanWarAndWarTypeResponseModel?> clansCurrentWar;
 
   @override
   List<Object?> get props => [clanTags, clansCurrentWar];

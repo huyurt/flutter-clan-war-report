@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
 
-import '../../../models/api/clan_war_response_model.dart';
+import '../../../models/api/clan_war_and_war_type_response_model.dart';
 import '../../../repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
 import '../../../repositories/bookmarked_clans_current_war/bookmarked_clans_current_war_repository.dart';
 import '../../../services/coc/coc_api_clans.dart';
@@ -41,20 +41,20 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
     for (String clanTag in event.clanTagList) {
       try {
         bool clanFound = false;
-        ClanWarResponseModel? clanCurrentWar;
+        ClanWarAndWarTypeResponseModel? clanCurrentWar;
         try {
           clanCurrentWar = await CocApiClans.getClanCurrentWar(clanTag);
         } catch (e) {}
         if (clanCurrentWar == null ||
-            clanCurrentWar.state == WarStateEnum.notInWar.name) {
+            clanCurrentWar.clanWarResponseModel.state == WarStateEnum.notInWar.name) {
           final clanLeague = await CocApiClans.getClanLeagueGroup(clanTag);
           final lastRound = clanLeague.rounds
               ?.lastWhere((element) => element.warTags?.isNotEmpty ?? false);
           if (lastRound?.warTags?.isNotEmpty ?? false) {
             for (String warTag in (lastRound?.warTags ?? <String>[])) {
               clanCurrentWar = await CocApiClans.getClanLeagueGroupWar(warTag);
-              if (clanCurrentWar.clan.tag == clanTag ||
-                  clanCurrentWar.opponent.tag == clanTag) {
+              if (clanCurrentWar.clanWarResponseModel.clan.tag == clanTag ||
+                  clanCurrentWar.clanWarResponseModel.opponent.tag == clanTag) {
                 clanFound = true;
                 break;
               }

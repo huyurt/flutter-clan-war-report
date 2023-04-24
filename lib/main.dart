@@ -34,6 +34,7 @@ import 'bloc/widgets/bookmarked_players/bookmarked_players_bloc.dart';
 import 'bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import 'bloc/widgets/clan_current_war_detail/clan_current_war_detail_bloc.dart';
 import 'bloc/widgets/clan_detail/clan_detail_bloc.dart';
+import 'bloc/widgets/clan_league_wars/clan_league_wars_bloc.dart';
 import 'bloc/widgets/player_detail/player_detail_bloc.dart';
 import 'bloc/widgets/search_clan/search_clan_bloc.dart';
 import 'bloc/widgets/search_player/search_player_bloc.dart';
@@ -166,6 +167,9 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => ClanCurrentWarDetailBloc(),
+          ),
+          BlocProvider(
+            create: (context) => ClanLeagueWarsBloc(),
           ),
         ],
         child: Builder(

@@ -153,4 +153,9 @@ class LocaleKey {
   static const attack = 'Attack';
   static const defence = 'Defence';
   static const notUsed = 'Not used';
+  static const viewLeague = 'View League';
+  static const clanWarLeague = 'Clan War League';
+  static const season = 'Season';
+  static const group = 'Group';
+  static const rounds = 'Rounds';
 }
