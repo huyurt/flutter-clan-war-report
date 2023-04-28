@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,17 +70,18 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                 return Center(child: Text(tr('search_failed_message')));
               }
               if (state is BookmarkedClansCurrentWarStateSuccess) {
-                if (state.clansCurrentWar.length - 1 < index) {
-                  return Container();
-                }
-                final clanTag = state.clanTags[index];
-                final warType = state.clansCurrentWar[index]?.warType;
-                final clanCurrentWar =
-                    state.clansCurrentWar[index]?.clanWarResponseModel;
+                final clanTag = context
+                    .watch<BookmarkedClanTagsCubit>()
+                    .state
+                    .clanTags[index];
+                final clanCurrentWarData = state.clansCurrentWar
+                    .firstWhereOrNull((element) => element?.clanTag == clanTag);
+                final clanCurrentWar = clanCurrentWarData?.clanWarResponseModel;
                 if (clanCurrentWar == null ||
                     clanCurrentWar.state == WarStateEnum.notInWar.name) {
                   return Container();
                 }
+                final warType = clanCurrentWarData?.warType;
 
                 DateTime? remainingDateTime;
                 final startTime =

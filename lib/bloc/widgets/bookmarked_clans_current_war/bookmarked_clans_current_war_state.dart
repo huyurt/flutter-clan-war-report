@@ -21,19 +21,17 @@ class BookmarkedClansCurrentWarStateCompleted
 class BookmarkedClansCurrentWarStateSuccess
     extends BookmarkedClansCurrentWarState {
   const BookmarkedClansCurrentWarStateSuccess({
-    required this.clanTags,
     required this.clansCurrentWar,
   });
 
-  final List<String> clanTags;
   final List<ClanWarAndWarTypeResponseModel?> clansCurrentWar;
 
   @override
-  List<Object?> get props => [clanTags, clansCurrentWar];
+  List<Object?> get props => [clansCurrentWar];
 
   @override
   String toString() =>
-      'BookmarkedClansCurrentWarStateSuccess { clanTags: $clanTags, clansCurrentWar: $clansCurrentWar }';
+      'BookmarkedClansCurrentWarStateSuccess { clansCurrentWar: $clansCurrentWar }';
 }
 
 class BookmarkedClansCurrentWarStateError

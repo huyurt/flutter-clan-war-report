@@ -37,8 +37,8 @@ class ClanCurrentWarDetailBloc
         if (event.warTag.isEmptyOrNull) {
           clanCurrentWar = await CocApiClans.getClanCurrentWar(event.clanTag);
         } else {
-          clanCurrentWar =
-              await CocApiClans.getClanLeagueGroupWar(event.warTag!);
+          clanCurrentWar = await CocApiClans.getClanLeagueGroupWar(
+              event.clanTag, event.warTag!);
         }
       } catch (e) {}
 
@@ -50,7 +50,8 @@ class ClanCurrentWarDetailBloc
             ?.lastWhere((element) => element.warTags?.isNotEmpty ?? false);
         if (lastRound?.warTags?.isNotEmpty ?? false) {
           for (String warTag in (lastRound?.warTags ?? <String>[])) {
-            clanCurrentWar = await CocApiClans.getClanLeagueGroupWar(warTag);
+            clanCurrentWar =
+                await CocApiClans.getClanLeagueGroupWar(event.clanTag, warTag);
             if (clanCurrentWar.clanWarResponseModel.clan.tag == event.clanTag ||
                 clanCurrentWar.clanWarResponseModel.opponent.tag ==
                     event.clanTag) {

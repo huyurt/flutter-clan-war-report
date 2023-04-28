@@ -57,6 +57,7 @@ class CocApiClans {
     final result = ClanWarResponseModel.fromMap(response.data);
     return ClanWarAndWarTypeResponseModel(
       warType: WarTypeEnum.clanWar,
+      clanTag: clanTag,
       clanWarResponseModel: result,
     );
   }
@@ -71,7 +72,7 @@ class CocApiClans {
   }
 
   static Future<ClanWarAndWarTypeResponseModel> getClanLeagueGroupWar(
-      String warTag) async {
+      String clanTag, String warTag) async {
     final response = await CocApiConnector.dio.get(
       '/clanwarleagues/wars/${Uri.encodeComponent(warTag)}',
     );
@@ -79,6 +80,7 @@ class CocApiClans {
     return ClanWarAndWarTypeResponseModel(
       warType: WarTypeEnum.leagueWar,
       warTag: warTag,
+      clanTag: clanTag,
       clanWarResponseModel: result,
     );
   }

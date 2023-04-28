@@ -43,7 +43,8 @@ class ClanLeagueWarsBloc
         final futureGroup = FutureGroup();
         for (Round round in rounds) {
           for (String warTag in (round.warTags ?? <String>[])) {
-            futureGroup.add(CocApiClans.getClanLeagueGroupWar(warTag));
+            futureGroup
+                .add(CocApiClans.getClanLeagueGroupWar(event.clanTag, warTag));
           }
         }
         futureGroup.close();

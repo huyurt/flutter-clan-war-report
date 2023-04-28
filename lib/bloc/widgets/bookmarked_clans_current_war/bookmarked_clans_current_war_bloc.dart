@@ -34,7 +34,6 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
           .removeBookmarkedClansCurrentWar(clanTag);
     }
     emit(BookmarkedClansCurrentWarStateSuccess(
-      clanTags: event.clanTagList,
       clansCurrentWar: bookmarkedClansCurrentWarRepository.getClansCurrentWar(),
     ));
 
@@ -46,13 +45,15 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
           clanCurrentWar = await CocApiClans.getClanCurrentWar(clanTag);
         } catch (e) {}
         if (clanCurrentWar == null ||
-            clanCurrentWar.clanWarResponseModel.state == WarStateEnum.notInWar.name) {
+            clanCurrentWar.clanWarResponseModel.state ==
+                WarStateEnum.notInWar.name) {
           final clanLeague = await CocApiClans.getClanLeagueGroup(clanTag);
           final lastRound = clanLeague.rounds
               ?.lastWhere((element) => element.warTags?.isNotEmpty ?? false);
           if (lastRound?.warTags?.isNotEmpty ?? false) {
             for (String warTag in (lastRound?.warTags ?? <String>[])) {
-              clanCurrentWar = await CocApiClans.getClanLeagueGroupWar(warTag);
+              clanCurrentWar =
+                  await CocApiClans.getClanLeagueGroupWar(clanTag, warTag);
               if (clanCurrentWar.clanWarResponseModel.clan.tag == clanTag ||
                   clanCurrentWar.clanWarResponseModel.opponent.tag == clanTag) {
                 clanFound = true;
@@ -70,7 +71,6 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
         emit(const BookmarkedClansCurrentWarStateError('something went wrong'));
       }
       emit(BookmarkedClansCurrentWarStateSuccess(
-        clanTags: event.clanTagList,
         clansCurrentWar:
             bookmarkedClansCurrentWarRepository.getClansCurrentWar(),
       ));
