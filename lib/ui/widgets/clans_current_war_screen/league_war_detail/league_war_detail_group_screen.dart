@@ -34,12 +34,14 @@ class LeagueWarDetailGroupScreen extends StatefulWidget {
     required this.warStartTime,
     required this.clanDetail,
     required this.clanLeagueWars,
+    required this.totalRoundCount,
   });
 
   final String clanTag;
   final String warStartTime;
   final ClanDetailResponseModel clanDetail;
   final List<ClanWarAndWarTypeResponseModel> clanLeagueWars;
+  final int totalRoundCount;
 
   @override
   State<LeagueWarDetailGroupScreen> createState() =>
@@ -59,10 +61,13 @@ class _LeagueWarDetailGroupScreenState
 
     final winSeries = <String?, List<bool?>>{};
     final stats = <Clan>[];
+    int roundIndex = 0;
     for (ClanWarAndWarTypeResponseModel warModel in widget.clanLeagueWars) {
       final war = warModel.clanWarResponseModel;
-      winSeries[war.clan.tag] ??= <bool?>[];
-      winSeries[war.opponent.tag] ??= <bool?>[];
+      winSeries[war.clan.tag] ??=
+          List<bool?>.generate(widget.totalRoundCount, (i) => null);
+      winSeries[war.opponent.tag] ??=
+          List<bool?>.generate(widget.totalRoundCount, (i) => null);
 
       if (war.state == WarStateEnum.warEnded.name) {
         bool clanWon = false;
@@ -73,16 +78,19 @@ class _LeagueWarDetailGroupScreenState
                 war.opponent.destructionPercentage) {
           clanWon = true;
         }
-        winSeries[war.clan.tag]?.add(clanWon);
-        winSeries[war.opponent.tag]?.add(!clanWon);
+        winSeries[war.clan.tag]?[roundIndex] = clanWon;
+        winSeries[war.opponent.tag]?[roundIndex] = !clanWon;
       } else {
-        winSeries[war.clan.tag]?.add(null);
-        winSeries[war.opponent.tag]?.add(null);
+        winSeries[war.clan.tag]?[roundIndex] = null;
+        winSeries[war.opponent.tag]?[roundIndex] = null;
       }
 
       stats.add(war.clan);
       stats.add(war.opponent);
+
+      roundIndex++;
     }
+
     final groupByClan = groupBy(stats, (war) => war.tag);
     final clanTags = groupByClan.keys;
     final totals = <ClanLeagueWarsStats>[];
@@ -120,12 +128,11 @@ class _LeagueWarDetailGroupScreenState
                 1;
         final currentWarLeague = EnumHelper.getWarLeagueById(warLeagueId);
         if (currentWarLeague == WarLeagueEnum.values[1]) {
-          if (clanOrder > totals.length - 3){
+          if (clanOrder > totals.length - 3) {
             // Birincinin detayını çek.
             // Birinci Bronz 1'de ise baktığım klan 2'den düşmüştür. Birinci Bronz 2'de ise baktığım klan 3'deymiş.
           }
-        } else if (currentWarLeague == WarLeagueEnum.values.last) {
-        }
+        } else if (currentWarLeague == WarLeagueEnum.values.last) {}
 
         if (clanOrder == 1) {
           //warLeagueId = (clanDetail.warLeague?.id ?? 1) - 1;

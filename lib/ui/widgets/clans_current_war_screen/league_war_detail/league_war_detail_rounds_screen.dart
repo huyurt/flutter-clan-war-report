@@ -37,8 +37,9 @@ class _LeagueWarDetailRoundsScreenState
   @override
   Widget build(BuildContext context) {
     final warsByRound = <int, List<ClanWarAndWarTypeResponseModel>>{};
-    final rounds = (widget.clanLeague.rounds ?? <Round>[])
-        .where((round) => round.warTags?.isNotEmpty ?? false);
+    final rounds = (widget.clanLeague.rounds ?? <Round>[]).where((element) =>
+        (element.warTags?.isNotEmpty ?? false) &&
+        (element.warTags?.any((e2) => e2 != '#0') ?? false));
     int roundNo = 1;
     for (final round in rounds) {
       final wars = <ClanWarAndWarTypeResponseModel>[];

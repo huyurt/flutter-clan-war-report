@@ -389,10 +389,10 @@ packages:
     dependency: "direct main"
     description:
       name: fl_chart
-      sha256: "155556c4aba56c8474308d51b4e5446b80a07db9ab66a3cb74aff05c110df982"
+      sha256: e97c5b850ad056e9b3a85d3afeb44c239a83aa994a90723940dac82234f2efaf
       url: "https://pub.dev"
     source: hosted
-    version: "0.60.0"
+    version: "0.61.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -653,14 +653,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
-  kg_charts:
-    dependency: "direct main"
-    description:
-      name: kg_charts
-      sha256: d2bc219b0eeceeec54c75a5ab4c2cc76bb2a5860a568f2082e7384ae3c9475da
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.5"
   lints:
     dependency: transitive
     description:

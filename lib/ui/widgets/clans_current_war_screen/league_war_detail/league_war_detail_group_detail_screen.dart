@@ -207,7 +207,7 @@ class _LeagueWarDetailGroupDetailScreenState
                           children: [
                             Text(star.totalStarCount.toString()),
                             Text(
-                              ' (%${(star.totalStarCount / totalStarCount * 100).toStringAsFixed(2).padLeft(2, '0')})',
+                              ' (%${totalStarCount == 0 ? 0 : (star.totalStarCount / totalStarCount * 100).toStringAsFixed(2).padLeft(2, '0')})',
                               style: const TextStyle(fontSize: 12.0),
                             ),
                           ],
@@ -257,7 +257,6 @@ class _LeagueWarDetailGroupDetailScreenState
                     warStartTime: widget.warStartTime,
                     clanName: clan.name ?? '',
                     opponentName: opponent.name ?? '',
-                    showFloatingButton: true,
                   ).launch(context);
                 },
                 child: Padding(

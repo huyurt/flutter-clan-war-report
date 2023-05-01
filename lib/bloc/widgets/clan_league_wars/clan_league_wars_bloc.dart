@@ -36,7 +36,9 @@ class ClanLeagueWarsBloc
       final clanLeagueWars = <ClanWarAndWarTypeResponseModel>[];
       final clanLeague = await CocApiClans.getClanLeagueGroup(event.clanTag);
       final rounds = clanLeague.rounds
-              ?.where((element) => element.warTags?.isNotEmpty ?? false)
+              ?.where((element) =>
+                  (element.warTags?.isNotEmpty ?? false) &&
+                  (element.warTags?.any((e2) => e2 != '#0') ?? false))
               .toList() ??
           <Round>[];
 
@@ -58,7 +60,9 @@ class ClanLeagueWarsBloc
         emit(ClanLeagueWarsStateEmpty());
       } else {
         emit(ClanLeagueWarsStateSuccess(
-            clanLeague: clanLeague, clanLeagueWars: clanLeagueWars));
+            totalRoundCount: clanLeague.rounds?.length ?? 0,
+            clanLeague: clanLeague,
+            clanLeagueWars: clanLeagueWars));
       }
     } catch (error) {
       emit(const ClanLeagueWarsStateError('something went wrong'));

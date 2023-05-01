@@ -128,6 +128,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                           warStartTime: widget.warStartTime,
                           clanDetail: widget.clanDetail,
                           clanLeagueWars: state.clanLeagueWars,
+                          totalRoundCount: state.totalRoundCount,
                         ),
                         LeagueWarDetailRoundsScreen(
                           key: const Key(LocaleKey.rounds),

@@ -15,18 +15,22 @@ class ClanLeagueWarsStateEmpty extends ClanLeagueWarsState {}
 class ClanLeagueWarsStateLoading extends ClanLeagueWarsState {}
 
 class ClanLeagueWarsStateSuccess extends ClanLeagueWarsState {
-  const ClanLeagueWarsStateSuccess(
-      {required this.clanLeague, required this.clanLeagueWars});
+  const ClanLeagueWarsStateSuccess({
+    required this.totalRoundCount,
+    required this.clanLeague,
+    required this.clanLeagueWars,
+  });
 
+  final int totalRoundCount;
   final ClanLeagueGroupResponseModel clanLeague;
   final List<ClanWarAndWarTypeResponseModel> clanLeagueWars;
 
   @override
-  List<Object?> get props => [clanLeague, clanLeagueWars];
+  List<Object?> get props => [totalRoundCount, clanLeague, clanLeagueWars];
 
   @override
   String toString() =>
-      'ClanLeagueWarsStateSuccess { clanLeague: $clanLeague, clanLeagueWars: $clanLeagueWars }';
+      'ClanLeagueWarsStateSuccess { totalRoundCount: $totalRoundCount, clanLeague: $clanLeague, clanLeagueWars: $clanLeagueWars }';
 }
 
 class ClanLeagueWarsStateError extends ClanLeagueWarsState {

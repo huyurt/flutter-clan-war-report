@@ -86,18 +86,17 @@ dependencies:
   country_flags: ^1.1.0
   date_time_picker: ^2.1.0
   dots_indicator: ^2.1.0
-  fl_chart: 0.60.0
+  fl_chart: ^0.61.0
   flutter_colorpicker: ^1.0.3
-  flutter_slidable: 2.0.0
-  flutter_staggered_grid_view: 0.6.2
+  flutter_slidable: ^2.0.0
+  flutter_staggered_grid_view: ^0.6.2
   flutter_svg: ^2.0.4
   google_fonts: ^4.0.3
   liquid_swipe: ^3.0.0
   lottie: ^2.2.0
-  kg_charts: ^0.0.5
   percent_indicator: ^4.2.2
   showcaseview: ^2.0.0
-  simple_animations: 4.1.0
+  simple_animations: ^4.1.0
   syncfusion_flutter_charts: ^20.4.49
   system_theme: ^2.1.0
 

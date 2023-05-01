@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import "package:collection/collection.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
@@ -20,6 +21,8 @@ class ClanLeagueWarsMemberStats {
     required this.member,
     required this.memberAttacks,
     required this.memberDefenceAttacks,
+    required this.roundCount,
+    required this.clanName,
   });
 
   final int attackCount;
@@ -28,6 +31,8 @@ class ClanLeagueWarsMemberStats {
   final Member member;
   final List<Attack> memberAttacks;
   final List<Attack> memberDefenceAttacks;
+  final int roundCount;
+  final String clanName;
 }
 
 class LeagueWarDetailPlayersScreen extends StatefulWidget {
@@ -55,6 +60,7 @@ class _LeagueWarDetailPlayersScreenState
     extends State<LeagueWarDetailPlayersScreen> {
   @override
   Widget build(BuildContext context) {
+    WarStateEnum lastWarState = WarStateEnum.notInWar;
     final members = <Member>[];
     for (final war in widget.clanLeagueWars) {
       final clanMembers = war.clanWarResponseModel.clan.members ?? <Member>[];
@@ -62,15 +68,19 @@ class _LeagueWarDetailPlayersScreenState
           war.clanWarResponseModel.opponent.members ?? <Member>[];
       members.addAll(clanMembers);
       members.addAll(opponentMembers);
+      lastWarState = WarStateEnum.values.firstWhere(
+          (element) => element.name == war.clanWarResponseModel.state);
     }
 
     final memberStats = <ClanLeagueWarsMemberStats>[];
     final groupedAttacks = groupBy(members, (member) => member.tag);
     for (final memberTag in groupedAttacks.keys) {
       final member = members.firstWhere((element) => element.tag == memberTag);
+      int roundCount = 0;
       final memberAttacks = <Attack>[];
       final memberDefenceAttacks = <Attack>[];
       members.where((member) => member.tag == memberTag).forEach((element) {
+        roundCount += 1;
         memberAttacks.addAll(element.attacks ?? <Attack>[]);
       });
       members
@@ -79,6 +89,8 @@ class _LeagueWarDetailPlayersScreenState
           .forEach((element) {
         memberDefenceAttacks.addAll(element.attacks ?? <Attack>[]);
       });
+      final clan = widget.clanLeague.clans?.firstWhere((element) =>
+          element.members?.any((e2) => e2.tag == member.tag) ?? false);
       memberStats.add(ClanLeagueWarsMemberStats(
         attackCount: memberAttacks.length,
         totalDestructionPercentages:
@@ -87,6 +99,10 @@ class _LeagueWarDetailPlayersScreenState
         member: member,
         memberAttacks: memberAttacks,
         memberDefenceAttacks: memberDefenceAttacks,
+        roundCount: lastWarState == WarStateEnum.preparation
+            ? roundCount - 1
+            : roundCount,
+        clanName: clan?.name ?? '',
       ));
     }
     memberStats.sort((a, b) => <Comparator<ClanLeagueWarsMemberStats>>[
@@ -96,11 +112,9 @@ class _LeagueWarDetailPlayersScreenState
           (o1, o2) => o2.attackCount.compareTo(o1.attackCount),
           (o1, o2) =>
               o2.member.townhallLevel.compareTo(o1.member.townhallLevel),
+          (o1, o2) => o1.clanName.compareTo(o2.clanName),
+          (o1, o2) => o1.member.name.compareTo(o2.member.name),
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
-
-    final roundCount = (widget.clanLeague.rounds ?? <Round>[])
-        .where((round) => round.warTags?.isNotEmpty ?? false)
-        .length;
 
     final leagueParticipants = <LeagueGroupMember>[];
     for (final clan in widget.clanLeague.clans ?? <LeagueGroupClan>[]) {
@@ -152,7 +166,7 @@ class _LeagueWarDetailPlayersScreenState
                     member: member,
                     memberAttacks: memberStat.memberAttacks,
                     memberDefenceAttacks: memberStat.memberDefenceAttacks,
-                    roundCount: roundCount,
+                    roundCount: memberStat.roundCount,
                   ).launch(context);
                 },
                 child: Padding(
@@ -275,7 +289,7 @@ class _LeagueWarDetailPlayersScreenState
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                        '${memberStat.attackCount}/$roundCount'),
+                                        '${memberStat.attackCount}/${memberStat.roundCount}'),
                                   ],
                                 ),
                               ),
@@ -322,7 +336,7 @@ class _LeagueWarDetailPlayersScreenState
                     ),
                     memberAttacks: const <Attack>[],
                     memberDefenceAttacks: const <Attack>[],
-                    roundCount: roundCount,
+                    roundCount: 0,
                   ).launch(context);
                 },
                 child: Padding(

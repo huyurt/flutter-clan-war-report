@@ -33,12 +33,9 @@ class WarDetailAttacksScreen extends StatefulWidget {
 }
 
 class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
-  late BookmarkedPlayerTagsCubit _bookmarkedPlayerTagsCubit;
-
   @override
   void initState() {
     super.initState();
-    _bookmarkedPlayerTagsCubit = context.read<BookmarkedPlayerTagsCubit>();
   }
 
   List<Widget> getStarsWidget(List<Attack> attacks, Attack? attack) {
@@ -109,9 +106,9 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Clan clan = widget.clan;
-    Clan opponent = widget.opponent;
-    List<Member> members = clan.members ?? <Member>[];
+    final clan = widget.clan;
+    final opponent = widget.opponent;
+    final members = clan.members ?? <Member>[];
     members
         .sort((item1, item2) => item1.mapPosition.compareTo(item2.mapPosition));
 

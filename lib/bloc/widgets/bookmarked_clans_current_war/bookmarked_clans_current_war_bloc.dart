@@ -48,8 +48,9 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
             clanCurrentWar.clanWarResponseModel.state ==
                 WarStateEnum.notInWar.name) {
           final clanLeague = await CocApiClans.getClanLeagueGroup(clanTag);
-          final lastRound = clanLeague.rounds
-              ?.lastWhere((element) => element.warTags?.isNotEmpty ?? false);
+          final lastRound = clanLeague.rounds?.lastWhere((element) =>
+              (element.warTags?.isNotEmpty ?? false) &&
+              (element.warTags?.any((e2) => e2 != '#0') ?? false));
           if (lastRound?.warTags?.isNotEmpty ?? false) {
             for (String warTag in (lastRound?.warTags ?? <String>[])) {
               clanCurrentWar =

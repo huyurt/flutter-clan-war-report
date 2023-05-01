@@ -3,8 +3,8 @@ import "package:collection/collection.dart";
 import 'package:duration/duration.dart';
 import 'package:duration/locale.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:kg_charts/kg_charts.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../models/api/clan_league_group_response_model.dart';
@@ -20,7 +20,7 @@ class ClanLeagueWarsStats {
   });
 
   final int stars;
-  final int totalStarCount;
+  late int totalStarCount;
 }
 
 class LeagueWarDetailPlayersDetailScreen extends StatefulWidget {
@@ -89,6 +89,7 @@ class _LeagueWarDetailPlayersDetailScreenState
         ? '${member.townhallLevel}.5'
         : (member.townhallLevel).toString();
 
+    final notUsedAttackCount = widget.roundCount - memberAttacks.length;
     final groupedStars =
         groupBy(memberAttacks, (memberAttack) => memberAttack.stars);
     final stars = <ClanLeagueWarsStats>[];
@@ -122,6 +123,11 @@ class _LeagueWarDetailPlayersDetailScreenState
         totalStarCount: 0,
       ));
     }
+    if (notUsedAttackCount > 0) {
+      final zeroStars = stars.firstWhere((element) => element.stars == 0);
+      zeroStars.totalStarCount += notUsedAttackCount;
+    }
+
     stars.sort((a, b) => b.stars.compareTo(a.stars));
     int totalStarCount = stars.sumBy((e) => e.totalStarCount);
 
@@ -135,16 +141,22 @@ class _LeagueWarDetailPlayersDetailScreenState
       ));
     }
 
-    double averageStars =
-        stars.sumBy((e) => e.totalStarCount * e.stars) / widget.roundCount;
-    double averageDefenceStars =
-        defenceStars.sumBy((e) => e.totalStarCount * e.stars) /
-            widget.roundCount;
-    double averageDestructionPercentage =
-        memberAttacks.sumBy((e) => e.destructionPercentage ?? 0) /
-            widget.roundCount;
-    double averageAttackDuration =
-        memberAttacks.sumBy((e) => e.duration ?? 0) / widget.roundCount;
+    double averageStars = 0;
+    double averageDefenceStars = 0;
+    double averageDestructionPercentage = 0;
+    double averageAttackDuration = 0;
+    if (widget.roundCount != 0) {
+      averageStars =
+          stars.sumBy((e) => e.totalStarCount * e.stars) / widget.roundCount;
+      averageDefenceStars =
+          defenceStars.sumBy((e) => e.totalStarCount * e.stars) /
+              widget.roundCount;
+      averageDestructionPercentage =
+          memberAttacks.sumBy((e) => e.destructionPercentage ?? 0) /
+              widget.roundCount;
+      averageAttackDuration = memberAttacks.sumBy((e) => e.duration ?? 0) /
+          (widget.roundCount - notUsedAttackCount);
+    }
 
     final clanAverageDuration =
         Duration(seconds: averageAttackDuration.floor());
@@ -277,7 +289,7 @@ class _LeagueWarDetailPlayersDetailScreenState
                           children: [
                             Text(star.totalStarCount.toString()),
                             Text(
-                              ' (%${(star.totalStarCount / totalStarCount * 100).toStringAsFixed(2).padLeft(2, '0')})',
+                              ' (%${totalStarCount == 0 ? 0 : (star.totalStarCount / totalStarCount * 100).toStringAsFixed(2).padLeft(2, '0')})',
                               style: const TextStyle(fontSize: 12.0),
                             ),
                           ],
@@ -395,37 +407,71 @@ class _LeagueWarDetailPlayersDetailScreenState
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: RadarWidget(
-                    skewing: 0,
-                    radarMap: RadarMapModel(
-                      legend: [
-                        LegendModel('', Colors.amber),
-                      ],
-                      indicator: [
-                        IndicatorModel(tr(LocaleKey.star), 3),
-                        IndicatorModel(tr(LocaleKey.destruction), 100),
-                        IndicatorModel(tr(LocaleKey.reliability),
-                            widget.roundCount.floorToDouble()),
-                        IndicatorModel(tr(LocaleKey.speed), 180),
-                        IndicatorModel(tr(LocaleKey.defence), 3),
-                      ],
-                      data: [
-                        MapDataModel([
-                          averageStars,
-                          averageDestructionPercentage,
-                          memberAttacks.length.floorToDouble(),
-                          averageAttackDuration,
-                          (3 - averageDefenceStars),
-                        ]),
-                      ],
-                      radius: 100,
-                      shape: Shape.square,
-                      maxWidth: 75,
-                      line: LineModel(4),
+                  padding: const EdgeInsets.only(top: 24.0),
+                  child: AspectRatio(
+                    aspectRatio: 1.5,
+                    child: RadarChart(
+                      RadarChartData(
+                        dataSets: [
+                          RadarDataSet(
+                            fillColor: Colors.amber.withOpacity(0.5),
+                            borderColor: Colors.amber,
+                            dataEntries: [
+                              RadarEntry(value: averageStars / 3),
+                              RadarEntry(
+                                  value: averageDestructionPercentage / 100),
+                              RadarEntry(
+                                  value: memberAttacks.length.floorToDouble() /
+                                      widget.roundCount.floorToDouble()),
+                              RadarEntry(
+                                  value: (180 - averageAttackDuration.floor()) /
+                                      180),
+                              RadarEntry(value: (3 - averageDefenceStars) / 3),
+                            ],
+                          ),
+                        ],
+                        radarShape: RadarShape.polygon,
+                        tickCount: 3,
+                        ticksTextStyle:
+                            const TextStyle(color: Colors.transparent),
+                        radarBorderData:
+                            const BorderSide(color: Colors.white60),
+                        tickBorderData: const BorderSide(color: Colors.white60),
+                        gridBorderData: const BorderSide(color: Colors.white60),
+                        getTitle: (index, angle) {
+                          final usedAngle = angle;
+                          switch (index) {
+                            case 0:
+                              return RadarChartTitle(
+                                text: tr(LocaleKey.star),
+                                angle: usedAngle,
+                              );
+                            case 1:
+                              return RadarChartTitle(
+                                text: tr(LocaleKey.destruction),
+                                angle: usedAngle,
+                              );
+                            case 2:
+                              return RadarChartTitle(
+                                text: tr(LocaleKey.reliability),
+                                angle: usedAngle,
+                              );
+                            case 3:
+                              return RadarChartTitle(
+                                text: tr(LocaleKey.speed),
+                                angle: usedAngle,
+                              );
+                            case 4:
+                              return RadarChartTitle(
+                                text: tr(LocaleKey.defence),
+                                angle: usedAngle,
+                              );
+                            default:
+                              return const RadarChartTitle(text: '');
+                          }
+                        },
+                      ),
                     ),
-                    textStyle: Theme.of(context).textTheme.labelMedium,
-                    isNeedDrawLegend: false,
                   ),
                 ),
               ],
