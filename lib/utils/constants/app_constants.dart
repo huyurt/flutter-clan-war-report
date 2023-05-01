@@ -22,6 +22,9 @@ class AppConstants {
   static const star3_0Image = 'star_3_0.png';
   static const star3_1Image = 'star_3_1.png';
   static const star3_2Image = 'star_3_2.png';
+  static const star3_3Image = 'star_3_3.png';
+  static const arrowDownImage = 'arrow_down.png';
+  static const arrowUpImage = 'arrow_up.png';
 
   static const clashResourceImagePath = 'assets/images/clash-resource/';
   static const clanWarLeaguesImagePath =

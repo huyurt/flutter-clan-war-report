@@ -14,13 +14,13 @@ class ClanLeagueGroupResponseModel {
 
   final String? state;
   final String? season;
-  final List<Clan>? clans;
+  final List<LeagueGroupClan>? clans;
   final List<Round>? rounds;
 
   ClanLeagueGroupResponseModel copyWith({
     String? state,
     String? season,
-    List<Clan>? clans,
+    List<LeagueGroupClan>? clans,
     List<Round>? rounds,
   }) =>
       ClanLeagueGroupResponseModel(
@@ -37,7 +37,7 @@ class ClanLeagueGroupResponseModel {
   factory ClanLeagueGroupResponseModel.fromMap(Map<String, dynamic> json) => ClanLeagueGroupResponseModel(
     state: json["state"],
     season: json["season"],
-    clans: json["clans"] == null ? [] : List<Clan>.from(json["clans"]!.map((x) => Clan.fromMap(x))),
+    clans: json["clans"] == null ? [] : List<LeagueGroupClan>.from(json["clans"]!.map((x) => LeagueGroupClan.fromMap(x))),
     rounds: json["rounds"] == null ? [] : List<Round>.from(json["rounds"]!.map((x) => Round.fromMap(x))),
   );
 
@@ -49,8 +49,8 @@ class ClanLeagueGroupResponseModel {
   };
 }
 
-class Clan {
-  Clan({
+class LeagueGroupClan {
+  LeagueGroupClan({
     this.tag,
     this.name,
     this.clanLevel,
@@ -62,16 +62,16 @@ class Clan {
   final String? name;
   final int? clanLevel;
   final BadgeUrls? badgeUrls;
-  final List<Member>? members;
+  final List<LeagueGroupMember>? members;
 
-  Clan copyWith({
+  LeagueGroupClan copyWith({
     String? tag,
     String? name,
     int? clanLevel,
     BadgeUrls? badgeUrls,
-    List<Member>? members,
+    List<LeagueGroupMember>? members,
   }) =>
-      Clan(
+      LeagueGroupClan(
         tag: tag ?? this.tag,
         name: name ?? this.name,
         clanLevel: clanLevel ?? this.clanLevel,
@@ -79,16 +79,16 @@ class Clan {
         members: members ?? this.members,
       );
 
-  factory Clan.fromJson(String str) => Clan.fromMap(json.decode(str));
+  factory LeagueGroupClan.fromJson(String str) => LeagueGroupClan.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Clan.fromMap(Map<String, dynamic> json) => Clan(
+  factory LeagueGroupClan.fromMap(Map<String, dynamic> json) => LeagueGroupClan(
     tag: json["tag"],
     name: json["name"],
     clanLevel: json["clanLevel"],
     badgeUrls: json["badgeUrls"] == null ? null : BadgeUrls.fromMap(json["badgeUrls"]),
-    members: json["members"] == null ? [] : List<Member>.from(json["members"]!.map((x) => Member.fromMap(x))),
+    members: json["members"] == null ? [] : List<LeagueGroupMember>.from(json["members"]!.map((x) => LeagueGroupMember.fromMap(x))),
   );
 
   Map<String, dynamic> toMap() => {
@@ -139,33 +139,33 @@ class BadgeUrls {
   };
 }
 
-class Member {
-  Member({
-    this.tag,
-    this.name,
-    this.townHallLevel,
+class LeagueGroupMember {
+  LeagueGroupMember({
+    required this.tag,
+    required this.name,
+    required this.townHallLevel,
   });
 
-  final String? tag;
-  final String? name;
-  final int? townHallLevel;
+  final String tag;
+  final String name;
+  final int townHallLevel;
 
-  Member copyWith({
+  LeagueGroupMember copyWith({
     String? tag,
     String? name,
     int? townHallLevel,
   }) =>
-      Member(
+      LeagueGroupMember(
         tag: tag ?? this.tag,
         name: name ?? this.name,
         townHallLevel: townHallLevel ?? this.townHallLevel,
       );
 
-  factory Member.fromJson(String str) => Member.fromMap(json.decode(str));
+  factory LeagueGroupMember.fromJson(String str) => LeagueGroupMember.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Member.fromMap(Map<String, dynamic> json) => Member(
+  factory LeagueGroupMember.fromMap(Map<String, dynamic> json) => LeagueGroupMember(
     tag: json["tag"],
     name: json["name"],
     townHallLevel: json["townHallLevel"],

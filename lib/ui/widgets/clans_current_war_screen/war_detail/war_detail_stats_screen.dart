@@ -388,8 +388,8 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                               fit: BoxFit.cover,
                             ),
                             Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-                              height: 20,
+                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                              height: 16,
                               fit: BoxFit.cover,
                             ),
                           ],
@@ -431,13 +431,13 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                               fit: BoxFit.cover,
                             ),
                             Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-                              height: 20,
+                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                              height: 16,
                               fit: BoxFit.cover,
                             ),
                             Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-                              height: 20,
+                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                              height: 16,
                               fit: BoxFit.cover,
                             ),
                           ],
@@ -474,18 +474,18 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-                              height: 20,
+                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                              height: 16,
                               fit: BoxFit.cover,
                             ),
                             Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-                              height: 20,
+                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                              height: 16,
                               fit: BoxFit.cover,
                             ),
                             Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-                              height: 20,
+                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                              height: 16,
                               fit: BoxFit.cover,
                             ),
                           ],

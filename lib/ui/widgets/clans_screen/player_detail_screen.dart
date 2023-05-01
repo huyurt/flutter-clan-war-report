@@ -144,12 +144,12 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                               child: player.townHallWeaponLevel != null
                                   ? Image.asset(
                                       '${AppConstants.townHallsImagePath}${player.townHallLevel}.${player.townHallWeaponLevel}.png',
-                                      height: 70,
+                                      width: 70,
                                       fit: BoxFit.cover,
                                     )
                                   : Image.asset(
                                       '${AppConstants.townHallsImagePath}${player.townHallLevel}.png',
-                                      height: 70,
+                                      width: 70,
                                       fit: BoxFit.cover,
                                     ),
                             ),
@@ -203,7 +203,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                       children: [
                                         Image.asset(
                                           '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
-                                          height: 20,
+                                          height: 18,
                                           fit: BoxFit.cover,
                                         ),
                                         Text(' ${player.warStars ?? 0}'),

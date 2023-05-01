@@ -128,6 +128,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                         warStartTime: clanCurrentWar.warStartTime ?? '',
                         clanName: clan.name ?? '',
                         opponentName: opponent.name ?? '',
+                        showFloatingButton: true,
                       ).launch(context);
                     },
                     child: Padding(

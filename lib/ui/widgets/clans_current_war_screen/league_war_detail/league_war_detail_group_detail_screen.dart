@@ -15,11 +15,11 @@ import '../war_detail/war_detail_screen.dart';
 class ClanLeagueWarsStats {
   ClanLeagueWarsStats({
     required this.stars,
-    required this.totalStars,
+    required this.totalStarCount,
   });
 
   final int stars;
-  final int totalStars;
+  final int totalStarCount;
 }
 
 class LeagueWarDetailGroupDetailScreen extends StatefulWidget {
@@ -47,17 +47,17 @@ class _LeagueWarDetailGroupDetailScreenState
     final zeroStar = 3 - stars;
     final widgets = <Widget>[];
 
-    for (int index = 0; index < stars; index++) {
+    for (var index = 0; index < stars; index++) {
       widgets.add(Image.asset(
         '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
         height: 16,
         fit: BoxFit.cover,
       ));
     }
-    for (int index = 0; index < zeroStar; index++) {
+    for (var index = 0; index < zeroStar; index++) {
       widgets.add(Image.asset(
-        '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-        height: 17,
+        '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+        height: 16,
         fit: BoxFit.cover,
       ));
     }
@@ -74,7 +74,7 @@ class _LeagueWarDetailGroupDetailScreenState
     }
 
     final stats = <Clan>[];
-    for (ClanWarAndWarTypeResponseModel warModel in widget.clanLeagueWars) {
+    for (final warModel in widget.clanLeagueWars) {
       final war = warModel.clanWarResponseModel;
       if (war.clan.tag == widget.clanTag) {
         stats.add(war.clan);
@@ -84,7 +84,7 @@ class _LeagueWarDetailGroupDetailScreenState
     }
 
     final attacks = <Attack?>[];
-    for (Clan stat in stats) {
+    for (final stat in stats) {
       stat.members?.forEach((e) {
         attacks.addAll(e.attacks ?? <Attack>[]);
       });
@@ -92,38 +92,38 @@ class _LeagueWarDetailGroupDetailScreenState
     final groupedStars = groupBy(attacks, (attack) => attack?.stars);
 
     final stars = <ClanLeagueWarsStats>[];
-    for (int? star in groupedStars.keys) {
+    for (final star in groupedStars.keys) {
       stars.add(ClanLeagueWarsStats(
         stars: star ?? 0,
-        totalStars: groupedStars[star]?.length ?? 0,
+        totalStarCount: groupedStars[star]?.length ?? 0,
       ));
     }
     if (!stars.any((element) => element.stars == 0)) {
       stars.add(ClanLeagueWarsStats(
         stars: 0,
-        totalStars: 0,
+        totalStarCount: 0,
       ));
     }
     if (!stars.any((element) => element.stars == 1)) {
       stars.add(ClanLeagueWarsStats(
         stars: 1,
-        totalStars: 0,
+        totalStarCount: 0,
       ));
     }
     if (!stars.any((element) => element.stars == 2)) {
       stars.add(ClanLeagueWarsStats(
         stars: 2,
-        totalStars: 0,
+        totalStarCount: 0,
       ));
     }
     if (!stars.any((element) => element.stars == 3)) {
       stars.add(ClanLeagueWarsStats(
         stars: 3,
-        totalStars: 0,
+        totalStarCount: 0,
       ));
     }
     stars.sort((a, b) => b.stars.compareTo(a.stars));
-    int totalStars = stars.sumBy((e) => e.totalStars);
+    int totalStarCount = stars.sumBy((e) => e.totalStarCount);
 
     return Scaffold(
       appBar: AppBar(
@@ -205,9 +205,9 @@ class _LeagueWarDetailGroupDetailScreenState
                           crossAxisAlignment: WrapCrossAlignment.center,
                           direction: Axis.horizontal,
                           children: [
-                            Text(star.totalStars.toString()),
+                            Text(star.totalStarCount.toString()),
                             Text(
-                              ' (%${(star.totalStars / totalStars * 100).toStringAsFixed(2).padLeft(2, '0')})',
+                              ' (%${(star.totalStarCount / totalStarCount * 100).toStringAsFixed(2).padLeft(2, '0')})',
                               style: const TextStyle(fontSize: 12.0),
                             ),
                           ],
@@ -257,6 +257,7 @@ class _LeagueWarDetailGroupDetailScreenState
                     warStartTime: widget.warStartTime,
                     clanName: clan.name ?? '',
                     opponentName: opponent.name ?? '',
+                    showFloatingButton: true,
                   ).launch(context);
                 },
                 child: Padding(

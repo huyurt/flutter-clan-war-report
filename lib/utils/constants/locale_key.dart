@@ -146,6 +146,8 @@ class LocaleKey {
   static const averageStars = 'Average Stars';
   static const averageDestruction = 'Average Destruction';
   static const averageAttackDuration = 'Average Attack Duration';
+  static const averageDefence = 'Average Defence';
+  static const estimatedMedals = 'Estimated Medals';
   static const hourShort = 'hour_short';
   static const minuteShort = 'minute_short';
   static const secondShort = 'second_short';
@@ -157,5 +159,12 @@ class LocaleKey {
   static const clanWarLeague = 'Clan War League';
   static const season = 'Season';
   static const group = 'Group';
+  static const nthRound = 'nth_round';
+  static const round = 'Round';
   static const rounds = 'Rounds';
+  static const refresh = 'Refresh';
+  static const star = 'Star';
+  static const destruction = 'Destruction';
+  static const reliability = 'Reliability';
+  static const speed = 'Speed';
 }

@@ -15,7 +15,7 @@ class PlayerDetailResponseModel {
     this.bestTrophies,
     this.warStars,
     this.attackWins,
-    this.defenseWins,
+    this.defenceWins,
     this.builderHallLevel,
     this.versusTrophies,
     this.bestVersusTrophies,
@@ -45,7 +45,7 @@ class PlayerDetailResponseModel {
   final int? bestTrophies;
   final int? warStars;
   final int? attackWins;
-  final int? defenseWins;
+  final int? defenceWins;
   final int? builderHallLevel;
   final int? versusTrophies;
   final int? bestVersusTrophies;
@@ -75,7 +75,7 @@ class PlayerDetailResponseModel {
     int? bestTrophies,
     int? warStars,
     int? attackWins,
-    int? defenseWins,
+    int? defenceWins,
     int? builderHallLevel,
     int? versusTrophies,
     int? bestVersusTrophies,
@@ -105,7 +105,7 @@ class PlayerDetailResponseModel {
         bestTrophies: bestTrophies ?? this.bestTrophies,
         warStars: warStars ?? this.warStars,
         attackWins: attackWins ?? this.attackWins,
-        defenseWins: defenseWins ?? this.defenseWins,
+        defenceWins: defenceWins ?? this.defenceWins,
         builderHallLevel: builderHallLevel ?? this.builderHallLevel,
         versusTrophies: versusTrophies ?? this.versusTrophies,
         bestVersusTrophies: bestVersusTrophies ?? this.bestVersusTrophies,
@@ -140,7 +140,7 @@ class PlayerDetailResponseModel {
     bestTrophies: json["bestTrophies"],
     warStars: json["warStars"],
     attackWins: json["attackWins"],
-    defenseWins: json["defenseWins"],
+    defenceWins: json["defenceWins"],
     builderHallLevel: json["builderHallLevel"],
     versusTrophies: json["versusTrophies"],
     bestVersusTrophies: json["bestVersusTrophies"],
@@ -171,7 +171,7 @@ class PlayerDetailResponseModel {
     "bestTrophies": bestTrophies,
     "warStars": warStars,
     "attackWins": attackWins,
-    "defenseWins": defenseWins,
+    "defenceWins": defenceWins,
     "builderHallLevel": builderHallLevel,
     "versusTrophies": versusTrophies,
     "bestVersusTrophies": bestVersusTrophies,

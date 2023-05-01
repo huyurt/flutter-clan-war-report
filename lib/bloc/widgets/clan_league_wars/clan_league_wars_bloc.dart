@@ -6,7 +6,6 @@ import 'package:stream_transform/stream_transform.dart';
 
 import '../../../models/api/clan_league_group_response_model.dart';
 import '../../../models/api/clan_war_and_war_type_response_model.dart';
-import '../../../models/api/clan_war_response_model.dart';
 import '../../../services/coc/coc_api_clans.dart';
 import 'clan_league_wars_event.dart';
 import 'clan_league_wars_state.dart';
@@ -37,28 +36,29 @@ class ClanLeagueWarsBloc
       final clanLeagueWars = <ClanWarAndWarTypeResponseModel>[];
       final clanLeague = await CocApiClans.getClanLeagueGroup(event.clanTag);
       final rounds = clanLeague.rounds
-          ?.where((element) => element.warTags?.isNotEmpty ?? false);
+              ?.where((element) => element.warTags?.isNotEmpty ?? false)
+              .toList() ??
+          <Round>[];
 
-      if (rounds != null) {
-        final futureGroup = FutureGroup();
-        for (Round round in rounds) {
-          for (String warTag in (round.warTags ?? <String>[])) {
-            futureGroup
-                .add(CocApiClans.getClanLeagueGroupWar(event.clanTag, warTag));
-          }
+      final futureGroup = FutureGroup();
+      for (Round round in rounds) {
+        for (String warTag in (round.warTags ?? <String>[])) {
+          futureGroup
+              .add(CocApiClans.getClanLeagueGroupWar(event.clanTag, warTag));
         }
-        futureGroup.close();
+      }
+      futureGroup.close();
 
-        final allResponse = await futureGroup.future;
-        for (ClanWarAndWarTypeResponseModel response in allResponse) {
-          clanLeagueWars.add(response);
-        }
+      final allResponse = await futureGroup.future;
+      for (ClanWarAndWarTypeResponseModel response in allResponse) {
+        clanLeagueWars.add(response);
       }
 
       if (clanLeagueWars.isEmpty) {
         emit(ClanLeagueWarsStateEmpty());
       } else {
-        emit(ClanLeagueWarsStateSuccess(clanLeagueWars: clanLeagueWars));
+        emit(ClanLeagueWarsStateSuccess(
+            clanLeague: clanLeague, clanLeagueWars: clanLeagueWars));
       }
     } catch (error) {
       emit(const ClanLeagueWarsStateError('something went wrong'));

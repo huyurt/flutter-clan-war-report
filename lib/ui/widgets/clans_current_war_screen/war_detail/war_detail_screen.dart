@@ -27,6 +27,7 @@ class WarDetailScreen extends StatefulWidget {
     required this.warStartTime,
     required this.clanName,
     required this.opponentName,
+    this.showFloatingButton,
   });
 
   final String clanTag;
@@ -35,6 +36,7 @@ class WarDetailScreen extends StatefulWidget {
   final String warStartTime;
   final String clanName;
   final String opponentName;
+  final bool? showFloatingButton;
 
   @override
   State<WarDetailScreen> createState() => _WarDetailScreenState();
@@ -48,13 +50,17 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
   void initState() {
     super.initState();
     _clanCurrentWarDetailBloc = context.read<ClanCurrentWarDetailBloc>();
+    _clanDetailBloc = context.read<ClanDetailBloc>();
+    _getDetails();
+  }
+
+  _getDetails() {
     _clanCurrentWarDetailBloc.add(
       GetClanCurrentWarDetail(
         clanTag: widget.clanTag,
         warTag: widget.warTag,
       ),
     );
-    _clanDetailBloc = context.read<ClanDetailBloc>();
     if (widget.warType == WarTypeEnum.leagueWar) {
       _clanDetailBloc.add(
         GetClanDetail(
@@ -69,6 +75,25 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.clanName} vs ${widget.opponentName}'),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: Text(tr(LocaleKey.refresh)),
+                ),
+              ];
+            },
+            onSelected: (value) {
+              switch (value) {
+                case 0:
+                  _getDetails();
+                  break;
+              }
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<ClanCurrentWarDetailBloc, ClanCurrentWarDetailState>(
         builder: (context, state) {
@@ -164,7 +189,8 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: widget.warType == WarTypeEnum.leagueWar
+      floatingActionButton: widget.showFloatingButton == true &&
+              widget.warType == WarTypeEnum.leagueWar
           ? BlocBuilder<ClanDetailBloc, ClanDetailState>(
               builder: (context, state) {
               if (state is ClanDetailStateSuccess) {

@@ -6,9 +6,12 @@ import '../../../../bloc/widgets/clan_league_wars/clan_league_wars_bloc.dart';
 import '../../../../bloc/widgets/clan_league_wars/clan_league_wars_event.dart';
 import '../../../../bloc/widgets/clan_league_wars/clan_league_wars_state.dart';
 import '../../../../models/api/clan_detail_response_model.dart';
+import '../../../../models/api/clan_league_group_response_model.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 import 'league_war_detail_group_screen.dart';
+import 'league_war_detail_players_screen.dart';
+import 'league_war_detail_rounds_screen.dart';
 
 class LeagueWarDetailScreen extends StatefulWidget {
   const LeagueWarDetailScreen({
@@ -35,6 +38,10 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
   void initState() {
     super.initState();
     _clanLeagueWarsBloc = context.read<ClanLeagueWarsBloc>();
+    _getDetails();
+  }
+
+  _getDetails() {
     _clanLeagueWarsBloc.add(
       GetClanLeagueWars(
         clanTag: widget.clanTag,
@@ -54,6 +61,25 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
       appBar: AppBar(
         title: Text(
             '${tr(LocaleKey.clanWarLeague)} - $season ${tr(LocaleKey.season)}'),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: Text(tr(LocaleKey.refresh)),
+                ),
+              ];
+            },
+            onSelected: (value) {
+              switch (value) {
+                case 0:
+                  _getDetails();
+                  break;
+              }
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<ClanLeagueWarsBloc, ClanLeagueWarsState>(
         builder: (context, state) {
@@ -103,8 +129,22 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                           clanDetail: widget.clanDetail,
                           clanLeagueWars: state.clanLeagueWars,
                         ),
-                        Container(),
-                        Container(),
+                        LeagueWarDetailRoundsScreen(
+                          key: const Key(LocaleKey.rounds),
+                          clanTag: widget.clanTag,
+                          warStartTime: widget.warStartTime,
+                          clanDetail: widget.clanDetail,
+                          clanLeague: state.clanLeague,
+                          clanLeagueWars: state.clanLeagueWars,
+                        ),
+                        LeagueWarDetailPlayersScreen(
+                          key: const Key(LocaleKey.players),
+                          clanTag: widget.clanTag,
+                          warStartTime: widget.warStartTime,
+                          clanDetail: widget.clanDetail,
+                          clanLeague: state.clanLeague,
+                          clanLeagueWars: state.clanLeagueWars,
+                        ),
                       ],
                     ),
                   ),

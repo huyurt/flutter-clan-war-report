@@ -653,6 +653,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
+  kg_charts:
+    dependency: "direct main"
+    description:
+      name: kg_charts
+      sha256: d2bc219b0eeceeec54c75a5ab4c2cc76bb2a5860a568f2082e7384ae3c9475da
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   lints:
     dependency: transitive
     description:

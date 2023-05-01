@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/locale_enum.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/war_league_enum.dart';
 
 import '../constants/app_constants.dart';
 import '../enums/theme_enum.dart';
@@ -52,5 +53,10 @@ class EnumHelper {
       default:
         return localeType.name;
     }
+  }
+
+  static WarLeagueEnum getWarLeagueById(int warLeagueId) {
+    final index = warLeagueId % WarLeagueEnum.values.length;
+    return WarLeagueEnum.values[index];
   }
 }

@@ -1,7 +1,9 @@
 import "package:collection/collection.dart";
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/war_league_enum.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
+import 'package:more_useful_clash_of_clans/utils/helpers/enum_helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../models/api/clan_detail_response_model.dart';
@@ -107,6 +109,30 @@ class _LeagueWarDetailGroupScreenState
               o2.destructionPercentage.compareTo(o1.destructionPercentage),
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
 
+    int warLeagueId = clanDetail.warLeague?.id ?? 0;
+    if (warLeagueId > AppConstants.warLeagueUnranked) {
+      final warEnded =
+          !(winSeries[clanDetail.tag]?.any((element) => element == null) ??
+              true);
+      if (warEnded) {
+        final clanOrder =
+            totals.indexWhere((element) => element.clanTag == clanDetail.tag) +
+                1;
+        final currentWarLeague = EnumHelper.getWarLeagueById(warLeagueId);
+        if (currentWarLeague == WarLeagueEnum.values[1]) {
+          if (clanOrder > totals.length - 3){
+            // Birincinin detayını çek.
+            // Birinci Bronz 1'de ise baktığım klan 2'den düşmüştür. Birinci Bronz 2'de ise baktığım klan 3'deymiş.
+          }
+        } else if (currentWarLeague == WarLeagueEnum.values.last) {
+        }
+
+        if (clanOrder == 1) {
+          //warLeagueId = (clanDetail.warLeague?.id ?? 1) - 1;
+        }
+      }
+    }
+
     return ListView(
       key: PageStorageKey(widget.key),
       shrinkWrap: true,
@@ -120,7 +146,7 @@ class _LeagueWarDetailGroupScreenState
               if ((clanDetail.warLeague?.id ?? 0) >
                   AppConstants.warLeagueUnranked)
                 Image.asset(
-                  '${AppConstants.clanWarLeaguesImagePath}${clanDetail.warLeague?.id}.png',
+                  '${AppConstants.clanWarLeaguesImagePath}$warLeagueId.png',
                   height: 72,
                   fit: BoxFit.cover,
                 )
@@ -134,7 +160,7 @@ class _LeagueWarDetailGroupScreenState
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Text(
-                  ' ${tr(clanDetail.warLeague?.name ?? '')}',
+                  ' ${tr('warLeague$warLeagueId')}',
                   style: const TextStyle(fontSize: 24.0),
                 ),
               ),

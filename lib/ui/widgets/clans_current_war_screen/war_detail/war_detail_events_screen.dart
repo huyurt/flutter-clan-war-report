@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,11 +38,21 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
     _bookmarkedPlayerTagsCubit = context.read<BookmarkedPlayerTagsCubit>();
   }
 
-  List<Widget> getStarsWidget(int stars) {
+  List<Widget> getStarsWidget(int stars, int beforeGainedStars) {
     final zeroStar = 3 - stars;
     final widgets = <Widget>[];
 
-    for (int index = 0; index < stars; index++) {
+    for (int index = 0; index < min(stars, beforeGainedStars); index++) {
+      widgets.add(Opacity(
+        opacity: 0.3,
+        child: Image.asset(
+          '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+          height: 16,
+          fit: BoxFit.cover,
+        ),
+      ));
+    }
+    for (int index = 0; index < stars - beforeGainedStars; index++) {
       widgets.add(Image.asset(
         '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
         height: 16,
@@ -49,8 +61,8 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
     }
     for (int index = 0; index < zeroStar; index++) {
       widgets.add(Image.asset(
-        '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-        height: 17,
+        '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+        height: 16,
         fit: BoxFit.cover,
       ));
     }
@@ -62,7 +74,7 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
   Widget build(BuildContext context) {
     Clan clan = widget.clan;
     Clan opponent = widget.opponent;
-    List<Attack> attacks = <Attack>[];
+    final attacks = <Attack>[];
     clan.members?.forEach((e) => attacks.addAll(e.attacks ?? <Attack>[]));
     opponent.members?.forEach((e) => attacks.addAll(e.attacks ?? <Attack>[]));
     attacks
@@ -86,28 +98,48 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                           member.tag == attack.defenderTag);
                   final clanAttacker = clanMember?.tag == attack.attackerTag;
 
-                  final clanMemberTownhallLevel =
+                  final clanMemberTownHallLevel =
                       (clanMember?.townhallLevel ?? 1) > 11
                           ? '${clanMember?.townhallLevel}.5'
                           : (clanMember?.townhallLevel ?? 1).toString();
-                  final opponentMemberTownhallLevel =
+                  final opponentMemberTownHallLevel =
                       (opponentMember?.townhallLevel ?? 1) > 11
                           ? '${opponentMember?.townhallLevel}.5'
                           : (opponentMember?.townhallLevel ?? 1).toString();
 
                   Color? bgColor;
                   if (clanAttacker) {
-                    if (_bookmarkedPlayerTagsCubit.state.playerTags
+                    if (context
+                        .watch<BookmarkedPlayerTagsCubit>()
+                        .state
+                        .playerTags
                         .contains(clanMember?.tag)) {
                       bgColor = AppConstants.attackerClanBackgroundColor;
                     }
                   } else {
-                    if (_bookmarkedPlayerTagsCubit.state.playerTags
+                    if (context
+                        .watch<BookmarkedPlayerTagsCubit>()
+                        .state
+                        .playerTags
                         .contains(opponentMember?.tag)) {
                       bgColor = AppConstants.attackerClanBackgroundColor;
-                    } else if (_bookmarkedPlayerTagsCubit.state.playerTags
+                    } else if (context
+                        .watch<BookmarkedPlayerTagsCubit>()
+                        .state
+                        .playerTags
                         .contains(clanMember?.tag)) {
                       bgColor = AppConstants.attackerOpponentBackgroundColor;
+                    }
+                  }
+
+                  final beforeAttacks = attacks.where((element) =>
+                      element.defenderTag == attack.defenderTag &&
+                      (element.order ?? 0) < (attack.order ?? 0));
+                  int beforeGainedStars = 0;
+                  for (final beforeAttack in beforeAttacks) {
+                    final stars = beforeAttack.stars ?? 0;
+                    if (stars > beforeGainedStars) {
+                      beforeGainedStars = stars;
                     }
                   }
 
@@ -157,8 +189,8 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                                         duration:
                                             const Duration(milliseconds: 250),
                                         child: Image.asset(
-                                          '${AppConstants.townHallsImagePath}$clanMemberTownhallLevel.png',
-                                          height: 40,
+                                          '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
+                                          width: 40,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -185,7 +217,8 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   Row(
-                                    children: getStarsWidget(attack.stars ?? 0),
+                                    children: getStarsWidget(
+                                        attack.stars ?? 0, beforeGainedStars),
                                   ),
                                   Text('%${attack.destructionPercentage ?? 0}'),
                                 ],
@@ -235,8 +268,8 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                                         duration:
                                             const Duration(milliseconds: 250),
                                         child: Image.asset(
-                                          '${AppConstants.townHallsImagePath}$opponentMemberTownhallLevel.png',
-                                          height: 40,
+                                          '${AppConstants.townHallsImagePath}$opponentMemberTownHallLevel.png',
+                                          width: 40,
                                           fit: BoxFit.cover,
                                         ),
                                       ),

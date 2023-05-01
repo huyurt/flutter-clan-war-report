@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -39,21 +41,65 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
     _bookmarkedPlayerTagsCubit = context.read<BookmarkedPlayerTagsCubit>();
   }
 
-  List<Widget> getStarsWidget(int stars) {
+  List<Widget> getStarsWidget(List<Attack> attacks, Attack? attack) {
+    int stars = attack?.stars ?? 0;
+    final beforeAttacks = attacks.where((element) =>
+        element.defenderTag == attack?.defenderTag &&
+        (element.order ?? 0) < (attack?.order ?? 0));
+    int beforeGainedStars = 0;
+    for (final beforeAttack in beforeAttacks) {
+      final stars = beforeAttack.stars ?? 0;
+      if (stars > beforeGainedStars) {
+        beforeGainedStars = stars;
+      }
+    }
+
+    final zeroStar = 3 - stars;
+    final widgets = <Widget>[];
+
+    for (int index = 0; index < min(stars, beforeGainedStars); index++) {
+      widgets.add(Opacity(
+        opacity: 0.3,
+        child: Image.asset(
+          '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+          height: 16,
+          fit: BoxFit.cover,
+        ),
+      ));
+    }
+    for (int index = 0; index < stars - beforeGainedStars; index++) {
+      widgets.add(Image.asset(
+        '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+        height: 16,
+        fit: BoxFit.cover,
+      ));
+    }
+    for (int index = 0; index < zeroStar; index++) {
+      widgets.add(Image.asset(
+        '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+        height: 16,
+        fit: BoxFit.cover,
+      ));
+    }
+
+    return widgets;
+  }
+
+  List<Widget> getOpponentStarsWidget(int stars) {
     final zeroStar = 3 - stars;
     final widgets = <Widget>[];
 
     for (int index = 0; index < stars; index++) {
       widgets.add(Image.asset(
         '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-        height: 14,
+        height: 16,
         fit: BoxFit.cover,
       ));
     }
     for (int index = 0; index < zeroStar; index++) {
       widgets.add(Image.asset(
-        '${AppConstants.clashResourceImagePath}${AppConstants.star3_0Image}',
-        height: 15,
+        '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+        height: 16,
         fit: BoxFit.cover,
       ));
     }
@@ -68,6 +114,11 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
     List<Member> members = clan.members ?? <Member>[];
     members
         .sort((item1, item2) => item1.mapPosition.compareTo(item2.mapPosition));
+
+    final allAttacks = <Attack>[];
+    clan.members?.forEach((e) => allAttacks.addAll(e.attacks ?? <Attack>[]));
+    allAttacks
+        .sort((item1, item2) => (item2.order ?? 0).compareTo(item1.order ?? 0));
 
     return ListView(
       key: PageStorageKey(widget.key),
@@ -142,316 +193,275 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                       member.bestOpponentAttack?.attackerTag);
             }
 
-            final clanMemberTownhallLevel = (member.townhallLevel) > 11
+            final clanMemberTownHallLevel = (member.townhallLevel) > 11
                 ? '${member.townhallLevel}.5'
                 : (member.townhallLevel).toString();
 
             Color? bgColor;
-            if (_bookmarkedPlayerTagsCubit.state.playerTags
+            if (context
+                .watch<BookmarkedPlayerTagsCubit>()
+                .state
+                .playerTags
                 .contains(member.tag)) {
               bgColor = AppConstants.attackerClanBackgroundColor;
             }
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 175,
-                      child: Card(
-                        margin: EdgeInsetsDirectional.zero,
-                        elevation: 0.0,
-                        color: bgColor ?? Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0.0),
+            return SizedBox(
+              height: 175,
+              child: Card(
+                margin: EdgeInsetsDirectional.zero,
+                elevation: 0.0,
+                color: bgColor ?? Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    if (!member.tag.isEmptyOrNull) {
+                      PlayerDetailScreen(
+                        playerTag: member.tag,
+                      ).launch(context);
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${member.mapPosition}. ${member.name}',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(height: 1, fontSize: 18),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Text(
+                                member.tag,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
-                        child: InkWell(
-                          onTap: () {
-                            if (!member.tag.isEmptyOrNull) {
-                              PlayerDetailScreen(
-                                playerTag: member.tag,
-                              ).launch(context);
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${member.mapPosition}. ${member.name}',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                          height: 1, fontSize: 18),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 4.0),
-                                      child: Text(
-                                        member.tag,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ],
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: FadeIn(
+                                animate: true,
+                                duration: const Duration(milliseconds: 250),
+                                child: Image.asset(
+                                  '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
+                                  width: 75,
+                                  fit: BoxFit.cover,
                                 ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 16.0),
-                                      child: FadeIn(
-                                        animate: true,
-                                        duration:
-                                            const Duration(milliseconds: 250),
-                                        child: Image.asset(
-                                          '${AppConstants.townHallsImagePath}$clanMemberTownhallLevel.png',
-                                          height: 75,
-                                          fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Row(
+                                                children: [
+                                                  const RotatedBox(
+                                                    quarterTurns: 1,
+                                                    child: Icon(MdiIcons.sword,
+                                                        size: 14.0),
+                                                  ),
+                                                  Text(
+                                                    ' ${tr(LocaleKey.attack)} 1',
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            attackDefender1 != null
+                                                ? Text(
+                                                    '${attackDefender1.mapPosition}. ${attackDefender1.name}',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: const TextStyle(
+                                                        height: 1),
+                                                  )
+                                                : Text(tr(LocaleKey.notUsed)),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                      Column(
                                         children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 4.0),
-                                                      child: Row(
-                                                        children: [
-                                                          const RotatedBox(
-                                                            quarterTurns: 1,
-                                                            child: Icon(
-                                                                MdiIcons.sword,
-                                                                size: 14.0),
-                                                          ),
-                                                          Text(
-                                                            ' ${tr(LocaleKey.attack)} 1',
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        12),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    attackDefender1 != null
-                                                        ? Text(
-                                                            '${attackDefender1.mapPosition}. ${attackDefender1.name}',
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            maxLines: 1,
-                                                            style:
-                                                                const TextStyle(
-                                                                    height: 1),
-                                                          )
-                                                        : Text(tr(
-                                                            LocaleKey.notUsed)),
-                                                  ],
-                                                ),
+                                          if (attackDefender1 != null) ...[
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: getStarsWidget(
+                                                    allAttacks,
+                                                    member.attacks?[0]),
                                               ),
-                                              Column(
-                                                children: [
-                                                  if (attackDefender1 !=
-                                                      null) ...[
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 4.0),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: getStarsWidget(
-                                                            member.attacks?[0]
-                                                                    .stars ??
-                                                                0),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                        '%${attacks[0].destructionPercentage}'),
-                                                  ],
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          if (widget.clanCurrentWar.warType ==
-                                              WarTypeEnum.clanWar)
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 4.0),
-                                                        child: Row(
-                                                          children: [
-                                                            const RotatedBox(
-                                                              quarterTurns: 1,
-                                                              child: Icon(
-                                                                  MdiIcons
-                                                                      .sword,
-                                                                  size: 14.0),
-                                                            ),
-                                                            Text(
-                                                              ' ${tr(LocaleKey.attack)} 2',
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          12),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      attackDefender2 != null
-                                                          ? Text(
-                                                              '${attackDefender2.mapPosition}. ${attackDefender2.name}',
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 1,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      height:
-                                                                          1),
-                                                            )
-                                                          : Text(tr(LocaleKey
-                                                              .notUsed)),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    if (attackDefender2 !=
-                                                        null) ...[
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 4.0),
-                                                        child: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: getStarsWidget(
-                                                              member.attacks?[1]
-                                                                      .stars ??
-                                                                  0),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                          '%${attacks[1].destructionPercentage}'),
-                                                    ],
-                                                  ],
-                                                ),
-                                              ],
                                             ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 4.0),
-                                                      child: Row(
-                                                        children: [
-                                                          const Icon(
-                                                              MdiIcons.shield,
-                                                              size: 14.0),
-                                                          Text(
-                                                            ' ${tr(LocaleKey.defence)}',
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        12),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    defenderAttacker != null
-                                                        ? Text(
-                                                            '${defenderAttacker.mapPosition}. ${defenderAttacker.name}',
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            maxLines: 1,
-                                                            style:
-                                                                const TextStyle(
-                                                                    height: 1),
-                                                          )
-                                                        : Text(tr(
-                                                            LocaleKey.notUsed)),
-                                                  ],
-                                                ),
-                                              ),
-                                              Column(
-                                                children: [
-                                                  if (defenderAttacker !=
-                                                      null) ...[
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 4.0),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: getStarsWidget(
-                                                            member.bestOpponentAttack
-                                                                    ?.stars ??
-                                                                0),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                        '%${member.bestOpponentAttack?.destructionPercentage ?? 0}'),
-                                                  ],
-                                                ],
-                                              ),
-                                            ],
-                                          ),
+                                            Text(
+                                                '%${attacks[0].destructionPercentage}'),
+                                          ],
                                         ],
                                       ),
+                                    ],
+                                  ),
+                                  if (widget.clanCurrentWar.warType ==
+                                      WarTypeEnum.clanWar)
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4.0),
+                                                child: Row(
+                                                  children: [
+                                                    const RotatedBox(
+                                                      quarterTurns: 1,
+                                                      child: Icon(
+                                                          MdiIcons.sword,
+                                                          size: 14.0),
+                                                    ),
+                                                    Text(
+                                                      ' ${tr(LocaleKey.attack)} 2',
+                                                      style: const TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              attackDefender2 != null
+                                                  ? Text(
+                                                      '${attackDefender2.mapPosition}. ${attackDefender2.name}',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      style: const TextStyle(
+                                                          height: 1),
+                                                    )
+                                                  : Text(tr(LocaleKey.notUsed)),
+                                            ],
+                                          ),
+                                        ),
+                                        Column(
+                                          children: [
+                                            if (attackDefender2 != null) ...[
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4.0),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: getStarsWidget(
+                                                      allAttacks,
+                                                      member.attacks?[1]),
+                                                ),
+                                              ),
+                                              Text(
+                                                  '%${attacks[1].destructionPercentage}'),
+                                            ],
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ],
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Row(
+                                                children: [
+                                                  const Icon(MdiIcons.shield,
+                                                      size: 14.0),
+                                                  Text(
+                                                    ' ${tr(LocaleKey.defence)}',
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            defenderAttacker != null
+                                                ? Text(
+                                                    '${defenderAttacker.mapPosition}. ${defenderAttacker.name}',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: const TextStyle(
+                                                        height: 1),
+                                                  )
+                                                : Text(tr(LocaleKey.notUsed)),
+                                          ],
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          if (defenderAttacker != null) ...[
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: getOpponentStarsWidget(
+                                                    member.bestOpponentAttack
+                                                            ?.stars ??
+                                                        0),
+                                              ),
+                                            ),
+                                            Text(
+                                                '%${member.bestOpponentAttack?.destructionPercentage ?? 0}'),
+                                          ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             );
           },
