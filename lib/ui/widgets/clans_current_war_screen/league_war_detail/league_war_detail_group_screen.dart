@@ -104,6 +104,7 @@ class _LeagueWarDetailGroupScreenState
       }
     }
 
+    final warPlayerCount = widget.clanLeagueWars.first.clanWarResponseModel.clan.members?.length ?? 0;
     final totals = <ClanLeagueWarsStats>[];
     for (String? clanTag in clanTags) {
       final clanStats = groupByClan[clanTag];
@@ -119,7 +120,7 @@ class _LeagueWarDetailGroupScreenState
           clanTag: clanTag,
           stars: (totalStars ?? 0) + winCount * 10,
           destructionPercentage:
-              ((totalDestructionPercentages ?? 0) * 15).round(),
+              ((totalDestructionPercentages ?? 0) * warPlayerCount).round(),
           clan: clanStats?.first));
     }
     totals.sort((a, b) => <Comparator<ClanLeagueWarsStats>>[
@@ -311,7 +312,7 @@ class _LeagueWarDetailGroupScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 70,
+                            width: 75,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(

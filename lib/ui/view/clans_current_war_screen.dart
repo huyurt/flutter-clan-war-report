@@ -86,13 +86,15 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                 DateTime? remainingDateTime;
                 final startTime =
                     DateTime.tryParse(clanCurrentWar.startTime ?? '');
+                final warStartTime =
+                    DateTime.tryParse(clanCurrentWar.warStartTime ?? '');
                 final endTime = DateTime.tryParse(clanCurrentWar.endTime ?? '');
                 if (endTime != null &&
                     clanCurrentWar.state == WarStateEnum.inWar.name) {
                   remainingDateTime = endTime;
-                } else if (startTime != null &&
+                } else if ((warStartTime != null || startTime != null) &&
                     clanCurrentWar.state == WarStateEnum.preparation.name) {
-                  remainingDateTime = startTime;
+                  remainingDateTime = warStartTime ?? startTime;
                 }
 
                 Clan clan;

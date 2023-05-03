@@ -10,6 +10,7 @@ import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_state_enum.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 import '../../clans_screen/clan_detail_screen.dart';
+import '../../countdown_timer/countdown_timer_widget.dart';
 import '../war_detail/war_detail_screen.dart';
 
 class ClanLeagueWarsStats {
@@ -241,6 +242,23 @@ class _LeagueWarDetailGroupDetailScreenState
                             opponent.destructionPercentage))
                 : null;
 
+            DateTime? remainingDateTime;
+            final startTime = DateTime.tryParse(
+                clanCurrentWar.clanWarResponseModel.startTime ?? '');
+            final warStartTime = DateTime.tryParse(
+                clanCurrentWar.clanWarResponseModel.warStartTime ?? '');
+            final endTime = DateTime.tryParse(
+                clanCurrentWar.clanWarResponseModel.endTime ?? '');
+            if (endTime != null &&
+                clanCurrentWar.clanWarResponseModel.state ==
+                    WarStateEnum.inWar.name) {
+              remainingDateTime = endTime;
+            } else if ((warStartTime != null || startTime != null) &&
+                clanCurrentWar.clanWarResponseModel.state ==
+                    WarStateEnum.preparation.name) {
+              remainingDateTime = warStartTime ?? startTime;
+            }
+
             return Card(
               margin: EdgeInsetsDirectional.zero,
               elevation: 0.0,
@@ -296,6 +314,10 @@ class _LeagueWarDetailGroupDetailScreenState
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                if (remainingDateTime != null)
+                                  CountdownTimerWidget(
+                                    remainingDateTime: remainingDateTime,
+                                  ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,

@@ -54,7 +54,7 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
                   (element.warTags?.any((e2) => e2 != '#0') ?? false))
               .toList();
           if (rounds != null) {
-            for (int index = rounds.length - 1; index >= 0; index--) {
+            for (int index = 0; index < rounds.length; index++) {
               final round = rounds[index];
               if (round.warTags?.isNotEmpty ?? false) {
                 for (String warTag in (round.warTags ?? <String>[])) {
@@ -62,7 +62,7 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
                       await CocApiClans.getClanLeagueGroupWar(clanTag, warTag);
 
                   if (clanCurrentWar.clanWarResponseModel.state ==
-                      WarStateEnum.preparation.name) {
+                      WarStateEnum.warEnded.name && index != rounds.length - 1) {
                     continue;
                   }
                   if (clanCurrentWar.clanWarResponseModel.clan.tag == clanTag ||
@@ -71,6 +71,10 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
                     clanFound = true;
                     break;
                   }
+                }
+
+                if (clanFound == true) {
+                  break;
                 }
               }
             }
