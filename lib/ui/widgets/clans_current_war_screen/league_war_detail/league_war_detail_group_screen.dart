@@ -69,20 +69,22 @@ class _LeagueWarDetailGroupScreenState
       winSeries[war.opponent.tag] ??=
           List<bool?>.generate(widget.totalRoundCount, (i) => null);
 
-      if (war.state == WarStateEnum.warEnded.name) {
-        bool clanWon = false;
-        if (war.clan.stars > war.opponent.stars) {
-          clanWon = true;
-        } else if (war.clan.stars == war.opponent.stars &&
-            war.clan.destructionPercentage >
-                war.opponent.destructionPercentage) {
-          clanWon = true;
+      if (roundIndex < widget.totalRoundCount - 1) {
+        if (war.state == WarStateEnum.warEnded.name) {
+          bool clanWon = false;
+          if (war.clan.stars > war.opponent.stars) {
+            clanWon = true;
+          } else if (war.clan.stars == war.opponent.stars &&
+              war.clan.destructionPercentage >
+                  war.opponent.destructionPercentage) {
+            clanWon = true;
+          }
+          winSeries[war.clan.tag]?[roundIndex] = clanWon;
+          winSeries[war.opponent.tag]?[roundIndex] = !clanWon;
+        } else {
+          winSeries[war.clan.tag]?[roundIndex] = null;
+          winSeries[war.opponent.tag]?[roundIndex] = null;
         }
-        winSeries[war.clan.tag]?[roundIndex] = clanWon;
-        winSeries[war.opponent.tag]?[roundIndex] = !clanWon;
-      } else {
-        winSeries[war.clan.tag]?[roundIndex] = null;
-        winSeries[war.opponent.tag]?[roundIndex] = null;
       }
 
       stats.add(war.clan);

@@ -48,17 +48,30 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
             clanCurrentWar.clanWarResponseModel.state ==
                 WarStateEnum.notInWar.name) {
           final clanLeague = await CocApiClans.getClanLeagueGroup(clanTag);
-          final lastRound = clanLeague.rounds?.lastWhere((element) =>
-              (element.warTags?.isNotEmpty ?? false) &&
-              (element.warTags?.any((e2) => e2 != '#0') ?? false));
-          if (lastRound?.warTags?.isNotEmpty ?? false) {
-            for (String warTag in (lastRound?.warTags ?? <String>[])) {
-              clanCurrentWar =
-                  await CocApiClans.getClanLeagueGroupWar(clanTag, warTag);
-              if (clanCurrentWar.clanWarResponseModel.clan.tag == clanTag ||
-                  clanCurrentWar.clanWarResponseModel.opponent.tag == clanTag) {
-                clanFound = true;
-                break;
+          final rounds = clanLeague.rounds
+              ?.where((element) =>
+                  (element.warTags?.isNotEmpty ?? false) &&
+                  (element.warTags?.any((e2) => e2 != '#0') ?? false))
+              .toList();
+          if (rounds != null) {
+            for (int index = rounds.length - 1; index >= 0; index--) {
+              final round = rounds[index];
+              if (round.warTags?.isNotEmpty ?? false) {
+                for (String warTag in (round.warTags ?? <String>[])) {
+                  clanCurrentWar =
+                      await CocApiClans.getClanLeagueGroupWar(clanTag, warTag);
+
+                  if (clanCurrentWar.clanWarResponseModel.state ==
+                      WarStateEnum.preparation.name) {
+                    continue;
+                  }
+                  if (clanCurrentWar.clanWarResponseModel.clan.tag == clanTag ||
+                      clanCurrentWar.clanWarResponseModel.opponent.tag ==
+                          clanTag) {
+                    clanFound = true;
+                    break;
+                  }
+                }
               }
             }
           }
