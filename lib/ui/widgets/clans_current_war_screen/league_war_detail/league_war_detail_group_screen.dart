@@ -61,40 +61,49 @@ class _LeagueWarDetailGroupScreenState
 
     final winSeries = <String?, List<bool?>>{};
     final stats = <Clan>[];
-    int roundIndex = 0;
-    for (ClanWarAndWarTypeResponseModel warModel in widget.clanLeagueWars) {
+    for (final warModel in widget.clanLeagueWars) {
       final war = warModel.clanWarResponseModel;
+
       winSeries[war.clan.tag] ??=
           List<bool?>.generate(widget.totalRoundCount, (i) => null);
       winSeries[war.opponent.tag] ??=
           List<bool?>.generate(widget.totalRoundCount, (i) => null);
 
-      if (roundIndex < widget.totalRoundCount - 1) {
-        if (war.state == WarStateEnum.warEnded.name) {
-          bool clanWon = false;
-          if (war.clan.stars > war.opponent.stars) {
-            clanWon = true;
-          } else if (war.clan.stars == war.opponent.stars &&
-              war.clan.destructionPercentage >
-                  war.opponent.destructionPercentage) {
-            clanWon = true;
-          }
-          winSeries[war.clan.tag]?[roundIndex] = clanWon;
-          winSeries[war.opponent.tag]?[roundIndex] = !clanWon;
-        } else {
-          winSeries[war.clan.tag]?[roundIndex] = null;
-          winSeries[war.opponent.tag]?[roundIndex] = null;
-        }
-      }
-
       stats.add(war.clan);
       stats.add(war.opponent);
-
-      roundIndex++;
     }
 
     final groupByClan = groupBy(stats, (war) => war.tag);
     final clanTags = groupByClan.keys;
+    int gameCountPerRound = (clanTags.length / 2).round();
+
+    int gameIndex = 0;
+    for (int warIndex = 0;
+        warIndex < widget.clanLeagueWars.length;
+        warIndex++) {
+      final war = widget.clanLeagueWars[warIndex].clanWarResponseModel;
+
+      if (warIndex > 0 && warIndex % gameCountPerRound == 0) {
+        gameIndex += 1;
+      }
+
+      if (war.state == WarStateEnum.warEnded.name) {
+        bool clanWon = false;
+        if (war.clan.stars > war.opponent.stars) {
+          clanWon = true;
+        } else if (war.clan.stars == war.opponent.stars &&
+            war.clan.destructionPercentage >
+                war.opponent.destructionPercentage) {
+          clanWon = true;
+        }
+        winSeries[war.clan.tag]?[gameIndex] = clanWon;
+        winSeries[war.opponent.tag]?[gameIndex] = !clanWon;
+      } else {
+        winSeries[war.clan.tag]?[gameIndex] = null;
+        winSeries[war.opponent.tag]?[gameIndex] = null;
+      }
+    }
+
     final totals = <ClanLeagueWarsStats>[];
     for (String? clanTag in clanTags) {
       final clanStats = groupByClan[clanTag];
