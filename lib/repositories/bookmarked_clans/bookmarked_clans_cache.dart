@@ -1,4 +1,4 @@
-import '../../models/api/clan_detail_response_model.dart';
+import '../../models/api/response/clan_detail_response_model.dart';
 
 class BookmarkedClansCache {
   final _cache = <String, ClanDetailResponseModel>{};

@@ -3,9 +3,8 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import '../../../models/api/clan_war_and_war_type_response_model.dart';
+import '../../../models/coc/clans_current_war_state_model.dart';
 import '../../../services/coc/coc_api_clans.dart';
-import '../../../utils/enums/war_state_enum.dart';
 import 'clan_current_war_detail_event.dart';
 import 'clan_current_war_detail_state.dart';
 
@@ -32,7 +31,7 @@ class ClanCurrentWarDetailBloc
     emit(ClanCurrentWarDetailStateLoading());
 
     try {
-      ClanWarAndWarTypeResponseModel? clanCurrentWar;
+      ClansCurrentWarStateModel? clanCurrentWar;
       try {
         if (event.warTag.isEmptyOrNull) {
           clanCurrentWar = await CocApiClans.getClanCurrentWar(event.clanTag);
@@ -42,44 +41,12 @@ class ClanCurrentWarDetailBloc
         }
       } catch (e) {}
 
-      if (clanCurrentWar == null ||
-          clanCurrentWar.clanWarResponseModel.state ==
-              WarStateEnum.notInWar.name) {
-        final clanLeague = await CocApiClans.getClanLeagueGroup(event.clanTag);
-        final rounds = clanLeague.rounds
-            ?.where((element) =>
-                (element.warTags?.isNotEmpty ?? false) &&
-                (element.warTags?.any((e2) => e2 != '#0') ?? false))
-            .toList();
-        if (rounds != null) {
-          for (int index = rounds.length - 1; index >= 0; index--) {
-            final round = rounds[index];
-            if (round?.warTags?.isNotEmpty ?? false) {
-              for (String warTag in (round?.warTags ?? <String>[])) {
-                clanCurrentWar = await CocApiClans.getClanLeagueGroupWar(
-                    event.clanTag, warTag);
-
-                if (clanCurrentWar.clanWarResponseModel.state ==
-                    WarStateEnum.preparation.name) {
-                  continue;
-                }
-                if (clanCurrentWar.clanWarResponseModel.clan.tag ==
-                        event.clanTag ||
-                    clanCurrentWar.clanWarResponseModel.opponent.tag ==
-                        event.clanTag) {
-                  break;
-                }
-              }
-            }
-          }
-        }
-      }
-
       if (clanCurrentWar == null) {
         emit(ClanCurrentWarDetailStateEmpty());
       } else {
         emit(ClanCurrentWarDetailStateSuccess(
-            clanCurrentWarDetail: clanCurrentWar));
+          clanCurrentWarDetail: clanCurrentWar,
+        ));
       }
     } catch (error) {
       emit(const ClanCurrentWarDetailStateError('something went wrong'));

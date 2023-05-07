@@ -1,4 +1,4 @@
-import '../../models/api/player_detail_response_model.dart';
+import '../../models/api/response/player_detail_response_model.dart';
 import 'coc_api_connector.dart';
 
 class CocApiPlayers {

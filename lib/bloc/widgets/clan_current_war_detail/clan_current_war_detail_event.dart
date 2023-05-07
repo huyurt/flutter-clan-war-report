@@ -21,5 +21,5 @@ class GetClanCurrentWarDetail extends ClanCurrentWarDetailBaseEvent {
   GetClanCurrentWarDetail({required super.clanTag, super.warTag});
 
   @override
-  String toString() => 'TextChanged { clanTag: $clanTag, warTag: $warTag }';
+  String toString() => 'FetchDetail { clanTag: $clanTag, warTag: $warTag }';
 }

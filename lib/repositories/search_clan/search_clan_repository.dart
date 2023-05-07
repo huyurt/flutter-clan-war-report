@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:more_useful_clash_of_clans/repositories/search_clan/search_clan_cache.dart';
 
-import '../../../models/api/search_clans_request_model.dart';
+import '../../models/api/request/search_clans_request_model.dart';
 import '../../../services/coc/coc_api_clans.dart';
 
 class SearchClanRepository {

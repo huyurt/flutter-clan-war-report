@@ -1,13 +1,13 @@
 import 'package:more_useful_clash_of_clans/utils/constants/app_constants.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/war_type_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../models/api/clan_detail_response_model.dart';
-import '../../models/api/clan_league_group_response_model.dart';
-import '../../models/api/clan_war_and_war_type_response_model.dart';
-import '../../models/api/clan_war_response_model.dart';
-import '../../models/api/search_clans_request_model.dart';
-import '../../models/api/search_clans_response_model.dart';
+import '../../models/api/response/clan_detail_response_model.dart';
+import '../../models/api/response/clan_league_group_response_model.dart';
+import '../../models/api/response/clan_war_response_model.dart';
+import '../../models/api/response/search_clans_response_model.dart';
+import '../../models/api/request/search_clans_request_model.dart';
+import '../../models/coc/clans_current_war_state_model.dart';
+import '../../utils/enums/war_type_enum.dart';
 import 'coc_api_connector.dart';
 
 class CocApiClans {
@@ -37,7 +37,7 @@ class CocApiClans {
       '/clans',
       queryParameters: parameters,
     );
-    final result = SearchClansResponseModel.fromJson(response.data);
+    final result = SearchClansResponseModel.fromMap(response.data);
     return result;
   }
 
@@ -49,16 +49,16 @@ class CocApiClans {
     return result;
   }
 
-  static Future<ClanWarAndWarTypeResponseModel> getClanCurrentWar(
+  static Future<ClansCurrentWarStateModel> getClanCurrentWar(
       String clanTag) async {
     final response = await CocApiConnector.dio.get(
       '/clans/${Uri.encodeComponent(clanTag)}/currentwar',
     );
     final result = ClanWarResponseModel.fromMap(response.data);
-    return ClanWarAndWarTypeResponseModel(
-      warType: WarTypeEnum.clanWar,
+    return ClansCurrentWarStateModel(
       clanTag: clanTag,
-      clanWarResponseModel: result,
+      war: result,
+      warType: WarTypeEnum.clanWar,
     );
   }
 
@@ -71,17 +71,17 @@ class CocApiClans {
     return result;
   }
 
-  static Future<ClanWarAndWarTypeResponseModel> getClanLeagueGroupWar(
+  static Future<ClansCurrentWarStateModel> getClanLeagueGroupWar(
       String clanTag, String warTag) async {
     final response = await CocApiConnector.dio.get(
       '/clanwarleagues/wars/${Uri.encodeComponent(warTag)}',
     );
     final result = ClanWarResponseModel.fromMap(response.data);
-    return ClanWarAndWarTypeResponseModel(
+    return ClansCurrentWarStateModel(
+      clanTag: clanTag,
+      war: result,
       warType: WarTypeEnum.leagueWar,
       warTag: warTag,
-      clanTag: clanTag,
-      clanWarResponseModel: result,
     );
   }
 }

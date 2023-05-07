@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/api/search_clans_response_model.dart';
+import '../../models/api/response/search_clans_response_model.dart';
 
 class SearchClanCache {
   final _cache = <SearchClanCacheKeyModel, SearchClanCacheValueModel>{};
@@ -39,5 +39,5 @@ class SearchClanCacheValueModel {
   });
 
   late String? after;
-  final List<SearchedClanItem> items;
+  final List<SearchClanItem> items;
 }

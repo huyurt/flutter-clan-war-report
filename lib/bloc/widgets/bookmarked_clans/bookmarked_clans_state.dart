@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/api/clan_detail_response_model.dart';
+import '../../../models/api/response/clan_detail_response_model.dart';
 
 abstract class BookmarkedClansState extends Equatable {
   const BookmarkedClansState();

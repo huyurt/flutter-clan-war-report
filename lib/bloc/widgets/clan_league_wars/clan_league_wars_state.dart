@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/api/clan_league_group_response_model.dart';
-import '../../../models/api/clan_war_and_war_type_response_model.dart';
+import '../../../models/api/response/clan_league_group_response_model.dart';
+import '../../../models/coc/clans_current_war_state_model.dart';
 
 abstract class ClanLeagueWarsState extends Equatable {
   const ClanLeagueWarsState();
@@ -23,7 +23,7 @@ class ClanLeagueWarsStateSuccess extends ClanLeagueWarsState {
 
   final int totalRoundCount;
   final ClanLeagueGroupResponseModel clanLeague;
-  final List<ClanWarAndWarTypeResponseModel> clanLeagueWars;
+  final List<ClansCurrentWarStateModel> clanLeagueWars;
 
   @override
   List<Object?> get props => [totalRoundCount, clanLeague, clanLeagueWars];

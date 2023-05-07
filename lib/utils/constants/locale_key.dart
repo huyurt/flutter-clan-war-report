@@ -63,6 +63,7 @@ class LocaleKey {
   static const coLeader = 'Co-Leader';
   static const elder = 'Elder';
   static const member = 'Member';
+  static const admin = 'Admin';
   static const warStars = 'War Stars';
   static const trophies = 'Trophies';
   static const heroes = 'Heroes';

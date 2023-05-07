@@ -1,8 +1,8 @@
+import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
 
-import '../../../models/api/clan_war_and_war_type_response_model.dart';
-import '../../../repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
+import '../../../models/coc/clans_current_war_state_model.dart';
 import '../../../repositories/bookmarked_clans_current_war/bookmarked_clans_current_war_repository.dart';
 import '../../../services/coc/coc_api_clans.dart';
 import 'bookmarked_clans_current_war_event.dart';
@@ -11,13 +11,11 @@ import 'bookmarked_clans_current_war_state.dart';
 class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
     BookmarkedClansCurrentWarState> {
   BookmarkedClansCurrentWarBloc({
-    required this.bookmarkedClanTagsRepository,
     required this.bookmarkedClansCurrentWarRepository,
   }) : super(BookmarkedClansCurrentWarStateEmpty()) {
     on<GetBookmarkedClansCurrentWar>(_onGetBookmarkedClansCurrentWar);
   }
 
-  final BookmarkedClanTagsRepository bookmarkedClanTagsRepository;
   final BookmarkedClansCurrentWarRepository bookmarkedClansCurrentWarRepository;
 
   Future<void> _onGetBookmarkedClansCurrentWar(
@@ -26,65 +24,64 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
   ) async {
     emit(BookmarkedClansCurrentWarStateLoading());
 
-    final removedClanTags = event.clanTagList
-        .where((element) => !event.clanTagList.contains(element))
-        .toList();
-    for (String clanTag in removedClanTags) {
-      bookmarkedClansCurrentWarRepository
-          .removeBookmarkedClansCurrentWar(clanTag);
-    }
+    bookmarkedClansCurrentWarRepository.cleanRemovedClanTags(event.clanTagList);
     emit(BookmarkedClansCurrentWarStateSuccess(
       clansCurrentWar: bookmarkedClansCurrentWarRepository.getClansCurrentWar(),
     ));
 
-    for (String clanTag in event.clanTagList) {
+    for (final clanTag in event.clanTagList) {
       try {
-        bool clanFound = false;
-        ClanWarAndWarTypeResponseModel? clanCurrentWar;
+        ClansCurrentWarStateModel? clanCurrentWar;
+
+        // Fetch current clan war
         try {
           clanCurrentWar = await CocApiClans.getClanCurrentWar(clanTag);
         } catch (e) {}
+
         if (clanCurrentWar == null ||
-            clanCurrentWar.clanWarResponseModel.state ==
-                WarStateEnum.notInWar.name) {
-          final clanLeague = await CocApiClans.getClanLeagueGroup(clanTag);
-          final rounds = clanLeague.rounds
-              ?.where((element) =>
-                  (element.warTags?.isNotEmpty ?? false) &&
-                  (element.warTags?.any((e2) => e2 != '#0') ?? false))
-              .toList();
-          if (rounds != null) {
-            for (int index = 0; index < rounds.length; index++) {
-              final round = rounds[index];
-              if (round.warTags?.isNotEmpty ?? false) {
-                for (String warTag in (round.warTags ?? <String>[])) {
-                  clanCurrentWar =
-                      await CocApiClans.getClanLeagueGroupWar(clanTag, warTag);
+            clanCurrentWar.war.state == WarStateEnum.notInWar.name) {
+          // Fetch clan league wars
+          final lastClanLeague = await CocApiClans.getClanLeagueGroup(clanTag);
 
-                  if (clanCurrentWar.clanWarResponseModel.state ==
-                      WarStateEnum.warEnded.name && index != rounds.length - 1) {
-                    continue;
-                  }
-                  if (clanCurrentWar.clanWarResponseModel.clan.tag == clanTag ||
-                      clanCurrentWar.clanWarResponseModel.opponent.tag ==
-                          clanTag) {
-                    clanFound = true;
-                    break;
-                  }
-                }
+          int notStartedRoundIndex = lastClanLeague.rounds
+              .indexWhere((r) => r.warTags?.contains('#0') ?? false);
+          int lastRoundIndex = notStartedRoundIndex > 0
+              ? (notStartedRoundIndex - 1)
+              : (lastClanLeague.rounds.length - 1);
 
-                if (clanFound == true) {
-                  break;
-                }
-              }
+          if (lastRoundIndex == 0) {
+            final round = lastClanLeague.rounds[lastRoundIndex];
+            final warTag = round.warTags?.first;
+            if (warTag != null) {
+              clanCurrentWar = await getClanCurrentLeagueWar(clanTag, [warTag]);
+              bookmarkedClansCurrentWarRepository
+                  .addOrUpdateBookmarkedClansCurrentWar(
+                clanTag,
+                clanCurrentWar,
+              );
             }
+          } else {
+            final round1 = lastClanLeague.rounds[lastRoundIndex - 1];
+            clanCurrentWar = await getClanCurrentLeagueWar(
+                clanTag, (round1.warTags ?? <String>[]));
+            if (clanCurrentWar.war.state == WarStateEnum.warEnded.name) {
+              final round2 = lastClanLeague.rounds[lastRoundIndex];
+              clanCurrentWar = await getClanCurrentLeagueWar(
+                  clanTag, (round2.warTags ?? <String>[]));
+            }
+            bookmarkedClansCurrentWarRepository
+                .addOrUpdateBookmarkedClansCurrentWar(
+              clanTag,
+              clanCurrentWar,
+            );
           }
         } else {
-          clanFound = true;
+          bookmarkedClansCurrentWarRepository
+              .addOrUpdateBookmarkedClansCurrentWar(
+            clanTag,
+            clanCurrentWar,
+          );
         }
-        clanCurrentWar = clanFound ? clanCurrentWar : null;
-        bookmarkedClansCurrentWarRepository
-            .addOrUpdateBookmarkedClansCurrentWar(clanTag, clanCurrentWar);
       } catch (e) {
         emit(const BookmarkedClansCurrentWarStateError('something went wrong'));
       }
@@ -95,5 +92,22 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
     }
 
     //emit(BookmarkedClansCurrentWarStateCompleted());
+  }
+
+  Future<ClansCurrentWarStateModel> getClanCurrentLeagueWar(
+      String clanTag, List<String> warTags) async {
+    final clanLeagueWars = <ClansCurrentWarStateModel>[];
+    final futureGroup = FutureGroup();
+    for (final warTag in warTags) {
+      futureGroup.add(CocApiClans.getClanLeagueGroupWar(clanTag, warTag));
+    }
+    futureGroup.close();
+
+    final allResponse = await futureGroup.future;
+    for (final response in allResponse) {
+      clanLeagueWars.add(response);
+    }
+    return clanLeagueWars.firstWhere(
+        (e) => e.war.clan.tag == clanTag || e.war.opponent.tag == clanTag);
   }
 }

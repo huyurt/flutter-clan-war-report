@@ -4,7 +4,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/search_clan/search_clan_repository.dart';
-import '../../../models/api/search_clans_request_model.dart';
+import '../../../models/api/request/search_clans_request_model.dart';
 import 'search_clan_event.dart';
 import 'search_clan_state.dart';
 

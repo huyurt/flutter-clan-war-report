@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/ui/view/home_screen.dart';
-import 'package:more_useful_clash_of_clans/ui/view/setting_screen.dart';
-import 'package:more_useful_clash_of_clans/ui/view/splash_screen.dart';
+import 'package:more_useful_clash_of_clans/ui/screens/home_screen/home_screen.dart';
+import 'package:more_useful_clash_of_clans/ui/screens/setting_screen/setting_screen.dart';
+import 'package:more_useful_clash_of_clans/ui/screens/home_screen/splash_screen.dart';
 
 class Routes {
   Routes._();

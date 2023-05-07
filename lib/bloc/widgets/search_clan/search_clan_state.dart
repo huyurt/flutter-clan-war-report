@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/api/search_clans_response_model.dart';
+import '../../../models/api/response/search_clans_response_model.dart';
 
 abstract class SearchClanState extends Equatable {
   const SearchClanState();
@@ -17,7 +17,7 @@ class SearchStateSuccess extends SearchClanState {
   const SearchStateSuccess({this.after, required this.items});
 
   final String? after;
-  final List<SearchedClanItem> items;
+  final List<SearchClanItem> items;
 
   @override
   List<Object?> get props => [after, items];

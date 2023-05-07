@@ -185,5 +185,9 @@
   "Star": "Yıldız",
   "Destruction": "Yıkım",
   "Reliability": "Dayanıklılık",
-  "Speed": "Hız"
+  "Speed": "Hız",
+  "admin": "Büyük",
+  "member": "Üye",
+  "coLeader": "Yardımcı Lider",
+  "leader": "Lider"
 }

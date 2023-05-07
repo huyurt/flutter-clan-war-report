@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../models/api/player_detail_response_model.dart';
+import '../../models/api/response/player_detail_response_model.dart';
 
 class SearchPlayerCache {
   final _cache = <SearchPlayerCacheKeyModel, SearchPlayerCacheValueModel>{};

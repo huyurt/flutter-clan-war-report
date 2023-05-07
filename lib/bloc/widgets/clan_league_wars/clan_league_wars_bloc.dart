@@ -4,8 +4,8 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import '../../../models/api/clan_league_group_response_model.dart';
-import '../../../models/api/clan_war_and_war_type_response_model.dart';
+import '../../../models/api/response/clan_league_group_response_model.dart';
+import '../../../models/coc/clans_current_war_state_model.dart';
 import '../../../services/coc/coc_api_clans.dart';
 import 'clan_league_wars_event.dart';
 import 'clan_league_wars_state.dart';
@@ -33,17 +33,17 @@ class ClanLeagueWarsBloc
     emit(ClanLeagueWarsStateLoading());
 
     try {
-      final clanLeagueWars = <ClanWarAndWarTypeResponseModel>[];
+      final clanLeagueWars = <ClansCurrentWarStateModel>[];
       final clanLeague = await CocApiClans.getClanLeagueGroup(event.clanTag);
       final rounds = clanLeague.rounds
               ?.where((element) =>
                   (element.warTags?.isNotEmpty ?? false) &&
                   (element.warTags?.any((e2) => e2 != '#0') ?? false))
               .toList() ??
-          <Round>[];
+          <LeagueGroupRound>[];
 
       final futureGroup = FutureGroup();
-      for (Round round in rounds) {
+      for (final round in rounds) {
         for (String warTag in (round.warTags ?? <String>[])) {
           futureGroup
               .add(CocApiClans.getClanLeagueGroupWar(event.clanTag, warTag));
@@ -52,7 +52,7 @@ class ClanLeagueWarsBloc
       futureGroup.close();
 
       final allResponse = await futureGroup.future;
-      for (ClanWarAndWarTypeResponseModel response in allResponse) {
+      for (final response in allResponse) {
         clanLeagueWars.add(response);
       }
 

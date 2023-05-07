@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/api/search_clans_request_model.dart';
+import '../../../models/api/request/search_clans_request_model.dart';
 
 abstract class SearchClanEvent extends Equatable {
 }

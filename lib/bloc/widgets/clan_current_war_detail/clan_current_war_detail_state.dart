@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../models/api/clan_war_and_war_type_response_model.dart';
+import '../../../models/coc/clans_current_war_state_model.dart';
 
 abstract class ClanCurrentWarDetailState extends Equatable {
   const ClanCurrentWarDetailState();
@@ -16,7 +16,7 @@ class ClanCurrentWarDetailStateLoading extends ClanCurrentWarDetailState {}
 class ClanCurrentWarDetailStateSuccess extends ClanCurrentWarDetailState {
   const ClanCurrentWarDetailStateSuccess({required this.clanCurrentWarDetail});
 
-  final ClanWarAndWarTypeResponseModel clanCurrentWarDetail;
+  final ClansCurrentWarStateModel clanCurrentWarDetail;
 
   @override
   List<Object?> get props => [clanCurrentWarDetail];
