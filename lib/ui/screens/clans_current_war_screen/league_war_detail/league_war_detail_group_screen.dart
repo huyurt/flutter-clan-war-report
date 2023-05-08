@@ -11,6 +11,7 @@ import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
+import '../../../../utils/enums/war_winning_enum.dart';
 import 'league_war_detail_group_detail_screen.dart';
 
 class ClanLeagueWarsStats {
@@ -55,19 +56,20 @@ class _LeagueWarDetailGroupScreenState
     final warStartTime = DateTime.tryParse(widget.warStartTime);
     String season = '';
     if (warStartTime != null) {
-      season = DateFormat.yMMMM().format(warStartTime);
+      season = DateFormat.yMMMM(Localizations.localeOf(context).languageCode)
+          .format(warStartTime);
     }
     final clanDetail = widget.clanDetail;
 
-    final winSeries = <String?, List<bool?>>{};
+    final winSeries = <String?, List<WarWinningEnum>>{};
     final stats = <WarClan>[];
     for (final warModel in widget.clanLeagueWars) {
       final war = warModel.war;
 
-      winSeries[war.clan.tag] ??=
-          List<bool?>.generate(widget.totalRoundCount, (i) => null);
-      winSeries[war.opponent.tag] ??=
-          List<bool?>.generate(widget.totalRoundCount, (i) => null);
+      winSeries[war.clan.tag] ??= List<WarWinningEnum>.generate(
+          widget.totalRoundCount, (i) => WarWinningEnum.notStarted);
+      winSeries[war.opponent.tag] ??= List<WarWinningEnum>.generate(
+          widget.totalRoundCount, (i) => WarWinningEnum.notStarted);
 
       stats.add(war.clan);
       stats.add(war.opponent);
@@ -96,15 +98,21 @@ class _LeagueWarDetailGroupScreenState
                 war.opponent.destructionPercentage) {
           clanWon = true;
         }
-        winSeries[war.clan.tag]?[gameIndex] = clanWon;
-        winSeries[war.opponent.tag]?[gameIndex] = !clanWon;
+        winSeries[war.clan.tag]?[gameIndex] =
+            clanWon ? WarWinningEnum.won : WarWinningEnum.lost;
+        winSeries[war.opponent.tag]?[gameIndex] =
+            !clanWon ? WarWinningEnum.won : WarWinningEnum.lost;
+      } else if (war.state == WarStateEnum.inWar.name) {
+        winSeries[war.clan.tag]?[gameIndex] = WarWinningEnum.inWar;
+        winSeries[war.opponent.tag]?[gameIndex] = WarWinningEnum.inWar;
       } else {
-        winSeries[war.clan.tag]?[gameIndex] = null;
-        winSeries[war.opponent.tag]?[gameIndex] = null;
+        winSeries[war.clan.tag]?[gameIndex] = WarWinningEnum.notStarted;
+        winSeries[war.opponent.tag]?[gameIndex] = WarWinningEnum.notStarted;
       }
     }
 
-    final warPlayerCount = widget.clanLeagueWars.first.war.clan.members?.length ?? 0;
+    final warPlayerCount =
+        widget.clanLeagueWars.first.war.clan.members?.length ?? 0;
     final totals = <ClanLeagueWarsStats>[];
     for (String? clanTag in clanTags) {
       final clanStats = groupByClan[clanTag];
@@ -211,10 +219,8 @@ class _LeagueWarDetailGroupScreenState
                     clan: clan,
                     clanLeagueWars: widget.clanLeagueWars
                         .where((warModel) =>
-                            warModel.war.clan.tag ==
-                                clan?.tag ||
-                            warModel.war.opponent.tag ==
-                                clan?.tag)
+                            warModel.war.clan.tag == clan?.tag ||
+                            warModel.war.opponent.tag == clan?.tag)
                         .toList(),
                   ).launch(context);
                 },
@@ -267,11 +273,18 @@ class _LeagueWarDetailGroupScreenState
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(2.0),
-                                                color: win == null
+                                                color: win ==
+                                                        WarWinningEnum
+                                                            .notStarted
                                                     ? Colors.black38
-                                                    : win == true
-                                                        ? Colors.lightGreen
-                                                        : Colors.redAccent,
+                                                    : win ==
+                                                            WarWinningEnum.inWar
+                                                        ? Colors.yellow
+                                                        : (win ==
+                                                                WarWinningEnum
+                                                                    .won
+                                                            ? Colors.lightGreen
+                                                            : Colors.redAccent),
                                               ),
                                             ),
                                           );

@@ -4,7 +4,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import '../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../models/coc/clans_current_war_state_model.dart';
 import '../../../services/coc/coc_api_clans.dart';
 import 'clan_league_wars_event.dart';
@@ -36,11 +35,10 @@ class ClanLeagueWarsBloc
       final clanLeagueWars = <ClansCurrentWarStateModel>[];
       final clanLeague = await CocApiClans.getClanLeagueGroup(event.clanTag);
       final rounds = clanLeague.rounds
-              ?.where((element) =>
-                  (element.warTags?.isNotEmpty ?? false) &&
-                  (element.warTags?.any((e2) => e2 != '#0') ?? false))
-              .toList() ??
-          <LeagueGroupRound>[];
+          .where((element) =>
+              (element.warTags?.isNotEmpty ?? false) &&
+              (element.warTags?.any((e2) => e2 != '#0') ?? false))
+          .toList();
 
       final futureGroup = FutureGroup();
       for (final round in rounds) {
@@ -57,13 +55,14 @@ class ClanLeagueWarsBloc
       }
 
       if (clanLeagueWars.isEmpty) {
-        emit(ClanLeagueWarsStateEmpty());
-      } else {
-        emit(ClanLeagueWarsStateSuccess(
-            totalRoundCount: clanLeague.rounds?.length ?? 0,
-            clanLeague: clanLeague,
-            clanLeagueWars: clanLeagueWars));
+        return emit(ClanLeagueWarsStateEmpty());
       }
+
+      return emit(ClanLeagueWarsStateSuccess(
+        totalRoundCount: clanLeague.rounds.length,
+        clanLeague: clanLeague,
+        clanLeagueWars: clanLeagueWars,
+      ));
     } catch (error) {
       emit(const ClanLeagueWarsStateError('something went wrong'));
     }

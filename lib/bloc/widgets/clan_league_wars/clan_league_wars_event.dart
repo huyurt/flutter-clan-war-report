@@ -20,5 +20,5 @@ class GetClanLeagueWars extends ClanLeagueWarsBaseEvent {
   GetClanLeagueWars({required super.clanTag});
 
   @override
-  String toString() => 'TextChanged { clanTag: $clanTag }';
+  String toString() => 'FetchList { clanTag: $clanTag }';
 }

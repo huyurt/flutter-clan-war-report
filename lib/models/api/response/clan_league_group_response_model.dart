@@ -45,24 +45,24 @@ class ClanLeagueGroupResponseModel {
     "state": state,
     "season": season,
     "clans": clans == null ? [] : List<dynamic>.from(clans!.map((x) => x.toMap())),
-    "rounds": rounds == null ? [] : List<dynamic>.from(rounds!.map((x) => x.toMap())),
+    "rounds": rounds == null ? [] : List<dynamic>.from(rounds.map((x) => x.toMap())),
   };
 }
 
 class LeagueGroupClan {
   LeagueGroupClan({
-    this.tag,
-    this.name,
+    required this.tag,
+    required this.name,
     this.clanLevel,
     this.badgeUrls,
-    this.members,
+    required this.members,
   });
 
-  final String? tag;
-  final String? name;
+  final String tag;
+  final String name;
   final int? clanLevel;
   final BadgeUrls? badgeUrls;
-  final List<LeagueGroupMember>? members;
+  final List<LeagueGroupMember> members;
 
   LeagueGroupClan copyWith({
     String? tag,
@@ -96,7 +96,7 @@ class LeagueGroupClan {
     "name": name,
     "clanLevel": clanLevel,
     "badgeUrls": badgeUrls?.toMap(),
-    "members": members == null ? [] : List<dynamic>.from(members!.map((x) => x.toMap())),
+    "members": members == null ? [] : List<dynamic>.from(members.map((x) => x.toMap())),
   };
 }
 

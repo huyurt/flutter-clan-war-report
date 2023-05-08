@@ -53,7 +53,8 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
     final warStartTime = DateTime.tryParse(widget.warStartTime);
     String season = '';
     if (warStartTime != null) {
-      season = DateFormat.yMMMM().format(warStartTime);
+      season = DateFormat.yMMMM(Localizations.localeOf(context).languageCode)
+          .format(warStartTime);
     }
 
     return Scaffold(

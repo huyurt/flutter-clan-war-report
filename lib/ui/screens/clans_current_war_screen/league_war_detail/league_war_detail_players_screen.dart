@@ -28,7 +28,7 @@ class ClanLeagueWarsMemberStats {
   final int attackCount;
   final int totalDestructionPercentages;
   final int totalStars;
-  final WarClanMember member;
+  final LeagueGroupMember member;
   final List<Attack> memberAttacks;
   final List<Attack> memberDefenceAttacks;
   final int roundCount;
@@ -60,37 +60,49 @@ class _LeagueWarDetailPlayersScreenState
     extends State<LeagueWarDetailPlayersScreen> {
   @override
   Widget build(BuildContext context) {
-    final lastWar = widget.clanLeagueWars.last.war;
-    WarStateEnum lastWarState = WarStateEnum.notInWar;
+    final clanMembers = <LeagueGroupMember>[];
+    for (var clan in widget.clanLeague.clans ?? <LeagueGroupClan>[]) {
+      clanMembers.addAll(clan.members);
+    }
+
     final members = <WarClanMember>[];
     for (final war in widget.clanLeagueWars) {
       final clanMembers = war.war.clan.members ?? <WarClanMember>[];
       final opponentMembers = war.war.opponent.members ?? <WarClanMember>[];
       members.addAll(clanMembers);
       members.addAll(opponentMembers);
-      lastWarState = WarStateEnum.values
-          .firstWhere((element) => element.name == war.war.state);
     }
 
     final memberStats = <ClanLeagueWarsMemberStats>[];
     final groupedAttacks = groupBy(members, (member) => member.tag);
     for (final memberTag in groupedAttacks.keys) {
-      final member = members.firstWhere((element) => element.tag == memberTag);
+      final member =
+          clanMembers.firstWhere((element) => element.tag == memberTag);
+      final clan = widget.clanLeague.clans?.firstWhere(
+          (element) => element.members.any((e2) => e2.tag == member.tag));
+
+      final memberInPreparationWar = widget.clanLeagueWars.any((w) =>
+          w.war.state == WarStateEnum.preparation.name &&
+          ((w.war.clan.members?.any((m) => m.tag == member.tag) ?? false) ||
+              (w.war.opponent.members?.any((m) => m.tag == member.tag) ??
+                  false)));
+
       int roundCount = 0;
       final memberAttacks = <Attack>[];
       final memberDefenceAttacks = <Attack>[];
+
       members.where((member) => member.tag == memberTag).forEach((element) {
         roundCount += 1;
         memberAttacks.addAll(element.attacks ?? <Attack>[]);
       });
+
       members
           .where((member) =>
               member.attacks?.any((e2) => e2.defenderTag == memberTag) ?? false)
           .forEach((element) {
         memberDefenceAttacks.addAll(element.attacks ?? <Attack>[]);
       });
-      final clan = widget.clanLeague.clans?.firstWhere((element) =>
-          element.members?.any((e2) => e2.tag == member.tag) ?? false);
+
       memberStats.add(ClanLeagueWarsMemberStats(
         attackCount: memberAttacks.length,
         totalDestructionPercentages:
@@ -99,14 +111,7 @@ class _LeagueWarDetailPlayersScreenState
         member: member,
         memberAttacks: memberAttacks,
         memberDefenceAttacks: memberDefenceAttacks,
-        roundCount: lastWarState == WarStateEnum.preparation &&
-                ((lastWar.clan.members?.any((m) => m.tag == member.tag) ??
-                        false) ||
-                    (lastWar.opponent.members
-                            ?.any((m) => m.tag == member.tag) ??
-                        false))
-            ? roundCount - 1
-            : roundCount,
+        roundCount: memberInPreparationWar ? roundCount - 1 : roundCount,
         clanName: clan?.name ?? '',
       ));
     }
@@ -116,16 +121,15 @@ class _LeagueWarDetailPlayersScreenState
               .compareTo(o1.totalDestructionPercentages),
           (o1, o2) => o2.attackCount.compareTo(o1.attackCount),
           (o1, o2) =>
-              o2.member.townhallLevel.compareTo(o1.member.townhallLevel),
+              o2.member.townHallLevel.compareTo(o1.member.townHallLevel),
           (o1, o2) => o1.clanName.compareTo(o2.clanName),
           (o1, o2) => o1.member.name.compareTo(o2.member.name),
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
 
     final leagueParticipants = <LeagueGroupMember>[];
     for (final clan in widget.clanLeague.clans ?? <LeagueGroupClan>[]) {
-      leagueParticipants.addAll(clan.members?.where(
-              (element) => !members.any((e2) => e2.tag == element.tag)) ??
-          <LeagueGroupMember>[]);
+      leagueParticipants.addAll(clan.members
+          .where((element) => !members.any((e2) => e2.tag == element.tag)));
     }
     leagueParticipants.sort((a, b) => <Comparator<LeagueGroupMember>>[
           (o1, o2) => o2.townHallLevel.compareTo(o1.townHallLevel),
@@ -140,11 +144,11 @@ class _LeagueWarDetailPlayersScreenState
             final index = memberStats.indexOf(memberStat);
             final member = memberStat.member;
             final clan = widget.clanLeague.clans?.firstWhere(
-                (e1) => e1.members?.any((e2) => e2.tag == member.tag) ?? false);
+                (e1) => e1.members.any((e2) => e2.tag == member.tag));
 
-            final clanMemberTownHallLevel = (member.townhallLevel) > 11
-                ? '${member.townhallLevel}.5'
-                : (member.townhallLevel).toString();
+            final clanMemberTownHallLevel = (member.townHallLevel) > 11
+                ? '${member.townHallLevel}.5'
+                : (member.townHallLevel).toString();
 
             Color? bgColor;
             if (context
@@ -313,7 +317,7 @@ class _LeagueWarDetailPlayersScreenState
           (member) {
             final index = leagueParticipants.indexOf(member);
             final clan = widget.clanLeague.clans?.firstWhere(
-                (e1) => e1.members?.any((e2) => e2.tag == member.tag) ?? false);
+                (e1) => e1.members.any((e2) => e2.tag == member.tag));
 
             final clanMemberTownHallLevel = (member.townHallLevel) > 11
                 ? '${member.townHallLevel}.5'
@@ -332,13 +336,7 @@ class _LeagueWarDetailPlayersScreenState
                     clanTag: widget.clanTag,
                     warStartTime: widget.warStartTime,
                     clan: clan,
-                    member: WarClanMember(
-                      tag: member.tag,
-                      name: member.name,
-                      townhallLevel: member.townHallLevel,
-                      mapPosition: 0,
-                      opponentAttacks: 0,
-                    ),
+                    member: member,
                     memberAttacks: const <Attack>[],
                     memberDefenceAttacks: const <Attack>[],
                     roundCount: 0,

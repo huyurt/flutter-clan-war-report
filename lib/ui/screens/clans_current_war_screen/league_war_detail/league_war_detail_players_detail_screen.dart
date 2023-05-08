@@ -38,7 +38,7 @@ class LeagueWarDetailPlayersDetailScreen extends StatefulWidget {
   final String clanTag;
   final String warStartTime;
   final LeagueGroupClan? clan;
-  final WarClanMember member;
+  final LeagueGroupMember member;
   final List<Attack> memberAttacks;
   final List<Attack> memberDefenceAttacks;
   final int roundCount;
@@ -77,7 +77,8 @@ class _LeagueWarDetailPlayersDetailScreenState
     final warStartTime = DateTime.tryParse(widget.warStartTime);
     String season = '';
     if (warStartTime != null) {
-      season = DateFormat.yMMMM().format(warStartTime);
+      season = DateFormat.yMMMM(Localizations.localeOf(context).languageCode)
+          .format(warStartTime);
     }
 
     final clan = widget.clan;
@@ -85,9 +86,9 @@ class _LeagueWarDetailPlayersDetailScreenState
     final memberAttacks = widget.memberAttacks;
     final memberDefenceAttacks = widget.memberDefenceAttacks;
 
-    final clanMemberTownHallLevel = (member.townhallLevel) > 11
-        ? '${member.townhallLevel}.5'
-        : (member.townhallLevel).toString();
+    final clanMemberTownHallLevel = (member.townHallLevel) > 11
+        ? '${member.townHallLevel}.5'
+        : (member.townHallLevel).toString();
 
     final notUsedAttackCount = widget.roundCount - memberAttacks.length;
     final groupedStars =
