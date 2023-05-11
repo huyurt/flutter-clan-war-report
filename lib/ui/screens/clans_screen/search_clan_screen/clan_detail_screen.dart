@@ -57,19 +57,19 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
           PopupMenuButton(
             itemBuilder: (context) {
               return [
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 0,
                   child: Text(tr(LocaleKey.warLog)),
                 ),
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 1,
                   child: Text(tr(LocaleKey.openInGame)),
                 ),
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 2,
                   child: Text(tr(LocaleKey.copyClanTag)),
                 ),
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 3,
                   child: Text(tr(LocaleKey.shareLink)),
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/locale_enum.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/war_league_enum.dart';
 
+import '../../models/coc/league_result_model.dart';
 import '../constants/app_constants.dart';
 import '../enums/theme_enum.dart';
 
@@ -58,5 +59,53 @@ class EnumHelper {
   static WarLeagueEnum getWarLeagueById(int warLeagueId) {
     final index = warLeagueId % WarLeagueEnum.values.length;
     return WarLeagueEnum.values[index];
+  }
+
+  static int getWarLeagueId(WarLeagueEnum warLeague) {
+    return AppConstants.warLeagueUnranked +
+        WarLeagueEnum.values.indexOf(warLeague);
+  }
+
+  static LeagueResultModel getLeagueResult(WarLeagueEnum warLeague) {
+    switch (warLeague) {
+      case WarLeagueEnum.bronzeLeagueIII:
+        return LeagueResultModel(promoted: 3, demoted: 0);
+      case WarLeagueEnum.bronzeLeagueII:
+        return LeagueResultModel(promoted: 3, demoted: 1);
+      case WarLeagueEnum.bronzeLeagueI:
+        return LeagueResultModel(promoted: 3, demoted: 1);
+      case WarLeagueEnum.silverLeagueIII:
+        return LeagueResultModel(promoted: 2, demoted: 1);
+      case WarLeagueEnum.silverLeagueII:
+        return LeagueResultModel(promoted: 2, demoted: 2);
+      case WarLeagueEnum.silverLeagueI:
+        return LeagueResultModel(promoted: 2, demoted: 2);
+      case WarLeagueEnum.goldLeagueIII:
+        return LeagueResultModel(promoted: 2, demoted: 2);
+      case WarLeagueEnum.goldLeagueII:
+        return LeagueResultModel(promoted: 2, demoted: 2);
+      case WarLeagueEnum.goldLeagueI:
+        return LeagueResultModel(promoted: 2, demoted: 2);
+      case WarLeagueEnum.crystalLeagueIII:
+        return LeagueResultModel(promoted: 2, demoted: 2);
+      case WarLeagueEnum.crystalLeagueII:
+        return LeagueResultModel(promoted: 2, demoted: 2);
+      case WarLeagueEnum.crystalLeagueI:
+        return LeagueResultModel(promoted: 1, demoted: 2);
+      case WarLeagueEnum.masterLeagueIII:
+        return LeagueResultModel(promoted: 1, demoted: 2);
+      case WarLeagueEnum.masterLeagueII:
+        return LeagueResultModel(promoted: 1, demoted: 2);
+      case WarLeagueEnum.masterLeagueI:
+        return LeagueResultModel(promoted: 1, demoted: 2);
+      case WarLeagueEnum.championLeagueIII:
+        return LeagueResultModel(promoted: 1, demoted: 2);
+      case WarLeagueEnum.championLeagueII:
+        return LeagueResultModel(promoted: 1, demoted: 2);
+      case WarLeagueEnum.championLeagueI:
+        return LeagueResultModel(promoted: 0, demoted: 3);
+      default:
+        return LeagueResultModel(promoted: 0, demoted: 0);
+    }
   }
 }

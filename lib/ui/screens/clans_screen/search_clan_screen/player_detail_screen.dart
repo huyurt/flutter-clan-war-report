@@ -57,19 +57,19 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
           PopupMenuButton(
             itemBuilder: (context) {
               return [
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 0,
                   child: Text(tr(LocaleKey.viewClan)),
                 ),
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 1,
                   child: Text(tr(LocaleKey.openInGame)),
                 ),
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 2,
                   child: Text(tr(LocaleKey.copyPlayerTag)),
                 ),
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 3,
                   child: Text(tr(LocaleKey.shareLink)),
                 ),

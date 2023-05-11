@@ -79,7 +79,7 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
           PopupMenuButton(
             itemBuilder: (context) {
               return [
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 0,
                   child: Text(tr(LocaleKey.refresh)),
                 ),
@@ -194,25 +194,7 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
               if (state is ClanDetailStateSuccess) {
                 final clanDetail = state.clanDetail;
                 return FloatingActionButton.extended(
-                  label: Row(
-                    children: [
-                      if ((clanDetail.warLeague?.id ?? 0) >
-                          AppConstants.warLeagueUnranked)
-                        Image.asset(
-                          '${AppConstants.clanWarLeaguesImagePath}${clanDetail.warLeague?.id}.png',
-                          height: 24,
-                          fit: BoxFit.cover,
-                        )
-                      else if (clanDetail.warLeague?.id ==
-                          AppConstants.warLeagueUnranked)
-                        Image.asset(
-                          '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                          height: 24,
-                          fit: BoxFit.cover,
-                        ),
-                      Text(' ${tr(LocaleKey.viewLeague)}'),
-                    ],
-                  ),
+                  label: Text(tr(LocaleKey.viewLeague)),
                   onPressed: () {
                     LeagueWarDetailScreen(
                       clanTag: widget.clanTag,

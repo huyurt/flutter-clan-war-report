@@ -65,7 +65,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
           PopupMenuButton(
             itemBuilder: (context) {
               return [
-                PopupMenuItem<int>(
+                PopupMenuItem(
                   value: 0,
                   child: Text(tr(LocaleKey.refresh)),
                 ),
