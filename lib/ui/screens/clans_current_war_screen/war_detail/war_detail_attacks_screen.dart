@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -266,11 +267,8 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                       vertical: 4.0),
                                               child: Row(
                                                 children: [
-                                                  const RotatedBox(
-                                                    quarterTurns: 1,
-                                                    child: Icon(MdiIcons.sword,
-                                                        size: 14.0),
-                                                  ),
+                                                  const Icon(AkarIcons.sword,
+                                                      size: 14.0),
                                                   Text(
                                                     ' ${tr(LocaleKey.attack)} 1',
                                                     style: const TextStyle(
@@ -329,12 +327,8 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                         vertical: 4.0),
                                                 child: Row(
                                                   children: [
-                                                    const RotatedBox(
-                                                      quarterTurns: 1,
-                                                      child: Icon(
-                                                          MdiIcons.sword,
-                                                          size: 14.0),
-                                                    ),
+                                                    const Icon(AkarIcons.sword,
+                                                        size: 14.0),
                                                     Text(
                                                       ' ${tr(LocaleKey.attack)} 2',
                                                       style: const TextStyle(

@@ -13,9 +13,9 @@ class _BottomProgressionIndicatorState
   @override
   Widget build(BuildContext context) {
     return const LinearProgressIndicator(
-      backgroundColor: Colors.amberAccent,
+      backgroundColor: Colors.white70,
       valueColor: AlwaysStoppedAnimation(Colors.amber),
-      minHeight: 2.0,
+      minHeight: 3.0,
     );
   }
 }

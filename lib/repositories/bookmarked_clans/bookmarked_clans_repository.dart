@@ -6,12 +6,9 @@ class BookmarkedClansRepository {
 
   final BookmarkedClansCache cache;
 
-  List<String> getClanTags() {
-    final clanTags = cache.getKeys();
-    return List.of(clanTags);
-  }
+  List<String> getClanTags() => cache.getKeys();
 
-  List<ClanDetailResponseModel> getClanDetails() {
+  List<ClanDetailResponseModel?> getClanDetails() {
     final clanDetails = cache.getValues();
     return List.of(clanDetails);
   }
@@ -21,19 +18,27 @@ class BookmarkedClansRepository {
   }
 
   void addOrUpdateBookmarkedClans(
-      String clanTag, ClanDetailResponseModel clanDetail) {
+      String clanTag, ClanDetailResponseModel? clanDetail) {
     cache.addOrUpdate(clanTag, clanDetail);
   }
 
-  void removeBookmarkedClans(String clanTag) {
-    cache.remove(clanTag);
-  }
+  void removeBookmarkedClans(String clanTag) => cache.remove(clanTag);
 
-  changeBookmarkedClans(String clanTag, ClanDetailResponseModel clanDetail) {
+  void changeBookmarkedClans(
+      String clanTag, ClanDetailResponseModel clanDetail) {
     if (cache.contains(clanTag)) {
       cache.remove(clanTag);
     } else {
       cache.addOrUpdate(clanTag, clanDetail);
+    }
+  }
+
+  void cleanRemovedClanTags(List<String> newClanTagList) {
+    final removedClanTags = getClanTags()
+        .where((element) => !newClanTagList.contains(element))
+        .toList();
+    for (final clanTag in removedClanTags) {
+      removeBookmarkedClans(clanTag);
     }
   }
 }

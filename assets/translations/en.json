@@ -42,5 +42,8 @@
   "admin": "Elder",
   "member": "Member",
   "coLeader": "Co-Leader",
-  "Leader": "Leader"
+  "Leader": "Leader",
+  "No clans in war_message": "You will see ongoing clan wars of all your bookmarked clans that have a public war log.",
+  "No bookmarked clans_message": "Click the button in the bottom right corner to search a clan.",
+  "No bookmarked players_message": "Click the button in the bottom right corner to search a player."
 }

@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.15"
+  akar_icons_flutter:
+    dependency: "direct main"
+    description:
+      name: akar_icons_flutter
+      sha256: "286add8566ba776a6237207c7178f015ae7e5375adaa100ef1b4935c3d115d07"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.16"
   analyzer:
     dependency: transitive
     description:
@@ -511,10 +519,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: "12006889e2987c549c4c1ec1a5ba4ec4b24d34d2469ee5f9476c926dcecff266"
+      sha256: f991fdb1533c3caeee0cdc14b04f50f0c3916f0dbcbc05237ccbe4e3c6b93f3f
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter

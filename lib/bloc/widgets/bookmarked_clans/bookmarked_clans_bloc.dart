@@ -7,9 +7,11 @@ import 'bookmarked_clans_state.dart';
 
 class BookmarkedClansBloc
     extends Bloc<BookmarkedClansEvent, BookmarkedClansState> {
-  BookmarkedClansBloc({required this.bookmarkedClansRepository})
-      : super(BookmarkedClansStateEmpty()) {
+  BookmarkedClansBloc({
+    required this.bookmarkedClansRepository,
+  }) : super(BookmarkedClansStateEmpty()) {
     on<GetBookmarkedClanDetail>(_onGetBookmarkedClans);
+    on<RefreshBookmarkedClanDetail>(_onRefreshBookmarkedClans);
   }
 
   final BookmarkedClansRepository bookmarkedClansRepository;
@@ -18,34 +20,69 @@ class BookmarkedClansBloc
     GetBookmarkedClanDetail event,
     Emitter<BookmarkedClansState> emit,
   ) async {
-    emit(BookmarkedClansStateLoading());
+    bookmarkedClansRepository.cleanRemovedClanTags(event.clanTagList);
+    final fetchedClanTags = bookmarkedClansRepository.getClanTags();
+    final newClanTags =
+        event.clanTagList.where((c) => !fetchedClanTags.contains(c)).toList();
 
-    final clanTags = bookmarkedClansRepository.getClanTags();
-    final removedClanTags = clanTags
-        .where((element) => !event.clanTagList.contains(element))
-        .toList();
-    for (String clanTag in removedClanTags) {
-      bookmarkedClansRepository.removeBookmarkedClans(clanTag);
-    }
-    emit(BookmarkedClansStateSuccess(
-      clanDetailList: bookmarkedClansRepository.getClanDetails(),
-    ));
-
-    for (String clanTag in event.clanTagList) {
-      try {
-        if (!bookmarkedClansRepository.contains(clanTag)) {
-          final clanDetail = await CocApiClans.getClanDetail(clanTag);
-          bookmarkedClansRepository.addOrUpdateBookmarkedClans(
-              clanTag, clanDetail);
-        }
-      } catch (e) {
-        emit(const BookmarkedClansStateError('something went wrong'));
-      }
-      emit(BookmarkedClansStateSuccess(
+    if (newClanTags.isEmpty) {
+      return emit(BookmarkedClansStateSuccess(
+        fetchingCompleted: true,
         clanDetailList: bookmarkedClansRepository.getClanDetails(),
       ));
     }
 
-    //emit(BookmarkedClansStateCompleted());
+    for (final clanTag in newClanTags) {
+      try {
+        await _fetchClanDetail(clanTag);
+      } catch (e) {
+        emit(const BookmarkedClansStateError('something went wrong'));
+      }
+      emit(BookmarkedClansStateSuccess(
+        fetchingCompleted: false,
+        clanDetailList: bookmarkedClansRepository.getClanDetails(),
+      ));
+    }
+
+    emit(BookmarkedClansStateSuccess(
+      fetchingCompleted: true,
+      clanDetailList: bookmarkedClansRepository.getClanDetails(),
+    ));
+  }
+
+  Future<void> _onRefreshBookmarkedClans(
+    RefreshBookmarkedClanDetail event,
+    Emitter<BookmarkedClansState> emit,
+  ) async {
+    bookmarkedClansRepository.cleanRemovedClanTags(event.clanTagList);
+
+    emit(BookmarkedClansStateSuccess(
+      fetchingCompleted: false,
+      clanDetailList: bookmarkedClansRepository.getClanDetails(),
+    ));
+
+    for (final clanTag in event.clanTagList) {
+      try {
+        await _fetchClanDetail(clanTag);
+      } catch (e) {
+        emit(const BookmarkedClansStateError('something went wrong'));
+      }
+      emit(BookmarkedClansStateSuccess(
+        fetchingCompleted: false,
+        clanDetailList: bookmarkedClansRepository.getClanDetails(),
+      ));
+    }
+
+    emit(BookmarkedClansStateSuccess(
+      fetchingCompleted: true,
+      clanDetailList: bookmarkedClansRepository.getClanDetails(),
+    ));
+  }
+
+  Future _fetchClanDetail(String clanTag) async {
+    bookmarkedClansRepository.addOrUpdateBookmarkedClans(clanTag, null);
+
+    final clanDetail = await CocApiClans.getClanDetail(clanTag);
+    bookmarkedClansRepository.addOrUpdateBookmarkedClans(clanTag, clanDetail);
   }
 }

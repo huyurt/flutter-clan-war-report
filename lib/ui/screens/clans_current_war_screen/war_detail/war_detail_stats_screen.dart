@@ -157,12 +157,25 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                 message: clan.name,
                 triggerMode: TooltipTriggerMode.tap,
                 preferBelow: true,
-                child: FadeInImage.assetNetwork(
-                  height: 50,
-                  width: 50,
-                  image: clan.badgeUrls.large,
-                  placeholder: AppConstants.placeholderImage,
-                  fit: BoxFit.cover,
+                child: SizedBox(
+                  width: 60,
+                  child: Column(
+                    children: [
+                      FadeInImage.assetNetwork(
+                        height: 50,
+                        width: 50,
+                        image: clan.badgeUrls.large,
+                        placeholder: AppConstants.placeholderImage,
+                        fit: BoxFit.cover,
+                      ),
+                      Text(
+                        clan.name ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(height: 1.0),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(
@@ -186,12 +199,25 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                 message: opponent.name,
                 triggerMode: TooltipTriggerMode.tap,
                 preferBelow: true,
-                child: FadeInImage.assetNetwork(
-                  height: 50,
-                  width: 50,
-                  image: opponent.badgeUrls.large,
-                  placeholder: AppConstants.placeholderImage,
-                  fit: BoxFit.cover,
+                child: SizedBox(
+                  width: 60,
+                  child: Column(
+                    children: [
+                      FadeInImage.assetNetwork(
+                        height: 50,
+                        width: 50,
+                        image: opponent.badgeUrls.large,
+                        placeholder: AppConstants.placeholderImage,
+                        fit: BoxFit.cover,
+                      ),
+                      Text(
+                        opponent.name ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(height: 1.0),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -217,7 +243,10 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: LinearProgressIndicator(
                         value: starsRatio,
-                        backgroundColor: Colors.red,
+                        backgroundColor: clanCurrentWar.state ==
+                                WarStateEnum.preparation.name
+                            ? Colors.yellow
+                            : Colors.red,
                         valueColor:
                             const AlwaysStoppedAnimation<Color>(Colors.green),
                       ),
@@ -256,7 +285,10 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: LinearProgressIndicator(
                         value: destructionPercentageRatio,
-                        backgroundColor: Colors.red,
+                        backgroundColor: clanCurrentWar.state ==
+                                WarStateEnum.preparation.name
+                            ? Colors.yellow
+                            : Colors.red,
                         valueColor:
                             const AlwaysStoppedAnimation<Color>(Colors.green),
                       ),

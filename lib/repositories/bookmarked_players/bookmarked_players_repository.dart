@@ -6,12 +6,9 @@ class BookmarkedPlayersRepository {
 
   final BookmarkedPlayersCache cache;
 
-  List<String> getPlayerTags() {
-    final playerTags = cache.getKeys();
-    return List.of(playerTags);
-  }
+  List<String> getPlayerTags() => cache.getKeys();
 
-  List<PlayerDetailResponseModel> getPlayerDetails() {
+  List<PlayerDetailResponseModel?> getPlayerDetails() {
     final playerDetails = cache.getValues();
     return List.of(playerDetails);
   }
@@ -21,19 +18,27 @@ class BookmarkedPlayersRepository {
   }
 
   void addOrUpdateBookmarkedPlayers(
-      String playerTag, PlayerDetailResponseModel playerDetail) {
+      String playerTag, PlayerDetailResponseModel? playerDetail) {
     cache.addOrUpdate(playerTag, playerDetail);
   }
 
-  void removeBookmarkedPlayers(String playerTag) {
-    cache.remove(playerTag);
-  }
+  void removeBookmarkedPlayers(String playerTag) => cache.remove(playerTag);
 
-  changeBookmarkedPlayers(String playerTag, PlayerDetailResponseModel playerDetail) {
+  void changeBookmarkedPlayers(
+      String playerTag, PlayerDetailResponseModel playerDetail) {
     if (cache.contains(playerTag)) {
       cache.remove(playerTag);
     } else {
       cache.addOrUpdate(playerTag, playerDetail);
+    }
+  }
+
+  void cleanRemovedPlayerTags(List<String> newPlayerTagList) {
+    final removedPlayerTags = getPlayerTags()
+        .where((element) => !newPlayerTagList.contains(element))
+        .toList();
+    for (final playerTag in removedPlayerTags) {
+      removeBookmarkedPlayers(playerTag);
     }
   }
 }

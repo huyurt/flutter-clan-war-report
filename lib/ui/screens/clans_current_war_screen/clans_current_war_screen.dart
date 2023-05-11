@@ -1,9 +1,10 @@
-import 'package:collection/collection.dart';
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_current_war_screen/war_detail/war_detail_screen.dart';
+import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/war_type_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -15,6 +16,7 @@ import '../../../models/api/response/clan_war_response_model.dart';
 import '../../../utils/constants/app_constants.dart';
 import '../../../utils/enums/war_state_enum.dart';
 import '../../widgets/countdown_timer/countdown_timer_widget.dart';
+import '../../widgets/bottom_progression_indicator.dart';
 
 class ClansCurrentWarScreen extends StatefulWidget {
   const ClansCurrentWarScreen({super.key});
@@ -53,256 +55,297 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: ListView.builder(
-        key: PageStorageKey(widget.key),
-        itemCount:
-            context.watch<BookmarkedClanTagsCubit>().state.clanTags.length,
-        itemBuilder: (BuildContext context, int index) {
-          return BlocBuilder<BookmarkedClansCurrentWarBloc,
-              BookmarkedClansCurrentWarState>(
-            builder: (context, state) {
-              if (state is BookmarkedClansCurrentWarStateLoading) {
-                return Container();
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (state is BookmarkedClansCurrentWarStateError) {
-                return Container();
-                return Center(child: Text(tr('search_failed_message')));
-              }
-              if (state is BookmarkedClansCurrentWarStateSuccess) {
-                final clanTag = context
-                    .watch<BookmarkedClanTagsCubit>()
-                    .state
-                    .clanTags[index];
-                final clanCurrentWarData = state.clansCurrentWar
-                    .firstWhereOrNull((element) => element?.clanTag == clanTag);
-                final clanCurrentWar = clanCurrentWarData?.war;
-                if (clanCurrentWar == null ||
-                    clanCurrentWar.state == WarStateEnum.notInWar.name) {
-                  return Container();
-                }
-                final warType = clanCurrentWarData?.warType;
+      child: BlocBuilder<BookmarkedClansCurrentWarBloc,
+          BookmarkedClansCurrentWarState>(
+        builder: (context, state) {
+          if (state is BookmarkedClansCurrentWarStateError) {
+            return Container();
+          }
+          if (state is BookmarkedClansCurrentWarStateSuccess) {
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    key: PageStorageKey(widget.key),
+                    itemCount: state.clansCurrentWar.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final clanCurrentWarData = state.clansCurrentWar[index];
+                      final clanTag = clanCurrentWarData?.clanTag;
+                      final clanCurrentWar = clanCurrentWarData?.war;
+                      if (clanCurrentWar == null ||
+                          clanCurrentWar.state == WarStateEnum.notInWar.name) {
+                        return Container();
+                      }
+                      final warType = clanCurrentWarData?.warType;
 
-                DateTime? remainingDateTime;
-                final startTime =
-                    DateTime.tryParse(clanCurrentWar.startTime ?? '');
-                final warStartTime =
-                    DateTime.tryParse(clanCurrentWar.warStartTime ?? '');
-                final endTime = DateTime.tryParse(clanCurrentWar.endTime ?? '');
-                if (endTime != null &&
-                    clanCurrentWar.state == WarStateEnum.inWar.name) {
-                  remainingDateTime = endTime;
-                } else if ((warStartTime != null || startTime != null) &&
-                    clanCurrentWar.state == WarStateEnum.preparation.name) {
-                  remainingDateTime = warStartTime ?? startTime;
-                }
+                      DateTime? remainingDateTime;
+                      final startTime =
+                          DateTime.tryParse(clanCurrentWar.startTime ?? '');
+                      final warStartTime =
+                          DateTime.tryParse(clanCurrentWar.warStartTime ?? '');
+                      final endTime =
+                          DateTime.tryParse(clanCurrentWar.endTime ?? '');
+                      if (endTime != null &&
+                          clanCurrentWar.state == WarStateEnum.inWar.name) {
+                        remainingDateTime = endTime;
+                      } else if ((warStartTime != null || startTime != null) &&
+                          clanCurrentWar.state ==
+                              WarStateEnum.preparation.name) {
+                        remainingDateTime = warStartTime ?? startTime;
+                      }
 
-                WarClan clan;
-                WarClan opponent;
-                if (clanCurrentWar.clan.tag == clanTag) {
-                  clan = clanCurrentWar.clan;
-                  opponent = clanCurrentWar.opponent;
-                } else {
-                  clan = clanCurrentWar.opponent;
-                  opponent = clanCurrentWar.clan;
-                }
-                final warState = WarStateEnum.values.firstWhere(
-                    (element) => element.name == clanCurrentWar.state);
-                bool? clanWon = warState == WarStateEnum.warEnded
-                    ? (clan.stars > opponent.stars ||
-                        (clan.stars == opponent.stars &&
-                            clan.destructionPercentage >
-                                opponent.destructionPercentage))
-                    : null;
+                      WarClan clan;
+                      WarClan opponent;
+                      if (clanCurrentWar.clan.tag == clanTag) {
+                        clan = clanCurrentWar.clan;
+                        opponent = clanCurrentWar.opponent;
+                      } else {
+                        clan = clanCurrentWar.opponent;
+                        opponent = clanCurrentWar.clan;
+                      }
+                      final warState = WarStateEnum.values.firstWhere(
+                          (element) => element.name == clanCurrentWar.state);
+                      bool? clanWon = warState == WarStateEnum.warEnded
+                          ? (clan.stars > opponent.stars ||
+                              (clan.stars == opponent.stars &&
+                                  clan.destructionPercentage >
+                                      opponent.destructionPercentage))
+                          : null;
 
-                return Card(
-                  margin: EdgeInsetsDirectional.zero,
-                  elevation: 0.0,
-                  color: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0),
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      WarDetailScreen(
-                        clanTag: clanTag,
-                        warTag: clanCurrentWarData?.warTag ?? '',
-                        warType: warType ?? WarTypeEnum.clanWar,
-                        warStartTime: clanCurrentWar.warStartTime ?? '',
-                        clanName: clan.name ?? '',
-                        opponentName: opponent.name ?? '',
-                        showFloatingButton: true,
-                      ).launch(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 5.0),
-                      child: SizedBox(
-                        height: 70,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                      return Card(
+                        margin: EdgeInsetsDirectional.zero,
+                        elevation: 0.0,
+                        color: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            WarDetailScreen(
+                              clanTag: clanTag ?? '',
+                              warTag: clanCurrentWarData?.warTag ?? '',
+                              warType: warType ?? WarTypeEnum.clanWar,
+                              warStartTime: clanCurrentWar.warStartTime ?? '',
+                              clanName: clan.name ?? '',
+                              opponentName: opponent.name ?? '',
+                              showFloatingButton: true,
+                            ).launch(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 5.0),
+                            child: SizedBox(
+                              height: 70,
+                              child: Row(
                                 children: [
-                                  FadeInImage.assetNetwork(
-                                    height: 40,
-                                    width: 40,
-                                    image: clan.badgeUrls.large,
-                                    placeholder: AppConstants.placeholderImage,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Text(
-                                    clan.name ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (remainingDateTime != null)
-                                      CountdownTimerWidget(
-                                        remainingDateTime: remainingDateTime,
-                                      ),
-                                    Row(
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            if (warState ==
-                                                    WarStateEnum.inWar ||
-                                                warState ==
-                                                    WarStateEnum.warEnded) ...[
-                                              Text(
-                                                clan.stars.toString(),
-                                                style: TextStyle(
-                                                  fontSize: 24.0,
-                                                  color: clanWon == true
-                                                      ? Colors.green
-                                                      : (clanWon == false
-                                                          ? Colors.redAccent
-                                                          : null),
-                                                ),
-                                              ),
-                                              Text(
-                                                  '%${clan.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
-                                            ] else ...[
-                                              const Text(
-                                                '-',
-                                                style:
-                                                    TextStyle(fontSize: 32.0),
-                                              ),
-                                              const Text(''),
-                                            ],
-                                          ],
+                                        FadeInImage.assetNetwork(
+                                          height: 40,
+                                          width: 40,
+                                          image: clan.badgeUrls.large,
+                                          placeholder:
+                                              AppConstants.placeholderImage,
+                                          fit: BoxFit.cover,
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              ' : ',
-                                              style: TextStyle(
-                                                fontSize: 24.0,
-                                                color: clanWon == true
-                                                    ? Colors.green
-                                                    : (clanWon == false
-                                                        ? Colors.redAccent
-                                                        : null),
-                                              ),
-                                            ),
-                                            const Text(''),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            if (warState ==
-                                                    WarStateEnum.inWar ||
-                                                warState ==
-                                                    WarStateEnum.warEnded) ...[
-                                              Text(
-                                                opponent.stars.toString(),
-                                                style: TextStyle(
-                                                  fontSize: 24.0,
-                                                  color: clanWon == true
-                                                      ? Colors.green
-                                                      : (clanWon == false
-                                                          ? Colors.redAccent
-                                                          : null),
-                                                ),
-                                              ),
-                                              Text(
-                                                  '%${opponent.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
-                                            ] else ...[
-                                              const Text(
-                                                '-',
-                                                style:
-                                                    TextStyle(fontSize: 32.0),
-                                              ),
-                                              const Text(''),
-                                            ],
-                                          ],
+                                        Text(
+                                          clan.name ?? '',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  FadeInImage.assetNetwork(
-                                    height: 40,
-                                    width: 40,
-                                    image: opponent.badgeUrls.large,
-                                    placeholder: AppConstants.placeholderImage,
-                                    fit: BoxFit.cover,
                                   ),
-                                  Text(
-                                    opponent.name ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          if (remainingDateTime != null)
+                                            CountdownTimerWidget(
+                                              remainingDateTime:
+                                                  remainingDateTime,
+                                            ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  if (warState ==
+                                                          WarStateEnum.inWar ||
+                                                      warState ==
+                                                          WarStateEnum
+                                                              .warEnded) ...[
+                                                    Text(
+                                                      clan.stars.toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 24.0,
+                                                        color: clanWon == true
+                                                            ? Colors.green
+                                                            : (clanWon == false
+                                                                ? Colors
+                                                                    .redAccent
+                                                                : null),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                        '%${clan.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
+                                                  ] else ...[
+                                                    const Text(
+                                                      '-',
+                                                      style: TextStyle(
+                                                          fontSize: 32.0),
+                                                    ),
+                                                    const Text(''),
+                                                  ],
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    ' : ',
+                                                    style: TextStyle(
+                                                      fontSize: 24.0,
+                                                      color: clanWon == true
+                                                          ? Colors.green
+                                                          : (clanWon == false
+                                                              ? Colors.redAccent
+                                                              : null),
+                                                    ),
+                                                  ),
+                                                  const Text(''),
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  if (warState ==
+                                                          WarStateEnum.inWar ||
+                                                      warState ==
+                                                          WarStateEnum
+                                                              .warEnded) ...[
+                                                    Text(
+                                                      opponent.stars.toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 24.0,
+                                                        color: clanWon == true
+                                                            ? Colors.green
+                                                            : (clanWon == false
+                                                                ? Colors
+                                                                    .redAccent
+                                                                : null),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                        '%${opponent.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
+                                                  ] else ...[
+                                                    const Text(
+                                                      '-',
+                                                      style: TextStyle(
+                                                          fontSize: 32.0),
+                                                    ),
+                                                    const Text(''),
+                                                  ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        FadeInImage.assetNetwork(
+                                          height: 40,
+                                          width: 40,
+                                          image: opponent.badgeUrls.large,
+                                          placeholder:
+                                              AppConstants.placeholderImage,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Text(
+                                          opponent.name ?? '',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                      );
+                    },
+                  ),
+                ),
+                Visibility(
+                  visible: !state.fetchingCompleted,
+                  child: const BottomProgressionIndicator(),
+                ),
+              ],
+            );
+          }
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    AkarIcons.double_sword,
+                    size: 96.0,
+                    color: Colors.amber,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      tr(LocaleKey.noClansInWar),
+                      style: const TextStyle(fontSize: 24.0),
                     ),
                   ),
-                );
-              }
-              return const Center(child: CircularProgressIndicator());
-            },
+                  Text(
+                    tr(LocaleKey.noClansInWarMessage),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),

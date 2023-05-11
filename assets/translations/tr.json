@@ -189,5 +189,11 @@
   "admin": "Büyük",
   "member": "Üye",
   "coLeader": "Yardımcı Lider",
-  "leader": "Lider"
+  "leader": "Lider",
+  "No clans in war": "Savaşta klan yok",
+  "No clans in war_message": "Savaş günlüğü herkese açık olan, işaretlenmiş tüm klanların mevcut savaşları listelenir.",
+  "No bookmarked clans": "Yer işaretli klan yok",
+  "No bookmarked clans_message": "Klan aramak için sağ alt köşedeki butona tıklayın.",
+  "No bookmarked players": "Yer işaretli oyuncu yok",
+  "No bookmarked players_message": "Oyuncu aramak için sağ alt köşedeki butona tıklayın."
 }

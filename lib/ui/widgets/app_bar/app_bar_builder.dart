@@ -17,10 +17,10 @@ import 'app_bar_gone.dart';
 import 'app_bar_widget.dart';
 
 PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
-  final bookmarkedClansBloc = context.read<BookmarkedClansBloc>();
-  final bookmarkedPlayersBloc = context.read<BookmarkedPlayersBloc>();
   final bookmarkedClansCurrentWarBloc =
       context.read<BookmarkedClansCurrentWarBloc>();
+  final bookmarkedClansBloc = context.read<BookmarkedClansBloc>();
+  final bookmarkedPlayersBloc = context.read<BookmarkedPlayersBloc>();
 
   switch (screenType) {
     case ScreenEnum.wars:
@@ -34,7 +34,7 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
             ),
             onPressed: () {
               bookmarkedClansCurrentWarBloc.add(
-                GetBookmarkedClansCurrentWar(
+                RefreshBookmarkedClansCurrentWar(
                   clanTagList:
                       context.read<BookmarkedClanTagsCubit>().state.clanTags,
                 ),
@@ -54,7 +54,7 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
             ),
             onPressed: () {
               bookmarkedClansBloc.add(
-                GetBookmarkedClanDetail(
+                RefreshBookmarkedClanDetail(
                   clanTagList:
                       context.read<BookmarkedClanTagsCubit>().state.clanTags,
                 ),
@@ -74,7 +74,7 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
             ),
             onPressed: () {
               bookmarkedPlayersBloc.add(
-                GetBookmarkedPlayerDetail(
+                RefreshBookmarkedPlayerDetail(
                   playerTagList: context
                       .read<BookmarkedPlayerTagsCubit>()
                       .state

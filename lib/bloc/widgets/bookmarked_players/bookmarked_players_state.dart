@@ -13,19 +13,21 @@ class BookmarkedPlayersStateEmpty extends BookmarkedPlayersState {}
 
 class BookmarkedPlayersStateLoading extends BookmarkedPlayersState {}
 
-class BookmarkedPlayersStateCompleted extends BookmarkedPlayersState {}
-
 class BookmarkedPlayersStateSuccess extends BookmarkedPlayersState {
-  const BookmarkedPlayersStateSuccess({required this.playerDetailList});
+  const BookmarkedPlayersStateSuccess({
+    required this.fetchingCompleted,
+    required this.playerDetailList,
+  });
 
-  final List<PlayerDetailResponseModel> playerDetailList;
+  final bool fetchingCompleted;
+  final List<PlayerDetailResponseModel?> playerDetailList;
 
   @override
-  List<Object?> get props => [playerDetailList];
+  List<Object?> get props => [fetchingCompleted, playerDetailList];
 
   @override
   String toString() =>
-      'BookmarkedPlayersStateSuccess { playerDetailList: $playerDetailList }';
+      'BookmarkedPlayersStateSuccess { fetchingCompleted: $fetchingCompleted, playerDetailList: $playerDetailList }';
 }
 
 class BookmarkedPlayersStateError extends BookmarkedPlayersState {

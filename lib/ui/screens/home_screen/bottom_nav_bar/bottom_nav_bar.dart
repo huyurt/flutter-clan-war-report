@@ -1,3 +1,4 @@
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,6 @@ import 'package:ionicons/ionicons.dart';
 import '../../../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/screen_enum.dart';
-import 'bottom_progression_indicator.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -15,7 +15,6 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        const BottomProgressionIndicator(),
         Card(
           margin: const EdgeInsets.only(top: 2.0),
           elevation: 4,
@@ -36,15 +35,15 @@ class BottomNavBar extends StatelessWidget {
             unselectedItemColor: Theme.of(context).textTheme.bodySmall!.color,
             items: [
               BottomNavigationBarItem(
-                icon: const Icon(Ionicons.home_outline),
+                icon: const Icon(AkarIcons.double_sword),
                 label: tr(LocaleKey.wars),
               ),
               BottomNavigationBarItem(
-                icon: const Icon(Ionicons.information_circle_outline),
+                icon: const Icon(AkarIcons.shield),
                 label: tr(LocaleKey.clans),
               ),
               BottomNavigationBarItem(
-                icon: const Icon(Ionicons.planet_outline),
+                icon: const Icon(AkarIcons.people_multiple),
                 label: tr(LocaleKey.players),
               ),
               BottomNavigationBarItem(

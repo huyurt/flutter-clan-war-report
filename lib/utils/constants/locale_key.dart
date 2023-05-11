@@ -168,4 +168,10 @@ class LocaleKey {
   static const destruction = 'Destruction';
   static const reliability = 'Reliability';
   static const speed = 'Speed';
+  static const noClansInWar = 'No clans in war';
+  static const noClansInWarMessage = 'No clans in war_message';
+  static const noBookmarkedClans = 'No bookmarked clans';
+  static const noBookmarkedClansMessage = 'No bookmarked clans_message';
+  static const noBookmarkedPlayers = 'No bookmarked players';
+  static const noBookmarkedPlayersMessage = 'No bookmarked players_message';
 }

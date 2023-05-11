@@ -103,8 +103,23 @@ class _LeagueWarDetailGroupScreenState
         winSeries[war.opponent.tag]?[gameIndex] =
             !clanWon ? WarWinningEnum.won : WarWinningEnum.lost;
       } else if (war.state == WarStateEnum.inWar.name) {
-        winSeries[war.clan.tag]?[gameIndex] = WarWinningEnum.inWar;
-        winSeries[war.opponent.tag]?[gameIndex] = WarWinningEnum.inWar;
+        final clanWinning = war.clan.stars > war.opponent.stars ||
+            (war.clan.stars == war.opponent.stars &&
+                war.clan.destructionPercentage >
+                    war.opponent.destructionPercentage);
+        final equal = war.clan.stars == war.opponent.stars &&
+            war.clan.destructionPercentage ==
+                war.opponent.destructionPercentage;
+
+        if (equal) {
+          winSeries[war.clan.tag]?[gameIndex] = WarWinningEnum.equal;
+          winSeries[war.opponent.tag]?[gameIndex] = WarWinningEnum.equal;
+        } else {
+          winSeries[war.clan.tag]?[gameIndex] =
+              clanWinning ? WarWinningEnum.winning : WarWinningEnum.losing;
+          winSeries[war.opponent.tag]?[gameIndex] =
+              !clanWinning ? WarWinningEnum.winning : WarWinningEnum.losing;
+        }
       } else {
         winSeries[war.clan.tag]?[gameIndex] = WarWinningEnum.notStarted;
         winSeries[war.opponent.tag]?[gameIndex] = WarWinningEnum.notStarted;
@@ -117,7 +132,8 @@ class _LeagueWarDetailGroupScreenState
     for (String? clanTag in clanTags) {
       final clanStats = groupByClan[clanTag];
       int winCount =
-          winSeries[clanTag]?.where((element) => element == true).length ?? 0;
+          winSeries[clanTag]?.where((ws) => ws == WarWinningEnum.won).length ??
+              0;
       int? totalStars = clanStats?.fold(
           0, (previousValue, element) => (previousValue ?? 0) + element.stars);
       double? totalDestructionPercentages = clanStats?.fold(
@@ -278,13 +294,27 @@ class _LeagueWarDetailGroupScreenState
                                                             .notStarted
                                                     ? Colors.black38
                                                     : win ==
-                                                            WarWinningEnum.inWar
-                                                        ? Colors.yellow
+                                                            WarWinningEnum
+                                                                .winning
+                                                        ? Colors
+                                                            .lightGreen.shade200
                                                         : (win ==
                                                                 WarWinningEnum
-                                                                    .won
-                                                            ? Colors.lightGreen
-                                                            : Colors.redAccent),
+                                                                    .losing
+                                                            ? Colors
+                                                                .red.shade200
+                                                            : (win ==
+                                                                    WarWinningEnum
+                                                                        .equal
+                                                                ? Colors.yellow
+                                                                    .shade200
+                                                                : (win ==
+                                                                        WarWinningEnum
+                                                                            .won
+                                                                    ? Colors
+                                                                        .green
+                                                                    : Colors
+                                                                        .red))),
                                               ),
                                             ),
                                           );

@@ -18,3 +18,11 @@ class GetBookmarkedClansCurrentWar extends BookmarkedClansCurrentWarBaseEvent {
   @override
   String toString() => 'FetchList { clanTagList: $clanTagList }';
 }
+
+class RefreshBookmarkedClansCurrentWar
+    extends BookmarkedClansCurrentWarBaseEvent {
+  RefreshBookmarkedClansCurrentWar({required super.clanTagList});
+
+  @override
+  String toString() => 'RefreshList { clanTagList: $clanTagList }';
+}

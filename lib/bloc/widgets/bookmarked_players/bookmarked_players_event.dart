@@ -15,5 +15,12 @@ class GetBookmarkedPlayerDetail extends BookmarkedPlayersBaseEvent {
   GetBookmarkedPlayerDetail({required super.playerTagList});
 
   @override
-  String toString() => 'TextChanged { playerTagList: $playerTagList }';
+  String toString() => 'FetchList { playerTagList: $playerTagList }';
+}
+
+class RefreshBookmarkedPlayerDetail extends BookmarkedPlayersBaseEvent {
+  RefreshBookmarkedPlayerDetail({required super.playerTagList});
+
+  @override
+  String toString() => 'RefreshList { playerTagList: $playerTagList }';
 }

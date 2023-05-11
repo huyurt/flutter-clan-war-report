@@ -1,6 +1,8 @@
 enum WarWinningEnum {
   won,
+  winning,
   lost,
-  inWar,
+  losing,
+  equal,
   notStarted,
 }

@@ -155,8 +155,10 @@ class _LeagueWarDetailPlayersDetailScreenState
       averageDestructionPercentage =
           memberAttacks.sumBy((e) => e.destructionPercentage ?? 0) /
               widget.roundCount;
-      averageAttackDuration = memberAttacks.sumBy((e) => e.duration ?? 0) /
-          (widget.roundCount - notUsedAttackCount);
+      averageAttackDuration = (widget.roundCount - notUsedAttackCount) == 0
+          ? 0
+          : memberAttacks.sumBy((e) => e.duration ?? 0) /
+              (widget.roundCount - notUsedAttackCount);
     }
 
     final clanAverageDuration =
@@ -425,9 +427,25 @@ class _LeagueWarDetailPlayersDetailScreenState
                                   value: memberAttacks.length.floorToDouble() /
                                       widget.roundCount.floorToDouble()),
                               RadarEntry(
-                                  value: (180 - averageAttackDuration.floor()) /
-                                      180),
-                              RadarEntry(value: (3 - averageDefenceStars) / 3),
+                                  value: memberAttacks.isEmpty
+                                      ? 0
+                                      : (180 - averageAttackDuration.floor()) /
+                                          180),
+                              RadarEntry(
+                                  value: widget.roundCount == 0
+                                      ? 0
+                                      : (3 - averageDefenceStars) / 3),
+                            ],
+                          ),
+                          RadarDataSet(
+                            fillColor: Colors.transparent,
+                            borderColor: Colors.transparent,
+                            dataEntries: [
+                              const RadarEntry(value: 1),
+                              const RadarEntry(value: 1),
+                              const RadarEntry(value: 1),
+                              const RadarEntry(value: 1),
+                              const RadarEntry(value: 1),
                             ],
                           ),
                         ],
@@ -455,12 +473,12 @@ class _LeagueWarDetailPlayersDetailScreenState
                             case 2:
                               return RadarChartTitle(
                                 text: tr(LocaleKey.reliability),
-                                angle: usedAngle,
+                                angle: usedAngle + 180,
                               );
                             case 3:
                               return RadarChartTitle(
                                 text: tr(LocaleKey.speed),
-                                angle: usedAngle,
+                                angle: usedAngle + 180,
                               );
                             case 4:
                               return RadarChartTitle(
@@ -478,6 +496,7 @@ class _LeagueWarDetailPlayersDetailScreenState
               ],
             ),
           ),
+          const SizedBox(height: 8.0),
         ],
       ),
     );
