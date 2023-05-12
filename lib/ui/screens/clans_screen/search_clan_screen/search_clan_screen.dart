@@ -420,7 +420,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             (location?.isCountry ?? false)
-                                                ? CountryFlags.flag(
+                                                ? CountryFlag.fromCountryCode(
                                                     location?.countryCode ?? '',
                                                     height: 16.0,
                                                     width: 24.0,

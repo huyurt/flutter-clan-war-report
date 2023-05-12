@@ -36,7 +36,7 @@ class LanguageSelectorDialog extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Row(
                       children: [
-                        CountryFlags.flag(
+                        CountryFlag.fromCountryCode(
                           EnumHelper.getCountryCode(
                               EnumHelper.getLocaleType(locale)),
                           height: 24.0,

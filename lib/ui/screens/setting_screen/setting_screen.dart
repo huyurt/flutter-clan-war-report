@@ -34,7 +34,7 @@ class SettingScreen extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
                 child: Row(
                   children: [
-                    CountryFlags.flag(
+                    CountryFlag.fromCountryCode(
                       EnumHelper.getCountryCode(
                           EnumHelper.getLocaleType(context.locale)),
                       height: 24.0,

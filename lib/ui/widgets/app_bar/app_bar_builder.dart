@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 import '../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import '../../../bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
@@ -28,10 +27,7 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
         title: LocaleKey.wars,
         actions: [
           IconButton(
-            icon: Icon(
-              Ionicons.reload,
-              color: context.theme.accentColor,
-            ),
+            icon: const Icon(Ionicons.reload),
             onPressed: () {
               bookmarkedClansCurrentWarBloc.add(
                 RefreshBookmarkedClansCurrentWar(
@@ -48,10 +44,7 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
         title: LocaleKey.clans,
         actions: [
           IconButton(
-            icon: Icon(
-              Ionicons.reload,
-              color: context.theme.accentColor,
-            ),
+            icon: const Icon(Ionicons.reload),
             onPressed: () {
               bookmarkedClansBloc.add(
                 RefreshBookmarkedClanDetail(
@@ -68,10 +61,7 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
         title: LocaleKey.players,
         actions: [
           IconButton(
-            icon: Icon(
-              Ionicons.reload,
-              color: context.theme.accentColor,
-            ),
+            icon: const Icon(Ionicons.reload),
             onPressed: () {
               bookmarkedPlayersBloc.add(
                 RefreshBookmarkedPlayerDetail(

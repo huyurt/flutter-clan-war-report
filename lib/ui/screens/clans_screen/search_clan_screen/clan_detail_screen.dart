@@ -240,7 +240,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                         (clan.location != null &&
                                                 (clan.location?.isCountry ??
                                                     false))
-                                            ? CountryFlags.flag(
+                                            ? CountryFlag.fromCountryCode(
                                                 clan.location?.countryCode ??
                                                     '',
                                                 height: 16.0,
