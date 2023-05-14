@@ -3,7 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import '../../../services/coc/coc_api_clans.dart';
+import '../../../services/coc_api/coc_api_clans.dart';
 import 'clan_detail_event.dart';
 import 'clan_detail_state.dart';
 
@@ -13,7 +13,7 @@ EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
 }
 
 class ClanDetailBloc extends Bloc<ClanDetailEvent, ClanDetailState> {
-  ClanDetailBloc() : super(ClanDetailStateEmpty()) {
+  ClanDetailBloc() : super(const ClanDetailState.init()) {
     on<ClearFilter>(_onClearFilter,
         transformer: throttleDroppable(const Duration(milliseconds: 0)));
     on<GetClanDetail>(_onGetClanDetail,
@@ -24,7 +24,7 @@ class ClanDetailBloc extends Bloc<ClanDetailEvent, ClanDetailState> {
     ClearFilter event,
     Emitter<ClanDetailState> emit,
   ) async {
-    return emit(ClanDetailStateEmpty());
+    return emit(const ClanDetailState.init());
   }
 
   Future<void> _onGetClanDetail(
@@ -32,16 +32,16 @@ class ClanDetailBloc extends Bloc<ClanDetailEvent, ClanDetailState> {
     Emitter<ClanDetailState> emit,
   ) async {
     if (event.clanTag.isEmptyOrNull) {
-      return emit(ClanDetailStateEmpty());
+      return emit(const ClanDetailState.failure());
     }
 
-    emit(ClanDetailStateLoading());
+    emit(const ClanDetailState.loading());
 
     try {
       final result = await CocApiClans.getClanDetail(event.clanTag!);
-      emit(ClanDetailStateSuccess(clanDetail: result));
+      emit(ClanDetailState.success(result));
     } catch (error) {
-      emit(const ClanDetailStateError('something went wrong'));
+      emit(const ClanDetailState.failure());
     }
   }
 }

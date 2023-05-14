@@ -19,7 +19,7 @@ EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
 
 class SearchClanBloc extends Bloc<SearchClanEvent, SearchClanState> {
   SearchClanBloc({required this.searchClanRepository})
-      : super(SearchStateEmpty()) {
+      : super(const SearchClanState.init()) {
     on<ClearFilter>(_onClearFilter,
         transformer: throttleDroppable(const Duration(milliseconds: 0)));
     on<TextChanged>(_onTextChanged,
@@ -38,7 +38,7 @@ class SearchClanBloc extends Bloc<SearchClanEvent, SearchClanState> {
     ClearFilter event,
     Emitter<SearchClanState> emit,
   ) async {
-    return emit(SearchStateEmpty());
+    return emit(const SearchClanState.init());
   }
 
   Future<void> _onTextChanged(
@@ -71,19 +71,19 @@ class SearchClanBloc extends Bloc<SearchClanEvent, SearchClanState> {
     Emitter<SearchClanState> emit,
   ) async {
     if (searchTerm.clanName.isEmptyOrNull || searchTerm.clanName.length < 3) {
-      return emit(SearchStateEmpty());
+      return emit(const SearchClanState.init());
     }
 
     if (!isNextPageRequest) {
-      emit(SearchStateLoading());
+      emit(const SearchClanState.loading());
     }
 
     try {
       final result =
           await searchClanRepository.searchClans(isNextPageRequest, searchTerm);
-      emit(SearchStateSuccess(after: result.after, items: result.items));
+      emit(SearchClanState.success(result.after, result.items));
     } catch (error) {
-      emit(const SearchStateError('something went wrong'));
+      emit(const SearchClanState.failure());
     }
   }
 }

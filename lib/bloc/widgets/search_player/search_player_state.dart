@@ -1,35 +1,27 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/api/response/player_detail_response_model.dart';
+import '../../../utils/enums/bloc_status_enum.dart';
 
-abstract class SearchPlayerState extends Equatable {
-  const SearchPlayerState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class SearchStateEmpty extends SearchPlayerState {}
-
-class SearchStateLoading extends SearchPlayerState {}
-
-class SearchStateSuccess extends SearchPlayerState {
-  const SearchStateSuccess({required this.items});
-
+class SearchPlayerState extends Equatable {
+  final BlocStatusEnum status;
   final List<PlayerDetailResponseModel> items;
 
-  @override
-  List<Object?> get props => [items];
+  const SearchPlayerState._({
+    this.status = BlocStatusEnum.loading,
+    this.items = const <PlayerDetailResponseModel>[],
+  });
+
+  const SearchPlayerState.init() : this._(status: BlocStatusEnum.init);
+
+  const SearchPlayerState.loading() : this._(status: BlocStatusEnum.loading);
+
+  const SearchPlayerState.success(
+    List<PlayerDetailResponseModel> items,
+  ) : this._(status: BlocStatusEnum.success, items: items);
+
+  const SearchPlayerState.failure() : this._(status: BlocStatusEnum.failure);
 
   @override
-  String toString() => 'SearchStateSuccess { items: ${items.length} }';
-}
-
-class SearchStateError extends SearchPlayerState {
-  const SearchStateError(this.error);
-
-  final String error;
-
-  @override
-  List<Object?> get props => [error];
+  List<Object> get props => [status, items];
 }

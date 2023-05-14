@@ -1,37 +1,30 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/api/response/search_clans_response_model.dart';
+import '../../../utils/enums/bloc_status_enum.dart';
 
-abstract class SearchClanState extends Equatable {
-  const SearchClanState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class SearchStateEmpty extends SearchClanState {}
-
-class SearchStateLoading extends SearchClanState {}
-
-class SearchStateSuccess extends SearchClanState {
-  const SearchStateSuccess({this.after, required this.items});
-
+class SearchClanState extends Equatable {
+  final BlocStatusEnum status;
   final String? after;
   final List<SearchClanItem> items;
 
-  @override
-  List<Object?> get props => [after, items];
+  const SearchClanState._({
+    this.status = BlocStatusEnum.loading,
+    this.after,
+    this.items = const <SearchClanItem>[],
+  });
+
+  const SearchClanState.init() : this._(status: BlocStatusEnum.init);
+
+  const SearchClanState.loading() : this._(status: BlocStatusEnum.loading);
+
+  const SearchClanState.success(
+    String? after,
+    List<SearchClanItem> items,
+  ) : this._(status: BlocStatusEnum.success, after: after, items: items);
+
+  const SearchClanState.failure() : this._(status: BlocStatusEnum.failure);
 
   @override
-  String toString() =>
-      'SearchStateSuccess { after: $after, items: ${items.length} }';
-}
-
-class SearchStateError extends SearchClanState {
-  const SearchStateError(this.error);
-
-  final String error;
-
-  @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [status, after, items];
 }

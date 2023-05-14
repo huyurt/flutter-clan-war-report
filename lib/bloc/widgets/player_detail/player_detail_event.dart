@@ -19,7 +19,4 @@ class ClearFilter extends PlayerDetailEvent {
 
 class GetPlayerDetail extends PlayerDetailBaseEvent {
   GetPlayerDetail({required super.playerTag});
-
-  @override
-  String toString() => 'TextChanged { playerTag: $playerTag }';
 }

@@ -19,7 +19,4 @@ class ClearFilter extends ClanDetailEvent {
 
 class GetClanDetail extends ClanDetailBaseEvent {
   GetClanDetail({required super.clanTag});
-
-  @override
-  String toString() => 'TextChanged { clanTag: $clanTag }';
 }

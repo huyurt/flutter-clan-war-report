@@ -4,7 +4,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../models/coc/clans_current_war_state_model.dart';
-import '../../../services/coc/coc_api_clans.dart';
+import '../../../services/coc_api/coc_api_clans.dart';
 import 'clan_current_war_detail_event.dart';
 import 'clan_current_war_detail_state.dart';
 
@@ -15,7 +15,7 @@ EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
 
 class ClanCurrentWarDetailBloc
     extends Bloc<ClanCurrentWarDetailEvent, ClanCurrentWarDetailState> {
-  ClanCurrentWarDetailBloc() : super(ClanCurrentWarDetailStateEmpty()) {
+  ClanCurrentWarDetailBloc() : super(const ClanCurrentWarDetailState.init()) {
     on<GetClanCurrentWarDetail>(_onGetClanCurrentWarDetail,
         transformer: throttleDroppable(const Duration(milliseconds: 0)));
   }
@@ -25,10 +25,10 @@ class ClanCurrentWarDetailBloc
     Emitter<ClanCurrentWarDetailState> emit,
   ) async {
     if (event.clanTag.isEmptyOrNull) {
-      return emit(ClanCurrentWarDetailStateEmpty());
+      return emit(const ClanCurrentWarDetailState.failure());
     }
 
-    emit(ClanCurrentWarDetailStateLoading());
+    emit(const ClanCurrentWarDetailState.loading());
 
     try {
       ClansCurrentWarStateModel? clanCurrentWar;
@@ -42,14 +42,14 @@ class ClanCurrentWarDetailBloc
       } catch (e) {}
 
       if (clanCurrentWar == null) {
-        emit(ClanCurrentWarDetailStateEmpty());
+        emit(const ClanCurrentWarDetailState.failure());
       } else {
-        emit(ClanCurrentWarDetailStateSuccess(
-          clanCurrentWarDetail: clanCurrentWar,
+        emit(ClanCurrentWarDetailState.success(
+          clanCurrentWar,
         ));
       }
     } catch (error) {
-      emit(const ClanCurrentWarDetailStateError('something went wrong'));
+      emit(const ClanCurrentWarDetailState.failure());
     }
   }
 }

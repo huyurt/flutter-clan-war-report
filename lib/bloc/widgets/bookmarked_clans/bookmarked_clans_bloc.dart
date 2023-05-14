@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 
+import '../../../repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
 import '../../../repositories/bookmarked_clans/bookmarked_clans_repository.dart';
-import '../../../services/coc/coc_api_clans.dart';
 import 'bookmarked_clans_event.dart';
 import 'bookmarked_clans_state.dart';
 
@@ -9,12 +9,15 @@ class BookmarkedClansBloc
     extends Bloc<BookmarkedClansEvent, BookmarkedClansState> {
   BookmarkedClansBloc({
     required this.bookmarkedClansRepository,
-  }) : super(BookmarkedClansStateEmpty()) {
+    required this.bookmarkedClanTagsRepository,
+  }) : super(const BookmarkedClansState.init()) {
     on<GetBookmarkedClanDetail>(_onGetBookmarkedClans);
     on<RefreshBookmarkedClanDetail>(_onRefreshBookmarkedClans);
+    on<ReorderBookmarkedClanDetail>(_onReorderBookmarkedClans);
   }
 
   final BookmarkedClansRepository bookmarkedClansRepository;
+  final BookmarkedClanTagsRepository bookmarkedClanTagsRepository;
 
   Future<void> _onGetBookmarkedClans(
     GetBookmarkedClanDetail event,
@@ -26,27 +29,24 @@ class BookmarkedClansBloc
         event.clanTagList.where((c) => !fetchedClanTags.contains(c)).toList();
 
     if (newClanTags.isEmpty) {
-      return emit(BookmarkedClansStateSuccess(
-        fetchingCompleted: true,
-        clanDetailList: bookmarkedClansRepository.getClanDetails(),
+      return emit(BookmarkedClansState.success(
+        bookmarkedClansRepository.getClanDetails(),
       ));
     }
 
     for (final clanTag in newClanTags) {
       try {
-        await _fetchClanDetail(clanTag);
+        await bookmarkedClansRepository.fetchClanDetail(clanTag);
       } catch (e) {
-        emit(const BookmarkedClansStateError('something went wrong'));
+        emit(const BookmarkedClansState.failure());
       }
-      emit(BookmarkedClansStateSuccess(
-        fetchingCompleted: false,
-        clanDetailList: bookmarkedClansRepository.getClanDetails(),
+      emit(BookmarkedClansState.loading(
+        bookmarkedClansRepository.getClanDetails(),
       ));
     }
 
-    emit(BookmarkedClansStateSuccess(
-      fetchingCompleted: true,
-      clanDetailList: bookmarkedClansRepository.getClanDetails(),
+    emit(BookmarkedClansState.success(
+      bookmarkedClansRepository.getClanDetails(),
     ));
   }
 
@@ -56,33 +56,36 @@ class BookmarkedClansBloc
   ) async {
     bookmarkedClansRepository.cleanRemovedClanTags(event.clanTagList);
 
-    emit(BookmarkedClansStateSuccess(
-      fetchingCompleted: false,
-      clanDetailList: bookmarkedClansRepository.getClanDetails(),
-    ));
-
     for (final clanTag in event.clanTagList) {
       try {
-        await _fetchClanDetail(clanTag);
+        await bookmarkedClansRepository.fetchClanDetail(clanTag);
       } catch (e) {
-        emit(const BookmarkedClansStateError('something went wrong'));
+        emit(const BookmarkedClansState.failure());
       }
-      emit(BookmarkedClansStateSuccess(
-        fetchingCompleted: false,
-        clanDetailList: bookmarkedClansRepository.getClanDetails(),
+      emit(BookmarkedClansState.loading(
+        bookmarkedClansRepository.getClanDetails(),
       ));
     }
 
-    emit(BookmarkedClansStateSuccess(
-      fetchingCompleted: true,
-      clanDetailList: bookmarkedClansRepository.getClanDetails(),
+    emit(BookmarkedClansState.success(
+      bookmarkedClansRepository.getClanDetails(),
     ));
   }
 
-  Future _fetchClanDetail(String clanTag) async {
-    bookmarkedClansRepository.addOrUpdateBookmarkedClans(clanTag, null);
+  Future<void> _onReorderBookmarkedClans(
+    ReorderBookmarkedClanDetail event,
+    Emitter<BookmarkedClansState> emit,
+  ) async {
+    final newIndex =
+        event.newIndex > event.oldIndex ? (event.newIndex - 1) : event.newIndex;
+    final item = state.items[event.oldIndex];
+    if (item != null) {
+      bookmarkedClansRepository.reorder(item, newIndex);
+      await event.bookmarkedClanTagsCubit.onReorder(item.tag, newIndex);
+    }
 
-    final clanDetail = await CocApiClans.getClanDetail(clanTag);
-    bookmarkedClansRepository.addOrUpdateBookmarkedClans(clanTag, clanDetail);
+    emit(BookmarkedClansState.success(
+      bookmarkedClansRepository.getClanDetails(),
+    ));
   }
 }

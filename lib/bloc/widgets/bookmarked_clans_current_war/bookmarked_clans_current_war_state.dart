@@ -1,44 +1,30 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/coc/clans_current_war_state_model.dart';
+import '../../../utils/enums/bloc_status_enum.dart';
 
-abstract class BookmarkedClansCurrentWarState extends Equatable {
-  const BookmarkedClansCurrentWarState();
+class BookmarkedClansCurrentWarState extends Equatable {
+  final BlocStatusEnum status;
+  final List<ClansCurrentWarStateModel?> items;
 
-  @override
-  List<Object?> get props => [];
-}
-
-class BookmarkedClansCurrentWarStateEmpty
-    extends BookmarkedClansCurrentWarState {}
-
-class BookmarkedClansCurrentWarStateLoading
-    extends BookmarkedClansCurrentWarState {}
-
-class BookmarkedClansCurrentWarStateSuccess
-    extends BookmarkedClansCurrentWarState {
-  const BookmarkedClansCurrentWarStateSuccess({
-    required this.fetchingCompleted,
-    required this.clansCurrentWar,
+  const BookmarkedClansCurrentWarState._({
+    this.status = BlocStatusEnum.loading,
+    this.items = const <ClansCurrentWarStateModel>[],
   });
 
-  final bool fetchingCompleted;
-  final List<ClansCurrentWarStateModel?> clansCurrentWar;
+  const BookmarkedClansCurrentWarState.init() : this._(status: BlocStatusEnum.init);
+
+  const BookmarkedClansCurrentWarState.loading(
+    List<ClansCurrentWarStateModel?> items,
+  ) : this._(status: BlocStatusEnum.loading, items: items);
+
+  const BookmarkedClansCurrentWarState.success(
+    List<ClansCurrentWarStateModel?> items,
+  ) : this._(status: BlocStatusEnum.success, items: items);
+
+  const BookmarkedClansCurrentWarState.failure()
+      : this._(status: BlocStatusEnum.failure);
 
   @override
-  List<Object?> get props => [fetchingCompleted, clansCurrentWar];
-
-  @override
-  String toString() =>
-      'BookmarkedClansCurrentWarStateSuccess { fetchingCompleted: $fetchingCompleted, clansCurrentWar: $clansCurrentWar }';
-}
-
-class BookmarkedClansCurrentWarStateError
-    extends BookmarkedClansCurrentWarState {
-  const BookmarkedClansCurrentWarStateError(this.error);
-
-  final String error;
-
-  @override
-  List<Object?> get props => [error];
+  List<Object> get props => [status, items];
 }

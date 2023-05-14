@@ -64,12 +64,16 @@ getBlocProviders() {
     BlocProvider(
       create: (context) => BookmarkedClansBloc(
         bookmarkedClansRepository: context.read<BookmarkedClansRepository>(),
+        bookmarkedClanTagsRepository:
+            context.read<BookmarkedClanTagsRepository>(),
       ),
     ),
     BlocProvider(
       create: (context) => BookmarkedPlayersBloc(
         bookmarkedPlayersRepository:
             context.read<BookmarkedPlayersRepository>(),
+        bookmarkedPlayerTagsRepository:
+            context.read<BookmarkedPlayerTagsRepository>(),
       ),
     ),
     BlocProvider(

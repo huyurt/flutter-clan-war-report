@@ -1,10 +1,16 @@
 import 'package:equatable/equatable.dart';
 
-abstract class BookmarkedClansEvent extends Equatable {
-}
+import '../bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
+
+abstract class BookmarkedClansEvent extends Equatable {}
 
 abstract class BookmarkedClansBaseEvent extends BookmarkedClansEvent {
-  BookmarkedClansBaseEvent({required this.clanTagList});
+  @override
+  List<Object?> get props => [];
+}
+
+class GetBookmarkedClanDetail extends BookmarkedClansBaseEvent {
+  GetBookmarkedClanDetail({required this.clanTagList});
 
   final List<String> clanTagList;
 
@@ -12,16 +18,26 @@ abstract class BookmarkedClansBaseEvent extends BookmarkedClansEvent {
   List<Object?> get props => [clanTagList];
 }
 
-class GetBookmarkedClanDetail extends BookmarkedClansBaseEvent {
-  GetBookmarkedClanDetail({required super.clanTagList});
+class RefreshBookmarkedClanDetail extends BookmarkedClansBaseEvent {
+  RefreshBookmarkedClanDetail({required this.clanTagList});
+
+  final List<String> clanTagList;
 
   @override
-  String toString() => 'FetchList { clanTagList: $clanTagList }';
+  List<Object?> get props => [clanTagList];
 }
 
-class RefreshBookmarkedClanDetail extends BookmarkedClansBaseEvent {
-  RefreshBookmarkedClanDetail({required super.clanTagList});
+class ReorderBookmarkedClanDetail extends BookmarkedClansBaseEvent {
+  ReorderBookmarkedClanDetail({
+    required this.oldIndex,
+    required this.newIndex,
+    required this.bookmarkedClanTagsCubit,
+  });
+
+  final int oldIndex;
+  final int newIndex;
+  final BookmarkedClanTagsCubit bookmarkedClanTagsCubit;
 
   @override
-  String toString() => 'RefreshList { clanTagList: $clanTagList }';
+  List<Object?> get props => [oldIndex, newIndex];
 }

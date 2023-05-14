@@ -1,4 +1,5 @@
 import '../../models/api/response/clan_detail_response_model.dart';
+import '../../services/coc_api/coc_api_clans.dart';
 import 'bookmarked_clans_cache.dart';
 
 class BookmarkedClansRepository {
@@ -6,21 +7,18 @@ class BookmarkedClansRepository {
 
   final BookmarkedClansCache cache;
 
-  List<String> getClanTags() => cache.getKeys();
+  List<String> getClanTags() => cache.getClanTags();
 
   List<ClanDetailResponseModel?> getClanDetails() {
     final clanDetails = cache.getValues();
     return List.of(clanDetails);
   }
 
-  bool contains(String clanTag) {
-    return cache.contains(clanTag);
-  }
+  bool contains(String clanTag) => cache.contains(clanTag);
 
   void addOrUpdateBookmarkedClans(
-      String clanTag, ClanDetailResponseModel? clanDetail) {
-    cache.addOrUpdate(clanTag, clanDetail);
-  }
+          String clanTag, ClanDetailResponseModel clanDetail) =>
+      cache.addOrUpdate(clanTag, clanDetail);
 
   void removeBookmarkedClans(String clanTag) => cache.remove(clanTag);
 
@@ -41,4 +39,12 @@ class BookmarkedClansRepository {
       removeBookmarkedClans(clanTag);
     }
   }
+
+  Future<void> fetchClanDetail(String clanTag) async {
+    final clanDetail = await CocApiClans.getClanDetail(clanTag);
+    addOrUpdateBookmarkedClans(clanTag, clanDetail);
+  }
+
+  void reorder(ClanDetailResponseModel clanDetail, int newIndex) =>
+      cache.reorder(clanDetail, newIndex);
 }

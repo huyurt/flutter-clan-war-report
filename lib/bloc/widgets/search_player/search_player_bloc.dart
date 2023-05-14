@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+import '../../../models/api/response/player_detail_response_model.dart';
 import '../../../repositories/search_player/search_player_repository.dart';
 import 'search_player_event.dart';
 import 'search_player_state.dart';
@@ -18,7 +22,7 @@ EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
 
 class SearchPlayerBloc extends Bloc<SearchPlayerEvent, SearchPlayerState> {
   SearchPlayerBloc({required this.searchPlayerRepository})
-      : super(SearchStateEmpty()) {
+      : super(const SearchPlayerState.init()) {
     on<ClearFilter>(_onClearFilter,
         transformer: throttleDroppable(const Duration(milliseconds: 0)));
     on<TextChanged>(_onTextChanged,
@@ -33,7 +37,7 @@ class SearchPlayerBloc extends Bloc<SearchPlayerEvent, SearchPlayerState> {
     ClearFilter event,
     Emitter<SearchPlayerState> emit,
   ) async {
-    return emit(SearchStateEmpty());
+    return emit(const SearchPlayerState.init());
   }
 
   Future<void> _onTextChanged(
@@ -48,14 +52,20 @@ class SearchPlayerBloc extends Bloc<SearchPlayerEvent, SearchPlayerState> {
     Emitter<SearchPlayerState> emit,
   ) async {
     if ((searchTerm?.isEmptyOrNull ?? true) || (searchTerm?.length ?? 0) < 3) {
-      return emit(SearchStateEmpty());
+      return emit(const SearchPlayerState.init());
     }
 
     try {
       final result = await searchPlayerRepository.searchPlayers(searchTerm!);
-      emit(SearchStateSuccess(items: result.items));
+      emit(SearchPlayerState.success(result.items));
     } catch (error) {
-      emit(const SearchStateError('something went wrong'));
+      if (error is DioError) {
+        if (error.response?.statusCode == HttpStatus.notFound) {
+          return emit(
+              const SearchPlayerState.success(<PlayerDetailResponseModel>[]));
+        }
+      }
+      emit(const SearchPlayerState.failure());
     }
   }
 }

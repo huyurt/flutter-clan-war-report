@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/bloc_status_enum.dart';
 
 import '../../../../bloc/widgets/clan_league_wars/clan_league_wars_bloc.dart';
 import '../../../../bloc/widgets/clan_league_wars/clan_league_wars_event.dart';
@@ -66,14 +67,14 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
             itemBuilder: (context) {
               return [
                 PopupMenuItem(
-                  value: 0,
+                  value: LocaleKey.refresh,
                   child: Text(tr(LocaleKey.refresh)),
                 ),
               ];
             },
             onSelected: (value) {
               switch (value) {
-                case 0:
+                case LocaleKey.refresh:
                   _getDetails();
                   break;
               }
@@ -83,77 +84,77 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
       ),
       body: BlocBuilder<ClanLeagueWarsBloc, ClanLeagueWarsState>(
         builder: (context, state) {
-          if (state is ClanLeagueWarsStateLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is ClanLeagueWarsStateError) {
-            return Center(child: Text(tr('search_failed_message')));
-          }
-          if (state is ClanLeagueWarsStateSuccess) {
-            return DefaultTabController(
-              length: 3,
-              initialIndex: 0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TabBar(
-                    tabs: [
-                      Tab(
-                        child: Text(
-                          tr(LocaleKey.group),
-                          textAlign: TextAlign.center,
+          switch (state.status) {
+            case BlocStatusEnum.failure:
+              return Center(child: Text(tr('search_failed_message')));
+            case BlocStatusEnum.success:
+              final clanLeague = state.clanLeague;
+
+              return DefaultTabController(
+                length: 3,
+                initialIndex: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TabBar(
+                      tabs: [
+                        Tab(
+                          child: Text(
+                            tr(LocaleKey.group),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      Tab(
-                        child: Text(
-                          tr(LocaleKey.rounds),
-                          textAlign: TextAlign.center,
+                        Tab(
+                          child: Text(
+                            tr(LocaleKey.rounds),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      Tab(
-                        child: Text(
-                          tr(LocaleKey.players),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: TabBarView(
-                      children: [
-                        LeagueWarDetailGroupScreen(
-                          key: const Key(LocaleKey.group),
-                          clanTag: widget.clanTag,
-                          warStartTime: widget.warStartTime,
-                          clanDetail: widget.clanDetail,
-                          clanLeagueWars: state.clanLeagueWars,
-                          totalRoundCount: state.totalRoundCount,
-                        ),
-                        LeagueWarDetailRoundsScreen(
-                          key: const Key(LocaleKey.rounds),
-                          clanTag: widget.clanTag,
-                          warStartTime: widget.warStartTime,
-                          clanDetail: widget.clanDetail,
-                          clanLeague: state.clanLeague,
-                          clanLeagueWars: state.clanLeagueWars,
-                        ),
-                        LeagueWarDetailPlayersScreen(
-                          key: const Key(LocaleKey.players),
-                          clanTag: widget.clanTag,
-                          warStartTime: widget.warStartTime,
-                          clanDetail: widget.clanDetail,
-                          clanLeague: state.clanLeague,
-                          clanLeagueWars: state.clanLeagueWars,
+                        Tab(
+                          child: Text(
+                            tr(LocaleKey.players),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            );
+                    Expanded(
+                      flex: 1,
+                      child: TabBarView(
+                        children: [
+                          LeagueWarDetailGroupScreen(
+                            key: const Key(LocaleKey.group),
+                            clanTag: widget.clanTag,
+                            warStartTime: widget.warStartTime,
+                            clanDetail: widget.clanDetail,
+                            clanLeagueWars: state.clanLeagueWars,
+                            totalRoundCount: state.totalRoundCount,
+                          ),
+                          LeagueWarDetailRoundsScreen(
+                            key: const Key(LocaleKey.rounds),
+                            clanTag: widget.clanTag,
+                            warStartTime: widget.warStartTime,
+                            clanDetail: widget.clanDetail,
+                            clanLeague: clanLeague!,
+                            clanLeagueWars: state.clanLeagueWars,
+                          ),
+                          LeagueWarDetailPlayersScreen(
+                            key: const Key(LocaleKey.players),
+                            clanTag: widget.clanTag,
+                            warStartTime: widget.warStartTime,
+                            clanDetail: widget.clanDetail,
+                            clanLeague: clanLeague,
+                            clanLeagueWars: state.clanLeagueWars,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            default:
+              return const Center(child: CircularProgressIndicator());
           }
-          return const Center(child: CircularProgressIndicator());
         },
       ),
     );

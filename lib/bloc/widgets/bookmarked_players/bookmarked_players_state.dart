@@ -1,40 +1,30 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/api/response/player_detail_response_model.dart';
+import '../../../utils/enums/bloc_status_enum.dart';
 
-abstract class BookmarkedPlayersState extends Equatable {
-  const BookmarkedPlayersState();
+class BookmarkedPlayersState extends Equatable {
+  final BlocStatusEnum status;
+  final List<PlayerDetailResponseModel?> items;
 
-  @override
-  List<Object?> get props => [];
-}
-
-class BookmarkedPlayersStateEmpty extends BookmarkedPlayersState {}
-
-class BookmarkedPlayersStateLoading extends BookmarkedPlayersState {}
-
-class BookmarkedPlayersStateSuccess extends BookmarkedPlayersState {
-  const BookmarkedPlayersStateSuccess({
-    required this.fetchingCompleted,
-    required this.playerDetailList,
+  const BookmarkedPlayersState._({
+    this.status = BlocStatusEnum.loading,
+    this.items = const <PlayerDetailResponseModel>[],
   });
 
-  final bool fetchingCompleted;
-  final List<PlayerDetailResponseModel?> playerDetailList;
+  const BookmarkedPlayersState.init() : this._(status: BlocStatusEnum.init);
+
+  const BookmarkedPlayersState.loading(
+    List<PlayerDetailResponseModel?> items,
+  ) : this._(status: BlocStatusEnum.loading, items: items);
+
+  const BookmarkedPlayersState.success(
+    List<PlayerDetailResponseModel?> items,
+  ) : this._(status: BlocStatusEnum.success, items: items);
+
+  const BookmarkedPlayersState.failure()
+      : this._(status: BlocStatusEnum.failure);
 
   @override
-  List<Object?> get props => [fetchingCompleted, playerDetailList];
-
-  @override
-  String toString() =>
-      'BookmarkedPlayersStateSuccess { fetchingCompleted: $fetchingCompleted, playerDetailList: $playerDetailList }';
-}
-
-class BookmarkedPlayersStateError extends BookmarkedPlayersState {
-  const BookmarkedPlayersStateError(this.error);
-
-  final String error;
-
-  @override
-  List<Object?> get props => [error];
+  List<Object> get props => [status, items];
 }

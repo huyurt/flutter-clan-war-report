@@ -1,40 +1,29 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/api/response/clan_detail_response_model.dart';
+import '../../../utils/enums/bloc_status_enum.dart';
 
-abstract class BookmarkedClansState extends Equatable {
-  const BookmarkedClansState();
+class BookmarkedClansState extends Equatable {
+  final BlocStatusEnum status;
+  final List<ClanDetailResponseModel?> items;
 
-  @override
-  List<Object?> get props => [];
-}
-
-class BookmarkedClansStateEmpty extends BookmarkedClansState {}
-
-class BookmarkedClansStateLoading extends BookmarkedClansState {}
-
-class BookmarkedClansStateSuccess extends BookmarkedClansState {
-  const BookmarkedClansStateSuccess({
-    required this.fetchingCompleted,
-    required this.clanDetailList,
+  const BookmarkedClansState._({
+    this.status = BlocStatusEnum.loading,
+    this.items = const <ClanDetailResponseModel>[],
   });
 
-  final bool fetchingCompleted;
-  final List<ClanDetailResponseModel?> clanDetailList;
+  const BookmarkedClansState.init() : this._(status: BlocStatusEnum.init);
+
+  const BookmarkedClansState.loading(
+    List<ClanDetailResponseModel?> items,
+  ) : this._(status: BlocStatusEnum.loading, items: items);
+
+  const BookmarkedClansState.success(
+    List<ClanDetailResponseModel?> items,
+  ) : this._(status: BlocStatusEnum.success, items: items);
+
+  const BookmarkedClansState.failure() : this._(status: BlocStatusEnum.failure);
 
   @override
-  List<Object?> get props => [fetchingCompleted, clanDetailList];
-
-  @override
-  String toString() =>
-      'BookmarkedClansStateSuccess { fetchingCompleted: $fetchingCompleted, clanDetailList: $clanDetailList }';
-}
-
-class BookmarkedClansStateError extends BookmarkedClansState {
-  const BookmarkedClansStateError(this.error);
-
-  final String error;
-
-  @override
-  List<Object?> get props => [error];
+  List<Object> get props => [status, items];
 }

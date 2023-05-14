@@ -51,5 +51,8 @@ class AppConstants {
   static const attackerClanBackgroundColor = Color.fromARGB(50, 0, 255, 0);
   static const attackerOpponentBackgroundColor = Color.fromARGB(75, 255, 50, 50);
 
+  static const cocAppClanUrl = 'https://link.clashofclans.com';
+  static const cocAppClanProfileUrl = '$cocAppClanUrl?action=OpenClanProfile&tag=';
+  static const cocAppPlayerProfileUrl = '$cocAppClanUrl?action=OpenPlayerProfile&tag=';
   static const playStoreUrl = 'https://play.google.com/store/apps/details?id=';
 }

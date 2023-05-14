@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 
+import '../../../repositories/bookmarked_player_tags/bookmarked_player_tags_repository.dart';
 import '../../../repositories/bookmarked_players/bookmarked_players_repository.dart';
-import '../../../services/coc/coc_api_players.dart';
 import 'bookmarked_players_event.dart';
 import 'bookmarked_players_state.dart';
 
@@ -9,12 +9,15 @@ class BookmarkedPlayersBloc
     extends Bloc<BookmarkedPlayersEvent, BookmarkedPlayersState> {
   BookmarkedPlayersBloc({
     required this.bookmarkedPlayersRepository,
-  }) : super(BookmarkedPlayersStateEmpty()) {
+    required this.bookmarkedPlayerTagsRepository,
+  }) : super(const BookmarkedPlayersState.init()) {
     on<GetBookmarkedPlayerDetail>(_onGetBookmarkedPlayers);
     on<RefreshBookmarkedPlayerDetail>(_onRefreshBookmarkedPlayers);
+    on<ReorderBookmarkedPlayerDetail>(_onReorderBookmarkedClans);
   }
 
   final BookmarkedPlayersRepository bookmarkedPlayersRepository;
+  final BookmarkedPlayerTagsRepository bookmarkedPlayerTagsRepository;
 
   Future<void> _onGetBookmarkedPlayers(
     GetBookmarkedPlayerDetail event,
@@ -27,27 +30,24 @@ class BookmarkedPlayersBloc
         .toList();
 
     if (newPlayerTags.isEmpty) {
-      return emit(BookmarkedPlayersStateSuccess(
-        fetchingCompleted: true,
-        playerDetailList: bookmarkedPlayersRepository.getPlayerDetails(),
+      return emit(BookmarkedPlayersState.success(
+        bookmarkedPlayersRepository.getPlayerDetails(),
       ));
     }
 
     for (final playerTag in event.playerTagList) {
       try {
-        await _fetchPlayerDetail(playerTag);
+        await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
       } catch (e) {
-        emit(const BookmarkedPlayersStateError('something went wrong'));
+        emit(const BookmarkedPlayersState.failure());
       }
-      emit(BookmarkedPlayersStateSuccess(
-        fetchingCompleted: false,
-        playerDetailList: bookmarkedPlayersRepository.getPlayerDetails(),
+      emit(BookmarkedPlayersState.loading(
+        bookmarkedPlayersRepository.getPlayerDetails(),
       ));
     }
 
-    emit(BookmarkedPlayersStateSuccess(
-      fetchingCompleted: true,
-      playerDetailList: bookmarkedPlayersRepository.getPlayerDetails(),
+    emit(BookmarkedPlayersState.success(
+      bookmarkedPlayersRepository.getPlayerDetails(),
     ));
   }
 
@@ -57,34 +57,36 @@ class BookmarkedPlayersBloc
   ) async {
     bookmarkedPlayersRepository.cleanRemovedPlayerTags(event.playerTagList);
 
-    emit(BookmarkedPlayersStateSuccess(
-      fetchingCompleted: false,
-      playerDetailList: bookmarkedPlayersRepository.getPlayerDetails(),
-    ));
-
     for (final playerTag in event.playerTagList) {
       try {
-        await _fetchPlayerDetail(playerTag);
+        await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
       } catch (e) {
-        emit(const BookmarkedPlayersStateError('something went wrong'));
+        emit(const BookmarkedPlayersState.failure());
       }
-      emit(BookmarkedPlayersStateSuccess(
-        fetchingCompleted: false,
-        playerDetailList: bookmarkedPlayersRepository.getPlayerDetails(),
+      emit(BookmarkedPlayersState.loading(
+        bookmarkedPlayersRepository.getPlayerDetails(),
       ));
     }
 
-    emit(BookmarkedPlayersStateSuccess(
-      fetchingCompleted: true,
-      playerDetailList: bookmarkedPlayersRepository.getPlayerDetails(),
+    emit(BookmarkedPlayersState.success(
+      bookmarkedPlayersRepository.getPlayerDetails(),
     ));
   }
 
-  Future _fetchPlayerDetail(String playerTag) async {
-    bookmarkedPlayersRepository.addOrUpdateBookmarkedPlayers(playerTag, null);
+  Future<void> _onReorderBookmarkedClans(
+    ReorderBookmarkedPlayerDetail event,
+    Emitter<BookmarkedPlayersState> emit,
+  ) async {
+    final newIndex =
+        event.newIndex > event.oldIndex ? (event.newIndex - 1) : event.newIndex;
+    final item = state.items[event.oldIndex];
+    if (item != null) {
+      bookmarkedPlayersRepository.reorder(item, newIndex);
+      await event.bookmarkedPlayerTagsCubit.onReorder(item.tag, newIndex);
+    }
 
-    final playerDetail = await CocApiPlayers.getPlayerDetail(playerTag);
-    bookmarkedPlayersRepository.addOrUpdateBookmarkedPlayers(
-        playerTag, playerDetail);
+    emit(BookmarkedPlayersState.success(
+      bookmarkedPlayersRepository.getPlayerDetails(),
+    ));
   }
 }

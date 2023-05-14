@@ -2,16 +2,12 @@ import 'dart:async';
 
 import 'bookmarked_clan_tags_cache.dart';
 
-// TODO: Use single repository! Merge this repo to BookmarkedClansRepository.
-
 class BookmarkedClanTagsRepository {
   const BookmarkedClanTagsRepository({required this.cache});
 
   final BookmarkedClanTagsCache cache;
 
-  List<String> getClanTags() {
-    return cache.get();
-  }
+  List<String> getClanTags() => List.of(cache.get());
 
   Future<List<String>> changeBookmarkedClanTags(String clanTag) async {
     if (cache.contains(clanTag)) {
@@ -21,5 +17,9 @@ class BookmarkedClanTagsRepository {
     }
     final clanTags = cache.get();
     return List.of(clanTags);
+  }
+
+  Future<void> reorder(String clanTag, int newIndex) async {
+    await cache.reorder(clanTag, newIndex);
   }
 }

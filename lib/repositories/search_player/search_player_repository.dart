@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:more_useful_clash_of_clans/repositories/search_player/search_player_cache.dart';
-import 'package:more_useful_clash_of_clans/services/coc/coc_api_players.dart';
 
 import '../../models/api/response/player_detail_response_model.dart';
+import '../../services/coc_api/coc_api_players.dart';
 
 class SearchPlayerRepository {
   const SearchPlayerRepository({required this.cache});

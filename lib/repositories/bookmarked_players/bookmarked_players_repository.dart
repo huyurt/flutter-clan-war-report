@@ -1,4 +1,5 @@
 import '../../models/api/response/player_detail_response_model.dart';
+import '../../services/coc_api/coc_api_players.dart';
 import 'bookmarked_players_cache.dart';
 
 class BookmarkedPlayersRepository {
@@ -6,21 +7,18 @@ class BookmarkedPlayersRepository {
 
   final BookmarkedPlayersCache cache;
 
-  List<String> getPlayerTags() => cache.getKeys();
+  List<String> getPlayerTags() => cache.getPlayerTags();
 
   List<PlayerDetailResponseModel?> getPlayerDetails() {
     final playerDetails = cache.getValues();
     return List.of(playerDetails);
   }
 
-  bool contains(String playerTag) {
-    return cache.contains(playerTag);
-  }
+  bool contains(String playerTag) => cache.contains(playerTag);
 
   void addOrUpdateBookmarkedPlayers(
-      String playerTag, PlayerDetailResponseModel? playerDetail) {
-    cache.addOrUpdate(playerTag, playerDetail);
-  }
+          String playerTag, PlayerDetailResponseModel playerDetail) =>
+      cache.addOrUpdate(playerTag, playerDetail);
 
   void removeBookmarkedPlayers(String playerTag) => cache.remove(playerTag);
 
@@ -41,4 +39,12 @@ class BookmarkedPlayersRepository {
       removeBookmarkedPlayers(playerTag);
     }
   }
+
+  Future<void> fetchPlayerDetail(String playerTag) async {
+    final playerDetail = await CocApiPlayers.getPlayerDetail(playerTag);
+    addOrUpdateBookmarkedPlayers(playerTag, playerDetail);
+  }
+
+  void reorder(PlayerDetailResponseModel playerDetail, int newIndex) =>
+      cache.reorder(playerDetail, newIndex);
 }

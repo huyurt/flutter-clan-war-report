@@ -1,36 +1,27 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/api/response/player_detail_response_model.dart';
+import '../../../utils/enums/bloc_status_enum.dart';
 
-abstract class PlayerDetailState extends Equatable {
-  const PlayerDetailState();
+class PlayerDetailState extends Equatable {
+  final BlocStatusEnum status;
+  final PlayerDetailResponseModel? item;
 
-  @override
-  List<Object?> get props => [];
-}
+  const PlayerDetailState._({
+    this.status = BlocStatusEnum.loading,
+    this.item,
+  });
 
-class PlayerDetailStateEmpty extends PlayerDetailState {}
+  const PlayerDetailState.init() : this._(status: BlocStatusEnum.init);
 
-class PlayerDetailStateLoading extends PlayerDetailState {}
+  const PlayerDetailState.loading() : this._(status: BlocStatusEnum.loading);
 
-class PlayerDetailStateSuccess extends PlayerDetailState {
-  const PlayerDetailStateSuccess({required this.playerDetail});
+  const PlayerDetailState.success(
+    PlayerDetailResponseModel item,
+  ) : this._(status: BlocStatusEnum.success, item: item);
 
-  final PlayerDetailResponseModel playerDetail;
-
-  @override
-  List<Object?> get props => [playerDetail];
-
-  @override
-  String toString() =>
-      'PlayerDetailStateSuccess { playerDetail: $playerDetail }';
-}
-
-class PlayerDetailStateError extends PlayerDetailState {
-  const PlayerDetailStateError(this.error);
-
-  final String error;
+  const PlayerDetailState.failure() : this._(status: BlocStatusEnum.failure);
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [status, item];
 }

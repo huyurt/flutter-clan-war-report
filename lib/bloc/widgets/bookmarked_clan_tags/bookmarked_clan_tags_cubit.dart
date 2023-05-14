@@ -18,4 +18,11 @@ class BookmarkedClanTagsCubit extends Cubit<BookmarkedClanTagsState> {
         await bookmarkedClanTagsRepository.changeBookmarkedClanTags(clanTag);
     emit(BookmarkedClanTagsState(clanTags));
   }
+
+  Future<void> onReorder(String clanTag, int newIndex) async {
+    await bookmarkedClanTagsRepository.reorder(clanTag, newIndex);
+
+    final clanTags = bookmarkedClanTagsRepository.getClanTags();
+    emit(BookmarkedClanTagsState(clanTags));
+  }
 }

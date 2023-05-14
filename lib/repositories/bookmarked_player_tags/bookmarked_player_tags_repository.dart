@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import '../../utils/helpers/cache_helper.dart';
 import 'bookmarked_player_tags_cache.dart';
 
 class BookmarkedPlayerTagsRepository {
@@ -8,14 +7,19 @@ class BookmarkedPlayerTagsRepository {
 
   final BookmarkedPlayerTagsCache cache;
 
+  List<String> getPlayerTags() => List.of(cache.get());
+
   Future<List<String>> changeBookmarkedPlayerTags(String playerTag) async {
     if (cache.contains(playerTag)) {
-      cache.remove(playerTag);
+      await cache.remove(playerTag);
     } else {
-      cache.add(playerTag);
+      await cache.add(playerTag);
     }
     final playerTags = cache.get();
-    await CacheHelper.setCachedBookmarkedPlayerTags(playerTags);
     return List.of(playerTags);
+  }
+
+  Future<void> reorder(String playerTag, int newIndex) async {
+    await cache.reorder(playerTag, newIndex);
   }
 }

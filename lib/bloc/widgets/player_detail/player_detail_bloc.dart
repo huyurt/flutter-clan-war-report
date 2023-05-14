@@ -3,7 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import '../../../services/coc/coc_api_players.dart';
+import '../../../services/coc_api/coc_api_players.dart';
 import 'player_detail_event.dart';
 import 'player_detail_state.dart';
 
@@ -13,7 +13,7 @@ EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
 }
 
 class PlayerDetailBloc extends Bloc<PlayerDetailEvent, PlayerDetailState> {
-  PlayerDetailBloc() : super(PlayerDetailStateEmpty()) {
+  PlayerDetailBloc() : super(const PlayerDetailState.init()) {
     on<ClearFilter>(_onClearFilter,
         transformer: throttleDroppable(const Duration(milliseconds: 0)));
     on<GetPlayerDetail>(_onGetPlayerDetail,
@@ -24,7 +24,7 @@ class PlayerDetailBloc extends Bloc<PlayerDetailEvent, PlayerDetailState> {
     ClearFilter event,
     Emitter<PlayerDetailState> emit,
   ) async {
-    return emit(PlayerDetailStateEmpty());
+    return emit(const PlayerDetailState.init());
   }
 
   Future<void> _onGetPlayerDetail(
@@ -32,16 +32,16 @@ class PlayerDetailBloc extends Bloc<PlayerDetailEvent, PlayerDetailState> {
     Emitter<PlayerDetailState> emit,
   ) async {
     if (event.playerTag.isEmptyOrNull) {
-      return emit(PlayerDetailStateEmpty());
+      return emit(const PlayerDetailState.failure());
     }
 
-    emit(PlayerDetailStateLoading());
+    emit(const PlayerDetailState.loading());
 
     try {
       final result = await CocApiPlayers.getPlayerDetail(event.playerTag!);
-      emit(PlayerDetailStateSuccess(playerDetail: result));
+      emit(PlayerDetailState.success(result));
     } catch (error) {
-      emit(const PlayerDetailStateError('something went wrong'));
+      emit(const PlayerDetailState.failure());
     }
   }
 }

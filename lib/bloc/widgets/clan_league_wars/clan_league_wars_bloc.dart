@@ -2,23 +2,17 @@ import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 import '../../../models/coc/clans_current_war_state_model.dart';
-import '../../../services/coc/coc_api_clans.dart';
+import '../../../services/coc_api/coc_api_clans.dart';
 import 'clan_league_wars_event.dart';
 import 'clan_league_wars_state.dart';
 
-EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
-  return (events, mapper) =>
-      droppable<Event>().call(events.throttle(duration), mapper);
-}
-
 class ClanLeagueWarsBloc
     extends Bloc<ClanCurrentWarDetailEvent, ClanLeagueWarsState> {
-  ClanLeagueWarsBloc() : super(ClanLeagueWarsStateEmpty()) {
+  ClanLeagueWarsBloc() : super(const ClanLeagueWarsState.init()) {
     on<GetClanLeagueWars>(_onGetClanCurrentWarDetail,
-        transformer: throttleDroppable(const Duration(milliseconds: 0)));
+        transformer: restartable());
   }
 
   Future<void> _onGetClanCurrentWarDetail(
@@ -26,10 +20,10 @@ class ClanLeagueWarsBloc
     Emitter<ClanLeagueWarsState> emit,
   ) async {
     if (event.clanTag.isEmptyOrNull) {
-      return emit(ClanLeagueWarsStateEmpty());
+      return emit(const ClanLeagueWarsState.failure());
     }
 
-    emit(ClanLeagueWarsStateLoading());
+    emit(const ClanLeagueWarsState.loading());
 
     try {
       final clanLeagueWars = <ClansCurrentWarStateModel>[];
@@ -55,16 +49,16 @@ class ClanLeagueWarsBloc
       }
 
       if (clanLeagueWars.isEmpty) {
-        return emit(ClanLeagueWarsStateEmpty());
+        return emit(const ClanLeagueWarsState.failure());
       }
 
-      return emit(ClanLeagueWarsStateSuccess(
-        totalRoundCount: clanLeague.rounds.length,
-        clanLeague: clanLeague,
-        clanLeagueWars: clanLeagueWars,
+      return emit(ClanLeagueWarsState.success(
+        clanLeague.rounds.length,
+        clanLeague,
+        clanLeagueWars,
       ));
     } catch (error) {
-      emit(const ClanLeagueWarsStateError('something went wrong'));
+      emit(const ClanLeagueWarsState.failure());
     }
   }
 }

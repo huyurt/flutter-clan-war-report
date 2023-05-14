@@ -21,22 +21,12 @@ class ClearFilter extends SearchClanEvent {
 
 class TextChanged extends SearchClanBaseEvent {
   TextChanged({required super.searchTerm});
-
-  @override
-  String toString() => 'TextChanged { clanName: ${searchTerm.clanName} }';
 }
 
 class FilterChanged extends SearchClanBaseEvent {
   FilterChanged({required super.searchTerm});
-
-  @override
-  String toString() =>
-      'FilterChanged { minMembers: ${searchTerm.minMembers}, maxMembers: ${searchTerm.maxMembers}, minClanLevel: ${searchTerm.minClanLevel} }';
 }
 
 class NextPageFetched extends SearchClanBaseEvent {
   NextPageFetched({required super.searchTerm});
-
-  @override
-  String toString() => 'NextPageFetched { after: ${searchTerm.after} }';
 }

@@ -1,36 +1,27 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/api/response/clan_detail_response_model.dart';
+import '../../../utils/enums/bloc_status_enum.dart';
 
-abstract class ClanDetailState extends Equatable {
-  const ClanDetailState();
+class ClanDetailState extends Equatable {
+  final BlocStatusEnum status;
+  final ClanDetailResponseModel? item;
 
-  @override
-  List<Object?> get props => [];
-}
+  const ClanDetailState._({
+    this.status = BlocStatusEnum.loading,
+    this.item,
+  });
 
-class ClanDetailStateEmpty extends ClanDetailState {}
+  const ClanDetailState.init() : this._(status: BlocStatusEnum.init);
 
-class ClanDetailStateLoading extends ClanDetailState {}
+  const ClanDetailState.loading() : this._(status: BlocStatusEnum.loading);
 
-class ClanDetailStateSuccess extends ClanDetailState {
-  const ClanDetailStateSuccess({required this.clanDetail});
+  const ClanDetailState.success(
+    ClanDetailResponseModel item,
+  ) : this._(status: BlocStatusEnum.success, item: item);
 
-  final ClanDetailResponseModel clanDetail;
-
-  @override
-  List<Object?> get props => [clanDetail];
-
-  @override
-  String toString() =>
-      'ClanDetailStateSuccess { clanDetail: $clanDetail }';
-}
-
-class ClanDetailStateError extends ClanDetailState {
-  const ClanDetailStateError(this.error);
-
-  final String error;
+  const ClanDetailState.failure() : this._(status: BlocStatusEnum.failure);
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [status, item];
 }

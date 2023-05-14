@@ -18,7 +18,4 @@ class ClearFilter extends ClanCurrentWarDetailEvent {
 
 class GetClanLeagueWars extends ClanLeagueWarsBaseEvent {
   GetClanLeagueWars({required super.clanTag});
-
-  @override
-  String toString() => 'FetchList { clanTag: $clanTag }';
 }

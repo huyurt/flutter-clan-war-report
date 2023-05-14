@@ -18,7 +18,4 @@ class ClearFilter extends SearchPlayerEvent {
 
 class TextChanged extends SearchPlayerBaseEvent {
   TextChanged({required super.searchTerm});
-
-  @override
-  String toString() => 'TextChanged { playerName: $searchTerm }';
 }

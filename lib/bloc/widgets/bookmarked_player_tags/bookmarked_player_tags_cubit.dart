@@ -18,4 +18,11 @@ class BookmarkedPlayerTagsCubit extends Cubit<BookmarkedPlayerTagsState> {
         .changeBookmarkedPlayerTags(playerTag);
     emit(BookmarkedPlayerTagsState(playerTags));
   }
+
+  Future<void> onReorder(String playerTag, int newIndex) async {
+    await bookmarkedPlayerTagsRepository.reorder(playerTag, newIndex);
+
+    final playerTags = bookmarkedPlayerTagsRepository.getPlayerTags();
+    emit(BookmarkedPlayerTagsState(playerTags));
+  }
 }
