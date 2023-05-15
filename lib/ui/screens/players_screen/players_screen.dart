@@ -11,6 +11,7 @@ import '../../../bloc/widgets/bookmarked_players/bookmarked_players_state.dart';
 import '../../../utils/constants/app_constants.dart';
 import '../../../utils/constants/locale_key.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
+import '../../../utils/enums/process_type_enum.dart';
 import '../../widgets/bottom_progression_indicator.dart';
 import '../clans_screen/search_clan_screen/player_detail_screen.dart';
 
@@ -36,6 +37,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
   void didChangeDependencies() {
     _bookmarkedPlayersBloc.add(
       GetBookmarkedPlayerDetail(
+        process: ProcessType.list,
         playerTagList:
             context.watch<BookmarkedPlayerTagsCubit>().state.playerTags,
       ),
@@ -45,7 +47,8 @@ class _PlayersScreenState extends State<PlayersScreen> {
 
   Future<void> _refreshList() async {
     _bookmarkedPlayersBloc.add(
-      RefreshBookmarkedPlayerDetail(
+      GetBookmarkedPlayerDetail(
+        process: ProcessType.refresh,
         playerTagList:
             context.watch<BookmarkedPlayerTagsCubit>().state.playerTags,
       ),

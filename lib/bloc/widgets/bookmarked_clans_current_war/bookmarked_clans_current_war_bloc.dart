@@ -1,19 +1,39 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_clans_current_war/bookmarked_clans_current_war_repository.dart';
+import '../../../utils/enums/process_type_enum.dart';
 import 'bookmarked_clans_current_war_event.dart';
 import 'bookmarked_clans_current_war_state.dart';
+
+EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
+  return (events, mapper) =>
+      droppable<Event>().call(events.throttle(duration), mapper);
+}
 
 class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
     BookmarkedClansCurrentWarState> {
   BookmarkedClansCurrentWarBloc({
     required this.bookmarkedClansCurrentWarRepository,
   }) : super(const BookmarkedClansCurrentWarState.init()) {
-    on<GetBookmarkedClansCurrentWar>(_onGetBookmarkedClansCurrentWar);
-    on<RefreshBookmarkedClansCurrentWar>(_onRefreshBookmarkedClansCurrentWar);
+    on<GetBookmarkedClansCurrentWar>(_emitter,
+        transformer: throttleDroppable(const Duration(milliseconds: 0)));
   }
 
   final BookmarkedClansCurrentWarRepository bookmarkedClansCurrentWarRepository;
+
+  Future<void> _emitter(
+    GetBookmarkedClansCurrentWar event,
+    Emitter<BookmarkedClansCurrentWarState> emit,
+  ) async {
+    switch (event.process) {
+      case ProcessType.list:
+        return _onGetBookmarkedClansCurrentWar(event, emit);
+      case ProcessType.refresh:
+        return _onRefreshBookmarkedClansCurrentWar(event, emit);
+    }
+  }
 
   Future<void> _onGetBookmarkedClansCurrentWar(
     GetBookmarkedClansCurrentWar event,
@@ -47,7 +67,7 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
   }
 
   Future<void> _onRefreshBookmarkedClansCurrentWar(
-    RefreshBookmarkedClansCurrentWar event,
+    GetBookmarkedClansCurrentWar event,
     Emitter<BookmarkedClansCurrentWarState> emit,
   ) async {
     bookmarkedClansCurrentWarRepository.cleanRemovedClanTags(event.clanTagList);

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../utils/enums/process_type_enum.dart';
 import '../bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 
 abstract class BookmarkedClansEvent extends Equatable {}
@@ -10,21 +11,16 @@ abstract class BookmarkedClansBaseEvent extends BookmarkedClansEvent {
 }
 
 class GetBookmarkedClanDetail extends BookmarkedClansBaseEvent {
-  GetBookmarkedClanDetail({required this.clanTagList});
+  GetBookmarkedClanDetail({
+    required this.process,
+    required this.clanTagList,
+  });
 
+  final ProcessType process;
   final List<String> clanTagList;
 
   @override
-  List<Object?> get props => [clanTagList];
-}
-
-class RefreshBookmarkedClanDetail extends BookmarkedClansBaseEvent {
-  RefreshBookmarkedClanDetail({required this.clanTagList});
-
-  final List<String> clanTagList;
-
-  @override
-  List<Object?> get props => [clanTagList];
+  List<Object?> get props => [process, clanTagList];
 }
 
 class ReorderBookmarkedClanDetail extends BookmarkedClansBaseEvent {

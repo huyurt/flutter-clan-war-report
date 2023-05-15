@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:more_useful_clash_of_clans/utils/enums/process_type_enum.dart';
 
 import '../bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
 
@@ -10,21 +11,16 @@ abstract class BookmarkedPlayersBaseEvent extends BookmarkedPlayersEvent {
 }
 
 class GetBookmarkedPlayerDetail extends BookmarkedPlayersBaseEvent {
-  GetBookmarkedPlayerDetail({required this.playerTagList});
+  GetBookmarkedPlayerDetail({
+    required this.process,
+    required this.playerTagList,
+  });
 
+  final ProcessType process;
   final List<String> playerTagList;
 
   @override
-  List<Object?> get props => [playerTagList];
-}
-
-class RefreshBookmarkedPlayerDetail extends BookmarkedPlayersBaseEvent {
-  RefreshBookmarkedPlayerDetail({required this.playerTagList});
-
-  final List<String> playerTagList;
-
-  @override
-  List<Object?> get props => [playerTagList];
+  List<Object?> get props => [process, playerTagList];
 }
 
 class ReorderBookmarkedPlayerDetail extends BookmarkedPlayersBaseEvent {

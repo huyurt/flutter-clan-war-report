@@ -1,9 +1,17 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_player_tags/bookmarked_player_tags_repository.dart';
 import '../../../repositories/bookmarked_players/bookmarked_players_repository.dart';
+import '../../../utils/enums/process_type_enum.dart';
 import 'bookmarked_players_event.dart';
 import 'bookmarked_players_state.dart';
+
+EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
+  return (events, mapper) =>
+      droppable<Event>().call(events.throttle(duration), mapper);
+}
 
 class BookmarkedPlayersBloc
     extends Bloc<BookmarkedPlayersEvent, BookmarkedPlayersState> {
@@ -11,13 +19,25 @@ class BookmarkedPlayersBloc
     required this.bookmarkedPlayersRepository,
     required this.bookmarkedPlayerTagsRepository,
   }) : super(const BookmarkedPlayersState.init()) {
-    on<GetBookmarkedPlayerDetail>(_onGetBookmarkedPlayers);
-    on<RefreshBookmarkedPlayerDetail>(_onRefreshBookmarkedPlayers);
+    on<GetBookmarkedPlayerDetail>(_emitter,
+        transformer: throttleDroppable(const Duration(milliseconds: 0)));
     on<ReorderBookmarkedPlayerDetail>(_onReorderBookmarkedClans);
   }
 
   final BookmarkedPlayersRepository bookmarkedPlayersRepository;
   final BookmarkedPlayerTagsRepository bookmarkedPlayerTagsRepository;
+
+  Future<void> _emitter(
+    GetBookmarkedPlayerDetail event,
+    Emitter<BookmarkedPlayersState> emit,
+  ) async {
+    switch (event.process) {
+      case ProcessType.list:
+        return _onGetBookmarkedPlayers(event, emit);
+      case ProcessType.refresh:
+        return _onRefreshBookmarkedPlayers(event, emit);
+    }
+  }
 
   Future<void> _onGetBookmarkedPlayers(
     GetBookmarkedPlayerDetail event,
@@ -52,7 +72,7 @@ class BookmarkedPlayersBloc
   }
 
   Future<void> _onRefreshBookmarkedPlayers(
-    RefreshBookmarkedPlayerDetail event,
+    GetBookmarkedPlayerDetail event,
     Emitter<BookmarkedPlayersState> emit,
   ) async {
     bookmarkedPlayersRepository.cleanRemovedPlayerTags(event.playerTagList);

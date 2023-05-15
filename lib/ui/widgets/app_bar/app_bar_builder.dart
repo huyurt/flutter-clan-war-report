@@ -11,6 +11,7 @@ import '../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubi
 import '../../../bloc/widgets/bookmarked_players/bookmarked_players_bloc.dart';
 import '../../../bloc/widgets/bookmarked_players/bookmarked_players_event.dart';
 import '../../../utils/constants/locale_key.dart';
+import '../../../utils/enums/process_type_enum.dart';
 import '../../../utils/enums/screen_enum.dart';
 import 'app_bar_gone.dart';
 import 'app_bar_widget.dart';
@@ -30,7 +31,8 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
             icon: const Icon(Ionicons.reload),
             onPressed: () {
               bookmarkedClansCurrentWarBloc.add(
-                RefreshBookmarkedClansCurrentWar(
+                GetBookmarkedClansCurrentWar(
+                  process: ProcessType.refresh,
                   clanTagList:
                       context.read<BookmarkedClanTagsCubit>().state.clanTags,
                 ),
@@ -47,7 +49,8 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
             icon: const Icon(Ionicons.reload),
             onPressed: () {
               bookmarkedClansBloc.add(
-                RefreshBookmarkedClanDetail(
+                GetBookmarkedClanDetail(
+                  process: ProcessType.refresh,
                   clanTagList:
                       context.read<BookmarkedClanTagsCubit>().state.clanTags,
                 ),
@@ -64,7 +67,8 @@ PreferredSizeWidget appBarBuilder(BuildContext context, ScreenEnum screenType) {
             icon: const Icon(Ionicons.reload),
             onPressed: () {
               bookmarkedPlayersBloc.add(
-                RefreshBookmarkedPlayerDetail(
+                GetBookmarkedPlayerDetail(
+                  process: ProcessType.refresh,
                   playerTagList: context
                       .read<BookmarkedPlayerTagsCubit>()
                       .state

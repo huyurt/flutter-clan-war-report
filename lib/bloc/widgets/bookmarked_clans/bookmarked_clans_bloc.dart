@@ -1,9 +1,17 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
 import '../../../repositories/bookmarked_clans/bookmarked_clans_repository.dart';
+import '../../../utils/enums/process_type_enum.dart';
 import 'bookmarked_clans_event.dart';
 import 'bookmarked_clans_state.dart';
+
+EventTransformer<Event> throttleDroppable<Event>(Duration duration) {
+  return (events, mapper) =>
+      droppable<Event>().call(events.throttle(duration), mapper);
+}
 
 class BookmarkedClansBloc
     extends Bloc<BookmarkedClansEvent, BookmarkedClansState> {
@@ -11,13 +19,25 @@ class BookmarkedClansBloc
     required this.bookmarkedClansRepository,
     required this.bookmarkedClanTagsRepository,
   }) : super(const BookmarkedClansState.init()) {
-    on<GetBookmarkedClanDetail>(_onGetBookmarkedClans);
-    on<RefreshBookmarkedClanDetail>(_onRefreshBookmarkedClans);
+    on<GetBookmarkedClanDetail>(_emitter,
+        transformer: throttleDroppable(const Duration(milliseconds: 0)));
     on<ReorderBookmarkedClanDetail>(_onReorderBookmarkedClans);
   }
 
   final BookmarkedClansRepository bookmarkedClansRepository;
   final BookmarkedClanTagsRepository bookmarkedClanTagsRepository;
+
+  Future<void> _emitter(
+    GetBookmarkedClanDetail event,
+    Emitter<BookmarkedClansState> emit,
+  ) async {
+    switch (event.process) {
+      case ProcessType.list:
+        return _onGetBookmarkedClans(event, emit);
+      case ProcessType.refresh:
+        return _onRefreshBookmarkedClans(event, emit);
+    }
+  }
 
   Future<void> _onGetBookmarkedClans(
     GetBookmarkedClanDetail event,
@@ -51,7 +71,7 @@ class BookmarkedClansBloc
   }
 
   Future<void> _onRefreshBookmarkedClans(
-    RefreshBookmarkedClanDetail event,
+    GetBookmarkedClanDetail event,
     Emitter<BookmarkedClansState> emit,
   ) async {
     bookmarkedClansRepository.cleanRemovedClanTags(event.clanTagList);

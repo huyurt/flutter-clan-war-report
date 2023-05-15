@@ -12,6 +12,7 @@ import '../../../bloc/widgets/bookmarked_clans/bookmarked_clans_state.dart';
 import '../../../utils/constants/app_constants.dart';
 import '../../../utils/constants/locale_key.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
+import '../../../utils/enums/process_type_enum.dart';
 import '../../widgets/bottom_progression_indicator.dart';
 
 class ClansScreen extends StatefulWidget {
@@ -36,6 +37,7 @@ class _ClansScreenState extends State<ClansScreen> {
   void didChangeDependencies() {
     _bookmarkedClansBloc.add(
       GetBookmarkedClanDetail(
+        process: ProcessType.list,
         clanTagList: context.watch<BookmarkedClanTagsCubit>().state.clanTags,
       ),
     );
@@ -44,7 +46,8 @@ class _ClansScreenState extends State<ClansScreen> {
 
   Future<void> _refreshList() async {
     _bookmarkedClansBloc.add(
-      RefreshBookmarkedClanDetail(
+      GetBookmarkedClanDetail(
+        process: ProcessType.refresh,
         clanTagList: context.watch<BookmarkedClanTagsCubit>().state.clanTags,
       ),
     );

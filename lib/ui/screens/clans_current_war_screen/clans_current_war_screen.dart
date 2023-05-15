@@ -14,6 +14,7 @@ import '../../../bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_curr
 import '../../../models/api/response/clan_war_response_model.dart';
 import '../../../utils/constants/app_constants.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
+import '../../../utils/enums/process_type_enum.dart';
 import '../../../utils/enums/war_state_enum.dart';
 import '../../widgets/countdown_timer/countdown_timer_widget.dart';
 import '../../widgets/bottom_progression_indicator.dart';
@@ -44,6 +45,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
   void didChangeDependencies() {
     _bookmarkedClansCurrentWarBloc.add(
       GetBookmarkedClansCurrentWar(
+        process: ProcessType.list,
         clanTagList: context.watch<BookmarkedClanTagsCubit>().state.clanTags,
       ),
     );
@@ -52,7 +54,8 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
 
   Future<void> _refreshList() async {
     _bookmarkedClansCurrentWarBloc.add(
-      RefreshBookmarkedClansCurrentWar(
+      GetBookmarkedClansCurrentWar(
+        process: ProcessType.refresh,
         clanTagList: context.read<BookmarkedClanTagsCubit>().state.clanTags,
       ),
     );
