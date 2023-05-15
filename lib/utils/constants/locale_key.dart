@@ -174,4 +174,5 @@ class LocaleKey {
   static const noBookmarkedClansMessage = 'No bookmarked clans_message';
   static const noBookmarkedPlayers = 'No bookmarked players';
   static const noBookmarkedPlayersMessage = 'No bookmarked players_message';
+  static const any = 'Any';
 }

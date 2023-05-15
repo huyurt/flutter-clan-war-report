@@ -11,8 +11,10 @@ import '../../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit
 import '../../../../bloc/widgets/search_clan/search_clan_bloc.dart';
 import '../../../../bloc/widgets/search_clan/search_clan_event.dart';
 import '../../../../bloc/widgets/search_clan/search_clan_state.dart';
+import '../../../../models/api/response/location_response_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../models/api/request/search_clans_request_model.dart';
+import '../../../../utils/helpers/location_helper.dart';
 import '../../../widgets/bottom_loader.dart';
 import 'clan_detail_screen.dart';
 
@@ -26,10 +28,15 @@ class SearchClanScreen extends StatefulWidget {
 class _SearchClanScreenState extends State<SearchClanScreen> {
   late SearchClanBloc _searchClanBloc;
 
+  final locations = LocationHelper.getAll(true);
+
   final _listController = ScrollController();
   String? _after = '';
 
   final TextEditingController _clanFilterController = TextEditingController();
+  final TextEditingController _locationFilterController =
+      TextEditingController();
+  LocationItem? _location;
   RangeValues _members = const RangeValues(
       AppConstants.minMembersFilter, AppConstants.maxMembersFilter);
   double _minClanLevel = AppConstants.minClanLevelFilter;
@@ -49,11 +56,13 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
         _performSearch(false);
       }
     });
+    _location = locations.first;
   }
 
   @override
   void dispose() {
     _clanFilterController.dispose();
+    _locationFilterController.dispose();
     _listController
       ..removeListener(_onScroll)
       ..dispose();
@@ -71,6 +80,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
         NextPageFetched(
           searchTerm: SearchClansRequestModel(
             clanName: _clanFilterController.text,
+            locationId: _location?.id,
             minMembers: _members.start.round(),
             maxMembers: _members.end.round(),
             minClanLevel: _minClanLevel.round(),
@@ -95,6 +105,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
           FilterChanged(
             searchTerm: SearchClansRequestModel(
               clanName: _clanFilterController.text,
+              locationId: _location?.id,
               minMembers: _members.start.round(),
               maxMembers: _members.end.round(),
               minClanLevel: _minClanLevel.round(),
@@ -108,6 +119,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
         TextChanged(
           searchTerm: SearchClansRequestModel(
             clanName: _clanFilterController.text,
+            locationId: _location?.id,
             minMembers: _members.start.round(),
             maxMembers: _members.end.round(),
             minClanLevel: _minClanLevel.round(),
@@ -123,6 +135,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   //    FilterChanged(
   //      searchTerm: SearchClansRequestModel(
   //        clanName: '',
+  //        locationId: _location?.id,
   //        minMembers: _members.start.round(),
   //        maxMembers: _members.end.round(),
   //        minClanLevel: _minClanLevel.round(),
@@ -130,6 +143,82 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   //    ),
   //  );
   //}
+
+  void showLocationFilter(BuildContext aContext, StateSetter setState) {
+    showModalBottomSheet(
+      context: aContext,
+      backgroundColor: aContext.primaryColor,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return FractionallySizedBox(
+          heightFactor: 0.5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                child: Text(
+                  tr(LocaleKey.location),
+                  style: const TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: locations.map(
+                    (location) {
+                      return Card(
+                        margin: EdgeInsets.zero,
+                        elevation: 0.0,
+                        color: _location?.id == location.id
+                            ? Colors.black12
+                            : Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (_location?.id != location.id) {
+                                _filterChanged = true;
+                              }
+                              _location = location;
+                            });
+                            Navigator.pop(aContext);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 18.0, horizontal: 12.0),
+                            child: Row(
+                              children: [
+                                location.isCountry
+                                    ? CountryFlag.fromCountryCode(
+                                        location.countryCode ?? '',
+                                        height: 16.0,
+                                        width: 24.0,
+                                        borderRadius: 4.0,
+                                      )
+                                    : const Icon(
+                                        Icons.public,
+                                        size: 24.0,
+                                        color: Colors.blue,
+                                      ),
+                                Text(location.name).paddingLeft(8.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   showFilter(BuildContext aContext) {
     showModalBottomSheet(
@@ -149,6 +238,45 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 10, top: 15),
+                    child: Text(tr(LocaleKey.location)),
+                  ),
+                  Card(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 8.0),
+                    elevation: 0.0,
+                    color: Colors.black12,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        showLocationFilter(context, setState);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 18.0, horizontal: 18.0),
+                        child: Row(
+                          children: [
+                            _location?.isCountry ?? false
+                                ? CountryFlag.fromCountryCode(
+                                    _location?.countryCode ?? '',
+                                    height: 16.0,
+                                    width: 24.0,
+                                    borderRadius: 4.0,
+                                  )
+                                : const Icon(
+                                    Icons.public,
+                                    size: 24.0,
+                                    color: Colors.blue,
+                                  ),
+                            Text(_location?.name ?? '').paddingLeft(8.0),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     padding: const EdgeInsets.only(left: 10, top: 15),
                     child: Row(

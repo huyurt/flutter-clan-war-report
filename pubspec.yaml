@@ -50,6 +50,7 @@ dependencies:
   share_plus: ^7.0.0
   stream_transform: ^2.1.0
   url_launcher: ^6.1.11
+  uuid: ^3.0.7
 
   # STATE MANAGEMENT
   bloc: ^8.1.1
@@ -85,6 +86,7 @@ dependencies:
   carousel_slider: ^4.2.1
   clippy_flutter: ^2.0.0-nullsafety.1
   country_flags: ^2.0.0
+  drop_down_list: ^0.0.5
   dots_indicator: ^3.0.0
   fl_chart: ^0.62.0
   flutter_colorpicker: ^1.0.3

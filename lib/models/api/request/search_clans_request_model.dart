@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class SearchClansRequestModel extends Equatable {
   const SearchClansRequestModel({
     required this.clanName,
+    this.locationId,
     this.minMembers,
     this.maxMembers,
     this.minClanLevel,
@@ -11,6 +12,7 @@ class SearchClansRequestModel extends Equatable {
   });
 
   final String clanName;
+  final int? locationId;
   final int? minMembers;
   final int? maxMembers;
   final int? minClanLevel;
@@ -19,6 +21,7 @@ class SearchClansRequestModel extends Equatable {
 
   SearchClansRequestModel copyWith({
     String? clanName,
+    int? locationId,
     int? minMembers,
     int? maxMembers,
     int? minClanLevel,
@@ -27,6 +30,7 @@ class SearchClansRequestModel extends Equatable {
   }) =>
       SearchClansRequestModel(
         clanName: clanName ?? this.clanName,
+        locationId: locationId ?? this.locationId,
         minMembers: minMembers ?? this.minMembers,
         maxMembers: maxMembers ?? this.maxMembers,
         minClanLevel: minClanLevel ?? this.minClanLevel,

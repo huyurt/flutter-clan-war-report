@@ -17,6 +17,9 @@ class CocApiClans {
       'limit': AppConstants.pageSize,
       'name': input.clanName,
     };
+    if (input.locationId! > -1) {
+      parameters['locationId'] = input.locationId;
+    }
     if (input.minMembers! > 1) {
       parameters['minMembers'] = input.minMembers;
     }
