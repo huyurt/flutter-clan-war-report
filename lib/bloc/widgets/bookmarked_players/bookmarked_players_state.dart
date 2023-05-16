@@ -4,10 +4,12 @@ import '../../../models/api/response/player_detail_response_model.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
 
 class BookmarkedPlayersState extends Equatable {
+  final String? errorMessage;
   final BlocStatusEnum status;
   final List<PlayerDetailResponseModel?> items;
 
   const BookmarkedPlayersState._({
+    this.errorMessage,
     this.status = BlocStatusEnum.loading,
     this.items = const <PlayerDetailResponseModel>[],
   });
@@ -22,8 +24,9 @@ class BookmarkedPlayersState extends Equatable {
     List<PlayerDetailResponseModel?> items,
   ) : this._(status: BlocStatusEnum.success, items: items);
 
-  const BookmarkedPlayersState.failure()
-      : this._(status: BlocStatusEnum.failure);
+  const BookmarkedPlayersState.failure(
+    String? errorMessage,
+  ) : this._(errorMessage: errorMessage, status: BlocStatusEnum.failure);
 
   @override
   List<Object> get props => [status, items];

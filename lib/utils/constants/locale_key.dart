@@ -175,4 +175,6 @@ class LocaleKey {
   static const noBookmarkedPlayers = 'No bookmarked players';
   static const noBookmarkedPlayersMessage = 'No bookmarked players_message';
   static const any = 'Any';
+  static const cocApiErrorMessage = 'coc_api_error_message';
+  static const viewWar = 'View War';
 }

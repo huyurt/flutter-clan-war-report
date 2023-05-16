@@ -205,7 +205,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
             }
 
             return SizedBox(
-              height: 150,
+              height: 160,
               child: Card(
                 margin: EdgeInsetsDirectional.zero,
                 elevation: 0.0,

@@ -1,5 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
@@ -57,8 +60,12 @@ class BookmarkedClansBloc
     for (final clanTag in newClanTags) {
       try {
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
-      } catch (e) {
-        emit(const BookmarkedClansState.failure());
+      } catch (error) {
+        if (error is DioError) {
+          emit(BookmarkedClansState.failure(error.message));
+        } else {
+          emit(BookmarkedClansState.failure(tr(LocaleKey.cocApiErrorMessage)));
+        }
       }
       emit(BookmarkedClansState.loading(
         bookmarkedClansRepository.getClanDetails(),
@@ -79,8 +86,12 @@ class BookmarkedClansBloc
     for (final clanTag in event.clanTagList) {
       try {
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
-      } catch (e) {
-        emit(const BookmarkedClansState.failure());
+      } catch (error) {
+        if (error is DioError) {
+          emit(BookmarkedClansState.failure(error.message));
+        } else {
+          emit(BookmarkedClansState.failure(tr(LocaleKey.cocApiErrorMessage)));
+        }
       }
       emit(BookmarkedClansState.loading(
         bookmarkedClansRepository.getClanDetails(),

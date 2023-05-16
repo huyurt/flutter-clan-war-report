@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_clans_current_war/bookmarked_clans_current_war_repository.dart';
+import '../../../utils/constants/locale_key.dart';
 import '../../../utils/enums/process_type_enum.dart';
 import 'bookmarked_clans_current_war_event.dart';
 import 'bookmarked_clans_current_war_state.dart';
@@ -53,8 +56,13 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
     for (final clanTag in newClanTags) {
       try {
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
-      } catch (e) {
-        emit(const BookmarkedClansCurrentWarState.failure());
+      } catch (error) {
+        if (error is DioError) {
+          emit(BookmarkedClansCurrentWarState.failure(error.message));
+        } else {
+          emit(BookmarkedClansCurrentWarState.failure(
+              tr(LocaleKey.cocApiErrorMessage)));
+        }
       }
       emit(BookmarkedClansCurrentWarState.loading(
         bookmarkedClansCurrentWarRepository.getClansCurrentWar(),
@@ -75,8 +83,13 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
     for (final clanTag in event.clanTagList) {
       try {
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
-      } catch (e) {
-        emit(const BookmarkedClansCurrentWarState.failure());
+      } catch (error) {
+        if (error is DioError) {
+          emit(BookmarkedClansCurrentWarState.failure(error.message));
+        } else {
+          emit(BookmarkedClansCurrentWarState.failure(
+              tr(LocaleKey.cocApiErrorMessage)));
+        }
       }
       emit(BookmarkedClansCurrentWarState.loading(
         bookmarkedClansCurrentWarRepository.getClansCurrentWar(),

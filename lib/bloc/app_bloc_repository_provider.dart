@@ -14,6 +14,8 @@ import '../repositories/search_clan/search_clan_cache.dart';
 import '../repositories/search_clan/search_clan_repository.dart';
 import '../repositories/search_player/search_player_cache.dart';
 import '../repositories/search_player/search_player_repository.dart';
+import '../repositories/war_log/war_log_cache.dart';
+import '../repositories/war_log/war_log_repository.dart';
 
 getBlocRepositoryProviders() {
   return [
@@ -50,6 +52,11 @@ getBlocRepositoryProviders() {
     RepositoryProvider(
       create: (context) => BookmarkedClansCurrentWarRepository(
         cache: BookmarkedClansCurrentWarCache(),
+      ),
+    ),
+    RepositoryProvider(
+      create: (context) => WarLogRepository(
+        cache: WarLogCache(),
       ),
     ),
   ];

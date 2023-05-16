@@ -190,27 +190,28 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
               widget.warType == WarTypeEnum.leagueWar
           ? BlocBuilder<ClanDetailBloc, ClanDetailState>(
               builder: (context, state) {
-              switch (state.status) {
-                case BlocStatusEnum.success:
-                  final clanDetail = state.item;
-                  return FloatingActionButton.extended(
-                    label: Text(tr(LocaleKey.viewLeague)),
-                    onPressed: () {
-                      LeagueWarDetailScreen(
-                        clanTag: widget.clanTag,
-                        warType: widget.warType,
-                        warStartTime: widget.warStartTime,
-                        clanDetail: clanDetail!,
-                      ).launch(context);
-                    },
-                  );
-                default:
-                  return Visibility(
-                    visible: false,
-                    child: FloatingActionButton(onPressed: () {}),
-                  );
-              }
-            })
+                switch (state.status) {
+                  case BlocStatusEnum.success:
+                    final clanDetail = state.item;
+                    return FloatingActionButton.extended(
+                      label: Text(tr(LocaleKey.viewLeague)),
+                      onPressed: () {
+                        LeagueWarDetailScreen(
+                          clanTag: widget.clanTag,
+                          warType: widget.warType,
+                          warStartTime: widget.warStartTime,
+                          clanDetail: clanDetail!,
+                        ).launch(context);
+                      },
+                    );
+                  default:
+                    return Visibility(
+                      visible: false,
+                      child: FloatingActionButton(onPressed: () {}),
+                    );
+                }
+              },
+            )
           : null,
     );
   }

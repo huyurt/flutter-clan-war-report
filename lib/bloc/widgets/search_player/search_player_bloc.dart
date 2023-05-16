@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../models/api/response/player_detail_response_model.dart';
 import '../../../repositories/search_player/search_player_repository.dart';
+import '../../../utils/constants/locale_key.dart';
 import 'search_player_event.dart';
 import 'search_player_state.dart';
 
@@ -63,9 +65,11 @@ class SearchPlayerBloc extends Bloc<SearchPlayerEvent, SearchPlayerState> {
         if (error.response?.statusCode == HttpStatus.notFound) {
           return emit(
               const SearchPlayerState.success(<PlayerDetailResponseModel>[]));
+        } else {
+          emit(SearchPlayerState.failure(error.message));
         }
       }
-      emit(const SearchPlayerState.failure());
+      emit(SearchPlayerState.failure(tr(LocaleKey.cocApiErrorMessage)));
     }
   }
 }

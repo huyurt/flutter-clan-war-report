@@ -12,6 +12,7 @@ import 'package:more_useful_clash_of_clans/bloc/widgets/clan_league_wars/clan_le
 import 'package:more_useful_clash_of_clans/bloc/widgets/player_detail/player_detail_bloc.dart';
 import 'package:more_useful_clash_of_clans/bloc/widgets/search_clan/search_clan_bloc.dart';
 import 'package:more_useful_clash_of_clans/bloc/widgets/search_player/search_player_bloc.dart';
+import 'package:more_useful_clash_of_clans/bloc/widgets/war_log/war_log_bloc.dart';
 
 import '../repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
 import '../repositories/bookmarked_clans/bookmarked_clans_repository.dart';
@@ -20,6 +21,7 @@ import '../repositories/bookmarked_player_tags/bookmarked_player_tags_repository
 import '../repositories/bookmarked_players/bookmarked_players_repository.dart';
 import '../repositories/search_clan/search_clan_repository.dart';
 import '../repositories/search_player/search_player_repository.dart';
+import '../repositories/war_log/war_log_repository.dart';
 import 'locale/locale_cubit.dart';
 
 getBlocProviders() {
@@ -87,6 +89,11 @@ getBlocProviders() {
     ),
     BlocProvider(
       create: (context) => ClanLeagueWarsBloc(),
+    ),
+    BlocProvider(
+      create: (context) => WarLogBloc(
+        warLogRepository: context.read<WarLogRepository>(),
+      ),
     ),
   ];
 }

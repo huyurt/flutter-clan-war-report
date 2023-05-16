@@ -5,12 +5,14 @@ import '../../../models/coc/clans_current_war_state_model.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
 
 class ClanLeagueWarsState extends Equatable {
+  final String? errorMessage;
   final BlocStatusEnum status;
   final int totalRoundCount;
   final ClanLeagueGroupResponseModel? clanLeague;
   final List<ClansCurrentWarStateModel> clanLeagueWars;
 
   const ClanLeagueWarsState._({
+    this.errorMessage,
     this.status = BlocStatusEnum.loading,
     this.totalRoundCount = 0,
     this.clanLeague,
@@ -31,7 +33,9 @@ class ClanLeagueWarsState extends Equatable {
             clanLeague: clanLeague,
             clanLeagueWars: clanLeagueWars);
 
-  const ClanLeagueWarsState.failure() : this._(status: BlocStatusEnum.failure);
+  const ClanLeagueWarsState.failure(
+    String? errorMessage,
+  ) : this._(errorMessage: errorMessage, status: BlocStatusEnum.failure);
 
   @override
   List<Object?> get props =>

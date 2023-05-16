@@ -1,10 +1,13 @@
 import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../models/coc/clans_current_war_state_model.dart';
 import '../../../services/coc_api/coc_api_clans.dart';
+import '../../../utils/constants/locale_key.dart';
 import 'clan_league_wars_event.dart';
 import 'clan_league_wars_state.dart';
 
@@ -20,7 +23,8 @@ class ClanLeagueWarsBloc
     Emitter<ClanLeagueWarsState> emit,
   ) async {
     if (event.clanTag.isEmptyOrNull) {
-      return emit(const ClanLeagueWarsState.failure());
+      return emit(
+          ClanLeagueWarsState.failure(tr(LocaleKey.cocApiErrorMessage)));
     }
 
     emit(const ClanLeagueWarsState.loading());
@@ -49,7 +53,8 @@ class ClanLeagueWarsBloc
       }
 
       if (clanLeagueWars.isEmpty) {
-        return emit(const ClanLeagueWarsState.failure());
+        return emit(
+            ClanLeagueWarsState.failure(tr(LocaleKey.cocApiErrorMessage)));
       }
 
       return emit(ClanLeagueWarsState.success(
@@ -58,7 +63,11 @@ class ClanLeagueWarsBloc
         clanLeagueWars,
       ));
     } catch (error) {
-      emit(const ClanLeagueWarsState.failure());
+      if (error is DioError) {
+        emit(ClanLeagueWarsState.failure(error.message));
+      } else {
+        emit(ClanLeagueWarsState.failure(tr(LocaleKey.cocApiErrorMessage)));
+      }
     }
   }
 }

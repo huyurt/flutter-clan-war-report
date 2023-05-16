@@ -70,7 +70,25 @@ class _ClansScreenState extends State<ClansScreen> {
         builder: (context, state) {
           switch (state.status) {
             case BlocStatusEnum.failure:
-              return Container();
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      AkarIcons.face_sad,
+                      size: 56.0,
+                      color: Colors.amber,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(
+                        state.errorMessage ?? tr(LocaleKey.cocApiErrorMessage),
+                        style: const TextStyle(fontSize: 18.0),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             case BlocStatusEnum.loading:
             case BlocStatusEnum.success:
               return Column(

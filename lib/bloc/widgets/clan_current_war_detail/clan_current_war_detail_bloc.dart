@@ -1,10 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../models/coc/clans_current_war_state_model.dart';
 import '../../../services/coc_api/coc_api_clans.dart';
+import '../../../utils/constants/locale_key.dart';
 import 'clan_current_war_detail_event.dart';
 import 'clan_current_war_detail_state.dart';
 
@@ -25,7 +28,8 @@ class ClanCurrentWarDetailBloc
     Emitter<ClanCurrentWarDetailState> emit,
   ) async {
     if (event.clanTag.isEmptyOrNull) {
-      return emit(const ClanCurrentWarDetailState.failure());
+      return emit(
+          ClanCurrentWarDetailState.failure(tr(LocaleKey.cocApiErrorMessage)));
     }
 
     emit(const ClanCurrentWarDetailState.loading());
@@ -42,14 +46,20 @@ class ClanCurrentWarDetailBloc
       } catch (e) {}
 
       if (clanCurrentWar == null) {
-        emit(const ClanCurrentWarDetailState.failure());
+        emit(ClanCurrentWarDetailState.failure(
+            tr(LocaleKey.cocApiErrorMessage)));
       } else {
         emit(ClanCurrentWarDetailState.success(
           clanCurrentWar,
         ));
       }
     } catch (error) {
-      emit(const ClanCurrentWarDetailState.failure());
+      if (error is DioError) {
+        emit(ClanCurrentWarDetailState.failure(error.message));
+      } else {
+        emit(ClanCurrentWarDetailState.failure(
+            tr(LocaleKey.cocApiErrorMessage)));
+      }
     }
   }
 }

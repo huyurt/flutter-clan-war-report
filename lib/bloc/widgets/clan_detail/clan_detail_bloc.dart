@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../services/coc_api/coc_api_clans.dart';
+import '../../../utils/constants/locale_key.dart';
 import 'clan_detail_event.dart';
 import 'clan_detail_state.dart';
 
@@ -32,7 +35,7 @@ class ClanDetailBloc extends Bloc<ClanDetailEvent, ClanDetailState> {
     Emitter<ClanDetailState> emit,
   ) async {
     if (event.clanTag.isEmptyOrNull) {
-      return emit(const ClanDetailState.failure());
+      return emit(ClanDetailState.failure(tr(LocaleKey.cocApiErrorMessage)));
     }
 
     emit(const ClanDetailState.loading());
@@ -41,7 +44,11 @@ class ClanDetailBloc extends Bloc<ClanDetailEvent, ClanDetailState> {
       final result = await CocApiClans.getClanDetail(event.clanTag!);
       emit(ClanDetailState.success(result));
     } catch (error) {
-      emit(const ClanDetailState.failure());
+      if (error is DioError) {
+        emit(ClanDetailState.failure(error.message));
+      } else {
+        emit(ClanDetailState.failure(tr(LocaleKey.cocApiErrorMessage)));
+      }
     }
   }
 }

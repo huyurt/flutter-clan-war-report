@@ -40,6 +40,10 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
     super.initState();
     _bookmarkedPlayerTagsCubit = context.read<BookmarkedPlayerTagsCubit>();
     _playerDetailBloc = context.read<PlayerDetailBloc>();
+    _getDetails();
+  }
+
+  _getDetails() {
     _playerDetailBloc.add(
       GetPlayerDetail(
         playerTag: widget.playerTag,
@@ -80,8 +84,8 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                   child: Text(tr(LocaleKey.copyPlayerTag)),
                 ),
                 PopupMenuItem(
-                  value: LocaleKey.shareLink,
-                  child: Text(tr(LocaleKey.shareLink)),
+                  value: LocaleKey.refresh,
+                  child: Text(tr(LocaleKey.refresh)),
                 ),
               ];
             },
@@ -104,7 +108,8 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                     ClipboardData(text: widget.playerTag),
                   );
                   break;
-                case LocaleKey.shareLink:
+                case LocaleKey.refresh:
+                  _getDetails();
                   break;
               }
             },

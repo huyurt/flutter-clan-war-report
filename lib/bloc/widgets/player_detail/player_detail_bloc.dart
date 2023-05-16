@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../services/coc_api/coc_api_players.dart';
+import '../../../utils/constants/locale_key.dart';
 import 'player_detail_event.dart';
 import 'player_detail_state.dart';
 
@@ -32,7 +35,7 @@ class PlayerDetailBloc extends Bloc<PlayerDetailEvent, PlayerDetailState> {
     Emitter<PlayerDetailState> emit,
   ) async {
     if (event.playerTag.isEmptyOrNull) {
-      return emit(const PlayerDetailState.failure());
+      return emit(PlayerDetailState.failure(tr(LocaleKey.cocApiErrorMessage)));
     }
 
     emit(const PlayerDetailState.loading());
@@ -41,7 +44,11 @@ class PlayerDetailBloc extends Bloc<PlayerDetailEvent, PlayerDetailState> {
       final result = await CocApiPlayers.getPlayerDetail(event.playerTag!);
       emit(PlayerDetailState.success(result));
     } catch (error) {
-      emit(const PlayerDetailState.failure());
+      if (error is DioError) {
+        emit(PlayerDetailState.failure(error.message));
+      } else {
+        emit(PlayerDetailState.failure(tr(LocaleKey.cocApiErrorMessage)));
+      }
     }
   }
 }

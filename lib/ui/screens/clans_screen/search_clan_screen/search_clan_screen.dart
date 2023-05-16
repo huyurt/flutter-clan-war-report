@@ -151,13 +151,13 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return FractionallySizedBox(
-          heightFactor: 0.5,
+          heightFactor: 0.7,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 12.0),
                 child: Text(
                   tr(LocaleKey.location),
                   style: const TextStyle(fontSize: 18.0),
@@ -198,11 +198,13 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                         width: 24.0,
                                         borderRadius: 4.0,
                                       )
-                                    : const Icon(
-                                        Icons.public,
-                                        size: 24.0,
-                                        color: Colors.blue,
-                                      ),
+                                    : (location.id == -1
+                                        ? const SizedBox(width: 24.0)
+                                        : const Icon(
+                                            Icons.public,
+                                            size: 24.0,
+                                            color: Colors.blue,
+                                          )),
                                 Text(location.name).paddingLeft(8.0),
                               ],
                             ),
@@ -266,11 +268,13 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                     width: 24.0,
                                     borderRadius: 4.0,
                                   )
-                                : const Icon(
-                                    Icons.public,
-                                    size: 24.0,
-                                    color: Colors.blue,
-                                  ),
+                                : (_location?.id == -1
+                                    ? Container()
+                                    : const Icon(
+                                        Icons.public,
+                                        size: 24.0,
+                                        color: Colors.blue,
+                                      )),
                             Text(_location?.name ?? '').paddingLeft(8.0),
                           ],
                         ),

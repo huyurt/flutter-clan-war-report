@@ -6,12 +6,12 @@ import '../../models/api/response/location_response_model.dart';
 
 class LocationHelper {
   static final locations = <LocationItem>[
-    LocationItem(id: 32000000, name: 'Europe', isCountry: false),
-    LocationItem(id: 32000001, name: 'North America', isCountry: false),
-    LocationItem(id: 32000002, name: 'South America', isCountry: false),
-    LocationItem(id: 32000003, name: 'Asia', isCountry: false),
-    LocationItem(id: 32000004, name: 'Australia', isCountry: false),
-    LocationItem(id: 32000005, name: 'Africa', isCountry: false),
+    //LocationItem(id: 32000000, name: 'Europe', isCountry: false),
+    //LocationItem(id: 32000001, name: 'North America', isCountry: false),
+    //LocationItem(id: 32000002, name: 'South America', isCountry: false),
+    //LocationItem(id: 32000003, name: 'Asia', isCountry: false),
+    //LocationItem(id: 32000004, name: 'Australia', isCountry: false),
+    //LocationItem(id: 32000005, name: 'Africa', isCountry: false),
     LocationItem(id: 32000006, name: 'International', isCountry: false),
     LocationItem(id: 32000007, name: 'Afghanistan', isCountry: true, countryCode: 'AF'),
     LocationItem(id: 32000008, name: 'Åland Islands', isCountry: true, countryCode: 'AX'),
@@ -267,24 +267,15 @@ class LocationHelper {
     LocationItem(id: 32000258, name: 'Yemen', isCountry: true, countryCode: 'YE'),
     LocationItem(id: 32000259, name: 'Zambia', isCountry: true, countryCode: 'ZM'),
     LocationItem(id: 32000260, name: 'Zimbabwe', isCountry: true, countryCode: 'ZW'),
-    LocationItem(id: 32000261, name: '', isCountry: false),
-    LocationItem(id: 32000262, name: '', isCountry: false),
-    LocationItem(id: 32000263, name: '', isCountry: false),
-    LocationItem(id: 32000264, name: '', isCountry: false),
-    LocationItem(id: 32000265, name: '', isCountry: false),
+    //LocationItem(id: 32000261, name: '', isCountry: false),
+    //LocationItem(id: 32000262, name: '', isCountry: false),
+    //LocationItem(id: 32000263, name: '', isCountry: false),
+    //LocationItem(id: 32000264, name: '', isCountry: false),
+    //LocationItem(id: 32000265, name: '', isCountry: false),
   ];
 
   static List<LocationItem> getAll(bool addAny) {
     final list = locations.where((l) => !l.name.isEmptyOrNull).toList();
-    if (addAny) {
-      list.insert(
-          0, LocationItem(id: -1, name: tr(LocaleKey.any), isCountry: false));
-    }
-    return list;
-  }
-
-  static List<LocationItem> getCounties(bool addAny) {
-    final list = locations.where((l) => l.isCountry == true).toList();
     if (addAny) {
       list.insert(
           0, LocationItem(id: -1, name: tr(LocaleKey.any), isCountry: false));

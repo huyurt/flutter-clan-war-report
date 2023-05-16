@@ -1,10 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/search_clan/search_clan_repository.dart';
 import '../../../models/api/request/search_clans_request_model.dart';
+import '../../../utils/constants/locale_key.dart';
 import 'search_clan_event.dart';
 import 'search_clan_state.dart';
 
@@ -83,7 +86,11 @@ class SearchClanBloc extends Bloc<SearchClanEvent, SearchClanState> {
           await searchClanRepository.searchClans(isNextPageRequest, searchTerm);
       emit(SearchClanState.success(result.after, result.items));
     } catch (error) {
-      emit(const SearchClanState.failure());
+      if (error is DioError) {
+        emit(SearchClanState.failure(error.message));
+      } else {
+        emit(SearchClanState.failure(tr(LocaleKey.cocApiErrorMessage)));
+      }
     }
   }
 }

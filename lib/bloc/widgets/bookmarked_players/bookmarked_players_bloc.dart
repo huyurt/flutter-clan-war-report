@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_player_tags/bookmarked_player_tags_repository.dart';
 import '../../../repositories/bookmarked_players/bookmarked_players_repository.dart';
+import '../../../utils/constants/locale_key.dart';
 import '../../../utils/enums/process_type_enum.dart';
 import 'bookmarked_players_event.dart';
 import 'bookmarked_players_state.dart';
@@ -58,8 +61,13 @@ class BookmarkedPlayersBloc
     for (final playerTag in event.playerTagList) {
       try {
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
-      } catch (e) {
-        emit(const BookmarkedPlayersState.failure());
+      } catch (error) {
+        if (error is DioError) {
+          emit(BookmarkedPlayersState.failure(error.message));
+        } else {
+          emit(
+              BookmarkedPlayersState.failure(tr(LocaleKey.cocApiErrorMessage)));
+        }
       }
       emit(BookmarkedPlayersState.loading(
         bookmarkedPlayersRepository.getPlayerDetails(),
@@ -80,8 +88,13 @@ class BookmarkedPlayersBloc
     for (final playerTag in event.playerTagList) {
       try {
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
-      } catch (e) {
-        emit(const BookmarkedPlayersState.failure());
+      } catch (error) {
+        if (error is DioError) {
+          emit(BookmarkedPlayersState.failure(error.message));
+        } else {
+          emit(
+              BookmarkedPlayersState.failure(tr(LocaleKey.cocApiErrorMessage)));
+        }
       }
       emit(BookmarkedPlayersState.loading(
         bookmarkedPlayersRepository.getPlayerDetails(),

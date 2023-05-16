@@ -6,6 +6,7 @@ import '../../models/api/response/clan_league_group_response_model.dart';
 import '../../models/api/response/clan_war_response_model.dart';
 import '../../models/api/response/search_clans_response_model.dart';
 import '../../models/api/request/search_clans_request_model.dart';
+import '../../models/api/response/war_log_response_model.dart';
 import '../../models/coc/clans_current_war_state_model.dart';
 import '../../utils/enums/war_type_enum.dart';
 import 'coc_api_connector.dart';
@@ -86,5 +87,13 @@ class CocApiClans {
       warType: WarTypeEnum.leagueWar,
       warTag: warTag,
     );
+  }
+
+  static Future<WarLogResponseModel> getWarLog(String clanTag) async {
+    final response = await CocApiConnector.dio.get(
+      '/clans/${Uri.encodeComponent(clanTag)}/warlog',
+    );
+    final result = WarLogResponseModel.fromMap(response.data);
+    return result;
   }
 }

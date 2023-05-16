@@ -4,10 +4,12 @@ import '../../../models/coc/clans_current_war_state_model.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
 
 class ClanCurrentWarDetailState extends Equatable {
+  final String? errorMessage;
   final BlocStatusEnum status;
   final ClansCurrentWarStateModel? item;
 
   const ClanCurrentWarDetailState._({
+    this.errorMessage,
     this.status = BlocStatusEnum.loading,
     this.item,
   });
@@ -21,8 +23,9 @@ class ClanCurrentWarDetailState extends Equatable {
     ClansCurrentWarStateModel item,
   ) : this._(status: BlocStatusEnum.success, item: item);
 
-  const ClanCurrentWarDetailState.failure()
-      : this._(status: BlocStatusEnum.failure);
+  const ClanCurrentWarDetailState.failure(
+    String? errorMessage,
+  ) : this._(errorMessage: errorMessage, status: BlocStatusEnum.failure);
 
   @override
   List<Object?> get props => [status, item];
