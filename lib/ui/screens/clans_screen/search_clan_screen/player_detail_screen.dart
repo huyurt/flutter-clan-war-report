@@ -93,6 +93,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
               switch (value) {
                 case LocaleKey.viewClan:
                   ClanDetailScreen(
+                    viewWarButton: true,
                     clanTag: clanTag,
                   ).launch(context);
                   break;

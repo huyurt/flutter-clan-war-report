@@ -25,8 +25,13 @@ import '../../../../utils/enums/bloc_status_enum.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 
 class ClanDetailScreen extends StatefulWidget {
-  const ClanDetailScreen({super.key, required this.clanTag});
+  const ClanDetailScreen({
+    super.key,
+    required this.viewWarButton,
+    required this.clanTag,
+  });
 
+  final bool viewWarButton;
   final String clanTag;
 
   @override
@@ -465,38 +470,40 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton:
-          BlocListener<ClanCurrentWarDetailBloc, ClanCurrentWarDetailState>(
-        listener: (context, state) {
-          if (state.status == BlocStatusEnum.success) {
-            if (state.item?.war.state != WarStateEnum.notInWar.name) {
-              setState(() {
-                _clanCurrentWarDetail = state;
-              });
-            }
-          }
-        },
-        child: Visibility(
-          visible: _clanCurrentWarDetail != null,
-          child: FloatingActionButton.extended(
-            label: Text(tr(LocaleKey.viewWar)),
-            onPressed: () {
-              WarDetailScreen(
-                clanTag: widget.clanTag,
-                warTag: _clanCurrentWarDetail?.item?.warTag ?? '',
-                warType:
-                    _clanCurrentWarDetail?.item?.warType ?? WarTypeEnum.clanWar,
-                warStartTime:
-                    _clanCurrentWarDetail?.item?.war.warStartTime ?? '',
-                clanName: _clanCurrentWarDetail?.item?.war.clan.name ?? '',
-                opponentName:
-                    _clanCurrentWarDetail?.item?.war.opponent.name ?? '',
-                showFloatingButton: true,
-              ).launch(context);
-            },
-          ),
-        ),
-      ),
+      floatingActionButton: widget.viewWarButton
+          ? BlocListener<ClanCurrentWarDetailBloc, ClanCurrentWarDetailState>(
+              listener: (context, state) {
+                if (state.status == BlocStatusEnum.success) {
+                  if (state.item?.war.state != WarStateEnum.notInWar.name) {
+                    setState(() {
+                      _clanCurrentWarDetail = state;
+                    });
+                  }
+                }
+              },
+              child: Visibility(
+                visible: _clanCurrentWarDetail != null,
+                child: FloatingActionButton.extended(
+                  label: Text(tr(LocaleKey.viewWar)),
+                  onPressed: () {
+                    WarDetailScreen(
+                      clanTag: widget.clanTag,
+                      warTag: _clanCurrentWarDetail?.item?.warTag ?? '',
+                      warType: _clanCurrentWarDetail?.item?.warType ??
+                          WarTypeEnum.clanWar,
+                      warStartTime:
+                          _clanCurrentWarDetail?.item?.war.warStartTime ?? '',
+                      clanName:
+                          _clanCurrentWarDetail?.item?.war.clan.name ?? '',
+                      opponentName:
+                          _clanCurrentWarDetail?.item?.war.opponent.name ?? '',
+                      showFloatingButton: true,
+                    ).launch(context);
+                  },
+                ),
+              ),
+            )
+          : null,
     );
   }
 }

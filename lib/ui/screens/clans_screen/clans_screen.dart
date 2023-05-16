@@ -118,6 +118,7 @@ class _ClansScreenState extends State<ClansScreen> {
                             child: InkWell(
                               onTap: () {
                                 ClanDetailScreen(
+                                  viewWarButton: true,
                                   clanTag: clan.tag,
                                 ).launch(context);
                               },

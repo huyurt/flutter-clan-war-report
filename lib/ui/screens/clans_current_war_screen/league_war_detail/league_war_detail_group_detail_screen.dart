@@ -146,6 +146,7 @@ class _LeagueWarDetailGroupDetailScreenState
             child: InkWell(
               onTap: () {
                 ClanDetailScreen(
+                  viewWarButton: false,
                   clanTag: widget.clanTag,
                 ).launch(context);
               },

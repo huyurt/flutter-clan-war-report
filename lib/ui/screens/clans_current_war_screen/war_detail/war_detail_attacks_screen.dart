@@ -133,6 +133,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
             onTap: () {
               if (!clan.tag.isEmptyOrNull) {
                 ClanDetailScreen(
+                  viewWarButton: false,
                   clanTag: clan.tag ?? '',
                 ).launch(context);
               }
@@ -444,8 +445,9 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
             );
           },
         ),
-        if (widget.clanCurrentWar.warType == WarTypeEnum.leagueWar)
-          const SizedBox(height: 72.0),
+        widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
+            ? const SizedBox(height: 72.0)
+            : const SizedBox(height: 24.0),
       ],
     );
   }
