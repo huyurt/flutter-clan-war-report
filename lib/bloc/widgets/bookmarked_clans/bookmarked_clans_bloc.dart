@@ -57,6 +57,10 @@ class BookmarkedClansBloc
       ));
     }
 
+    emit(BookmarkedClansState.loading(
+      bookmarkedClansRepository.getClanDetails(),
+    ));
+
     for (final clanTag in newClanTags) {
       try {
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
@@ -82,6 +86,10 @@ class BookmarkedClansBloc
     Emitter<BookmarkedClansState> emit,
   ) async {
     bookmarkedClansRepository.cleanRemovedClanTags(event.clanTagList);
+
+    emit(BookmarkedClansState.loading(
+      bookmarkedClansRepository.getClanDetails(),
+    ));
 
     for (final clanTag in event.clanTagList) {
       try {

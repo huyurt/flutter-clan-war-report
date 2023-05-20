@@ -53,6 +53,10 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
       ));
     }
 
+    emit(BookmarkedClansCurrentWarState.loading(
+      bookmarkedClansCurrentWarRepository.getClansCurrentWar(),
+    ));
+
     for (final clanTag in newClanTags) {
       try {
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
@@ -79,6 +83,10 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
     Emitter<BookmarkedClansCurrentWarState> emit,
   ) async {
     bookmarkedClansCurrentWarRepository.cleanRemovedClanTags(event.clanTagList);
+
+    emit(BookmarkedClansCurrentWarState.loading(
+      bookmarkedClansCurrentWarRepository.getClansCurrentWar(),
+    ));
 
     for (final clanTag in event.clanTagList) {
       try {

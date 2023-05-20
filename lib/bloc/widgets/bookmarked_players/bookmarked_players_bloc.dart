@@ -58,6 +58,10 @@ class BookmarkedPlayersBloc
       ));
     }
 
+    emit(BookmarkedPlayersState.loading(
+      bookmarkedPlayersRepository.getPlayerDetails(),
+    ));
+
     for (final playerTag in event.playerTagList) {
       try {
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
@@ -84,6 +88,10 @@ class BookmarkedPlayersBloc
     Emitter<BookmarkedPlayersState> emit,
   ) async {
     bookmarkedPlayersRepository.cleanRemovedPlayerTags(event.playerTagList);
+
+    emit(BookmarkedPlayersState.loading(
+      bookmarkedPlayersRepository.getPlayerDetails(),
+    ));
 
     for (final playerTag in event.playerTagList) {
       try {

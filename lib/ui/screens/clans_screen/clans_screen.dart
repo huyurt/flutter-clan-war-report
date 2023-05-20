@@ -91,6 +91,10 @@ class _ClansScreenState extends State<ClansScreen> {
               );
             case BlocStatusEnum.loading:
             case BlocStatusEnum.success:
+              if (state.status == BlocStatusEnum.loading &&
+                  state.items.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
               return Column(
                 children: [
                   Expanded(
