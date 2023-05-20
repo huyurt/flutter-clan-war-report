@@ -460,7 +460,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                   final clan = state.items[index];
                   final location = clan.location;
                   return Card(
-                    margin: EdgeInsetsDirectional.zero,
+                    margin: EdgeInsets.zero,
                     elevation: 0.0,
                     color: context
                             .watch<BookmarkedClanTagsCubit>()
@@ -540,7 +540,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                 width: 80,
                                 height: 50,
                                 child: Card(
-                                  margin: EdgeInsetsDirectional.zero,
+                                  margin: EdgeInsets.zero,
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Column(

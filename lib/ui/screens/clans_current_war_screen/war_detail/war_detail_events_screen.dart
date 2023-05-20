@@ -149,7 +149,7 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                           child: SizedBox(
                             height: 50,
                             child: Card(
-                              margin: EdgeInsetsDirectional.zero,
+                              margin: EdgeInsets.zero,
                               elevation: 0.0,
                               color: clanAttacker
                                   ? bgColor ??
@@ -228,7 +228,7 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                           child: SizedBox(
                             height: 50,
                             child: Card(
-                              margin: EdgeInsetsDirectional.zero,
+                              margin: EdgeInsets.zero,
                               elevation: 0.0,
                               color: !clanAttacker
                                   ? bgColor ??

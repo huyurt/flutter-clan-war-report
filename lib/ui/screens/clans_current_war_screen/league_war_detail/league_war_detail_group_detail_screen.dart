@@ -137,7 +137,7 @@ class _LeagueWarDetailGroupDetailScreenState
         shrinkWrap: true,
         children: [
           Card(
-            margin: EdgeInsetsDirectional.zero,
+            margin: EdgeInsets.zero,
             elevation: 0.0,
             color: Colors.transparent,
             shape: RoundedRectangleBorder(
@@ -255,7 +255,7 @@ class _LeagueWarDetailGroupDetailScreenState
             }
 
             return Card(
-              margin: EdgeInsetsDirectional.zero,
+              margin: EdgeInsets.zero,
               elevation: 0.0,
               color: Colors.transparent,
               shape: RoundedRectangleBorder(

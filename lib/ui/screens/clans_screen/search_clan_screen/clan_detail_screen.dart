@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_current_war_screen/war_detail/war_detail_screen.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/player_detail_screen.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_screen.dart';
@@ -12,16 +13,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import '../../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
-import '../../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_bloc.dart';
-import '../../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_event.dart';
-import '../../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_state.dart';
-import '../../../../bloc/widgets/clan_detail/clan_detail_bloc.dart';
-import '../../../../bloc/widgets/clan_detail/clan_detail_event.dart';
-import '../../../../bloc/widgets/clan_detail/clan_detail_state.dart';
 import '../../../../models/api/response/clan_detail_response_model.dart';
+import '../../../../models/coc/clans_current_war_state_model.dart';
+import '../../../../services/clan_service.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
-import '../../../../utils/enums/bloc_status_enum.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 
 class ClanDetailScreen extends StatefulWidget {
@@ -40,31 +36,19 @@ class ClanDetailScreen extends StatefulWidget {
 
 class _ClanDetailScreenState extends State<ClanDetailScreen> {
   late BookmarkedClanTagsCubit _bookmarkedClanTagsCubit;
-  late ClanDetailBloc _clanDetailBloc;
-  late ClanCurrentWarDetailBloc _clanCurrentWarDetailBloc;
 
-  late ClanCurrentWarDetailState? _clanCurrentWarDetail = null;
+  late Future<ClanDetailResponseModel> _clanDetailFuture;
+  late Future<ClansCurrentWarStateModel> _currentWarDetailFuture;
 
   @override
   void initState() {
     super.initState();
     _bookmarkedClanTagsCubit = context.read<BookmarkedClanTagsCubit>();
-    _clanDetailBloc = context.read<ClanDetailBloc>();
-    _clanCurrentWarDetailBloc = context.read<ClanCurrentWarDetailBloc>();
-    _clanCurrentWarDetailBloc.add(
-      GetClanCurrentWarDetail(
-        clanTag: widget.clanTag,
-      ),
-    );
-    _getDetails();
-  }
-
-  _getDetails() {
-    _clanDetailBloc.add(
-      GetClanDetail(
-        clanTag: widget.clanTag,
-      ),
-    );
+    _clanDetailFuture = ClanService.getClanDetail(widget.clanTag);
+    if (widget.viewWarButton) {
+      _currentWarDetailFuture =
+          ClanService.getCurrentWarDetail(widget.clanTag, null);
+    }
   }
 
   @override
@@ -124,20 +108,25 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                   );
                   break;
                 case LocaleKey.refresh:
-                  _getDetails();
+                  setState(() {
+                    _clanDetailFuture =
+                        ClanService.getClanDetail(widget.clanTag);
+                  });
                   break;
               }
             },
           ),
         ],
       ),
-      body: BlocBuilder<ClanDetailBloc, ClanDetailState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case BlocStatusEnum.failure:
+      body: FutureBuilder(
+        future: _clanDetailFuture,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
               return Center(child: Text(tr('search_failed_message')));
-            case BlocStatusEnum.success:
-              final clan = state.item;
+            }
+            if (snapshot.hasData) {
+              final clan = snapshot.data;
               final members = clan?.memberList ?? <MemberList>[];
               return SingleChildScrollView(
                 child: Column(
@@ -199,10 +188,19 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                             child: Wrap(
                               direction: Axis.horizontal,
                               children: [
-                                const Icon(
-                                  Icons.public,
-                                  size: 18,
-                                  color: Colors.blue,
+                                const Card(
+                                  margin: EdgeInsets.zero,
+                                  elevation: 0.0,
+                                  color: Colors.green,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 1.0),
+                                    child: Icon(
+                                      MdiIcons.trendingUp,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                                 Text(
                                     ' ${(clan?.warWins ?? 0).toString()} ${tr(LocaleKey.wins)}'),
@@ -214,10 +212,19 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                             child: Wrap(
                               direction: Axis.horizontal,
                               children: [
-                                const Icon(
-                                  Icons.public,
-                                  size: 18,
+                                const Card(
+                                  margin: EdgeInsets.zero,
+                                  elevation: 0.0,
                                   color: Colors.blue,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 1.0),
+                                    child: Icon(
+                                      MdiIcons.trendingNeutral,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                                 Text(
                                     ' ${(clan?.warTies ?? 0).toString()} ${tr(LocaleKey.ties)}'),
@@ -229,10 +236,18 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                             child: Wrap(
                               direction: Axis.horizontal,
                               children: [
-                                const Icon(
-                                  Icons.public,
-                                  size: 18,
-                                  color: Colors.blue,
+                                const Card(
+                                  margin: EdgeInsets.zero,
+                                  elevation: 0.0,
+                                  color: Colors.red,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 2.0),
+                                    child: Icon(
+                                      MdiIcons.trendingDown,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                                 Text(
                                     ' ${(clan?.warLosses ?? 0).toString()} ${tr(LocaleKey.losses)}'),
@@ -244,10 +259,19 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                             child: Wrap(
                               direction: Axis.horizontal,
                               children: [
-                                const Icon(
-                                  Icons.public,
-                                  size: 18,
-                                  color: Colors.blue,
+                                const Card(
+                                  margin: EdgeInsets.zero,
+                                  elevation: 0.0,
+                                  color: Colors.grey,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 2.0),
+                                    child: Icon(
+                                      MdiIcons.chartLineVariant,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                                 Text(
                                     ' ${(clan?.warWinStreak ?? 0).toString()} ${tr(LocaleKey.warWinStreak)}'),
@@ -355,7 +379,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                             (member) => SizedBox(
                               height: 70,
                               child: Card(
-                                margin: EdgeInsetsDirectional.zero,
+                                margin: EdgeInsets.zero,
                                 elevation: 0.0,
                                 color: context
                                         .watch<BookmarkedPlayerTagsCubit>()
@@ -464,44 +488,47 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                   ],
                 ),
               );
-            default:
-              return const Center(child: CircularProgressIndicator());
+            }
           }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: widget.viewWarButton
-          ? BlocListener<ClanCurrentWarDetailBloc, ClanCurrentWarDetailState>(
-              listener: (context, state) {
-                if (state.status == BlocStatusEnum.success) {
-                  if (state.item?.war.state != WarStateEnum.notInWar.name) {
-                    setState(() {
-                      _clanCurrentWarDetail = state;
-                    });
+          ? FutureBuilder(
+              future: _currentWarDetailFuture,
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    final currentWarDetail = snapshot.data;
+                    return Visibility(
+                      visible: currentWarDetail?.war.state !=
+                          WarStateEnum.notInWar.name,
+                      child: FloatingActionButton.extended(
+                        label: Text(tr(LocaleKey.viewWar)),
+                        onPressed: () {
+                          WarDetailScreen(
+                            clanTag: widget.clanTag,
+                            warTag: currentWarDetail?.warTag ?? '',
+                            warType: currentWarDetail?.warType ??
+                                WarTypeEnum.clanWar,
+                            warStartTime:
+                                currentWarDetail?.war.warStartTime ?? '',
+                            clanName: currentWarDetail?.war.clan.name ?? '',
+                            opponentName:
+                                currentWarDetail?.war.opponent.name ?? '',
+                            showFloatingButton: true,
+                          ).launch(context);
+                        },
+                      ),
+                    );
                   }
                 }
+                return Visibility(
+                  visible: false,
+                  child: FloatingActionButton(onPressed: () {}),
+                );
               },
-              child: Visibility(
-                visible: _clanCurrentWarDetail != null,
-                child: FloatingActionButton.extended(
-                  label: Text(tr(LocaleKey.viewWar)),
-                  onPressed: () {
-                    WarDetailScreen(
-                      clanTag: widget.clanTag,
-                      warTag: _clanCurrentWarDetail?.item?.warTag ?? '',
-                      warType: _clanCurrentWarDetail?.item?.warType ??
-                          WarTypeEnum.clanWar,
-                      warStartTime:
-                          _clanCurrentWarDetail?.item?.war.warStartTime ?? '',
-                      clanName:
-                          _clanCurrentWarDetail?.item?.war.clan.name ?? '',
-                      opponentName:
-                          _clanCurrentWarDetail?.item?.war.opponent.name ?? '',
-                      showFloatingButton: true,
-                    ).launch(context);
-                  },
-                ),
-              ),
             )
           : null,
     );

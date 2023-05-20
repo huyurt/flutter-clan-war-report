@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:more_useful_clash_of_clans/utils/helpers/enum_helper.dart';
-import 'package:more_useful_clash_of_clans/routes.dart';
+import 'package:more_useful_clash_of_clans/utils/injection.dart' as di;
+import 'package:more_useful_clash_of_clans/utils/routes.dart';
 import 'package:more_useful_clash_of_clans/utils/themes/app_themes.dart';
 
 import 'bloc/app_bloc_observer.dart';
@@ -27,6 +28,7 @@ void main() async {
     await FlutterDisplayMode.setHighRefreshRate();
   }
   Bloc.observer = const AppBlocObserver();
+  di.init();
 
   runApp(
     EasyLocalization(

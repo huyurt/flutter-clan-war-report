@@ -123,7 +123,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
       shrinkWrap: true,
       children: [
         Card(
-          margin: EdgeInsetsDirectional.zero,
+          margin: EdgeInsets.zero,
           elevation: 0.0,
           color: Colors.transparent,
           shape: RoundedRectangleBorder(
@@ -208,7 +208,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
             return SizedBox(
               height: 160,
               child: Card(
-                margin: EdgeInsetsDirectional.zero,
+                margin: EdgeInsets.zero,
                 elevation: 0.0,
                 color: bgColor ?? Colors.transparent,
                 shape: RoundedRectangleBorder(

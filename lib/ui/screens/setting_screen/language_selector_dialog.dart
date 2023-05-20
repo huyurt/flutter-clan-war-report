@@ -20,7 +20,7 @@ class LanguageSelectorDialog extends StatelessWidget {
       children: EnumHelper.getLocales()
           .map(
             (locale) => Card(
-              margin: EdgeInsetsDirectional.zero,
+              margin: EdgeInsets.zero,
               elevation: 0.0,
               child: InkWell(
                 onTap: () {

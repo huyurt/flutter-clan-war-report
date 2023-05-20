@@ -1,14 +1,17 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:more_useful_clash_of_clans/services/clan_service.dart';
+import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_classic_screen.dart';
+import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_league_screen.dart';
+import 'package:more_useful_clash_of_clans/utils/constants/app_constants.dart';
 import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
-import 'package:nb_utils/nb_utils.dart';
 
-import '../../../../../bloc/widgets/war_log/war_log_bloc.dart';
-import '../../../../../bloc/widgets/war_log/war_log_event.dart';
-import '../../../../../bloc/widgets/war_log/war_log_state.dart';
-import '../../../../../utils/constants/app_constants.dart';
-import '../../../../../utils/enums/bloc_status_enum.dart';
+import '../../../../../models/api/response/war_log_response_model.dart';
+import '../../../../../models/coc/war_logs_model.dart';
 
 class WarLogScreen extends StatefulWidget {
   const WarLogScreen({super.key, required this.clanTag});
@@ -20,17 +23,12 @@ class WarLogScreen extends StatefulWidget {
 }
 
 class _WarLogScreenState extends State<WarLogScreen> {
-  late WarLogBloc _warLogBloc;
+  late Future<WarLogsModel> _warLogsFuture;
 
   @override
   void initState() {
     super.initState();
-    _warLogBloc = context.read<WarLogBloc>();
-    _warLogBloc.add(
-      GetWarLog(
-        clanTag: widget.clanTag,
-      ),
-    );
+    _warLogsFuture = ClanService.getWarLogs(widget.clanTag);
   }
 
   @override
@@ -44,173 +42,101 @@ class _WarLogScreenState extends State<WarLogScreen> {
       appBar: AppBar(
         title: Text(tr(LocaleKey.warLog)),
       ),
-      body: BlocBuilder<WarLogBloc, WarLogState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case BlocStatusEnum.failure:
-              return Center(child: Text(tr('search_failed_message')));
-            case BlocStatusEnum.success:
-              return ListView(
-                children: state.items
-                    .where((e) =>
-                        !e.result.isEmptyOrNull &&
-                        !e.opponent.name.isEmptyOrNull)
-                    .map(
-                  (warLog) {
-                    final clan = warLog.clan;
-                    final opponent = warLog.opponent;
-
-                    String? endTimeText = null;
-                    final endTime = DateTime.tryParse(warLog.endTime ?? '');
-                    if (endTime != null) {
-                      final formatter = DateFormat('d MMM yyyy',
-                          Localizations.localeOf(context).languageCode);
-                      endTimeText = formatter.format(endTime);
-                    }
-
-                    final clanWon = (clan.stars > opponent.stars ||
-                        (clan.stars == opponent.stars &&
-                            clan.destructionPercentage >
-                                opponent.destructionPercentage));
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 5.0),
-                      child: SizedBox(
-                        height: 70,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  FadeInImage.assetNetwork(
-                                    height: 40,
-                                    width: 40,
-                                    image: clan.badgeUrls?.large ?? '',
-                                    placeholder: AppConstants.placeholderImage,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Text(
-                                    clan.name ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (!endTimeText.isEmptyOrNull)
-                                      Text(endTimeText ?? ''),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              clan.stars.toString(),
-                                              style: TextStyle(
-                                                fontSize: 24.0,
-                                                color: clanWon
-                                                    ? Colors.green
-                                                    : Colors.redAccent,
-                                              ),
-                                            ),
-                                            Text(
-                                                '%${clan.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              ' : ',
-                                              style: TextStyle(
-                                                fontSize: 24.0,
-                                                color: clanWon
-                                                    ? Colors.green
-                                                    : Colors.redAccent,
-                                              ),
-                                            ),
-                                            const Text(''),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              opponent.stars.toString(),
-                                              style: TextStyle(
-                                                fontSize: 24.0,
-                                                color: clanWon
-                                                    ? Colors.green
-                                                    : Colors.redAccent,
-                                              ),
-                                            ),
-                                            Text(
-                                                '%${opponent.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  FadeInImage.assetNetwork(
-                                    height: 40,
-                                    width: 40,
-                                    image: opponent.badgeUrls?.large ?? '',
-                                    placeholder: AppConstants.placeholderImage,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Text(
-                                    opponent.name ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+      body: FutureBuilder(
+        future: _warLogsFuture,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              if (snapshot.error is DioError) {
+                final error = snapshot.error as DioError;
+                if (error.response?.statusCode == HttpStatus.forbidden) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        MdiIcons.eyeRemove,
+                        size: 50.0,
+                        color: Colors.amber,
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.0)),
+                      Center(
+                        child: Text(
+                          tr(LocaleKey.warLogErrorMessageTitle),
+                          style: const TextStyle(fontSize: 20.0),
                         ),
                       ),
-                    );
-                  },
-                ).toList(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15.0, horizontal: 75.0),
+                        child: Center(
+                          child: Text(
+                            tr(LocaleKey.warLogErrorMessage),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return Center(child: Text(tr('search_failed_message')));
+              }
+            }
+            if (snapshot.hasData) {
+              final clan = snapshot.data?.clan;
+              final warLogs = snapshot.data?.warLogs ?? <WarLogItem>[];
+
+              return DefaultTabController(
+                length: 2,
+                initialIndex: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TabBar(
+                      tabs: [
+                        Tab(
+                          child: Text(
+                            tr(LocaleKey.tabWarLogClassicTitle),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Tab(
+                          child: Text(
+                            tr(LocaleKey.tabWarLogLeagueTitle),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: TabBarView(
+                        children: [
+                          WarLogClassicScreen(
+                            key: const Key(LocaleKey.tabWarLogClassicTitle),
+                            warLogs: warLogs
+                                .where((w) => w.attacksPerMember != 1)
+                                .toList(),
+                          ),
+                          WarLogLeagueScreen(
+                            key: const Key(LocaleKey.tabWarLogLeagueTitle),
+                            clanWarLeagueId: clan?.warLeague?.id ??
+                                AppConstants.warLeagueUnranked,
+                            clanWarLeagueName: clan?.warLeague?.name ?? '',
+                            warLogs: warLogs
+                                .where((w) => w.attacksPerMember == 1)
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               );
-            default:
-              return const Center(child: CircularProgressIndicator());
+            }
           }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );

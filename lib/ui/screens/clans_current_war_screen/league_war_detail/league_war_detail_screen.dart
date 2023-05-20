@@ -1,12 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/bloc_status_enum.dart';
+import 'package:more_useful_clash_of_clans/services/clan_service.dart';
 
-import '../../../../bloc/widgets/clan_league_wars/clan_league_wars_bloc.dart';
-import '../../../../bloc/widgets/clan_league_wars/clan_league_wars_event.dart';
-import '../../../../bloc/widgets/clan_league_wars/clan_league_wars_state.dart';
 import '../../../../models/api/response/clan_detail_response_model.dart';
+import '../../../../models/coc/clan_league_wars_model.dart';
+import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 import 'league_war_detail_group_screen.dart';
@@ -32,21 +30,12 @@ class LeagueWarDetailScreen extends StatefulWidget {
 }
 
 class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
-  late ClanLeagueWarsBloc _clanLeagueWarsBloc;
+  late Future<ClanLeagueWarsModel> _leagueWarsFuture;
 
   @override
   void initState() {
     super.initState();
-    _clanLeagueWarsBloc = context.read<ClanLeagueWarsBloc>();
-    _getDetails();
-  }
-
-  _getDetails() {
-    _clanLeagueWarsBloc.add(
-      GetClanLeagueWars(
-        clanTag: widget.clanTag,
-      ),
-    );
+    _leagueWarsFuture = ClanService.getClanLeagueWars(widget.clanTag);
   }
 
   @override
@@ -75,20 +64,28 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
             onSelected: (value) {
               switch (value) {
                 case LocaleKey.refresh:
-                  _getDetails();
+                  setState(() {
+                    _leagueWarsFuture =
+                        ClanService.getClanLeagueWars(widget.clanTag);
+                  });
                   break;
               }
             },
           ),
         ],
       ),
-      body: BlocBuilder<ClanLeagueWarsBloc, ClanLeagueWarsState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case BlocStatusEnum.failure:
+      body: FutureBuilder(
+        future: _leagueWarsFuture,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
               return Center(child: Text(tr('search_failed_message')));
-            case BlocStatusEnum.success:
-              final clanLeague = state.clanLeague;
+            }
+            if (snapshot.hasData) {
+              final totalRoundCount = snapshot.data?.rounds ?? 0;
+              final clanLeague = snapshot.data?.clanLeague;
+              final clanLeagueWars = snapshot.data?.clanLeagueWars ??
+                  <ClansCurrentWarStateModel>[];
 
               return DefaultTabController(
                 length: 3,
@@ -127,8 +124,8 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                             clanTag: widget.clanTag,
                             warStartTime: widget.warStartTime,
                             clanDetail: widget.clanDetail,
-                            clanLeagueWars: state.clanLeagueWars,
-                            totalRoundCount: state.totalRoundCount,
+                            clanLeagueWars: clanLeagueWars,
+                            totalRoundCount: totalRoundCount,
                           ),
                           LeagueWarDetailRoundsScreen(
                             key: const Key(LocaleKey.rounds),
@@ -136,7 +133,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                             warStartTime: widget.warStartTime,
                             clanDetail: widget.clanDetail,
                             clanLeague: clanLeague!,
-                            clanLeagueWars: state.clanLeagueWars,
+                            clanLeagueWars: clanLeagueWars,
                           ),
                           LeagueWarDetailPlayersScreen(
                             key: const Key(LocaleKey.players),
@@ -144,7 +141,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                             warStartTime: widget.warStartTime,
                             clanDetail: widget.clanDetail,
                             clanLeague: clanLeague,
-                            clanLeagueWars: state.clanLeagueWars,
+                            clanLeagueWars: clanLeagueWars,
                           ),
                         ],
                       ),
@@ -152,9 +149,9 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                   ],
                 ),
               );
-            default:
-              return const Center(child: CircularProgressIndicator());
+            }
           }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );

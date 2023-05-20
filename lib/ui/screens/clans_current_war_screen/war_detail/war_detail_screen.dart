@@ -1,19 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_current_war_screen/war_detail/war_detail_attacks_screen.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_current_war_screen/war_detail/war_detail_events_screen.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_current_war_screen/war_detail/war_detail_stats_screen.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/bloc_status_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_bloc.dart';
-import '../../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_event.dart';
-import '../../../../bloc/widgets/clan_current_war_detail/clan_current_war_detail_state.dart';
-import '../../../../bloc/widgets/clan_detail/clan_detail_bloc.dart';
-import '../../../../bloc/widgets/clan_detail/clan_detail_event.dart';
-import '../../../../bloc/widgets/clan_detail/clan_detail_state.dart';
+import '../../../../models/api/response/clan_detail_response_model.dart';
 import '../../../../models/api/response/clan_war_response_model.dart';
+import '../../../../models/coc/clans_current_war_state_model.dart';
+import '../../../../services/clan_service.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 import '../league_war_detail/league_war_detail_screen.dart';
@@ -43,31 +38,18 @@ class WarDetailScreen extends StatefulWidget {
 }
 
 class _WarDetailScreenState extends State<WarDetailScreen> {
-  late ClanCurrentWarDetailBloc _clanCurrentWarDetailBloc;
-  late ClanDetailBloc _clanDetailBloc;
+  late Future<ClanDetailResponseModel> _clanDetailFuture;
+  late Future<ClansCurrentWarStateModel> _currentWarDetailFuture;
 
   @override
   void initState() {
     super.initState();
-    _clanCurrentWarDetailBloc = context.read<ClanCurrentWarDetailBloc>();
-    _clanDetailBloc = context.read<ClanDetailBloc>();
-    _getDetails();
-  }
-
-  _getDetails() {
-    _clanCurrentWarDetailBloc.add(
-      GetClanCurrentWarDetail(
-        clanTag: widget.clanTag,
-        warTag: widget.warTag,
-      ),
-    );
-    if (widget.warType == WarTypeEnum.leagueWar) {
-      _clanDetailBloc.add(
-        GetClanDetail(
-          clanTag: widget.clanTag,
-        ),
-      );
+    if (widget.showFloatingButton == true &&
+        widget.warType == WarTypeEnum.leagueWar) {
+      _clanDetailFuture = ClanService.getClanDetail(widget.clanTag);
     }
+    _currentWarDetailFuture =
+        ClanService.getCurrentWarDetail(widget.clanTag, widget.warTag);
   }
 
   @override
@@ -88,20 +70,25 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
             onSelected: (value) {
               switch (value) {
                 case LocaleKey.refresh:
-                  _getDetails();
+                  setState(() {
+                    _currentWarDetailFuture = ClanService.getCurrentWarDetail(
+                        widget.clanTag, widget.warTag);
+                  });
                   break;
               }
             },
           ),
         ],
       ),
-      body: BlocBuilder<ClanCurrentWarDetailBloc, ClanCurrentWarDetailState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case BlocStatusEnum.failure:
+      body: FutureBuilder(
+        future: _currentWarDetailFuture,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
               return Center(child: Text(tr('search_failed_message')));
-            case BlocStatusEnum.success:
-              final clansCurrentWar = state.item;
+            }
+            if (snapshot.hasData) {
+              final clansCurrentWar = snapshot.data;
               WarClan clan;
               WarClan opponent;
               if (clansCurrentWar?.war.clan.tag == widget.clanTag) {
@@ -180,19 +167,20 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
                   ],
                 ),
               );
-            default:
-              return const Center(child: CircularProgressIndicator());
+            }
           }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: widget.showFloatingButton == true &&
               widget.warType == WarTypeEnum.leagueWar
-          ? BlocBuilder<ClanDetailBloc, ClanDetailState>(
-              builder: (context, state) {
-                switch (state.status) {
-                  case BlocStatusEnum.success:
-                    final clanDetail = state.item;
+          ? FutureBuilder(
+              future: _clanDetailFuture,
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    final clanDetail = snapshot.data;
                     return FloatingActionButton.extended(
                       label: Text(tr(LocaleKey.viewLeague)),
                       onPressed: () {
@@ -204,14 +192,13 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
                         ).launch(context);
                       },
                     );
-                  default:
-                    return Visibility(
-                      visible: false,
-                      child: FloatingActionButton(onPressed: () {}),
-                    );
+                  }
                 }
-              },
-            )
+                return Visibility(
+                  visible: false,
+                  child: FloatingActionButton(onPressed: () {}),
+                );
+              })
           : null,
     );
   }

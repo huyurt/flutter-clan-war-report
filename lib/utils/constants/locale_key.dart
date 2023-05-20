@@ -177,4 +177,8 @@ class LocaleKey {
   static const any = 'Any';
   static const cocApiErrorMessage = 'coc_api_error_message';
   static const viewWar = 'View War';
+  static const warLogErrorMessageTitle = 'war_log_error_message_title';
+  static const warLogErrorMessage = 'war_log_error_message';
+  static const tabWarLogClassicTitle = 'tab_war_log_classic_title';
+  static const tabWarLogLeagueTitle = 'tab_war_log_league_title';
 }

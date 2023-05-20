@@ -135,7 +135,7 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                   }
                   PlayerDetailResponseModel player = state.items[index];
                   return Card(
-                    margin: EdgeInsetsDirectional.zero,
+                    margin: EdgeInsets.zero,
                     elevation: 0.0,
                     color: context
                             .watch<BookmarkedPlayerTagsCubit>()

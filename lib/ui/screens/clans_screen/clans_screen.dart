@@ -113,7 +113,7 @@ class _ClansScreenState extends State<ClansScreen> {
 
                           return Card(
                             key: PageStorageKey(clan.tag),
-                            margin: EdgeInsetsDirectional.zero,
+                            margin: EdgeInsets.zero,
                             elevation: 0.0,
                             color: Colors.transparent,
                             shape: RoundedRectangleBorder(

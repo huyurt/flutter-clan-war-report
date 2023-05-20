@@ -150,7 +150,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                               : null;
 
                           return Card(
-                            margin: EdgeInsetsDirectional.zero,
+                            margin: EdgeInsets.zero,
                             elevation: 0.0,
                             color: Colors.transparent,
                             shape: RoundedRectangleBorder(

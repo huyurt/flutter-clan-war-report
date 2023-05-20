@@ -115,7 +115,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
 
                           return Card(
                             key: PageStorageKey(player.tag),
-                            margin: EdgeInsetsDirectional.zero,
+                            margin: EdgeInsets.zero,
                             elevation: 0.0,
                             color: Colors.transparent,
                             shape: RoundedRectangleBorder(

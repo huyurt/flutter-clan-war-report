@@ -4,15 +4,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/bloc_status_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
-import '../../../../bloc/widgets/player_detail/player_detail_bloc.dart';
-import '../../../../bloc/widgets/player_detail/player_detail_event.dart';
-import '../../../../bloc/widgets/player_detail/player_detail_state.dart';
 import '../../../../models/api/response/player_detail_response_model.dart';
+import '../../../../services/player_service.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/helpers/image_helper.dart';
@@ -32,23 +29,15 @@ class PlayerDetailScreen extends StatefulWidget {
 
 class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
   late BookmarkedPlayerTagsCubit _bookmarkedPlayerTagsCubit;
-  late PlayerDetailBloc _playerDetailBloc;
+
+  late Future<PlayerDetailResponseModel> _playerDetailFuture;
   late String clanTag = '';
 
   @override
   void initState() {
     super.initState();
     _bookmarkedPlayerTagsCubit = context.read<BookmarkedPlayerTagsCubit>();
-    _playerDetailBloc = context.read<PlayerDetailBloc>();
-    _getDetails();
-  }
-
-  _getDetails() {
-    _playerDetailBloc.add(
-      GetPlayerDetail(
-        playerTag: widget.playerTag,
-      ),
-    );
+    _playerDetailFuture = PlayerService.getPlayerDetail(widget.playerTag);
   }
 
   @override
@@ -110,20 +99,25 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                   );
                   break;
                 case LocaleKey.refresh:
-                  _getDetails();
+                  setState(() {
+                    _playerDetailFuture =
+                        PlayerService.getPlayerDetail(widget.playerTag);
+                  });
                   break;
               }
             },
           ),
         ],
       ),
-      body: BlocBuilder<PlayerDetailBloc, PlayerDetailState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case BlocStatusEnum.failure:
+      body: FutureBuilder(
+        future: _playerDetailFuture,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
               return Center(child: Text(tr('search_failed_message')));
-            case BlocStatusEnum.success:
-              final player = state.item;
+            }
+            if (snapshot.hasData) {
+              final player = snapshot.data;
               clanTag = player?.clan?.tag ?? '';
               final heroes = player?.heroes
                       ?.where((element) => element.village == Village.HOME) ??
@@ -147,6 +141,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                       ?.where((element) => element.village == Village.HOME) ??
                   <PlayerItemLevel>[].where((element) =>
                       ImageHelper.getSiegeMachines().contains(element.name));
+
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -817,9 +812,9 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                   ],
                 ),
               );
-            default:
-              return const Center(child: CircularProgressIndicator());
+            }
           }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );

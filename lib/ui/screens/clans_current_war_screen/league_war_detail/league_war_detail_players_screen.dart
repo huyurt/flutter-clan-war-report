@@ -160,7 +160,7 @@ class _LeagueWarDetailPlayersScreenState
             }
 
             return Card(
-              margin: EdgeInsetsDirectional.zero,
+              margin: EdgeInsets.zero,
               elevation: 0.0,
               color: bgColor ?? Colors.transparent,
               shape: RoundedRectangleBorder(
@@ -324,7 +324,7 @@ class _LeagueWarDetailPlayersScreenState
                 : (member.townHallLevel).toString();
 
             return Card(
-              margin: EdgeInsetsDirectional.zero,
+              margin: EdgeInsets.zero,
               elevation: 0.0,
               color: Colors.transparent,
               shape: RoundedRectangleBorder(

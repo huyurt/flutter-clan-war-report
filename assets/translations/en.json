@@ -46,5 +46,9 @@
   "No clans in war_message": "You will see ongoing clan wars of all your bookmarked clans that have a public war log.",
   "No bookmarked clans_message": "Click the button in the bottom right corner to search a clan.",
   "No bookmarked players_message": "Click the button in the bottom right corner to search a player.",
-  "coc_api_error_message": "Something went wrong."
+  "coc_api_error_message": "Something went wrong.",
+  "war_log_error_message_title": "Private war log",
+  "war_log_error_message": "This clan has decided to keep their war log private. If this is your clan, please ask one of your clan leaders to make the war log public.",
+  "tab_war_log_classic_title": "Classic",
+  "tab_war_log_league_title": "War League"
 }

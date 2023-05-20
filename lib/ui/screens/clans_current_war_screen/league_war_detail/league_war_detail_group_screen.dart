@@ -221,7 +221,7 @@ class _LeagueWarDetailGroupScreenState
           (total) {
             final clan = total.clan;
             return Card(
-              margin: EdgeInsetsDirectional.zero,
+              margin: EdgeInsets.zero,
               elevation: 0.0,
               color: Colors.transparent,
               shape: RoundedRectangleBorder(
