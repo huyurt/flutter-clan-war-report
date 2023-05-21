@@ -16,8 +16,8 @@ class BottomNavBar extends StatelessWidget {
     return Stack(
       children: [
         Card(
-          margin: const EdgeInsets.only(top: 2.0),
-          elevation: 4,
+          margin: EdgeInsets.zero,
+          elevation: 0.0,
           shadowColor: Theme.of(context).colorScheme.shadow,
           color: Theme.of(context).colorScheme.surfaceVariant,
           shape: const RoundedRectangleBorder(

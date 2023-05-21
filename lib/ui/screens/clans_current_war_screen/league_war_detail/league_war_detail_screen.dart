@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:more_useful_clash_of_clans/services/clan_service.dart';
 
 import '../../../../models/api/response/clan_detail_response_model.dart';
-import '../../../../models/coc/clan_league_wars_model.dart';
+import '../../../../models/coc/clan_details_and_league_wars_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
@@ -30,12 +30,13 @@ class LeagueWarDetailScreen extends StatefulWidget {
 }
 
 class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
-  late Future<ClanLeagueWarsModel> _leagueWarsFuture;
+  late Future<ClanDetailsAndLeagueWarsModel> _clanDetailsAndLeagueWarsFuture;
 
   @override
   void initState() {
     super.initState();
-    _leagueWarsFuture = ClanService.getClanLeagueWars(widget.clanTag);
+    _clanDetailsAndLeagueWarsFuture =
+        ClanService.getClanDetailsAndLeagueWars(widget.clanTag);
   }
 
   @override
@@ -65,8 +66,8 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
               switch (value) {
                 case LocaleKey.refresh:
                   setState(() {
-                    _leagueWarsFuture =
-                        ClanService.getClanLeagueWars(widget.clanTag);
+                    _clanDetailsAndLeagueWarsFuture =
+                        ClanService.getClanDetailsAndLeagueWars(widget.clanTag);
                   });
                   break;
               }
@@ -75,7 +76,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: _leagueWarsFuture,
+        future: _clanDetailsAndLeagueWarsFuture,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
@@ -124,6 +125,8 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                             clanTag: widget.clanTag,
                             warStartTime: widget.warStartTime,
                             clanDetail: widget.clanDetail,
+                            otherClans: snapshot.data?.otherClans ?? [],
+                            clanLeague: clanLeague!,
                             clanLeagueWars: clanLeagueWars,
                             totalRoundCount: totalRoundCount,
                           ),

@@ -181,4 +181,5 @@ class LocaleKey {
   static const warLogErrorMessage = 'war_log_error_message';
   static const tabWarLogClassicTitle = 'tab_war_log_classic_title';
   static const tabWarLogLeagueTitle = 'tab_war_log_league_title';
+  static const noAttacksYet = 'No attacks yet';
 }

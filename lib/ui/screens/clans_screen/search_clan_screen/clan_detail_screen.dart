@@ -196,7 +196,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 1.0),
                                     child: Icon(
-                                      MdiIcons.trendingUp,
+                                      Icons.trending_up,
                                       size: 16.0,
                                       color: Colors.white,
                                     ),
@@ -220,7 +220,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 1.0),
                                     child: Icon(
-                                      MdiIcons.trendingNeutral,
+                                      Icons.trending_neutral,
                                       size: 16.0,
                                       color: Colors.white,
                                     ),
@@ -243,7 +243,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                   child: Padding(
                                     padding: EdgeInsets.only(right: 2.0),
                                     child: Icon(
-                                      MdiIcons.trendingDown,
+                                      Icons.trending_down,
                                       size: 16.0,
                                       color: Colors.white,
                                     ),

@@ -46,12 +46,12 @@ class _WarLogLeagueScreenState extends State<WarLogLeagueScreen> {
             Color resultIconColor = Colors.blue;
             switch (warLog.result) {
               case 'tie':
-                resultIcon = MdiIcons.chevronDown;
+                resultIcon = Icons.keyboard_arrow_down;
                 resultIconColor = Colors.red;
                 leagueCounter += 1;
                 break;
               case 'win':
-                resultIcon = MdiIcons.chevronUp;
+                resultIcon = Icons.keyboard_arrow_up;
                 resultIconColor = Colors.green;
                 leagueCounter -= 1;
                 break;

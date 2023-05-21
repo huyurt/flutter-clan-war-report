@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -9,6 +10,7 @@ import '../../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_c
 import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
+import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
 import '../../../widgets/attacker_painter.dart';
@@ -76,6 +78,23 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
     opponent.members?.forEach((e) => attacks.addAll(e.attacks ?? <Attack>[]));
     attacks
         .sort((item1, item2) => (item2.order ?? 0).compareTo(item1.order ?? 0));
+
+    if (attacks.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.paste,
+            size: 54.0,
+            color: Colors.amber,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(tr(LocaleKey.noAttacksYet)),
+          ),
+        ],
+      );
+    }
 
     return Column(
       children: [

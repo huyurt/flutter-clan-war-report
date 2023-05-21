@@ -7,10 +7,12 @@ import 'package:more_useful_clash_of_clans/utils/helpers/enum_helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../models/api/response/clan_detail_response_model.dart';
+import '../../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
+import '../../../../utils/enums/league_state_enum.dart';
 import '../../../../utils/enums/war_winning_enum.dart';
 import 'league_war_detail_group_detail_screen.dart';
 
@@ -34,6 +36,8 @@ class LeagueWarDetailGroupScreen extends StatefulWidget {
     required this.clanTag,
     required this.warStartTime,
     required this.clanDetail,
+    required this.otherClans,
+    required this.clanLeague,
     required this.clanLeagueWars,
     required this.totalRoundCount,
   });
@@ -41,6 +45,8 @@ class LeagueWarDetailGroupScreen extends StatefulWidget {
   final String clanTag;
   final String warStartTime;
   final ClanDetailResponseModel clanDetail;
+  final List<ClanDetailResponseModel> otherClans;
+  final ClanLeagueGroupResponseModel clanLeague;
   final List<ClansCurrentWarStateModel> clanLeagueWars;
   final int totalRoundCount;
 
@@ -154,24 +160,38 @@ class _LeagueWarDetailGroupScreenState
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
 
     int warLeagueId = clanDetail.warLeague?.id ?? 0;
-    if (warLeagueId > AppConstants.warLeagueUnranked) {
-      final warEnded =
-          !(winSeries[clanDetail.tag]?.any((element) => element == null) ??
-              true);
-      if (warEnded) {
-        final clanOrder =
-            totals.indexWhere((element) => element.clanTag == clanDetail.tag) +
-                1;
-        final currentWarLeague = EnumHelper.getWarLeagueById(warLeagueId);
-        if (currentWarLeague == WarLeagueEnum.values[1]) {
-          if (clanOrder > totals.length - 3) {
-            // Birincinin detayını çek.
-            // Birinci Bronz 1'de ise baktığım klan 2'den düşmüştür. Birinci Bronz 2'de ise baktığım klan 3'deymiş.
-          }
-        } else if (currentWarLeague == WarLeagueEnum.values.last) {}
-
+    final warLeague = EnumHelper.getWarLeagueById(warLeagueId);
+    final warEnded = widget.clanLeague.state == LeagueStateEnum.ended.name;
+    final clanOrder =
+        totals.indexWhere((element) => element.clanTag == clanDetail.tag) + 1;
+    if (warEnded) {
+      if (warLeague == WarLeagueEnum.values.last) {
         if (clanOrder == 1) {
-          //warLeagueId = (clanDetail.warLeague?.id ?? 1) - 1;
+          final secondClan =
+              widget.otherClans.firstWhere((c) => c.tag == totals[1].clanTag);
+          if (secondClan.warLeague?.id == warLeagueId - 1) {
+            warLeagueId -= 1;
+          }
+        }
+      } else if (warLeague == WarLeagueEnum.values[1]) {
+        final firstClan =
+            widget.otherClans.firstWhere((c) => c.tag == totals.first.clanTag);
+        if (firstClan.warLeague?.id == warLeagueId + 2) {
+          warLeagueId += 1;
+        }
+      } else {
+        if (clanOrder == 1) {
+          warLeagueId -= 1;
+        } else if (clanOrder == totals.length) {
+          warLeagueId += 1;
+        } else {
+          final firstClan = widget.otherClans
+              .firstWhere((c) => c.tag == totals.first.clanTag);
+          if (firstClan.warLeague?.id == warLeagueId + 2) {
+            warLeagueId += 1;
+          } else if (firstClan.warLeague?.id == warLeagueId) {
+            warLeagueId -= 1;
+          }
         }
       }
     }
