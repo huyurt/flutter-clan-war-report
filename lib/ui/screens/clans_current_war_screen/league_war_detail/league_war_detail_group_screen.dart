@@ -159,8 +159,8 @@ class _LeagueWarDetailGroupScreenState
               o2.destructionPercentage.compareTo(o1.destructionPercentage),
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
 
-    int warLeagueId = clanDetail.warLeague?.id ?? 0;
-    final warLeague = EnumHelper.getWarLeagueById(warLeagueId);
+    int lastWarLeagueId = clanDetail.warLeague?.id ?? 0;
+    final warLeague = EnumHelper.getWarLeagueById(lastWarLeagueId);
     final warEnded = widget.clanLeague.state == LeagueStateEnum.ended.name;
     final clanOrder =
         totals.indexWhere((element) => element.clanTag == clanDetail.tag) + 1;
@@ -169,32 +169,35 @@ class _LeagueWarDetailGroupScreenState
         if (clanOrder == 1) {
           final secondClan =
               widget.otherClans.firstWhere((c) => c.tag == totals[1].clanTag);
-          if (secondClan.warLeague?.id == warLeagueId - 1) {
-            warLeagueId -= 1;
+          if (secondClan.warLeague?.id == lastWarLeagueId - 1) {
+            lastWarLeagueId -= 1;
           }
         }
       } else if (warLeague == WarLeagueEnum.values[1]) {
         final firstClan =
             widget.otherClans.firstWhere((c) => c.tag == totals.first.clanTag);
-        if (firstClan.warLeague?.id == warLeagueId + 2) {
-          warLeagueId += 1;
+        if (firstClan.warLeague?.id == lastWarLeagueId + 2) {
+          lastWarLeagueId += 1;
         }
       } else {
         if (clanOrder == 1) {
-          warLeagueId -= 1;
+          lastWarLeagueId -= 1;
         } else if (clanOrder == totals.length) {
-          warLeagueId += 1;
+          lastWarLeagueId += 1;
         } else {
           final firstClan = widget.otherClans
               .firstWhere((c) => c.tag == totals.first.clanTag);
-          if (firstClan.warLeague?.id == warLeagueId + 2) {
-            warLeagueId += 1;
-          } else if (firstClan.warLeague?.id == warLeagueId) {
-            warLeagueId -= 1;
+          if (firstClan.warLeague?.id == lastWarLeagueId + 2) {
+            lastWarLeagueId += 1;
+          } else if (firstClan.warLeague?.id == lastWarLeagueId) {
+            lastWarLeagueId -= 1;
           }
         }
       }
     }
+
+    final lastWarLeague = EnumHelper.getWarLeagueById(lastWarLeagueId);
+    final lastWarLeagueResult = EnumHelper.getLeagueResult(lastWarLeague);
 
     return ListView(
       key: PageStorageKey(widget.key),
@@ -209,7 +212,7 @@ class _LeagueWarDetailGroupScreenState
               if ((clanDetail.warLeague?.id ?? 0) >
                   AppConstants.warLeagueUnranked)
                 Image.asset(
-                  '${AppConstants.clanWarLeaguesImagePath}$warLeagueId.png',
+                  '${AppConstants.clanWarLeaguesImagePath}$lastWarLeagueId.png',
                   height: 72,
                   fit: BoxFit.cover,
                 )
@@ -223,7 +226,7 @@ class _LeagueWarDetailGroupScreenState
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Text(
-                  ' ${tr('warLeague$warLeagueId')}',
+                  ' ${tr('warLeague$lastWarLeagueId')}',
                   style: const TextStyle(fontSize: 24.0),
                 ),
               ),
@@ -267,6 +270,29 @@ class _LeagueWarDetailGroupScreenState
                     height: 70,
                     child: Row(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: totals.indexOf(total) + 1 <=
+                                  lastWarLeagueResult.promoted
+                              ? const Icon(
+                                  Icons.keyboard_arrow_up,
+                                  size: 24.0,
+                                  color: Colors.green,
+                                )
+                              : (totals.indexOf(total) + 1 >
+                                      totals.length -
+                                          lastWarLeagueResult.demoted
+                                  ? const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 24.0,
+                                      color: Colors.red,
+                                    )
+                                  : const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 24.0,
+                                      color: Colors.transparent,
+                                    )),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: Text('${totals.indexOf(total) + 1}. '),
