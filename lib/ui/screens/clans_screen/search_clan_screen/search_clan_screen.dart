@@ -403,10 +403,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(
-              Ionicons.filter,
-              color: context.theme.colorScheme.secondary,
-            ),
+            icon: const Icon(Ionicons.filter),
             onPressed: () {
               showFilter(context);
             },
@@ -467,7 +464,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                             .state
                             .clanTags
                             .contains(clan.tag)
-                        ? Theme.of(context).colorScheme.secondary
+                        ? AppConstants.attackerClanBackgroundColor
                         : Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(0.0),

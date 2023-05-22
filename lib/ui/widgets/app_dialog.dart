@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class AppDialog extends StatelessWidget {
-  const AppDialog(
-      {super.key,
-      this.showCloseButton = true,
-      this.title,
-      required this.children});
+  const AppDialog({
+    super.key,
+    this.showCloseButton = true,
+    this.title,
+    required this.children,
+  });
 
   final bool showCloseButton;
   final String? title;

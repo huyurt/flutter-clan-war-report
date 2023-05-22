@@ -13,6 +13,7 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = context.watch<BottomNavigationBarCubit>().state.index;
     return Stack(
       children: [
         Card(
@@ -27,27 +28,87 @@ class BottomNavBar extends StatelessWidget {
             ),
           ),
           child: BottomNavigationBar(
-            currentIndex: context.watch<BottomNavigationBarCubit>().state.index,
+            currentIndex: currentIndex,
             type: BottomNavigationBarType.fixed,
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Theme.of(context).textTheme.bodySmall!.color,
             items: [
               BottomNavigationBarItem(
-                icon: const Icon(AkarIcons.double_sword),
+                icon: Container(
+                  margin: const EdgeInsets.only(bottom: 4.0),
+                  decoration: BoxDecoration(
+                    color: currentIndex == 0
+                        ? Theme.of(context).indicatorColor
+                        : null,
+                    shape: BoxShape.rectangle,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                    child: Icon(AkarIcons.double_sword),
+                  ),
+                ),
                 label: tr(LocaleKey.wars),
               ),
               BottomNavigationBarItem(
-                icon: const Icon(AkarIcons.shield),
+                icon: Container(
+                  margin: const EdgeInsets.only(bottom: 4.0),
+                  decoration: BoxDecoration(
+                    color: currentIndex == 1
+                        ? Theme.of(context).indicatorColor
+                        : null,
+                    shape: BoxShape.rectangle,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                    child: Icon(AkarIcons.shield),
+                  ),
+                ),
                 label: tr(LocaleKey.clans),
               ),
               BottomNavigationBarItem(
-                icon: const Icon(AkarIcons.people_multiple),
+                icon: Container(
+                  margin: const EdgeInsets.only(bottom: 4.0),
+                  decoration: BoxDecoration(
+                    color: currentIndex == 2
+                        ? Theme.of(context).indicatorColor
+                        : null,
+                    shape: BoxShape.rectangle,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                    child: Icon(AkarIcons.people_multiple),
+                  ),
+                ),
                 label: tr(LocaleKey.players),
               ),
               BottomNavigationBarItem(
-                icon: const Icon(Ionicons.settings_outline),
+                icon: Container(
+                  margin: const EdgeInsets.only(bottom: 4.0),
+                  decoration: BoxDecoration(
+                    color: currentIndex == 3
+                        ? Theme.of(context).indicatorColor
+                        : null,
+                    shape: BoxShape.rectangle,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                    child: Icon(AkarIcons.gear),
+                  ),
+                ),
                 label: tr(LocaleKey.settings),
               ),
             ],

@@ -131,6 +131,12 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                         .playerTags
                         .contains(clanMember?.tag)) {
                       bgColor = AppConstants.attackerClanBackgroundColor;
+                    } else if (context
+                        .watch<BookmarkedPlayerTagsCubit>()
+                        .state
+                        .playerTags
+                        .contains(opponentMember?.tag)) {
+                      bgColor = AppConstants.attackerOpponentBackgroundColor;
                     }
                   } else {
                     if (context
@@ -193,7 +199,6 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                                   child: Row(
                                     children: [
                                       Expanded(
-                                        flex: 1,
                                         child: Text(
                                           '${clanMember?.mapPosition}. ${clanMember?.name}',
                                           overflow: TextOverflow.ellipsis,
@@ -272,7 +277,6 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                                   child: Row(
                                     children: [
                                       Expanded(
-                                        flex: 1,
                                         child: Text(
                                           '${opponentMember?.mapPosition}. ${opponentMember?.name}',
                                           overflow: TextOverflow.ellipsis,

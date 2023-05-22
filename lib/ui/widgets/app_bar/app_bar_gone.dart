@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class AppBarGone extends StatelessWidget implements PreferredSizeWidget {
   const AppBarGone({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).colorScheme.brightness;
-
     return AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarBrightness: brightness,
-        systemStatusBarContrastEnforced: false,
-        statusBarColor: Theme.of(context).colorScheme.background,
-        statusBarIconBrightness:
-            brightness == Brightness.dark ? Brightness.light : Brightness.dark,
-      ),
       backgroundColor: Colors.transparent,
       excludeHeaderSemantics: true,
       shadowColor: Colors.transparent,

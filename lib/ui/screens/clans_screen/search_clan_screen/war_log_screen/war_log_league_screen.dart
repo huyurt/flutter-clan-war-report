@@ -67,24 +67,27 @@ class _WarLogLeagueScreenState extends State<WarLogLeagueScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(endTimeText ?? ''),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          resultIcon,
-                          size: 24.0,
-                          color: resultIconColor,
-                        ),
-                        Image.asset(
-                          '${AppConstants.clanWarLeaguesImagePath}$clanWarLeagueId.png',
-                          height: 28.0,
-                          fit: BoxFit.cover,
-                        ),
-                        Text(
-                          ' ${tr('warLeague$clanWarLeagueId')}',
-                          style: const TextStyle(fontSize: 24.0),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            resultIcon,
+                            size: 24.0,
+                            color: resultIconColor,
+                          ),
+                          Image.asset(
+                            '${AppConstants.clanWarLeaguesImagePath}$clanWarLeagueId.png',
+                            height: 28.0,
+                            fit: BoxFit.cover,
+                          ),
+                          Text(
+                            ' ${tr('warLeague$clanWarLeagueId')}',
+                            style: const TextStyle(fontSize: 24.0),
+                          ),
+                        ],
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

@@ -215,23 +215,21 @@ class _LeagueWarDetailPlayersScreenState
                               ),
                               Row(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 4.0),
-                                    child: FadeInImage.assetNetwork(
-                                      height: 12,
-                                      width: 12,
-                                      image: clan?.badgeUrls?.large ??
-                                          AppConstants.placeholderImage,
-                                      placeholder:
-                                          AppConstants.placeholderImage,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  FadeInImage.assetNetwork(
+                                    height: 12,
+                                    width: 12,
+                                    image: clan?.badgeUrls?.large ??
+                                        AppConstants.placeholderImage,
+                                    placeholder: AppConstants.placeholderImage,
+                                    fit: BoxFit.cover,
                                   ),
-                                  Text(
-                                    clan?.name ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: const TextStyle(fontSize: 10),
+                                  Expanded(
+                                    child: Text(
+                                      ' ${clan?.name}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -242,7 +240,7 @@ class _LeagueWarDetailPlayersScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 60,
+                            width: 65,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
@@ -267,7 +265,7 @@ class _LeagueWarDetailPlayersScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 60,
+                            width: 70,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
@@ -288,7 +286,7 @@ class _LeagueWarDetailPlayersScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 50,
+                            width: 55,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
@@ -406,7 +404,7 @@ class _LeagueWarDetailPlayersScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 60,
+                            width: 65,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
@@ -427,19 +425,19 @@ class _LeagueWarDetailPlayersScreenState
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 60,
+                            width: 70,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
+                                padding: EdgeInsets.symmetric(
                                     vertical: 6.0, horizontal: 12.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Text('%0'),
                                   ],
                                 ),
@@ -447,19 +445,19 @@ class _LeagueWarDetailPlayersScreenState
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 50,
+                            width: 55,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
+                                padding: EdgeInsets.symmetric(
                                     vertical: 6.0, horizontal: 12.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Text('0/0'),
                                   ],
                                 ),

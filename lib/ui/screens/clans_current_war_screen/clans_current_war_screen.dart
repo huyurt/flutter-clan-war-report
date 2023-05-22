@@ -61,6 +61,36 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
     );
   }
 
+  Widget _emptyList() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              AkarIcons.double_sword,
+              size: 96.0,
+              color: Colors.amber,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                tr(LocaleKey.noClansInWar),
+                style: const TextStyle(fontSize: 24.0),
+              ),
+            ),
+            Text(
+              tr(LocaleKey.noClansInWarMessage),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -93,6 +123,9 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
               if (state.status == BlocStatusEnum.loading &&
                   state.items.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
+              }
+              if (state.items.isEmpty) {
+                return _emptyList();
               }
               return Column(
                 children: [
@@ -200,8 +233,8 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                                           ],
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 1,
+                                      SizedBox(
+                                        width: 180,
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0),
@@ -372,33 +405,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                 ],
               );
             default:
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        AkarIcons.double_sword,
-                        size: 96.0,
-                        color: Colors.amber,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          tr(LocaleKey.noClansInWar),
-                          style: const TextStyle(fontSize: 24.0),
-                        ),
-                      ),
-                      Text(
-                        tr(LocaleKey.noClansInWarMessage),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return _emptyList();
           }
         },
       ),

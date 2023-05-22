@@ -194,7 +194,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                   color: Colors.green,
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 1.0),
+                                        EdgeInsets.symmetric(horizontal: 2.0),
                                     child: Icon(
                                       Icons.trending_up,
                                       size: 16.0,
@@ -218,7 +218,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                   color: Colors.blue,
                                   child: Padding(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 1.0),
+                                        EdgeInsets.symmetric(horizontal: 2.0),
                                     child: Icon(
                                       Icons.trending_neutral,
                                       size: 16.0,
@@ -241,7 +241,8 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                   elevation: 0.0,
                                   color: Colors.red,
                                   child: Padding(
-                                    padding: EdgeInsets.only(right: 2.0),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 2.0),
                                     child: Icon(
                                       Icons.trending_down,
                                       size: 16.0,
@@ -368,6 +369,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                           child: Text(
                             clan?.description ?? '',
                             textAlign: TextAlign.center,
+                            style: const TextStyle(height: 1.2),
                           ),
                         ),
                       ),
@@ -451,7 +453,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                           ),
                                           SizedBox(
                                             height: 50,
-                                            width: 105,
+                                            width: 110,
                                             child: Card(
                                               child: Padding(
                                                 padding:

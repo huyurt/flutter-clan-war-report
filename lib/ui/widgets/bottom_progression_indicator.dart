@@ -12,9 +12,9 @@ class _BottomProgressionIndicatorState
     extends State<BottomProgressionIndicator> {
   @override
   Widget build(BuildContext context) {
-    return const LinearProgressIndicator(
+    return LinearProgressIndicator(
       backgroundColor: Colors.white70,
-      valueColor: AlwaysStoppedAnimation(Colors.amber),
+      valueColor: AlwaysStoppedAnimation(Theme.of(context).indicatorColor),
       minHeight: 3.0,
     );
   }

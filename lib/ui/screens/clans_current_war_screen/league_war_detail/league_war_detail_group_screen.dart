@@ -315,7 +315,7 @@ class _LeagueWarDetailGroupScreenState
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  padding: const EdgeInsets.only(bottom: 4.0),
                                   child: Text(
                                     clan?.name ?? '',
                                     overflow: TextOverflow.ellipsis,
@@ -323,48 +323,54 @@ class _LeagueWarDetailGroupScreenState
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                 ),
-                                Row(
+                                Wrap(
                                   children: [
-                                    ...winSeries[total.clanTag]?.map((win) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 2.0),
-                                            child: Container(
-                                              height: 10.0,
-                                              width: 10.0,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(2.0),
-                                                color: win ==
-                                                        WarWinningEnum
-                                                            .notStarted
-                                                    ? Colors.black38
-                                                    : win ==
-                                                            WarWinningEnum
-                                                                .winning
-                                                        ? Colors
-                                                            .lightGreen.shade200
-                                                        : (win ==
-                                                                WarWinningEnum
-                                                                    .losing
-                                                            ? Colors
-                                                                .red.shade200
-                                                            : (win ==
-                                                                    WarWinningEnum
-                                                                        .equal
-                                                                ? Colors.yellow
-                                                                    .shade200
-                                                                : (win ==
-                                                                        WarWinningEnum
-                                                                            .won
-                                                                    ? Colors
-                                                                        .green
-                                                                    : Colors
-                                                                        .red))),
+                                    ...winSeries[total.clanTag]?.map(
+                                          (win) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 4.0,
+                                                  left: 2.0,
+                                                  right: 2.0),
+                                              child: Container(
+                                                height: 10.0,
+                                                width: 10.0,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          2.0),
+                                                  color: win ==
+                                                          WarWinningEnum
+                                                              .notStarted
+                                                      ? Colors.black38
+                                                      : win ==
+                                                              WarWinningEnum
+                                                                  .winning
+                                                          ? Colors.lightGreen
+                                                              .shade200
+                                                          : (win ==
+                                                                  WarWinningEnum
+                                                                      .losing
+                                                              ? Colors
+                                                                  .red.shade200
+                                                              : (win ==
+                                                                      WarWinningEnum
+                                                                          .equal
+                                                                  ? Colors
+                                                                      .yellow
+                                                                      .shade200
+                                                                  : (win ==
+                                                                          WarWinningEnum
+                                                                              .won
+                                                                      ? Colors
+                                                                          .green
+                                                                      : Colors
+                                                                          .red))),
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        }) ??
+                                            );
+                                          },
+                                        ) ??
                                         <Widget>[],
                                   ],
                                 ),
@@ -376,7 +382,7 @@ class _LeagueWarDetailGroupScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 70,
+                            width: 80,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
@@ -401,7 +407,7 @@ class _LeagueWarDetailGroupScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 75,
+                            width: 80,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(

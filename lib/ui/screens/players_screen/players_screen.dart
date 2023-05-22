@@ -65,6 +65,36 @@ class _PlayersScreenState extends State<PlayersScreen> {
     );
   }
 
+  Widget _emptyList() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              AkarIcons.people_multiple,
+              size: 96.0,
+              color: Colors.amber,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                tr(LocaleKey.noBookmarkedPlayers),
+                style: const TextStyle(fontSize: 24.0),
+              ),
+            ),
+            Text(
+              tr(LocaleKey.noBookmarkedPlayersMessage),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -96,6 +126,9 @@ class _PlayersScreenState extends State<PlayersScreen> {
               if (state.status == BlocStatusEnum.loading &&
                   state.items.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
+              }
+              if (state.items.isEmpty) {
+                return _emptyList();
               }
               return Column(
                 children: [
@@ -203,7 +236,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                       ),
                                       SizedBox(
                                         height: 50,
-                                        width: 105,
+                                        width: 110,
                                         child: Card(
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -241,33 +274,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                 ],
               );
             default:
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        AkarIcons.people_multiple,
-                        size: 96.0,
-                        color: Colors.amber,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          tr(LocaleKey.noBookmarkedPlayers),
-                          style: const TextStyle(fontSize: 24.0),
-                        ),
-                      ),
-                      Text(
-                        tr(LocaleKey.noBookmarkedPlayersMessage),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return _emptyList();
           }
         },
       ),

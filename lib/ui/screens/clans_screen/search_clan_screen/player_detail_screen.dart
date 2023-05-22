@@ -42,6 +42,11 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final borderColor =
+        Theme.of(context).colorScheme.brightness == Brightness.dark
+            ? Colors.white24
+            : Colors.black26;
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -181,45 +186,53 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    player?.name ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        height: 1, fontSize: 24.0),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 4.0),
-                                          child: FadeInImage.assetNetwork(
-                                            width: 16,
-                                            image: player
-                                                    ?.clan?.badgeUrls?.large ??
-                                                AppConstants.placeholderImage,
-                                            placeholder:
-                                                AppConstants.placeholderImage,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Text(
-                                          player?.clan?.name ?? '',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: const TextStyle(height: 1.0),
-                                        ),
-                                        Text(
-                                          ' | ${tr(player?.role ?? ' ')}',
-                                          style:
-                                              const TextStyle(fontSize: 12.0),
-                                        ),
-                                      ],
+                                  Flexible(
+                                    child: Text(
+                                      player?.name ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                          height: 1, fontSize: 24.0),
                                     ),
                                   ),
+                                  if (player?.clan != null) ...[
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 4.0),
+                                            child: FadeInImage.assetNetwork(
+                                              width: 16,
+                                              image: player?.clan?.badgeUrls
+                                                      ?.large ??
+                                                  AppConstants.placeholderImage,
+                                              placeholder:
+                                                  AppConstants.placeholderImage,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Text(
+                                            player?.clan?.name ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: const TextStyle(height: 1.0),
+                                          ),
+                                          if (!(player?.role?.isEmptyOrNull ??
+                                              true)) ...[
+                                            const Text(' - '),
+                                            Text(
+                                              tr(player?.role ?? ''),
+                                              style: const TextStyle(
+                                                  fontSize: 12.0),
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),
@@ -333,7 +346,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 3,
-                                      color: Colors.white24,
+                                      color: borderColor,
                                     ),
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
@@ -433,7 +446,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 3,
-                                      color: Colors.white24,
+                                      color: borderColor,
                                     ),
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
@@ -533,7 +546,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 3,
-                                      color: Colors.white24,
+                                      color: borderColor,
                                     ),
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
@@ -633,7 +646,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 3,
-                                      color: Colors.white24,
+                                      color: borderColor,
                                     ),
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
@@ -734,7 +747,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 3,
-                                      color: Colors.white24,
+                                      color: borderColor,
                                     ),
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
