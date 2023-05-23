@@ -80,8 +80,8 @@ class _LeagueWarDetailPlayersScreenState
       LeagueGroupClan(name: tr(LocaleKey.allClans), tag: '', members: []);
 
   void showClanFilter(BuildContext aContext, StateSetter setState) {
-    late List<LeagueGroupClan> clanList =
-        List.of(widget.clanLeague.clans ?? <LeagueGroupClan>[]);
+    final clanList = List.of(widget.clanLeague.clans ?? <LeagueGroupClan>[]);
+    clanList.sort((a, b) => a.tag.compareTo(b.tag));
     clanList.insert(
         0, LeagueGroupClan(name: tr(LocaleKey.allClans), tag: '', members: []));
     showModalBottomSheet(

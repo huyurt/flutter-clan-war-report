@@ -304,7 +304,7 @@ class _LeagueWarDetailGroupDetailScreenState
                           ),
                         ),
                         SizedBox(
-                          width: 180,
+                          width: 155,
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),

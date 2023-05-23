@@ -68,7 +68,7 @@ class _WarLogClassicScreenState extends State<WarLogClassicScreen> {
                         ),
                       ),
                       SizedBox(
-                        width: 180,
+                        width: 155,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Column(

@@ -234,7 +234,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 180,
+                                        width: 155,
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0),
