@@ -49,6 +49,9 @@ class AppThemes {
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: Color(0xffffc107),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: Color(0xffffc107),
@@ -115,6 +118,11 @@ class AppThemes {
       indicatorSize: TabBarIndicatorSize.tab,
       labelColor: Color(0xdd000000),
       unselectedLabelColor: Color(0xb2000000),
+    ),
+    textTheme: TextTheme(
+      bodySmall: TextStyle(fontSize: 10.0),
+      bodyMedium: TextStyle(fontSize: 12.0),
+      bodyLarge: TextStyle(fontSize: 14.0),
     ),
     dialogTheme: DialogTheme(
       shape: RoundedRectangleBorder(
@@ -183,6 +191,9 @@ class AppThemes {
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: Color(0xffffc107),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: Color(0xffffc107),
@@ -250,33 +261,10 @@ class AppThemes {
       labelColor: Color(0xffffffff),
       unselectedLabelColor: Color(0xb2ffffff),
     ),
-    chipTheme: ChipThemeData(
-      backgroundColor: Color(0x1fffffff),
-      brightness: Brightness.dark,
-      deleteIconColor: Color(0xdeffffff),
-      disabledColor: Color(0x0cffffff),
-      labelPadding: EdgeInsets.only(top: 0, bottom: 0, left: 8, right: 8),
-      labelStyle: TextStyle(
-        color: Color(0xdeffffff),
-        fontSize: null,
-        fontWeight: FontWeight.w400,
-        fontStyle: FontStyle.normal,
-      ),
-      padding: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
-      secondaryLabelStyle: TextStyle(
-        color: Color(0x3dffffff),
-        fontSize: null,
-        fontWeight: FontWeight.w400,
-        fontStyle: FontStyle.normal,
-      ),
-      secondarySelectedColor: Color(0x3d212121),
-      selectedColor: Color(0x3dffffff),
-      shape: StadiumBorder(
-          side: BorderSide(
-        color: Color(0xff000000),
-        width: 0,
-        style: BorderStyle.none,
-      )),
+    textTheme: TextTheme(
+      bodySmall: TextStyle(fontSize: 10.0),
+      bodyMedium: TextStyle(fontSize: 12.0),
+      bodyLarge: TextStyle(fontSize: 14.0),
     ),
     dialogTheme: DialogTheme(
       shape: RoundedRectangleBorder(

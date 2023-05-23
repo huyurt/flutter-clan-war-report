@@ -100,18 +100,21 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                           child: Text(
                             tr(LocaleKey.group),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                         Tab(
                           child: Text(
                             tr(LocaleKey.rounds),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                         Tab(
                           child: Text(
                             tr(LocaleKey.players),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                       ],

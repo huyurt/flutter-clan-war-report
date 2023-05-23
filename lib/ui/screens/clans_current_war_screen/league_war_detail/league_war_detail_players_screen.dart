@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import "package:collection/collection.dart";
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
@@ -11,6 +12,7 @@ import '../../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
+import '../../../../utils/constants/locale_key.dart';
 import 'league_war_detail_players_detail_screen.dart';
 
 class ClanLeagueWarsMemberStats {
@@ -22,6 +24,7 @@ class ClanLeagueWarsMemberStats {
     required this.memberAttacks,
     required this.memberDefenceAttacks,
     required this.roundCount,
+    required this.clanTag,
     required this.clanName,
   });
 
@@ -32,7 +35,18 @@ class ClanLeagueWarsMemberStats {
   final List<Attack> memberAttacks;
   final List<Attack> memberDefenceAttacks;
   final int roundCount;
+  final String clanTag;
   final String clanName;
+}
+
+class LeagueParticipant {
+  LeagueParticipant({
+    required this.member,
+    required this.clanTag,
+  });
+
+  final LeagueGroupMember member;
+  final String clanTag;
 }
 
 class LeagueWarDetailPlayersScreen extends StatefulWidget {
@@ -57,7 +71,91 @@ class LeagueWarDetailPlayersScreen extends StatefulWidget {
 }
 
 class _LeagueWarDetailPlayersScreenState
-    extends State<LeagueWarDetailPlayersScreen> {
+    extends State<LeagueWarDetailPlayersScreen>
+    with AutomaticKeepAliveClientMixin<LeagueWarDetailPlayersScreen> {
+  @override
+  bool get wantKeepAlive => true;
+
+  late LeagueGroupClan _clanFilter =
+      LeagueGroupClan(name: tr(LocaleKey.allClans), tag: '', members: []);
+
+  void showClanFilter(BuildContext aContext, StateSetter setState) {
+    late List<LeagueGroupClan> clanList =
+        List.of(widget.clanLeague.clans ?? <LeagueGroupClan>[]);
+    clanList.insert(
+        0, LeagueGroupClan(name: tr(LocaleKey.allClans), tag: '', members: []));
+    showModalBottomSheet(
+      context: aContext,
+      backgroundColor: aContext.primaryColor,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return FractionallySizedBox(
+          heightFactor: 0.5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 12.0),
+                child: Text(
+                  tr(LocaleKey.clans),
+                  style: const TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: clanList.map(
+                    (clan) {
+                      return Card(
+                        margin: EdgeInsets.zero,
+                        elevation: 0.0,
+                        color: _clanFilter.tag == clan.tag
+                            ? Colors.black12
+                            : Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _clanFilter = clan;
+                            });
+                            Navigator.pop(aContext);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 18.0, horizontal: 12.0),
+                            child: Row(
+                              children: [
+                                if (clan.badgeUrls != null)
+                                  FadeInImage.assetNetwork(
+                                    height: 16.0,
+                                    width: 16.0,
+                                    image: clan.badgeUrls?.large ??
+                                        AppConstants.placeholderImage,
+                                    placeholder: AppConstants.placeholderImage,
+                                    fit: BoxFit.cover,
+                                  ).paddingRight(8.0),
+                                Text(
+                                  clan.name,
+                                  style: const TextStyle(height: 1.2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final clanMembers = <LeagueGroupMember>[];
@@ -112,6 +210,7 @@ class _LeagueWarDetailPlayersScreenState
         memberAttacks: memberAttacks,
         memberDefenceAttacks: memberDefenceAttacks,
         roundCount: memberInPreparationWar ? roundCount - 1 : roundCount,
+        clanTag: clan?.tag ?? '',
         clanName: clan?.name ?? '',
       ));
     }
@@ -126,20 +225,62 @@ class _LeagueWarDetailPlayersScreenState
           (o1, o2) => o1.member.name.compareTo(o2.member.name),
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
 
-    final leagueParticipants = <LeagueGroupMember>[];
+    final leagueParticipants = <LeagueParticipant>[];
     for (final clan in widget.clanLeague.clans ?? <LeagueGroupClan>[]) {
       leagueParticipants.addAll(clan.members
-          .where((element) => !members.any((e2) => e2.tag == element.tag)));
+          .where((element) => !members.any((e2) => e2.tag == element.tag))
+          .map((e) => LeagueParticipant(
+                member: e,
+                clanTag: clan.tag,
+              )));
     }
-    leagueParticipants.sort((a, b) => <Comparator<LeagueGroupMember>>[
-          (o1, o2) => o2.townHallLevel.compareTo(o1.townHallLevel),
+    leagueParticipants.sort((a, b) => <Comparator<LeagueParticipant>>[
+          (o1, o2) =>
+              o2.member.townHallLevel.compareTo(o1.member.townHallLevel),
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
 
     return ListView(
       key: PageStorageKey(widget.key),
       shrinkWrap: true,
       children: [
-        ...memberStats.map(
+        Card(
+          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+          elevation: 0.0,
+          color: Colors.black12,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: InkWell(
+            onTap: () {
+              showClanFilter(context, setState);
+            },
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 18.0),
+              child: Row(
+                children: [
+                  if (_clanFilter.badgeUrls != null)
+                    FadeInImage.assetNetwork(
+                      height: 16.0,
+                      width: 16.0,
+                      image: _clanFilter.badgeUrls?.large ??
+                          AppConstants.placeholderImage,
+                      placeholder: AppConstants.placeholderImage,
+                      fit: BoxFit.cover,
+                    ).paddingRight(8.0),
+                  Text(
+                    _clanFilter.name,
+                    style: const TextStyle(height: 1.2),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        ...(_clanFilter.tag.isEmptyOrNull
+                ? memberStats
+                : memberStats.where((m) => m.clanTag == _clanFilter.tag))
+            .map(
           (memberStat) {
             final index = memberStats.indexOf(memberStat);
             final member = memberStat.member;
@@ -211,13 +352,14 @@ class _LeagueWarDetailPlayersScreenState
                                   member.name,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
+                                  style: const TextStyle(height: 1.2),
                                 ),
                               ),
                               Row(
                                 children: [
                                   FadeInImage.assetNetwork(
-                                    height: 12,
-                                    width: 12,
+                                    height: 12.0,
+                                    width: 12.0,
                                     image: clan?.badgeUrls?.large ??
                                         AppConstants.placeholderImage,
                                     placeholder: AppConstants.placeholderImage,
@@ -228,7 +370,10 @@ class _LeagueWarDetailPlayersScreenState
                                       ' ${clan?.name}',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: const TextStyle(fontSize: 10),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(height: 1.2),
                                     ),
                                   ),
                                 ],
@@ -240,7 +385,7 @@ class _LeagueWarDetailPlayersScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 65,
+                            width: 60,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
@@ -251,7 +396,7 @@ class _LeagueWarDetailPlayersScreenState
                                   children: [
                                     Image.asset(
                                       '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
-                                      height: 14,
+                                      height: 12.0,
                                       fit: BoxFit.cover,
                                     ),
                                     Text(' ${memberStat.totalStars}'),
@@ -311,15 +456,19 @@ class _LeagueWarDetailPlayersScreenState
             );
           },
         ).toList(),
-        ...leagueParticipants.map(
-          (member) {
-            final index = leagueParticipants.indexOf(member);
-            final clan = widget.clanLeague.clans?.firstWhere(
-                (e1) => e1.members.any((e2) => e2.tag == member.tag));
+        ...(_clanFilter.tag.isEmptyOrNull
+                ? leagueParticipants
+                : leagueParticipants.where((m) => m.clanTag == _clanFilter.tag))
+            .map(
+          (participant) {
+            final index = leagueParticipants.indexOf(participant);
+            final clan = widget.clanLeague.clans?.firstWhere((e1) =>
+                e1.members.any((e2) => e2.tag == participant.member.tag));
 
-            final clanMemberTownHallLevel = (member.townHallLevel) > 11
-                ? '${member.townHallLevel}.5'
-                : (member.townHallLevel).toString();
+            final clanMemberTownHallLevel =
+                (participant.member.townHallLevel) > 11
+                    ? '${participant.member.townHallLevel}.5'
+                    : (participant.member.townHallLevel).toString();
 
             return Card(
               margin: EdgeInsets.zero,
@@ -334,7 +483,7 @@ class _LeagueWarDetailPlayersScreenState
                     clanTag: widget.clanTag,
                     warStartTime: widget.warStartTime,
                     clan: clan,
-                    member: member,
+                    member: participant.member,
                     memberAttacks: const <Attack>[],
                     memberDefenceAttacks: const <Attack>[],
                     roundCount: 0,
@@ -370,9 +519,10 @@ class _LeagueWarDetailPlayersScreenState
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 4.0),
                                 child: Text(
-                                  member.name,
+                                  participant.member.name,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
+                                  style: const TextStyle(height: 1.2),
                                 ),
                               ),
                               Row(
@@ -380,8 +530,8 @@ class _LeagueWarDetailPlayersScreenState
                                   Padding(
                                     padding: const EdgeInsets.only(right: 4.0),
                                     child: FadeInImage.assetNetwork(
-                                      height: 12,
-                                      width: 12,
+                                      height: 12.0,
+                                      width: 12.0,
                                       image: clan?.badgeUrls?.large ??
                                           AppConstants.placeholderImage,
                                       placeholder:
@@ -389,11 +539,16 @@ class _LeagueWarDetailPlayersScreenState
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-                                  Text(
-                                    clan?.name ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: const TextStyle(fontSize: 10),
+                                  Expanded(
+                                    child: Text(
+                                      clan?.name ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(height: 1.2),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -404,7 +559,7 @@ class _LeagueWarDetailPlayersScreenState
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: SizedBox(
                             height: 50,
-                            width: 65,
+                            width: 60,
                             child: Card(
                               margin: EdgeInsets.zero,
                               child: Padding(
@@ -415,7 +570,7 @@ class _LeagueWarDetailPlayersScreenState
                                   children: [
                                     Image.asset(
                                       '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
-                                      height: 14,
+                                      height: 12.0,
                                       fit: BoxFit.cover,
                                     ),
                                     const Text(' 0'),
@@ -473,6 +628,7 @@ class _LeagueWarDetailPlayersScreenState
             );
           },
         ).toList(),
+        const SizedBox(height: 24.0),
       ],
     );
   }

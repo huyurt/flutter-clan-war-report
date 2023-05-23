@@ -305,8 +305,9 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                   );
                 },
               ),
-              if (widget.clanCurrentWar.warType == WarTypeEnum.leagueWar)
-                const SizedBox(height: 72.0),
+              widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
+                  ? const SizedBox(height: 72.0)
+                  : const SizedBox(height: 24.0),
             ],
           ),
         ),

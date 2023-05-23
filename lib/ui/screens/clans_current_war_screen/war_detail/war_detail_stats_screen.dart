@@ -172,7 +172,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                         clan.name ?? '',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: const TextStyle(height: 1.0),
+                        style: const TextStyle(height: 1.2),
                       ),
                     ],
                   ),
@@ -186,7 +186,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                   children: [
                     Text(
                       tr('${clanCurrentWar.state}_description'),
-                      style: const TextStyle(fontSize: 18.0),
+                      style: const TextStyle(fontSize: 16.0),
                     ),
                     if (remainingDateTime != null)
                       CountdownTimerWidget(
@@ -214,7 +214,7 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
                         opponent.name ?? '',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: const TextStyle(height: 1.0),
+                        style: const TextStyle(height: 1.2),
                       ),
                     ],
                   ),
@@ -642,8 +642,9 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
             ],
           ),
         ),
-        if (widget.clanCurrentWar.warType == WarTypeEnum.leagueWar)
-          const SizedBox(height: 72.0),
+        widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
+            ? const SizedBox(height: 72.0)
+            : const SizedBox(height: 24.0),
       ],
     );
   }

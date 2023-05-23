@@ -82,7 +82,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
                 tr(LocaleKey.noBookmarkedPlayers),
-                style: const TextStyle(fontSize: 24.0),
+                style: const TextStyle(fontSize: 22.0),
               ),
             ),
             Text(
@@ -168,8 +168,8 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                   child: Row(
                                     children: [
                                       FadeInImage.assetNetwork(
-                                        height: 60,
-                                        width: 60,
+                                        height: 50,
+                                        width: 50,
                                         image:
                                             player.league?.iconUrls?.medium ??
                                                 AppConstants.placeholderImage,
@@ -193,8 +193,8 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
                                                 style: const TextStyle(
-                                                    height: 1.0,
-                                                    fontSize: 16.0),
+                                                    height: 1.2,
+                                                    fontSize: 14.0),
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
@@ -224,8 +224,11 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       maxLines: 1,
-                                                      style: const TextStyle(
-                                                          height: 1.0),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall
+                                                          ?.copyWith(
+                                                              height: 1.2),
                                                     ),
                                                   ],
                                                 ),

@@ -111,7 +111,7 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                     Center(
                       child: Text(
                         tr(LocaleKey.noPlayerFound),
-                        style: const TextStyle(fontSize: 20.0),
+                        style: const TextStyle(fontSize: 18.0),
                       ),
                     ),
                     Padding(
@@ -161,8 +161,8 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                           child: Row(
                             children: [
                               FadeInImage.assetNetwork(
-                                height: 60,
-                                width: 60,
+                                height: 50,
+                                width: 50,
                                 image: player.league?.iconUrls?.medium ??
                                     AppConstants.placeholderImage,
                                 placeholder: AppConstants.placeholderImage,
@@ -182,7 +182,8 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                                         player.name,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
-                                        style: const TextStyle(fontSize: 16),
+                                        style: const TextStyle(
+                                            height: 1.2, fontSize: 14.0),
                                       ),
                                       Padding(
                                         padding:
@@ -233,7 +234,7 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                   Center(
                     child: Text(
                       tr(LocaleKey.searchPlayer),
-                      style: const TextStyle(fontSize: 20.0),
+                      style: const TextStyle(fontSize: 18.0),
                     ),
                   ),
                   Padding(

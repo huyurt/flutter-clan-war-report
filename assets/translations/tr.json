@@ -203,5 +203,6 @@
   "war_log_error_message": "Bu klan savaş günlüğünü gizli tutuyor. Eğer sizin klanınız ise lider ile iletişime geçip, savaş günlüğünü herkese görünür yapmasını isteyin.",
   "tab_war_log_classic_title": "Klasik",
   "tab_war_log_league_title": "Savaş Ligi",
-  "No attacks yet": "Henüz saldırı yapılmadı"
+  "No attacks yet": "Henüz saldırı yapılmadı",
+  "All clans": "Tüm klanlar"
 }

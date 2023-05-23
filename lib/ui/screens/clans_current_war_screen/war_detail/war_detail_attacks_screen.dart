@@ -60,7 +60,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
         opacity: 0.3,
         child: Image.asset(
           '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-          height: 16,
+          height: 14.0,
           fit: BoxFit.cover,
         ),
       ));
@@ -68,14 +68,14 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
     for (int index = 0; index < stars - beforeGainedStars; index++) {
       widgets.add(Image.asset(
         '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-        height: 16,
+        height: 14.0,
         fit: BoxFit.cover,
       ));
     }
     for (int index = 0; index < zeroStar; index++) {
       widgets.add(Image.asset(
         '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-        height: 16,
+        height: 14.0,
         fit: BoxFit.cover,
       ));
     }
@@ -90,14 +90,14 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
     for (int index = 0; index < stars; index++) {
       widgets.add(Image.asset(
         '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-        height: 16,
+        height: 14.0,
         fit: BoxFit.cover,
       ));
     }
     for (int index = 0; index < zeroStar; index++) {
       widgets.add(Image.asset(
         '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-        height: 16,
+        height: 14.0,
         fit: BoxFit.cover,
       ));
     }
@@ -156,11 +156,17 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        clan.name ?? '',
-                        style: const TextStyle(height: 1.0, fontSize: 18.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Text(
+                          clan.name ?? '',
+                          style: const TextStyle(height: 1.2, fontSize: 16.0),
+                        ),
                       ),
-                      Text(clan.tag ?? ''),
+                      Text(
+                        clan.tag ?? '',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     ],
                   ),
                 ],
@@ -233,7 +239,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                           '${member.mapPosition}. ${member.name}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: const TextStyle(height: 1.0, fontSize: 18),
+                          style: const TextStyle(height: 1.2, fontSize: 16.0),
                         ),
                         Row(
                           children: [
@@ -273,7 +279,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                   Text(
                                                     ' ${tr(LocaleKey.attack)} 1',
                                                     style: const TextStyle(
-                                                        fontSize: 12),
+                                                        fontSize: 10.0),
                                                   ),
                                                 ],
                                               ),
@@ -333,7 +339,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                     Text(
                                                       ' ${tr(LocaleKey.attack)} 2',
                                                       style: const TextStyle(
-                                                          fontSize: 12),
+                                                          fontSize: 10.0),
                                                     ),
                                                   ],
                                                 ),
@@ -391,7 +397,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                   Text(
                                                     ' ${tr(LocaleKey.defence)}',
                                                     style: const TextStyle(
-                                                        fontSize: 12),
+                                                        fontSize: 10.0),
                                                   ),
                                                 ],
                                               ),

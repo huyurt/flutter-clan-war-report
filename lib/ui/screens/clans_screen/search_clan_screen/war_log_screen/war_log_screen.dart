@@ -64,7 +64,7 @@ class _WarLogScreenState extends State<WarLogScreen> {
                       Center(
                         child: Text(
                           tr(LocaleKey.warLogErrorMessageTitle),
-                          style: const TextStyle(fontSize: 20.0),
+                          style: const TextStyle(fontSize: 22.0),
                         ),
                       ),
                       Padding(
@@ -99,12 +99,14 @@ class _WarLogScreenState extends State<WarLogScreen> {
                           child: Text(
                             tr(LocaleKey.tabWarLogClassicTitle),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                         Tab(
                           child: Text(
                             tr(LocaleKey.tabWarLogLeagueTitle),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                       ],

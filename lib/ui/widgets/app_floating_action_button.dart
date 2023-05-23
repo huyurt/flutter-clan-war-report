@@ -17,7 +17,10 @@ class AppFloatingActionButton extends StatelessWidget {
     switch (context.watch<BottomNavigationBarCubit>().state.screenType) {
       case ScreenEnum.clans:
         return FloatingActionButton.extended(
-          label: Text(tr(LocaleKey.search)),
+          label: Text(
+            tr(LocaleKey.search),
+            style: const TextStyle(fontSize: 10.0),
+          ),
           icon: const Icon(Icons.search),
           onPressed: () {
             const SearchClanScreen().launch(context);
@@ -25,7 +28,10 @@ class AppFloatingActionButton extends StatelessWidget {
         );
       case ScreenEnum.players:
         return FloatingActionButton.extended(
-          label: Text(tr(LocaleKey.search)),
+          label: Text(
+            tr(LocaleKey.search),
+            style: const TextStyle(fontSize: 10.0),
+          ),
           icon: const Icon(Icons.search),
           onPressed: () {
             const SearchPlayerScreen().launch(context);

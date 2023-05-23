@@ -159,14 +159,19 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: const TextStyle(
-                                          height: 1.0, fontSize: 24.0),
+                                          height: 1.2, fontSize: 22.0),
                                     ),
                                   ),
                                   Flexible(
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0),
-                                      child: Text(clan?.tag ?? ''),
+                                      child: Text(
+                                        clan?.tag ?? '',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -197,7 +202,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                         EdgeInsets.symmetric(horizontal: 2.0),
                                     child: Icon(
                                       Icons.trending_up,
-                                      size: 16.0,
+                                      size: 14.0,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -221,7 +226,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                         EdgeInsets.symmetric(horizontal: 2.0),
                                     child: Icon(
                                       Icons.trending_neutral,
-                                      size: 16.0,
+                                      size: 14.0,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -245,7 +250,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                         EdgeInsets.symmetric(horizontal: 2.0),
                                     child: Icon(
                                       Icons.trending_down,
-                                      size: 16.0,
+                                      size: 14.0,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -269,7 +274,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                         EdgeInsets.symmetric(horizontal: 2.0),
                                     child: Icon(
                                       MdiIcons.chartLineVariant,
-                                      size: 16.0,
+                                      size: 14.0,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -306,13 +311,13 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                               ? CountryFlag.fromCountryCode(
                                                   clan?.location?.countryCode ??
                                                       '',
-                                                  height: 16.0,
+                                                  height: 18.0,
                                                   width: 24.0,
                                                   borderRadius: 4.0,
                                                 )
                                               : const Icon(
                                                   Icons.public,
-                                                  size: 18,
+                                                  size: 18.0,
                                                   color: Colors.blue,
                                                 ),
                                           Text(
@@ -339,14 +344,14 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                               AppConstants.warLeagueUnranked)
                                             Image.asset(
                                               '${AppConstants.clanWarLeaguesImagePath}${clan?.warLeague?.id}.png',
-                                              height: 18,
+                                              height: 18.0,
                                               fit: BoxFit.cover,
                                             )
                                           else if (clan?.warLeague?.id ==
                                               AppConstants.warLeagueUnranked)
                                             Image.asset(
                                               '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                                              height: 18,
+                                              height: 18.0,
                                               fit: BoxFit.cover,
                                             ),
                                           Text(
@@ -369,13 +374,13 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                           child: Text(
                             clan?.description ?? '',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(height: 1.2),
+                            style: const TextStyle(height: 1.3),
                           ),
                         ),
                       ),
                     ],
                     if (members.isNotEmpty) ...[
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 14.0),
                       ...members
                           .map(
                             (member) => SizedBox(
@@ -420,8 +425,8 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                 )
                                               : Image.asset(
                                                   '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                                                  height: 60,
-                                                  width: 60,
+                                                  height: 50,
+                                                  width: 50,
                                                   fit: BoxFit.cover,
                                                 ),
                                           Expanded(
@@ -434,19 +439,28 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
+                                                    MainAxisAlignment.center,
                                                 children: [
-                                                  Text(
-                                                    member.name,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: const TextStyle(
-                                                        height: 1,
-                                                        fontSize: 16.0),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 4.0),
+                                                    child: Text(
+                                                      member.name,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      style: const TextStyle(
+                                                          height: 1.2,
+                                                          fontSize: 14.0),
+                                                    ),
                                                   ),
-                                                  Text(tr(member.role)),
+                                                  Text(
+                                                    tr(member.role),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall,
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -507,7 +521,10 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                       visible: currentWarDetail?.war.state !=
                           WarStateEnum.notInWar.name,
                       child: FloatingActionButton.extended(
-                        label: Text(tr(LocaleKey.viewWar)),
+                        label: Text(
+                          tr(LocaleKey.viewWar),
+                          style: const TextStyle(fontSize: 10.0),
+                        ),
                         onPressed: () {
                           WarDetailScreen(
                             clanTag: widget.clanTag,

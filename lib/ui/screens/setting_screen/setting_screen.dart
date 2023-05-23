@@ -62,8 +62,8 @@ class SettingScreen extends StatelessWidget {
             ),
           ),
           TextDivider(text: tr(LocaleKey.theme)),
-          Row(
-            children: const [
+          const Row(
+            children: [
               ThemeCard(
                 themeMode: ThemeMode.system,
                 icon: Ionicons.contrast_outline,
@@ -78,7 +78,7 @@ class SettingScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 36),
+          const SizedBox(height: 24.0),
         ],
       ),
     );

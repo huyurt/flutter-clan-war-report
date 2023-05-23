@@ -484,8 +484,8 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                           child: Row(
                             children: [
                               FadeInImage.assetNetwork(
-                                height: 60,
-                                width: 60,
+                                height: 50,
+                                width: 50,
                                 image: clan.badgeUrls?.large ??
                                     AppConstants.placeholderImage,
                                 placeholder: AppConstants.placeholderImage,
@@ -505,7 +505,8 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                         clan.name,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
-                                        style: const TextStyle(fontSize: 16),
+                                        style: const TextStyle(
+                                            height: 1.2, fontSize: 14.0),
                                       ),
                                       Padding(
                                         padding:

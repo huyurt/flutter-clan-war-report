@@ -57,7 +57,7 @@ class AppDialog extends StatelessWidget {
                     const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
                 child: Text(
                   title.toString(),
-                  style: const TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 22),
                 ),
               ),
               16.height,

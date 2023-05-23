@@ -30,80 +30,87 @@ class _WarLogLeagueScreenState extends State<WarLogLeagueScreen> {
     return Material(
       child: ListView(
         key: PageStorageKey(widget.key),
-        children: widget.warLogs.map(
-          (warLog) {
-            final clan = warLog.clan;
+        children: [
+          ...widget.warLogs.map(
+            (warLog) {
+              final clan = warLog.clan;
 
-            String? endTimeText = null;
-            final endTime = DateTime.tryParse(warLog.endTime ?? '');
-            if (endTime != null) {
-              final formatter = DateFormat(
-                  'MMMM yyyy', Localizations.localeOf(context).languageCode);
-              endTimeText = formatter.format(endTime);
-            }
+              String? endTimeText = null;
+              final endTime = DateTime.tryParse(warLog.endTime ?? '');
+              if (endTime != null) {
+                final formatter = DateFormat(
+                    'MMMM yyyy', Localizations.localeOf(context).languageCode);
+                endTimeText = formatter.format(endTime);
+              }
 
-            IconData resultIcon = MdiIcons.equal;
-            Color resultIconColor = Colors.blue;
-            switch (warLog.result) {
-              case 'tie':
-                resultIcon = Icons.keyboard_arrow_down;
-                resultIconColor = Colors.red;
-                leagueCounter += 1;
-                break;
-              case 'win':
-                resultIcon = Icons.keyboard_arrow_up;
-                resultIconColor = Colors.green;
-                leagueCounter -= 1;
-                break;
-            }
-            int clanWarLeagueId = widget.clanWarLeagueId + leagueCounter;
+              IconData resultIcon = MdiIcons.equal;
+              Color resultIconColor = Colors.blue;
+              switch (warLog.result) {
+                case 'tie':
+                  resultIcon = Icons.keyboard_arrow_down;
+                  resultIconColor = Colors.red;
+                  leagueCounter += 1;
+                  break;
+                case 'win':
+                  resultIcon = Icons.keyboard_arrow_up;
+                  resultIconColor = Colors.green;
+                  leagueCounter -= 1;
+                  break;
+              }
+              int clanWarLeagueId = widget.clanWarLeagueId + leagueCounter;
 
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-              child: SizedBox(
-                height: 70,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(endTimeText ?? ''),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: Row(
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+                child: SizedBox(
+                  height: 70,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(endTimeText ?? ''),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              resultIcon,
+                              size: 24.0,
+                              color: resultIconColor,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Image.asset(
+                                '${AppConstants.clanWarLeaguesImagePath}$clanWarLeagueId.png',
+                                height: 28.0,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Text(
+                              tr('warLeague$clanWarLeagueId'),
+                              style: const TextStyle(fontSize: 20.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            resultIcon,
-                            size: 24.0,
-                            color: resultIconColor,
-                          ),
-                          Image.asset(
-                            '${AppConstants.clanWarLeaguesImagePath}$clanWarLeagueId.png',
-                            height: 28.0,
-                            fit: BoxFit.cover,
-                          ),
+                          Text('${tr(LocaleKey.stars)}: ${clan.stars}')
+                              .paddingRight(24.0),
                           Text(
-                            ' ${tr('warLeague$clanWarLeagueId')}',
-                            style: const TextStyle(fontSize: 24.0),
-                          ),
+                              '${tr(LocaleKey.destruction)}: %${(clan.destructionPercentage * (warLog.teamSize ?? 0)).toStringAsFixed(0)}'),
                         ],
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('${tr(LocaleKey.stars)}: ${clan.stars}')
-                            .paddingRight(24.0),
-                        Text(
-                            '${tr(LocaleKey.destruction)}: %${(clan.destructionPercentage * (warLog.teamSize ?? 0)).toStringAsFixed(0)}'),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-        ).toList(),
+              );
+            },
+          ).toList(),
+          const SizedBox(height: 24.0),
+        ],
       ),
     );
   }

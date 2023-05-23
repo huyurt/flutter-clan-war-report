@@ -80,7 +80,7 @@ class _ClansScreenState extends State<ClansScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
                 tr(LocaleKey.noBookmarkedClans),
-                style: const TextStyle(fontSize: 24.0),
+                style: const TextStyle(fontSize: 22.0),
               ),
             ),
             Text(
@@ -167,8 +167,8 @@ class _ClansScreenState extends State<ClansScreen> {
                                   child: Row(
                                     children: [
                                       FadeInImage.assetNetwork(
-                                        height: 60,
-                                        width: 60,
+                                        height: 50,
+                                        width: 50,
                                         image: clan.badgeUrls?.large ??
                                             AppConstants.placeholderImage,
                                         placeholder:
@@ -191,14 +191,18 @@ class _ClansScreenState extends State<ClansScreen> {
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
                                                 style: const TextStyle(
-                                                    height: 1.0,
-                                                    fontSize: 16.0),
+                                                    height: 1.2,
+                                                    fontSize: 14.0),
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 8.0),
-                                                child: Text(tr(
-                                                    "${clan.type}_clan_type")),
+                                                child: Text(
+                                                  tr("${clan.type}_clan_type"),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
                                               ),
                                             ],
                                           ),

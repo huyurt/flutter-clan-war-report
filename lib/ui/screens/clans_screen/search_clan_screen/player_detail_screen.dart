@@ -192,7 +192,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: const TextStyle(
-                                          height: 1, fontSize: 24.0),
+                                          height: 1.2, fontSize: 20.0),
                                     ),
                                   ),
                                   if (player?.clan != null) ...[
@@ -218,15 +218,16 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                             player?.clan?.name ?? '',
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
-                                            style: const TextStyle(height: 1.0),
+                                            style: const TextStyle(height: 1.2),
                                           ),
                                           if (!(player?.role?.isEmptyOrNull ??
                                               true)) ...[
                                             const Text(' - '),
                                             Text(
                                               tr(player?.role ?? ''),
-                                              style: const TextStyle(
-                                                  fontSize: 12.0),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
                                             ),
                                           ],
                                         ],
@@ -260,7 +261,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                         children: [
                                           Image.asset(
                                             '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
-                                            height: 18,
+                                            height: 16.0,
                                             fit: BoxFit.cover,
                                           ),
                                           Text(' ${player?.warStars ?? 0}'),
@@ -289,7 +290,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                             player?.league?.iconUrls?.medium !=
                                                     null
                                                 ? FadeInImage.assetNetwork(
-                                                    height: 20,
+                                                    height: 16.0,
                                                     image: player
                                                             ?.league
                                                             ?.iconUrls
@@ -302,7 +303,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                                   )
                                                 : Image.asset(
                                                     '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                                                    height: 18,
+                                                    height: 16.0,
                                                     fit: BoxFit.cover,
                                                   ),
                                             Text(' ${player?.trophies ?? 0}'),

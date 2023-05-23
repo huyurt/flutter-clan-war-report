@@ -110,24 +110,28 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
                           child: Text(
                             tr(LocaleKey.tabStatsTitle),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                         Tab(
                           child: Text(
                             tr(LocaleKey.tabEventsTitle),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                         Tab(
                           child: Text(
                             tr(LocaleKey.tabMyTeamTitle),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                         Tab(
                           child: Text(
                             tr(LocaleKey.tabEnemyTeamTitle),
                             textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12.0),
                           ),
                         ),
                       ],
@@ -182,7 +186,10 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
                   if (snapshot.hasData) {
                     final clanDetail = snapshot.data;
                     return FloatingActionButton.extended(
-                      label: Text(tr(LocaleKey.viewLeague)),
+                      label: Text(
+                        tr(LocaleKey.viewLeague),
+                        style: const TextStyle(fontSize: 10.0),
+                      ),
                       onPressed: () {
                         LeagueWarDetailScreen(
                           clanTag: widget.clanTag,

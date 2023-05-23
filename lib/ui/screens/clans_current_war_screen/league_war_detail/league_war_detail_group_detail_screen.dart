@@ -173,10 +173,13 @@ class _LeagueWarDetailGroupDetailScreenState
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
                           child: Text(
                             widget.clan?.name ?? '',
-                            style: const TextStyle(fontSize: 24.0),
+                            style: const TextStyle(fontSize: 22.0),
                           ),
                         ),
-                        Text(widget.clan?.tag ?? ''),
+                        Text(
+                          widget.clan?.tag ?? '',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ],
                     ),
                   ],
@@ -329,7 +332,7 @@ class _LeagueWarDetailGroupDetailScreenState
                                           Text(
                                             clan.stars.toString(),
                                             style: TextStyle(
-                                              fontSize: 24.0,
+                                              fontSize: 22.0,
                                               color: clanWon == true
                                                   ? Colors.green
                                                   : (clanWon == false
@@ -357,7 +360,7 @@ class _LeagueWarDetailGroupDetailScreenState
                                         Text(
                                           ' : ',
                                           style: TextStyle(
-                                            fontSize: 24.0,
+                                            fontSize: 22.0,
                                             color: clanWon == true
                                                 ? Colors.green
                                                 : (clanWon == false
@@ -380,7 +383,7 @@ class _LeagueWarDetailGroupDetailScreenState
                                           Text(
                                             opponent.stars.toString(),
                                             style: TextStyle(
-                                              fontSize: 24.0,
+                                              fontSize: 22.0,
                                               color: clanWon == true
                                                   ? Colors.green
                                                   : (clanWon == false
@@ -433,6 +436,7 @@ class _LeagueWarDetailGroupDetailScreenState
               ),
             );
           }).toList(),
+          const SizedBox(height: 24.0),
         ],
       ),
     );

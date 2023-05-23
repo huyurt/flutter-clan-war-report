@@ -78,7 +78,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
                 tr(LocaleKey.noClansInWar),
-                style: const TextStyle(fontSize: 24.0),
+                style: const TextStyle(fontSize: 22.0),
               ),
             ),
             Text(
@@ -271,7 +271,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                                                         Text(
                                                           clan.stars.toString(),
                                                           style: TextStyle(
-                                                            fontSize: 24.0,
+                                                            fontSize: 22.0,
                                                             color: clanWon ==
                                                                     true
                                                                 ? Colors.green
@@ -305,7 +305,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                                                       Text(
                                                         ' : ',
                                                         style: TextStyle(
-                                                          fontSize: 24.0,
+                                                          fontSize: 22.0,
                                                           color: clanWon == true
                                                               ? Colors.green
                                                               : (clanWon ==
@@ -336,7 +336,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                                                           opponent.stars
                                                               .toString(),
                                                           style: TextStyle(
-                                                            fontSize: 24.0,
+                                                            fontSize: 22.0,
                                                             color: clanWon ==
                                                                     true
                                                                 ? Colors.green

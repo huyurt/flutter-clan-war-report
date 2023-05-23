@@ -46,7 +46,7 @@ class LanguageSelectorDialog extends StatelessWidget {
                         const SizedBox(width: 16.0),
                         Text(
                           tr(locale.languageCode),
-                          style: const TextStyle(fontSize: 16.0),
+                          style: const TextStyle(fontSize: 14.0),
                         ),
                       ],
                     ),

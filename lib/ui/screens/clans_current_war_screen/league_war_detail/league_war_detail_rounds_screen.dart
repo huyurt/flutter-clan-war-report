@@ -174,7 +174,7 @@ class _LeagueWarDetailRoundsScreenState
                                                 : const Text(
                                                     '-',
                                                     style: TextStyle(
-                                                        fontSize: 28.0),
+                                                        fontSize: 26.0),
                                                   ),
                                           ),
                                         ),
@@ -206,7 +206,7 @@ class _LeagueWarDetailRoundsScreenState
                                                 : const Text(
                                                     '-',
                                                     style: TextStyle(
-                                                        fontSize: 28.0),
+                                                        fontSize: 26.0),
                                                   ),
                                           ),
                                         ),
@@ -254,6 +254,7 @@ class _LeagueWarDetailRoundsScreenState
             );
           },
         ).toList(),
+        const SizedBox(height: 24.0),
       ],
     );
   }

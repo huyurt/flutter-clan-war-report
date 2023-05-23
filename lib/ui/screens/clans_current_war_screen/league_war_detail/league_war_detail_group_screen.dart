@@ -213,28 +213,28 @@ class _LeagueWarDetailGroupScreenState
                   AppConstants.warLeagueUnranked)
                 Image.asset(
                   '${AppConstants.clanWarLeaguesImagePath}$lastWarLeagueId.png',
-                  height: 72,
+                  height: 64,
                   fit: BoxFit.cover,
                 )
               else if (clanDetail.warLeague?.id ==
                   AppConstants.warLeagueUnranked)
                 Image.asset(
                   '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                  height: 72,
+                  height: 64,
                   fit: BoxFit.cover,
                 ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Text(
                   ' ${tr('warLeague$lastWarLeagueId')}',
-                  style: const TextStyle(fontSize: 24.0),
+                  style: const TextStyle(fontSize: 20.0),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   '$season ${tr(LocaleKey.season)}',
-                  style: const TextStyle(fontSize: 16.0),
+                  style: const TextStyle(fontSize: 14.0),
                 ),
               ),
             ],
@@ -298,8 +298,8 @@ class _LeagueWarDetailGroupScreenState
                           child: Text('${totals.indexOf(total) + 1}. '),
                         ),
                         FadeInImage.assetNetwork(
-                          height: 55,
-                          width: 55,
+                          height: 45,
+                          width: 45,
                           image: clan?.badgeUrls.large ??
                               AppConstants.placeholderImage,
                           placeholder: AppConstants.placeholderImage,
@@ -320,7 +320,8 @@ class _LeagueWarDetailGroupScreenState
                                     clan?.name ?? '',
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: const TextStyle(fontSize: 16),
+                                    style: const TextStyle(
+                                        height: 1.2, fontSize: 14.0),
                                   ),
                                 ),
                                 Wrap(
@@ -432,6 +433,7 @@ class _LeagueWarDetailGroupScreenState
             );
           },
         ).toList(),
+        const SizedBox(height: 24.0),
       ],
     );
   }

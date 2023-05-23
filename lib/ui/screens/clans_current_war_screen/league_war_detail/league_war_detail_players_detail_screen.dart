@@ -74,6 +74,10 @@ class _LeagueWarDetailPlayersDetailScreenState
 
   @override
   Widget build(BuildContext context) {
+    final borderColor =
+        Theme.of(context).colorScheme.brightness == Brightness.dark
+            ? Colors.white60
+            : Colors.black26;
     final warStartTime = DateTime.tryParse(widget.warStartTime);
     String season = '';
     if (warStartTime != null) {
@@ -235,7 +239,8 @@ class _LeagueWarDetailPlayersDetailScreenState
                               member.name,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: const TextStyle(fontSize: 18),
+                              style:
+                                  const TextStyle(height: 1.2, fontSize: 18.0),
                             ),
                           ),
                           Row(
@@ -255,6 +260,10 @@ class _LeagueWarDetailPlayersDetailScreenState
                                 clan?.name ?? '',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(height: 1.2),
                               ),
                             ],
                           ),
@@ -415,8 +424,37 @@ class _LeagueWarDetailPlayersDetailScreenState
                     aspectRatio: 1.5,
                     child: RadarChart(
                       RadarChartData(
+                        radarTouchData: RadarTouchData(
+                          touchCallback: (FlTouchEvent event,
+                              RadarTouchResponse? response) {
+                            if (event is FlTapDownEvent &&
+                                response?.touchedSpot?.touchedDataSetIndex ==
+                                    0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  width: 75.0,
+                                  behavior: SnackBarBehavior.floating,
+                                  elevation: 5.0,
+                                  backgroundColor: Colors.black38,
+                                  duration: const Duration(milliseconds: 500),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(35.0)),
+                                  content: Center(
+                                    child: Text(
+                                      '%${((response?.touchedSpot?.touchedRadarEntry.value ?? 0) * 100).round().toString()}',
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                         dataSets: [
                           RadarDataSet(
+                            entryRadius: 4.0,
                             fillColor: Colors.amber.withOpacity(0.5),
                             borderColor: Colors.amber,
                             dataEntries: [
@@ -438,6 +476,7 @@ class _LeagueWarDetailPlayersDetailScreenState
                             ],
                           ),
                           RadarDataSet(
+                            entryRadius: 0.0,
                             fillColor: Colors.transparent,
                             borderColor: Colors.transparent,
                             dataEntries: [
@@ -453,10 +492,9 @@ class _LeagueWarDetailPlayersDetailScreenState
                         tickCount: 3,
                         ticksTextStyle:
                             const TextStyle(color: Colors.transparent),
-                        radarBorderData:
-                            const BorderSide(color: Colors.white60),
-                        tickBorderData: const BorderSide(color: Colors.white60),
-                        gridBorderData: const BorderSide(color: Colors.white60),
+                        radarBorderData: BorderSide(color: borderColor),
+                        tickBorderData: BorderSide(color: borderColor),
+                        gridBorderData: BorderSide(color: borderColor),
                         getTitle: (index, angle) {
                           final usedAngle = angle;
                           switch (index) {
@@ -496,7 +534,7 @@ class _LeagueWarDetailPlayersDetailScreenState
               ],
             ),
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 24.0),
         ],
       ),
     );
