@@ -21,20 +21,21 @@ class WarDetailEventsScreen extends StatefulWidget {
     required this.clanCurrentWar,
     required this.clan,
     required this.opponent,
+    required this.refreshCallback,
   });
 
   final ClansCurrentWarStateModel clanCurrentWar;
   final WarClan clan;
   final WarClan opponent;
+  final VoidCallback refreshCallback;
 
   @override
   State<WarDetailEventsScreen> createState() => _WarDetailEventsScreenState();
 }
 
 class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _refresh() async {
+    widget.refreshCallback();
   }
 
   List<Widget> getStarsWidget(int stars, int beforeGainedStars) {
@@ -79,239 +80,257 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
     attacks
         .sort((item1, item2) => (item2.order ?? 0).compareTo(item1.order ?? 0));
 
-    if (attacks.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.paste,
-            size: 54.0,
-            color: Colors.amber,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(tr(LocaleKey.noAttacksYet)),
-          ),
-        ],
-      );
-    }
+    return RefreshIndicator(
+      color: Colors.amber,
+      onRefresh: _refresh,
+      child: attacks.isEmpty
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.paste,
+                  size: 54.0,
+                  color: Colors.amber,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(tr(LocaleKey.noAttacksYet)),
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    key: PageStorageKey(widget.key),
+                    shrinkWrap: true,
+                    children: [
+                      ...attacks.map(
+                        (attack) {
+                          final clanMember = clan.members?.firstWhere(
+                              (member) =>
+                                  member.tag == attack.attackerTag ||
+                                  member.tag == attack.defenderTag);
+                          final opponentMember = opponent.members?.firstWhere(
+                              (member) =>
+                                  member.tag == attack.attackerTag ||
+                                  member.tag == attack.defenderTag);
+                          final clanAttacker =
+                              clanMember?.tag == attack.attackerTag;
 
-    return Column(
-      children: [
-        Expanded(
-          child: ListView(
-            key: PageStorageKey(widget.key),
-            shrinkWrap: true,
-            children: [
-              ...attacks.map(
-                (attack) {
-                  final clanMember = clan.members?.firstWhere((member) =>
-                      member.tag == attack.attackerTag ||
-                      member.tag == attack.defenderTag);
-                  final opponentMember = opponent.members?.firstWhere(
-                      (member) =>
-                          member.tag == attack.attackerTag ||
-                          member.tag == attack.defenderTag);
-                  final clanAttacker = clanMember?.tag == attack.attackerTag;
+                          final clanMemberTownHallLevel =
+                              (clanMember?.townhallLevel ?? 1) > 11
+                                  ? '${clanMember?.townhallLevel}.5'
+                                  : (clanMember?.townhallLevel ?? 1).toString();
+                          final opponentMemberTownHallLevel =
+                              (opponentMember?.townhallLevel ?? 1) > 11
+                                  ? '${opponentMember?.townhallLevel}.5'
+                                  : (opponentMember?.townhallLevel ?? 1)
+                                      .toString();
 
-                  final clanMemberTownHallLevel =
-                      (clanMember?.townhallLevel ?? 1) > 11
-                          ? '${clanMember?.townhallLevel}.5'
-                          : (clanMember?.townhallLevel ?? 1).toString();
-                  final opponentMemberTownHallLevel =
-                      (opponentMember?.townhallLevel ?? 1) > 11
-                          ? '${opponentMember?.townhallLevel}.5'
-                          : (opponentMember?.townhallLevel ?? 1).toString();
+                          Color? bgColor;
+                          if (clanAttacker) {
+                            if (context
+                                .watch<BookmarkedPlayerTagsCubit>()
+                                .state
+                                .playerTags
+                                .contains(clanMember?.tag)) {
+                              bgColor =
+                                  AppConstants.attackerClanBackgroundColor;
+                            } else if (context
+                                .watch<BookmarkedPlayerTagsCubit>()
+                                .state
+                                .playerTags
+                                .contains(opponentMember?.tag)) {
+                              bgColor =
+                                  AppConstants.attackerOpponentBackgroundColor;
+                            }
+                          } else {
+                            if (context
+                                .watch<BookmarkedPlayerTagsCubit>()
+                                .state
+                                .playerTags
+                                .contains(opponentMember?.tag)) {
+                              bgColor =
+                                  AppConstants.attackerClanBackgroundColor;
+                            } else if (context
+                                .watch<BookmarkedPlayerTagsCubit>()
+                                .state
+                                .playerTags
+                                .contains(clanMember?.tag)) {
+                              bgColor =
+                                  AppConstants.attackerOpponentBackgroundColor;
+                            }
+                          }
 
-                  Color? bgColor;
-                  if (clanAttacker) {
-                    if (context
-                        .watch<BookmarkedPlayerTagsCubit>()
-                        .state
-                        .playerTags
-                        .contains(clanMember?.tag)) {
-                      bgColor = AppConstants.attackerClanBackgroundColor;
-                    } else if (context
-                        .watch<BookmarkedPlayerTagsCubit>()
-                        .state
-                        .playerTags
-                        .contains(opponentMember?.tag)) {
-                      bgColor = AppConstants.attackerOpponentBackgroundColor;
-                    }
-                  } else {
-                    if (context
-                        .watch<BookmarkedPlayerTagsCubit>()
-                        .state
-                        .playerTags
-                        .contains(opponentMember?.tag)) {
-                      bgColor = AppConstants.attackerClanBackgroundColor;
-                    } else if (context
-                        .watch<BookmarkedPlayerTagsCubit>()
-                        .state
-                        .playerTags
-                        .contains(clanMember?.tag)) {
-                      bgColor = AppConstants.attackerOpponentBackgroundColor;
-                    }
-                  }
+                          final beforeAttacks = attacks.where((element) =>
+                              element.defenderTag == attack.defenderTag &&
+                              (element.order ?? 0) < (attack.order ?? 0));
+                          int beforeGainedStars = 0;
+                          for (final beforeAttack in beforeAttacks) {
+                            final stars = beforeAttack.stars ?? 0;
+                            if (stars > beforeGainedStars) {
+                              beforeGainedStars = stars;
+                            }
+                          }
 
-                  final beforeAttacks = attacks.where((element) =>
-                      element.defenderTag == attack.defenderTag &&
-                      (element.order ?? 0) < (attack.order ?? 0));
-                  int beforeGainedStars = 0;
-                  for (final beforeAttack in beforeAttacks) {
-                    final stars = beforeAttack.stars ?? 0;
-                    if (stars > beforeGainedStars) {
-                      beforeGainedStars = stars;
-                    }
-                  }
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: SizedBox(
-                            height: 50,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              elevation: 0.0,
-                              color: clanAttacker
-                                  ? bgColor ??
-                                      AppConstants
-                                          .attackerDefaultBackgroundColor
-                                  : Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  if (!(clanMember?.tag.isEmptyOrNull ??
-                                      true)) {
-                                    PlayerDetailScreen(
-                                      playerTag: clanMember?.tag ?? '',
-                                    ).launch(context);
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${clanMember?.mapPosition}. ${clanMember?.name}',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 0.0,
+                                      color: clanAttacker
+                                          ? bgColor ??
+                                              AppConstants
+                                                  .attackerDefaultBackgroundColor
+                                          : Colors.transparent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(0.0),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (!(clanMember?.tag.isEmptyOrNull ??
+                                              true)) {
+                                            PlayerDetailScreen(
+                                              playerTag: clanMember?.tag ?? '',
+                                            ).launch(context);
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  '${clanMember?.mapPosition}. ${clanMember?.name}',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                              FadeIn(
+                                                animate: true,
+                                                duration: const Duration(
+                                                    milliseconds: 250),
+                                                child: Image.asset(
+                                                  '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
+                                                  width: 40,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                      FadeIn(
-                                        animate: true,
-                                        duration:
-                                            const Duration(milliseconds: 250),
-                                        child: Image.asset(
-                                          '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
-                                          width: 40,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 50,
-                          child: CustomPaint(
-                            painter: AttackerPainter(
-                              color: bgColor,
-                              rightDirection: clanAttacker,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 4.0, horizontal: 16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Row(
-                                    children: getStarsWidget(
-                                        attack.stars ?? 0, beforeGainedStars),
-                                  ),
-                                  Text('%${attack.destructionPercentage ?? 0}'),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: SizedBox(
-                            height: 50,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              elevation: 0.0,
-                              color: !clanAttacker
-                                  ? bgColor ??
-                                      AppConstants
-                                          .attackerDefaultBackgroundColor
-                                  : Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  if (!(opponentMember?.tag.isEmptyOrNull ??
-                                      true)) {
-                                    PlayerDetailScreen(
-                                      playerTag: opponentMember?.tag ?? '',
-                                    ).launch(context);
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${opponentMember?.mapPosition}. ${opponentMember?.name}',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
+                                SizedBox(
+                                  height: 50,
+                                  child: CustomPaint(
+                                    painter: AttackerPainter(
+                                      color: bgColor,
+                                      rightDirection: clanAttacker,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0, horizontal: 16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Row(
+                                            children: getStarsWidget(
+                                                attack.stars ?? 0,
+                                                beforeGainedStars),
+                                          ),
+                                          Text(
+                                              '%${attack.destructionPercentage ?? 0}'),
+                                        ],
                                       ),
-                                      FadeIn(
-                                        animate: true,
-                                        duration:
-                                            const Duration(milliseconds: 250),
-                                        child: Image.asset(
-                                          '${AppConstants.townHallsImagePath}$opponentMemberTownHallLevel.png',
-                                          width: 40,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Expanded(
+                                  flex: 1,
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 0.0,
+                                      color: !clanAttacker
+                                          ? bgColor ??
+                                              AppConstants
+                                                  .attackerDefaultBackgroundColor
+                                          : Colors.transparent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(0.0),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (!(opponentMember
+                                                  ?.tag.isEmptyOrNull ??
+                                              true)) {
+                                            PlayerDetailScreen(
+                                              playerTag:
+                                                  opponentMember?.tag ?? '',
+                                            ).launch(context);
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  '${opponentMember?.mapPosition}. ${opponentMember?.name}',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                              FadeIn(
+                                                animate: true,
+                                                duration: const Duration(
+                                                    milliseconds: 250),
+                                                child: Image.asset(
+                                                  '${AppConstants.townHallsImagePath}$opponentMemberTownHallLevel.png',
+                                                  width: 40,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
-                  ? const SizedBox(height: 72.0)
-                  : const SizedBox(height: 24.0),
-            ],
-          ),
-        ),
-      ],
+                          );
+                        },
+                      ),
+                      widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
+                          ? const SizedBox(height: 72.0)
+                          : const SizedBox(height: 24.0),
+                    ],
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }

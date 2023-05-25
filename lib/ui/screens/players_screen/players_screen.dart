@@ -134,6 +134,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                 children: [
                   Expanded(
                     child: RefreshIndicator(
+                      color: Colors.amber,
                       onRefresh: _refreshList,
                       child: ReorderableListView.builder(
                         key: PageStorageKey(widget.key),
@@ -207,7 +208,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                                               right: 4.0),
                                                       child: FadeInImage
                                                           .assetNetwork(
-                                                        width: 16,
+                                                        width: 16.0,
                                                         image: player
                                                                 .clan
                                                                 ?.badgeUrls

@@ -39,6 +39,13 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
         ClanService.getClanDetailsAndLeagueWars(widget.clanTag);
   }
 
+  Future<void> _refresh() async {
+    setState(() {
+      _clanDetailsAndLeagueWarsFuture =
+          ClanService.getClanDetailsAndLeagueWars(widget.clanTag);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final warStartTime = DateTime.tryParse(widget.warStartTime);
@@ -62,13 +69,10 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                 ),
               ];
             },
-            onSelected: (value) {
+            onSelected: (value) async {
               switch (value) {
                 case LocaleKey.refresh:
-                  setState(() {
-                    _clanDetailsAndLeagueWarsFuture =
-                        ClanService.getClanDetailsAndLeagueWars(widget.clanTag);
-                  });
+                  await _refresh();
                   break;
               }
             },
@@ -132,6 +136,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                             clanLeague: clanLeague!,
                             clanLeagueWars: clanLeagueWars,
                             totalRoundCount: totalRoundCount,
+                            refreshCallback: _refresh,
                           ),
                           LeagueWarDetailRoundsScreen(
                             key: const Key(LocaleKey.rounds),
@@ -140,6 +145,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                             clanDetail: widget.clanDetail,
                             clanLeague: clanLeague!,
                             clanLeagueWars: clanLeagueWars,
+                            refreshCallback: _refresh,
                           ),
                           LeagueWarDetailPlayersScreen(
                             key: const Key(LocaleKey.players),
@@ -148,6 +154,7 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
                             clanDetail: widget.clanDetail,
                             clanLeague: clanLeague,
                             clanLeagueWars: clanLeagueWars,
+                            refreshCallback: _refresh,
                           ),
                         ],
                       ),

@@ -23,20 +23,21 @@ class WarDetailAttacksScreen extends StatefulWidget {
     required this.clanCurrentWar,
     required this.clan,
     required this.opponent,
+    required this.refreshCallback,
   });
 
   final ClansCurrentWarStateModel clanCurrentWar;
   final WarClan clan;
   final WarClan opponent;
+  final VoidCallback refreshCallback;
 
   @override
   State<WarDetailAttacksScreen> createState() => _WarDetailAttacksScreenState();
 }
 
 class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _refresh() async {
+    widget.refreshCallback();
   }
 
   List<Widget> getStarsWidget(List<Attack> attacks, Attack? attack) {
@@ -118,209 +119,152 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
     allAttacks
         .sort((item1, item2) => (item2.order ?? 0).compareTo(item1.order ?? 0));
 
-    return ListView(
-      key: PageStorageKey(widget.key),
-      shrinkWrap: true,
-      children: [
-        Card(
-          margin: EdgeInsets.zero,
-          elevation: 0.0,
-          color: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0.0),
-          ),
-          child: InkWell(
-            onTap: () {
-              if (!clan.tag.isEmptyOrNull) {
-                ClanDetailScreen(
-                  viewWarButton: false,
-                  clanTag: clan.tag ?? '',
-                ).launch(context);
-              }
-            },
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: FadeInImage.assetNetwork(
-                      height: 50,
-                      width: 50,
-                      image: clan.badgeUrls.large,
-                      placeholder: AppConstants.placeholderImage,
-                      fit: BoxFit.cover,
+    return RefreshIndicator(
+      color: Colors.amber,
+      onRefresh: _refresh,
+      child: ListView(
+        key: PageStorageKey(widget.key),
+        shrinkWrap: true,
+        children: [
+          Card(
+            margin: EdgeInsets.zero,
+            elevation: 0.0,
+            color: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0.0),
+            ),
+            child: InkWell(
+              onTap: () {
+                if (!clan.tag.isEmptyOrNull) {
+                  ClanDetailScreen(
+                    viewWarButton: false,
+                    clanTag: clan.tag ?? '',
+                  ).launch(context);
+                }
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: FadeInImage.assetNetwork(
+                        height: 50,
+                        width: 50,
+                        image: clan.badgeUrls.large,
+                        placeholder: AppConstants.placeholderImage,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Text(
-                          clan.name ?? '',
-                          style: const TextStyle(height: 1.2, fontSize: 16.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Text(
+                            clan.name ?? '',
+                            style: const TextStyle(height: 1.2, fontSize: 16.0),
+                          ),
                         ),
-                      ),
-                      Text(
-                        clan.tag ?? '',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
-                ],
+                        Text(
+                          clan.tag ?? '',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        ...members.map(
-          (member) {
-            final attacks = member.attacks ?? <Attack>[];
+          ...members.map(
+            (member) {
+              final attacks = member.attacks ?? <Attack>[];
 
-            WarClanMember? attackDefender1;
-            if (attacks.isNotEmpty) {
-              attackDefender1 = opponent.members?.firstWhere((opponentMember) =>
-                  opponentMember.tag == attacks[0].defenderTag);
-            }
+              WarClanMember? attackDefender1;
+              if (attacks.isNotEmpty) {
+                attackDefender1 = opponent.members?.firstWhere((opponentMember) =>
+                    opponentMember.tag == attacks[0].defenderTag);
+              }
 
-            WarClanMember? attackDefender2;
-            if (attacks.length > 1) {
-              attackDefender2 = opponent.members?.firstWhere((opponentMember) =>
-                  opponentMember.tag == attacks[1].defenderTag);
-            }
+              WarClanMember? attackDefender2;
+              if (attacks.length > 1) {
+                attackDefender2 = opponent.members?.firstWhere((opponentMember) =>
+                    opponentMember.tag == attacks[1].defenderTag);
+              }
 
-            WarClanMember? defenderAttacker;
-            if (member.bestOpponentAttack != null) {
-              defenderAttacker = opponent.members?.firstWhere(
-                  (opponentMember) =>
-                      opponentMember.tag ==
-                      member.bestOpponentAttack?.attackerTag);
-            }
+              WarClanMember? defenderAttacker;
+              if (member.bestOpponentAttack != null) {
+                defenderAttacker = opponent.members?.firstWhere(
+                    (opponentMember) =>
+                        opponentMember.tag ==
+                        member.bestOpponentAttack?.attackerTag);
+              }
 
-            final clanMemberTownHallLevel = (member.townhallLevel) > 11
-                ? '${member.townhallLevel}.5'
-                : (member.townhallLevel).toString();
+              final clanMemberTownHallLevel = (member.townhallLevel) > 11
+                  ? '${member.townhallLevel}.5'
+                  : (member.townhallLevel).toString();
 
-            Color? bgColor;
-            if (context
-                .watch<BookmarkedPlayerTagsCubit>()
-                .state
-                .playerTags
-                .contains(member.tag)) {
-              bgColor = AppConstants.attackerClanBackgroundColor;
-            }
+              Color? bgColor;
+              if (context
+                  .watch<BookmarkedPlayerTagsCubit>()
+                  .state
+                  .playerTags
+                  .contains(member.tag)) {
+                bgColor = AppConstants.attackerClanBackgroundColor;
+              }
 
-            return SizedBox(
-              height: 160,
-              child: Card(
-                margin: EdgeInsets.zero,
-                elevation: 0.0,
-                color: bgColor ?? Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    if (!member.tag.isEmptyOrNull) {
-                      PlayerDetailScreen(
-                        playerTag: member.tag,
-                      ).launch(context);
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          '${member.mapPosition}. ${member.name}',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: const TextStyle(height: 1.2, fontSize: 16.0),
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: FadeIn(
-                                animate: true,
-                                duration: const Duration(milliseconds: 250),
-                                child: Image.asset(
-                                  '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
-                                  width: 75,
-                                  fit: BoxFit.cover,
+              return SizedBox(
+                height: 160,
+                child: Card(
+                  margin: EdgeInsets.zero,
+                  elevation: 0.0,
+                  color: bgColor ?? Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      if (!member.tag.isEmptyOrNull) {
+                        PlayerDetailScreen(
+                          playerTag: member.tag,
+                        ).launch(context);
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            '${member.mapPosition}. ${member.name}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: const TextStyle(height: 1.2, fontSize: 16.0),
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: FadeIn(
+                                  animate: true,
+                                  duration: const Duration(milliseconds: 250),
+                                  child: Image.asset(
+                                    '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
+                                    width: 75,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 4.0),
-                                              child: Row(
-                                                children: [
-                                                  const Icon(AkarIcons.sword,
-                                                      size: 14.0),
-                                                  Text(
-                                                    ' ${tr(LocaleKey.attack)} 1',
-                                                    style: const TextStyle(
-                                                        fontSize: 10.0),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            attackDefender1 != null
-                                                ? Text(
-                                                    '${attackDefender1.mapPosition}. ${attackDefender1.name}',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: const TextStyle(
-                                                        height: 1),
-                                                  )
-                                                : Text(tr(LocaleKey.notUsed)),
-                                          ],
-                                        ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          if (attackDefender1 != null) ...[
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 4.0),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: getStarsWidget(
-                                                    allAttacks,
-                                                    member.attacks?[0]),
-                                              ),
-                                            ),
-                                            Text(
-                                                '%${attacks[0].destructionPercentage}'),
-                                          ],
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  if (widget.clanCurrentWar.warType ==
-                                      WarTypeEnum.clanWar)
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
                                     Row(
                                       children: [
                                         Expanded(
@@ -337,16 +281,16 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                     const Icon(AkarIcons.sword,
                                                         size: 14.0),
                                                     Text(
-                                                      ' ${tr(LocaleKey.attack)} 2',
+                                                      ' ${tr(LocaleKey.attack)} 1',
                                                       style: const TextStyle(
                                                           fontSize: 10.0),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                              attackDefender2 != null
+                                              attackDefender1 != null
                                                   ? Text(
-                                                      '${attackDefender2.mapPosition}. ${attackDefender2.name}',
+                                                      '${attackDefender1.mapPosition}. ${attackDefender1.name}',
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       maxLines: 1,
@@ -359,7 +303,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                         ),
                                         Column(
                                           children: [
-                                            if (attackDefender2 != null) ...[
+                                            if (attackDefender1 != null) ...[
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -369,92 +313,153 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                       CrossAxisAlignment.start,
                                                   children: getStarsWidget(
                                                       allAttacks,
-                                                      member.attacks?[1]),
+                                                      member.attacks?[0]),
                                                 ),
                                               ),
                                               Text(
-                                                  '%${attacks[1].destructionPercentage}'),
+                                                  '%${attacks[0].destructionPercentage}'),
                                             ],
                                           ],
                                         ),
                                       ],
                                     ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 4.0),
-                                              child: Row(
-                                                children: [
-                                                  const Icon(MdiIcons.shield,
-                                                      size: 14.0),
-                                                  Text(
-                                                    ' ${tr(LocaleKey.defence)}',
-                                                    style: const TextStyle(
-                                                        fontSize: 10.0),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            defenderAttacker != null
-                                                ? Text(
-                                                    '${defenderAttacker.mapPosition}. ${defenderAttacker.name}',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: const TextStyle(
-                                                        height: 1),
-                                                  )
-                                                : Text(tr(LocaleKey.notUsed)),
-                                          ],
-                                        ),
-                                      ),
-                                      Column(
+                                    if (widget.clanCurrentWar.warType ==
+                                        WarTypeEnum.clanWar)
+                                      Row(
                                         children: [
-                                          if (defenderAttacker != null) ...[
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 4.0),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: getOpponentStarsWidget(
-                                                    member.bestOpponentAttack
-                                                            ?.stars ??
-                                                        0),
-                                              ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          vertical: 4.0),
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(AkarIcons.sword,
+                                                          size: 14.0),
+                                                      Text(
+                                                        ' ${tr(LocaleKey.attack)} 2',
+                                                        style: const TextStyle(
+                                                            fontSize: 10.0),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                attackDefender2 != null
+                                                    ? Text(
+                                                        '${attackDefender2.mapPosition}. ${attackDefender2.name}',
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                        maxLines: 1,
+                                                        style: const TextStyle(
+                                                            height: 1),
+                                                      )
+                                                    : Text(tr(LocaleKey.notUsed)),
+                                              ],
                                             ),
-                                            Text(
-                                                '%${member.bestOpponentAttack?.destructionPercentage ?? 0}'),
-                                          ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              if (attackDefender2 != null) ...[
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          vertical: 4.0),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: getStarsWidget(
+                                                        allAttacks,
+                                                        member.attacks?[1]),
+                                                  ),
+                                                ),
+                                                Text(
+                                                    '%${attacks[1].destructionPercentage}'),
+                                              ],
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ],
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4.0),
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(MdiIcons.shield,
+                                                        size: 14.0),
+                                                    Text(
+                                                      ' ${tr(LocaleKey.defence)}',
+                                                      style: const TextStyle(
+                                                          fontSize: 10.0),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              defenderAttacker != null
+                                                  ? Text(
+                                                      '${defenderAttacker.mapPosition}. ${defenderAttacker.name}',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      style: const TextStyle(
+                                                          height: 1),
+                                                    )
+                                                  : Text(tr(LocaleKey.notUsed)),
+                                            ],
+                                          ),
+                                        ),
+                                        Column(
+                                          children: [
+                                            if (defenderAttacker != null) ...[
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4.0),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: getOpponentStarsWidget(
+                                                      member.bestOpponentAttack
+                                                              ?.stars ??
+                                                          0),
+                                                ),
+                                              ),
+                                              Text(
+                                                  '%${member.bestOpponentAttack?.destructionPercentage ?? 0}'),
+                                            ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
-        widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
-            ? const SizedBox(height: 72.0)
-            : const SizedBox(height: 24.0),
-      ],
+              );
+            },
+          ),
+          widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
+              ? const SizedBox(height: 72.0)
+              : const SizedBox(height: 24.0),
+        ],
+      ),
     );
   }
 }

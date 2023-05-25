@@ -19,6 +19,7 @@ class LeagueWarDetailRoundsScreen extends StatefulWidget {
     required this.clanDetail,
     required this.clanLeague,
     required this.clanLeagueWars,
+    required this.refreshCallback,
   });
 
   final String clanTag;
@@ -26,6 +27,7 @@ class LeagueWarDetailRoundsScreen extends StatefulWidget {
   final ClanDetailResponseModel clanDetail;
   final ClanLeagueGroupResponseModel clanLeague;
   final List<ClansCurrentWarStateModel> clanLeagueWars;
+  final VoidCallback refreshCallback;
 
   @override
   State<LeagueWarDetailRoundsScreen> createState() =>
@@ -34,6 +36,10 @@ class LeagueWarDetailRoundsScreen extends StatefulWidget {
 
 class _LeagueWarDetailRoundsScreenState
     extends State<LeagueWarDetailRoundsScreen> {
+  Future<void> _refresh() async {
+    widget.refreshCallback();
+  }
+
   @override
   Widget build(BuildContext context) {
     final warsByRound = <int, List<ClansCurrentWarStateModel>>{};
@@ -54,208 +60,218 @@ class _LeagueWarDetailRoundsScreenState
       warsByRound[roundNo++] = wars;
     }
 
-    return ListView(
-      key: PageStorageKey(widget.key),
-      shrinkWrap: true,
-      children: [
-        ...warsByRound.keys.map(
-          (round) {
-            final warsData =
-                warsByRound[round] ?? <ClansCurrentWarStateModel>[];
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Text(
-                      tr(LocaleKey.nthRound, args: [
-                        round.toString(),
-                      ]),
-                      style: const TextStyle(
-                        fontSize: 18.0,
+    return RefreshIndicator(
+      color: Colors.amber,
+      onRefresh: _refresh,
+      child: ListView(
+        key: PageStorageKey(widget.key),
+        shrinkWrap: true,
+        children: [
+          ...warsByRound.keys.map(
+            (round) {
+              final warsData =
+                  warsByRound[round] ?? <ClansCurrentWarStateModel>[];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Text(
+                        tr(LocaleKey.nthRound, args: [
+                          round.toString(),
+                        ]),
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                        ),
                       ),
                     ),
-                  ),
-                  ...warsData.map(
-                    (warData) {
-                      final war = warData.war;
-                      final clan = war.clan;
-                      final opponent = war.opponent;
-                      final warState = WarStateEnum.values
-                          .firstWhere((element) => element.name == war.state);
-                      bool? clanWon = warState == WarStateEnum.warEnded
-                          ? (clan.stars > opponent.stars ||
-                              (clan.stars == opponent.stars &&
-                                  clan.destructionPercentage >
-                                      opponent.destructionPercentage))
-                          : null;
+                    ...warsData.map(
+                      (warData) {
+                        final war = warData.war;
+                        final clan = war.clan;
+                        final opponent = war.opponent;
+                        final warState = WarStateEnum.values
+                            .firstWhere((element) => element.name == war.state);
+                        bool? clanWon = warState == WarStateEnum.warEnded
+                            ? (clan.stars > opponent.stars ||
+                                (clan.stars == opponent.stars &&
+                                    clan.destructionPercentage >
+                                        opponent.destructionPercentage))
+                            : null;
 
-                      return Card(
-                        margin: EdgeInsets.zero,
-                        elevation: 0.0,
-                        color: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            WarDetailScreen(
-                              clanTag: clan.tag ?? '',
-                              warTag: warData.warTag,
-                              warType: WarTypeEnum.leagueWar,
-                              warStartTime: war.warStartTime ?? '',
-                              clanName: clan.name ?? '',
-                              opponentName: opponent.name ?? '',
-                            ).launch(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 14.0),
-                            child: SizedBox(
-                              height: 70,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Center(
-                                            child: Text(
-                                              clan.name ?? '',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
+                        return Card(
+                          margin: EdgeInsets.zero,
+                          elevation: 0.0,
+                          color: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              WarDetailScreen(
+                                clanTag: clan.tag ?? '',
+                                warTag: warData.warTag,
+                                warType: WarTypeEnum.leagueWar,
+                                warStartTime: war.warStartTime ?? '',
+                                clanName: clan.name ?? '',
+                                opponentName: opponent.name ?? '',
+                              ).launch(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 14.0),
+                              child: SizedBox(
+                                height: 70,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                clan.name ?? '',
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        FadeInImage.assetNetwork(
-                                          height: 40,
-                                          width: 40,
-                                          image: clan.badgeUrls.large,
-                                          placeholder:
-                                              AppConstants.placeholderImage,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ],
+                                          FadeInImage.assetNetwork(
+                                            height: 40,
+                                            width: 40,
+                                            image: clan.badgeUrls.large,
+                                            placeholder:
+                                                AppConstants.placeholderImage,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8.0, horizontal: 8.0),
-                                            child: (warState ==
-                                                        WarStateEnum.inWar ||
-                                                    warState ==
-                                                        WarStateEnum.warEnded)
-                                                ? Text(
-                                                    clan.stars.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 20.0,
-                                                      color: clanWon == true
-                                                          ? Colors.green
-                                                          : (clanWon == false
-                                                              ? Colors.redAccent
-                                                              : null),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal: 8.0),
+                                              child: (warState ==
+                                                          WarStateEnum.inWar ||
+                                                      warState ==
+                                                          WarStateEnum.warEnded)
+                                                  ? Text(
+                                                      clan.stars.toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 20.0,
+                                                        color: clanWon == true
+                                                            ? Colors.green
+                                                            : (clanWon == false
+                                                                ? Colors
+                                                                    .redAccent
+                                                                : null),
+                                                      ),
+                                                    )
+                                                  : const Text(
+                                                      '-',
+                                                      style: TextStyle(
+                                                          fontSize: 26.0),
                                                     ),
-                                                  )
-                                                : const Text(
-                                                    '-',
-                                                    style: TextStyle(
-                                                        fontSize: 26.0),
-                                                  ),
-                                          ),
-                                        ),
-                                        const Text(
-                                          ' : ',
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                          ),
-                                        ),
-                                        Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8.0, horizontal: 8.0),
-                                            child: (warState ==
-                                                        WarStateEnum.inWar ||
-                                                    warState ==
-                                                        WarStateEnum.warEnded)
-                                                ? Text(
-                                                    opponent.stars.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 20.0,
-                                                      color: clanWon == false
-                                                          ? Colors.green
-                                                          : (clanWon == true
-                                                              ? Colors.redAccent
-                                                              : null),
-                                                    ),
-                                                  )
-                                                : const Text(
-                                                    '-',
-                                                    style: TextStyle(
-                                                        fontSize: 26.0),
-                                                  ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        FadeInImage.assetNetwork(
-                                          height: 40,
-                                          width: 40,
-                                          image: opponent.badgeUrls.large,
-                                          placeholder:
-                                              AppConstants.placeholderImage,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        Expanded(
-                                          child: Center(
-                                            child: Text(
-                                              opponent.name ?? '',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                          const Text(
+                                            ' : ',
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
+                                          Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0,
+                                                      horizontal: 8.0),
+                                              child: (warState ==
+                                                          WarStateEnum.inWar ||
+                                                      warState ==
+                                                          WarStateEnum.warEnded)
+                                                  ? Text(
+                                                      opponent.stars.toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 20.0,
+                                                        color: clanWon == false
+                                                            ? Colors.green
+                                                            : (clanWon == true
+                                                                ? Colors
+                                                                    .redAccent
+                                                                : null),
+                                                      ),
+                                                    )
+                                                  : const Text(
+                                                      '-',
+                                                      style: TextStyle(
+                                                          fontSize: 26.0),
+                                                    ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Expanded(
+                                      flex: 1,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          FadeInImage.assetNetwork(
+                                            height: 40,
+                                            width: 40,
+                                            image: opponent.badgeUrls.large,
+                                            placeholder:
+                                                AppConstants.placeholderImage,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          Expanded(
+                                            child: Center(
+                                              child: Text(
+                                                opponent.name ?? '',
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        ).toList(),
-        const SizedBox(height: 24.0),
-      ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ).toList(),
+          const SizedBox(height: 24.0),
+        ],
+      ),
     );
   }
 }

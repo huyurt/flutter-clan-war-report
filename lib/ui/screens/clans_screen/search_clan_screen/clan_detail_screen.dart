@@ -51,6 +51,12 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
     }
   }
 
+  Future<void> _refresh() async {
+    setState(() {
+      _clanDetailFuture = ClanService.getClanDetail(widget.clanTag);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,406 +114,415 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                   );
                   break;
                 case LocaleKey.refresh:
-                  setState(() {
-                    _clanDetailFuture =
-                        ClanService.getClanDetail(widget.clanTag);
-                  });
+                  await _refresh();
                   break;
               }
             },
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: _clanDetailFuture,
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(child: Text(tr('search_failed_message')));
-            }
-            if (snapshot.hasData) {
-              final clan = snapshot.data;
-              final members = clan?.memberList ?? <MemberList>[];
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        height: 75,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+      body: RefreshIndicator(
+        color: Colors.amber,
+        onRefresh: _refresh,
+        child: FutureBuilder(
+          future: _clanDetailFuture,
+          builder: (ctx, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(child: Text(tr('search_failed_message')));
+              }
+              if (snapshot.hasData) {
+                final clan = snapshot.data;
+                final members = clan?.memberList ?? <MemberList>[];
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 75,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              FadeInImage.assetNetwork(
+                                height: 70,
+                                image: clan?.badgeUrls?.large ??
+                                    AppConstants.placeholderImage,
+                                placeholder: AppConstants.placeholderImage,
+                                fit: BoxFit.cover,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        clan?.name ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                            height: 1.2, fontSize: 22.0),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Text(
+                                          clan?.tag ?? '',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.center,
+                          spacing: 14.0,
                           children: [
-                            FadeInImage.assetNetwork(
-                              height: 70,
-                              image: clan?.badgeUrls?.large ??
-                                  AppConstants.placeholderImage,
-                              placeholder: AppConstants.placeholderImage,
-                              fit: BoxFit.cover,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                              child: Wrap(
+                                direction: Axis.horizontal,
+                                children: [
+                                  const Card(
+                                    margin: EdgeInsets.zero,
+                                    elevation: 0.0,
+                                    color: Colors.green,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 2.0),
+                                      child: Icon(
+                                        Icons.trending_up,
+                                        size: 14.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                      ' ${(clan?.warWins ?? 0).toString()} ${tr(LocaleKey.wins)}'),
+                                ],
+                              ),
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                              child: Wrap(
+                                direction: Axis.horizontal,
                                 children: [
-                                  Flexible(
-                                    child: Text(
-                                      clan?.name ?? '',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                          height: 1.2, fontSize: 22.0),
+                                  const Card(
+                                    margin: EdgeInsets.zero,
+                                    elevation: 0.0,
+                                    color: Colors.blue,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 2.0),
+                                      child: Icon(
+                                        Icons.trending_neutral,
+                                        size: 14.0,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                  Flexible(
+                                  Text(
+                                      ' ${(clan?.warTies ?? 0).toString()} ${tr(LocaleKey.ties)}'),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                              child: Wrap(
+                                direction: Axis.horizontal,
+                                children: [
+                                  const Card(
+                                    margin: EdgeInsets.zero,
+                                    elevation: 0.0,
+                                    color: Colors.red,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 2.0),
+                                      child: Icon(
+                                        Icons.trending_down,
+                                        size: 14.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                      ' ${(clan?.warLosses ?? 0).toString()} ${tr(LocaleKey.losses)}'),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 5.0),
+                              child: Wrap(
+                                direction: Axis.horizontal,
+                                children: [
+                                  const Card(
+                                    margin: EdgeInsets.zero,
+                                    elevation: 0.0,
+                                    color: Colors.grey,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 2.0),
+                                      child: Icon(
+                                        MdiIcons.chartLineVariant,
+                                        size: 14.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                      ' ${(clan?.warWinStreak ?? 0).toString()} ${tr(LocaleKey.warWinStreak)}'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2.0),
+                                child: Column(
+                                  children: [
+                                    Text(tr(LocaleKey.country)),
+                                    Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            (clan?.location != null &&
+                                                    (clan?.location
+                                                            ?.isCountry ??
+                                                        false))
+                                                ? CountryFlag.fromCountryCode(
+                                                    clan?.location
+                                                            ?.countryCode ??
+                                                        '',
+                                                    height: 18.0,
+                                                    width: 24.0,
+                                                    borderRadius: 4.0,
+                                                  )
+                                                : const Icon(
+                                                    Icons.public,
+                                                    size: 18.0,
+                                                    color: Colors.blue,
+                                                  ),
+                                            Text(
+                                                ' ${tr(clan?.location?.name ?? LocaleKey.notSet)}'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2.0),
+                                child: Column(
+                                  children: [
+                                    Text(tr(LocaleKey.warLeague)),
+                                    Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            if ((clan?.warLeague?.id ?? 0) >
+                                                AppConstants.warLeagueUnranked)
+                                              Image.asset(
+                                                '${AppConstants.clanWarLeaguesImagePath}${clan?.warLeague?.id}.png',
+                                                height: 18.0,
+                                                fit: BoxFit.cover,
+                                              )
+                                            else if (clan?.warLeague?.id ==
+                                                AppConstants.warLeagueUnranked)
+                                              Image.asset(
+                                                '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
+                                                height: 18.0,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            Text(
+                                                ' ${tr(clan?.warLeague?.name ?? '')}'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (!(clan?.description?.isEmptyOrNull ?? true)) ...[
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Center(
+                            child: Text(
+                              clan?.description ?? '',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(height: 1.3),
+                            ),
+                          ),
+                        ),
+                      ],
+                      if (members.isNotEmpty) ...[
+                        const SizedBox(height: 14.0),
+                        ...members
+                            .map(
+                              (member) => SizedBox(
+                                height: 70,
+                                child: Card(
+                                  margin: EdgeInsets.zero,
+                                  elevation: 0.0,
+                                  color: context
+                                          .watch<BookmarkedPlayerTagsCubit>()
+                                          .state
+                                          .playerTags
+                                          .contains(member.tag)
+                                      ? AppConstants.attackerClanBackgroundColor
+                                      : Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      PlayerDetailScreen(
+                                        playerTag: member.tag,
+                                      ).launch(context);
+                                    },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: Text(
-                                        clan?.tag ?? '',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        alignment: WrapAlignment.center,
-                        spacing: 14.0,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: Wrap(
-                              direction: Axis.horizontal,
-                              children: [
-                                const Card(
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0.0,
-                                  color: Colors.green,
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 2.0),
-                                    child: Icon(
-                                      Icons.trending_up,
-                                      size: 14.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                    ' ${(clan?.warWins ?? 0).toString()} ${tr(LocaleKey.wins)}'),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: Wrap(
-                              direction: Axis.horizontal,
-                              children: [
-                                const Card(
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0.0,
-                                  color: Colors.blue,
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 2.0),
-                                    child: Icon(
-                                      Icons.trending_neutral,
-                                      size: 14.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                    ' ${(clan?.warTies ?? 0).toString()} ${tr(LocaleKey.ties)}'),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: Wrap(
-                              direction: Axis.horizontal,
-                              children: [
-                                const Card(
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0.0,
-                                  color: Colors.red,
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 2.0),
-                                    child: Icon(
-                                      Icons.trending_down,
-                                      size: 14.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                    ' ${(clan?.warLosses ?? 0).toString()} ${tr(LocaleKey.losses)}'),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: Wrap(
-                              direction: Axis.horizontal,
-                              children: [
-                                const Card(
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0.0,
-                                  color: Colors.grey,
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 2.0),
-                                    child: Icon(
-                                      MdiIcons.chartLineVariant,
-                                      size: 14.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                    ' ${(clan?.warWinStreak ?? 0).toString()} ${tr(LocaleKey.warWinStreak)}'),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 2.0),
-                              child: Column(
-                                children: [
-                                  Text(tr(LocaleKey.country)),
-                                  Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          (clan?.location != null &&
-                                                  (clan?.location?.isCountry ??
-                                                      false))
-                                              ? CountryFlag.fromCountryCode(
-                                                  clan?.location?.countryCode ??
-                                                      '',
-                                                  height: 18.0,
-                                                  width: 24.0,
-                                                  borderRadius: 4.0,
-                                                )
-                                              : const Icon(
-                                                  Icons.public,
-                                                  size: 18.0,
-                                                  color: Colors.blue,
-                                                ),
-                                          Text(
-                                              ' ${tr(clan?.location?.name ?? LocaleKey.notSet)}'),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 2.0),
-                              child: Column(
-                                children: [
-                                  Text(tr(LocaleKey.warLeague)),
-                                  Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          if ((clan?.warLeague?.id ?? 0) >
-                                              AppConstants.warLeagueUnranked)
-                                            Image.asset(
-                                              '${AppConstants.clanWarLeaguesImagePath}${clan?.warLeague?.id}.png',
-                                              height: 18.0,
-                                              fit: BoxFit.cover,
-                                            )
-                                          else if (clan?.warLeague?.id ==
-                                              AppConstants.warLeagueUnranked)
-                                            Image.asset(
-                                              '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                                              height: 18.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          Text(
-                                              ' ${tr(clan?.warLeague?.name ?? '')}'),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    if (!(clan?.description?.isEmptyOrNull ?? true)) ...[
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Center(
-                          child: Text(
-                            clan?.description ?? '',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(height: 1.3),
-                          ),
-                        ),
-                      ),
-                    ],
-                    if (members.isNotEmpty) ...[
-                      const SizedBox(height: 14.0),
-                      ...members
-                          .map(
-                            (member) => SizedBox(
-                              height: 70,
-                              child: Card(
-                                margin: EdgeInsets.zero,
-                                elevation: 0.0,
-                                color: context
-                                        .watch<BookmarkedPlayerTagsCubit>()
-                                        .state
-                                        .playerTags
-                                        .contains(member.tag)
-                                    ? AppConstants.attackerClanBackgroundColor
-                                    : Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-                                    PlayerDetailScreen(
-                                      playerTag: member.tag,
-                                    ).launch(context);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 5.0),
-                                    child: SizedBox(
-                                      height: 70,
-                                      child: Row(
-                                        children: [
-                                          member.league?.iconUrls?.medium !=
-                                                  null
-                                              ? FadeInImage.assetNetwork(
-                                                  width: 50,
-                                                  image: member.league?.iconUrls
-                                                          ?.medium ??
-                                                      AppConstants
-                                                          .placeholderImage,
-                                                  placeholder: AppConstants
-                                                      .placeholderImage,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image.asset(
-                                                  '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                                                  height: 50,
-                                                  width: 50,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 4.0),
-                                                    child: Text(
-                                                      member.name,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                      style: const TextStyle(
-                                                          height: 1.2,
-                                                          fontSize: 14.0),
-                                                    ),
+                                          vertical: 10.0, horizontal: 5.0),
+                                      child: SizedBox(
+                                        height: 70,
+                                        child: Row(
+                                          children: [
+                                            member.league?.iconUrls?.medium !=
+                                                    null
+                                                ? FadeInImage.assetNetwork(
+                                                    width: 50,
+                                                    image: member
+                                                            .league
+                                                            ?.iconUrls
+                                                            ?.medium ??
+                                                        AppConstants
+                                                            .placeholderImage,
+                                                    placeholder: AppConstants
+                                                        .placeholderImage,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Image.asset(
+                                                    '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
+                                                    height: 50,
+                                                    width: 50,
+                                                    fit: BoxFit.cover,
                                                   ),
-                                                  Text(
-                                                    tr(member.role),
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 50,
-                                            width: 110,
-                                            child: Card(
+                                            Expanded(
+                                              flex: 1,
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        vertical: 6.0,
-                                                        horizontal: 12.0),
-                                                child: Row(
+                                                        horizontal: 8.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment.end,
+                                                      MainAxisAlignment.center,
                                                   children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 4.0),
+                                                      child: Text(
+                                                        member.name,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                        style: const TextStyle(
+                                                            height: 1.2,
+                                                            fontSize: 14.0),
+                                                      ),
+                                                    ),
                                                     Text(
-                                                        '${(member.trophies ?? 0).toString()} '),
-                                                    Image.asset(
-                                                      '${AppConstants.clashResourceImagePath}${AppConstants.cup1Image}',
-                                                      height: 20,
-                                                      fit: BoxFit.cover,
+                                                      tr(member.role),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall,
                                                     ),
                                                   ],
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                            SizedBox(
+                                              height: 50,
+                                              width: 110,
+                                              child: Card(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 6.0,
+                                                      horizontal: 12.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                          '${(member.trophies ?? 0).toString()} '),
+                                                      Image.asset(
+                                                        '${AppConstants.clashResourceImagePath}${AppConstants.cup1Image}',
+                                                        height: 20,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                          .toList(),
+                            )
+                            .toList(),
+                      ],
+                      const SizedBox(height: 72.0),
                     ],
-                    const SizedBox(height: 72.0),
-                  ],
-                ),
-              );
+                  ),
+                );
+              }
             }
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: widget.viewWarButton

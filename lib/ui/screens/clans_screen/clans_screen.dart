@@ -132,10 +132,11 @@ class _ClansScreenState extends State<ClansScreen> {
                 children: [
                   Expanded(
                     child: RefreshIndicator(
+                      color: Colors.amber,
                       onRefresh: _refreshList,
                       child: ReorderableListView.builder(
                         key: PageStorageKey(widget.key),
-                        padding: const EdgeInsets.only(bottom: 75),
+                        padding: const EdgeInsets.only(bottom: 75.0),
                         onReorder: _onReorder,
                         itemCount: state.items.length,
                         itemBuilder: (BuildContext context, int index) {

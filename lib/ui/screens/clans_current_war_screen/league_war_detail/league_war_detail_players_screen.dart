@@ -57,6 +57,7 @@ class LeagueWarDetailPlayersScreen extends StatefulWidget {
     required this.clanDetail,
     required this.clanLeague,
     required this.clanLeagueWars,
+    required this.refreshCallback,
   });
 
   final String clanTag;
@@ -64,6 +65,7 @@ class LeagueWarDetailPlayersScreen extends StatefulWidget {
   final ClanDetailResponseModel clanDetail;
   final ClanLeagueGroupResponseModel clanLeague;
   final List<ClansCurrentWarStateModel> clanLeagueWars;
+  final VoidCallback refreshCallback;
 
   @override
   State<LeagueWarDetailPlayersScreen> createState() =>
@@ -75,6 +77,10 @@ class _LeagueWarDetailPlayersScreenState
     with AutomaticKeepAliveClientMixin<LeagueWarDetailPlayersScreen> {
   @override
   bool get wantKeepAlive => true;
+
+  Future<void> _refresh() async {
+    widget.refreshCallback();
+  }
 
   late LeagueGroupClan _clanFilter =
       LeagueGroupClan(name: tr(LocaleKey.allClans), tag: '', members: []);
@@ -239,297 +245,129 @@ class _LeagueWarDetailPlayersScreenState
               o2.member.townHallLevel.compareTo(o1.member.townHallLevel),
         ].map((e) => e(a, b)).firstWhere((e) => e != 0, orElse: () => 0));
 
-    return ListView(
-      key: PageStorageKey(widget.key),
-      shrinkWrap: true,
-      children: [
-        Card(
-          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-          elevation: 0.0,
-          color: Colors.black12,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: InkWell(
-            onTap: () {
-              showClanFilter(context, setState);
-            },
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 18.0),
-              child: Row(
-                children: [
-                  if (_clanFilter.badgeUrls != null)
-                    FadeInImage.assetNetwork(
-                      height: 16.0,
-                      width: 16.0,
-                      image: _clanFilter.badgeUrls?.large ??
-                          AppConstants.placeholderImage,
-                      placeholder: AppConstants.placeholderImage,
-                      fit: BoxFit.cover,
-                    ).paddingRight(8.0),
-                  Text(
-                    _clanFilter.name,
-                    style: const TextStyle(height: 1.2),
-                  ),
-                ],
+    return RefreshIndicator(
+      color: Colors.amber,
+      onRefresh: _refresh,
+      child: ListView(
+        key: PageStorageKey(widget.key),
+        shrinkWrap: true,
+        children: [
+          Card(
+            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+            elevation: 0.0,
+            color: Colors.black12,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: InkWell(
+              onTap: () {
+                showClanFilter(context, setState);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 18.0, horizontal: 18.0),
+                child: Row(
+                  children: [
+                    if (_clanFilter.badgeUrls != null)
+                      FadeInImage.assetNetwork(
+                        height: 16.0,
+                        width: 16.0,
+                        image: _clanFilter.badgeUrls?.large ??
+                            AppConstants.placeholderImage,
+                        placeholder: AppConstants.placeholderImage,
+                        fit: BoxFit.cover,
+                      ).paddingRight(8.0),
+                    Text(
+                      _clanFilter.name,
+                      style: const TextStyle(height: 1.2),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        ...(_clanFilter.tag.isEmptyOrNull
-                ? memberStats
-                : memberStats.where((m) => m.clanTag == _clanFilter.tag))
-            .map(
-          (memberStat) {
-            final index = memberStats.indexOf(memberStat);
-            final member = memberStat.member;
-            final clan = widget.clanLeague.clans?.firstWhere(
-                (e1) => e1.members.any((e2) => e2.tag == member.tag));
+          ...(_clanFilter.tag.isEmptyOrNull
+                  ? memberStats
+                  : memberStats.where((m) => m.clanTag == _clanFilter.tag))
+              .map(
+            (memberStat) {
+              final index = memberStats.indexOf(memberStat);
+              final member = memberStat.member;
+              final clan = widget.clanLeague.clans?.firstWhere(
+                  (e1) => e1.members.any((e2) => e2.tag == member.tag));
 
-            final clanMemberTownHallLevel = (member.townHallLevel) > 11
-                ? '${member.townHallLevel}.5'
-                : (member.townHallLevel).toString();
+              final clanMemberTownHallLevel = (member.townHallLevel) > 11
+                  ? '${member.townHallLevel}.5'
+                  : (member.townHallLevel).toString();
 
-            Color? bgColor;
-            if (context
-                .watch<BookmarkedPlayerTagsCubit>()
-                .state
-                .playerTags
-                .contains(member.tag)) {
-              bgColor = AppConstants.attackerClanBackgroundColor;
-            }
+              Color? bgColor;
+              if (context
+                  .watch<BookmarkedPlayerTagsCubit>()
+                  .state
+                  .playerTags
+                  .contains(member.tag)) {
+                bgColor = AppConstants.attackerClanBackgroundColor;
+              }
 
-            return Card(
-              margin: EdgeInsets.zero,
-              elevation: 0.0,
-              color: bgColor ?? Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0.0),
-              ),
-              child: InkWell(
-                onTap: () {
-                  LeagueWarDetailPlayersDetailScreen(
-                    clanTag: widget.clanTag,
-                    warStartTime: widget.warStartTime,
-                    clan: clan,
-                    member: member,
-                    memberAttacks: memberStat.memberAttacks,
-                    memberDefenceAttacks: memberStat.memberDefenceAttacks,
-                    roundCount: memberStat.roundCount,
-                  ).launch(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 14.0),
-                  child: SizedBox(
-                    height: 60,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('${index + 1}.'),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: FadeIn(
-                            animate: true,
-                            duration: const Duration(milliseconds: 250),
-                            child: Image.asset(
-                              '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
-                              width: 40,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 4.0),
-                                child: Text(
-                                  member.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: const TextStyle(height: 1.2),
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  FadeInImage.assetNetwork(
-                                    height: 12.0,
-                                    width: 12.0,
-                                    image: clan?.badgeUrls?.large ??
-                                        AppConstants.placeholderImage,
-                                    placeholder: AppConstants.placeholderImage,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      ' ${clan?.name}',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(height: 1.2),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: SizedBox(
-                            height: 50,
-                            width: 60,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
-                                      height: 12.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    Text(' ${memberStat.totalStars}'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: SizedBox(
-                            height: 50,
-                            width: 70,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        '%${memberStat.totalDestructionPercentages}'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: SizedBox(
-                            height: 50,
-                            width: 55,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        '${memberStat.attackCount}/${memberStat.roundCount}'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              return Card(
+                margin: EdgeInsets.zero,
+                elevation: 0.0,
+                color: bgColor ?? Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
                 ),
-              ),
-            );
-          },
-        ).toList(),
-        ...(_clanFilter.tag.isEmptyOrNull
-                ? leagueParticipants
-                : leagueParticipants.where((m) => m.clanTag == _clanFilter.tag))
-            .map(
-          (participant) {
-            final index = leagueParticipants.indexOf(participant);
-            final clan = widget.clanLeague.clans?.firstWhere((e1) =>
-                e1.members.any((e2) => e2.tag == participant.member.tag));
-
-            final clanMemberTownHallLevel =
-                (participant.member.townHallLevel) > 11
-                    ? '${participant.member.townHallLevel}.5'
-                    : (participant.member.townHallLevel).toString();
-
-            return Card(
-              margin: EdgeInsets.zero,
-              elevation: 0.0,
-              color: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0.0),
-              ),
-              child: InkWell(
-                onTap: () {
-                  LeagueWarDetailPlayersDetailScreen(
-                    clanTag: widget.clanTag,
-                    warStartTime: widget.warStartTime,
-                    clan: clan,
-                    member: participant.member,
-                    memberAttacks: const <Attack>[],
-                    memberDefenceAttacks: const <Attack>[],
-                    roundCount: 0,
-                  ).launch(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 14.0),
-                  child: SizedBox(
-                    height: 70,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('${index + 1 + memberStats.length}.'),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: FadeIn(
-                            animate: true,
-                            duration: const Duration(milliseconds: 250),
-                            child: Image.asset(
-                              '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
-                              width: 40,
-                              fit: BoxFit.cover,
+                child: InkWell(
+                  onTap: () {
+                    LeagueWarDetailPlayersDetailScreen(
+                      clanTag: widget.clanTag,
+                      warStartTime: widget.warStartTime,
+                      clan: clan,
+                      member: member,
+                      memberAttacks: memberStat.memberAttacks,
+                      memberDefenceAttacks: memberStat.memberDefenceAttacks,
+                      roundCount: memberStat.roundCount,
+                    ).launch(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 14.0),
+                    child: SizedBox(
+                      height: 60,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${index + 1}.'),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: FadeIn(
+                              animate: true,
+                              duration: const Duration(milliseconds: 250),
+                              child: Image.asset(
+                                '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
+                                width: 40,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 4.0),
-                                child: Text(
-                                  participant.member.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: const TextStyle(height: 1.2),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: Text(
+                                    member.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: const TextStyle(height: 1.2),
+                                  ),
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 4.0),
-                                    child: FadeInImage.assetNetwork(
+                                Row(
+                                  children: [
+                                    FadeInImage.assetNetwork(
                                       height: 12.0,
                                       width: 12.0,
                                       image: clan?.badgeUrls?.large ??
@@ -538,98 +376,279 @@ class _LeagueWarDetailPlayersScreenState
                                           AppConstants.placeholderImage,
                                       fit: BoxFit.cover,
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      clan?.name ?? '',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(height: 1.2),
+                                    Expanded(
+                                      child: Text(
+                                        ' ${clan?.name}',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(height: 1.2),
+                                      ),
                                     ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 60,
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
+                                        height: 12.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Text(' ${memberStat.totalStars}'),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: SizedBox(
-                            height: 50,
-                            width: 60,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
-                                      height: 12.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    const Text(' 0'),
-                                  ],
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4.0),
-                          child: SizedBox(
-                            height: 50,
-                            width: 70,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('%0'),
-                                  ],
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 70,
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                          '%${memberStat.totalDestructionPercentages}'),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4.0),
-                          child: SizedBox(
-                            height: 50,
-                            width: 55,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('0/0'),
-                                  ],
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 55,
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                          '${memberStat.attackCount}/${memberStat.roundCount}'),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        ).toList(),
-        const SizedBox(height: 24.0),
-      ],
+              );
+            },
+          ).toList(),
+          ...(_clanFilter.tag.isEmptyOrNull
+                  ? leagueParticipants
+                  : leagueParticipants
+                      .where((m) => m.clanTag == _clanFilter.tag))
+              .map(
+            (participant) {
+              final index = leagueParticipants.indexOf(participant);
+              final clan = widget.clanLeague.clans?.firstWhere((e1) =>
+                  e1.members.any((e2) => e2.tag == participant.member.tag));
+
+              final clanMemberTownHallLevel =
+                  (participant.member.townHallLevel) > 11
+                      ? '${participant.member.townHallLevel}.5'
+                      : (participant.member.townHallLevel).toString();
+
+              return Card(
+                margin: EdgeInsets.zero,
+                elevation: 0.0,
+                color: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    LeagueWarDetailPlayersDetailScreen(
+                      clanTag: widget.clanTag,
+                      warStartTime: widget.warStartTime,
+                      clan: clan,
+                      member: participant.member,
+                      memberAttacks: const <Attack>[],
+                      memberDefenceAttacks: const <Attack>[],
+                      roundCount: 0,
+                    ).launch(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 14.0),
+                    child: SizedBox(
+                      height: 70,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${index + 1 + memberStats.length}.'),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: FadeIn(
+                              animate: true,
+                              duration: const Duration(milliseconds: 250),
+                              child: Image.asset(
+                                '${AppConstants.townHallsImagePath}$clanMemberTownHallLevel.png',
+                                width: 40,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: Text(
+                                    participant.member.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: const TextStyle(height: 1.2),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 4.0),
+                                      child: FadeInImage.assetNetwork(
+                                        height: 12.0,
+                                        width: 12.0,
+                                        image: clan?.badgeUrls?.large ??
+                                            AppConstants.placeholderImage,
+                                        placeholder:
+                                            AppConstants.placeholderImage,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        clan?.name ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(height: 1.2),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 60,
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
+                                        height: 12.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      const Text(' 0'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 70,
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('%0'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 55,
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('0/0'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ).toList(),
+          const SizedBox(height: 24.0),
+        ],
+      ),
     );
   }
 }

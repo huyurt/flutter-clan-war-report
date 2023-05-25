@@ -52,6 +52,13 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
         ClanService.getCurrentWarDetail(widget.clanTag, widget.warTag);
   }
 
+  Future<void> _refresh() async {
+    setState(() {
+      _currentWarDetailFuture =
+          ClanService.getCurrentWarDetail(widget.clanTag, widget.warTag);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,13 +74,10 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
                 ),
               ];
             },
-            onSelected: (value) {
+            onSelected: (value) async {
               switch (value) {
                 case LocaleKey.refresh:
-                  setState(() {
-                    _currentWarDetailFuture = ClanService.getCurrentWarDetail(
-                        widget.clanTag, widget.warTag);
-                  });
+                  await _refresh();
                   break;
               }
             },
@@ -146,24 +150,28 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
                             clanCurrentWar: clansCurrentWar,
                             clan: clan,
                             opponent: opponent,
+                            refreshCallback: _refresh,
                           ),
                           WarDetailEventsScreen(
                             key: const Key(LocaleKey.tabEventsTitle),
                             clanCurrentWar: clansCurrentWar,
                             clan: clan,
                             opponent: opponent,
+                            refreshCallback: _refresh,
                           ),
                           WarDetailAttacksScreen(
                             key: const Key(LocaleKey.tabMyTeamTitle),
                             clanCurrentWar: clansCurrentWar,
                             clan: clan,
                             opponent: opponent,
+                            refreshCallback: _refresh,
                           ),
                           WarDetailAttacksScreen(
                             key: const Key(LocaleKey.tabEnemyTeamTitle),
                             clanCurrentWar: clansCurrentWar,
                             clan: opponent,
                             opponent: clan,
+                            refreshCallback: _refresh,
                           ),
                         ],
                       ),

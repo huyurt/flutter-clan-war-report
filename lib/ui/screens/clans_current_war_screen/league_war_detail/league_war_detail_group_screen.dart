@@ -40,6 +40,7 @@ class LeagueWarDetailGroupScreen extends StatefulWidget {
     required this.clanLeague,
     required this.clanLeagueWars,
     required this.totalRoundCount,
+    required this.refreshCallback,
   });
 
   final String clanTag;
@@ -49,6 +50,7 @@ class LeagueWarDetailGroupScreen extends StatefulWidget {
   final ClanLeagueGroupResponseModel clanLeague;
   final List<ClansCurrentWarStateModel> clanLeagueWars;
   final int totalRoundCount;
+  final VoidCallback refreshCallback;
 
   @override
   State<LeagueWarDetailGroupScreen> createState() =>
@@ -57,6 +59,10 @@ class LeagueWarDetailGroupScreen extends StatefulWidget {
 
 class _LeagueWarDetailGroupScreenState
     extends State<LeagueWarDetailGroupScreen> {
+  Future<void> _refresh() async {
+    widget.refreshCallback();
+  }
+
   @override
   Widget build(BuildContext context) {
     final warStartTime = DateTime.tryParse(widget.warStartTime);
@@ -199,242 +205,248 @@ class _LeagueWarDetailGroupScreenState
     final lastWarLeague = EnumHelper.getWarLeagueById(lastWarLeagueId);
     final lastWarLeagueResult = EnumHelper.getLeagueResult(lastWarLeague);
 
-    return ListView(
-      key: PageStorageKey(widget.key),
-      shrinkWrap: true,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if ((clanDetail.warLeague?.id ?? 0) >
-                  AppConstants.warLeagueUnranked)
-                Image.asset(
-                  '${AppConstants.clanWarLeaguesImagePath}$lastWarLeagueId.png',
-                  height: 64,
-                  fit: BoxFit.cover,
-                )
-              else if (clanDetail.warLeague?.id ==
-                  AppConstants.warLeagueUnranked)
-                Image.asset(
-                  '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                  height: 64,
-                  fit: BoxFit.cover,
+    return RefreshIndicator(
+      color: Colors.amber,
+      onRefresh: _refresh,
+      child: ListView(
+        key: PageStorageKey(widget.key),
+        shrinkWrap: true,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if ((clanDetail.warLeague?.id ?? 0) >
+                    AppConstants.warLeagueUnranked)
+                  Image.asset(
+                    '${AppConstants.clanWarLeaguesImagePath}$lastWarLeagueId.png',
+                    height: 64,
+                    fit: BoxFit.cover,
+                  )
+                else if (clanDetail.warLeague?.id ==
+                    AppConstants.warLeagueUnranked)
+                  Image.asset(
+                    '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
+                    height: 64,
+                    fit: BoxFit.cover,
+                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Text(
+                    ' ${tr('warLeague$lastWarLeagueId')}',
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
                 ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  ' ${tr('warLeague$lastWarLeagueId')}',
-                  style: const TextStyle(fontSize: 20.0),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    '$season ${tr(LocaleKey.season)}',
+                    style: const TextStyle(fontSize: 14.0),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Text(
-                  '$season ${tr(LocaleKey.season)}',
-                  style: const TextStyle(fontSize: 14.0),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        ...totals.map(
-          (total) {
-            final clan = total.clan;
-            return Card(
-              margin: EdgeInsets.zero,
-              elevation: 0.0,
-              color: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0.0),
-              ),
-              child: InkWell(
-                onTap: () {
-                  LeagueWarDetailGroupDetailScreen(
-                    clanTag: clan?.tag ?? '',
-                    warStartTime: widget.warStartTime,
-                    clan: clan,
-                    clanLeagueWars: widget.clanLeagueWars
-                        .where((warModel) =>
-                            warModel.war.clan.tag == clan?.tag ||
-                            warModel.war.opponent.tag == clan?.tag)
-                        .toList(),
-                  ).launch(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 12.0, horizontal: 8.0),
-                  child: SizedBox(
-                    height: 70,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: totals.indexOf(total) + 1 <=
-                                  lastWarLeagueResult.promoted
-                              ? const Icon(
-                                  Icons.keyboard_arrow_up,
-                                  size: 24.0,
-                                  color: Colors.green,
-                                )
-                              : (totals.indexOf(total) + 1 >
-                                      totals.length -
-                                          lastWarLeagueResult.demoted
-                                  ? const Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: 24.0,
-                                      color: Colors.red,
-                                    )
-                                  : const Icon(
-                                      Icons.keyboard_arrow_down,
-                                      size: 24.0,
-                                      color: Colors.transparent,
-                                    )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Text('${totals.indexOf(total) + 1}. '),
-                        ),
-                        FadeInImage.assetNetwork(
-                          height: 45,
-                          width: 45,
-                          image: clan?.badgeUrls.large ??
-                              AppConstants.placeholderImage,
-                          placeholder: AppConstants.placeholderImage,
-                          fit: BoxFit.cover,
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
+          ...totals.map(
+            (total) {
+              final clan = total.clan;
+              return Card(
+                margin: EdgeInsets.zero,
+                elevation: 0.0,
+                color: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    LeagueWarDetailGroupDetailScreen(
+                      clanTag: clan?.tag ?? '',
+                      warStartTime: widget.warStartTime,
+                      clan: clan,
+                      clanLeagueWars: widget.clanLeagueWars
+                          .where((warModel) =>
+                              warModel.war.clan.tag == clan?.tag ||
+                              warModel.war.opponent.tag == clan?.tag)
+                          .toList(),
+                    ).launch(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 8.0),
+                    child: SizedBox(
+                      height: 70,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: totals.indexOf(total) + 1 <=
+                                    lastWarLeagueResult.promoted
+                                ? const Icon(
+                                    Icons.keyboard_arrow_up,
+                                    size: 24.0,
+                                    color: Colors.green,
+                                  )
+                                : (totals.indexOf(total) + 1 >
+                                        totals.length -
+                                            lastWarLeagueResult.demoted
+                                    ? const Icon(
+                                        Icons.keyboard_arrow_down,
+                                        size: 24.0,
+                                        color: Colors.red,
+                                      )
+                                    : const Icon(
+                                        Icons.keyboard_arrow_down,
+                                        size: 24.0,
+                                        color: Colors.transparent,
+                                      )),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Text('${totals.indexOf(total) + 1}. '),
+                          ),
+                          FadeInImage.assetNetwork(
+                            height: 45,
+                            width: 45,
+                            image: clan?.badgeUrls.large ??
+                                AppConstants.placeholderImage,
+                            placeholder: AppConstants.placeholderImage,
+                            fit: BoxFit.cover,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 4.0),
+                                    child: Text(
+                                      clan?.name ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                          height: 1.2, fontSize: 14.0),
+                                    ),
+                                  ),
+                                  Wrap(
+                                    children: [
+                                      ...winSeries[total.clanTag]?.map(
+                                            (win) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 4.0,
+                                                    left: 2.0,
+                                                    right: 2.0),
+                                                child: Container(
+                                                  height: 10.0,
+                                                  width: 10.0,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            2.0),
+                                                    color: win ==
+                                                            WarWinningEnum
+                                                                .notStarted
+                                                        ? Colors.black38
+                                                        : win ==
+                                                                WarWinningEnum
+                                                                    .winning
+                                                            ? Colors.lightGreen
+                                                                .shade200
+                                                            : (win ==
+                                                                    WarWinningEnum
+                                                                        .losing
+                                                                ? Colors.red
+                                                                    .shade200
+                                                                : (win ==
+                                                                        WarWinningEnum
+                                                                            .equal
+                                                                    ? Colors
+                                                                        .yellow
+                                                                        .shade200
+                                                                    : (win ==
+                                                                            WarWinningEnum
+                                                                                .won
+                                                                        ? Colors
+                                                                            .green
+                                                                        : Colors
+                                                                            .red))),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ) ??
+                                          <Widget>[],
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 4.0),
-                                  child: Text(
-                                    clan?.name ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        height: 1.2, fontSize: 14.0),
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 80,
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text('${total.stars} '),
+                                      Image.asset(
+                                        '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
+                                        height: 14,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Wrap(
-                                  children: [
-                                    ...winSeries[total.clanTag]?.map(
-                                          (win) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 4.0,
-                                                  left: 2.0,
-                                                  right: 2.0),
-                                              child: Container(
-                                                height: 10.0,
-                                                width: 10.0,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          2.0),
-                                                  color: win ==
-                                                          WarWinningEnum
-                                                              .notStarted
-                                                      ? Colors.black38
-                                                      : win ==
-                                                              WarWinningEnum
-                                                                  .winning
-                                                          ? Colors.lightGreen
-                                                              .shade200
-                                                          : (win ==
-                                                                  WarWinningEnum
-                                                                      .losing
-                                                              ? Colors
-                                                                  .red.shade200
-                                                              : (win ==
-                                                                      WarWinningEnum
-                                                                          .equal
-                                                                  ? Colors
-                                                                      .yellow
-                                                                      .shade200
-                                                                  : (win ==
-                                                                          WarWinningEnum
-                                                                              .won
-                                                                      ? Colors
-                                                                          .green
-                                                                      : Colors
-                                                                          .red))),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ) ??
-                                        <Widget>[],
-                                  ],
-                                ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: SizedBox(
-                            height: 50,
-                            width: 80,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text('${total.stars} '),
-                                    Image.asset(
-                                      '${AppConstants.clashResourceImagePath}${AppConstants.star2Image}',
-                                      height: 14,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ],
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 80,
+                              child: Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                          '%${(total.destructionPercentage).toString()}'),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: SizedBox(
-                            height: 50,
-                            width: 80,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                        '%${(total.destructionPercentage).toString()}'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        ).toList(),
-        const SizedBox(height: 24.0),
-      ],
+              );
+            },
+          ).toList(),
+          const SizedBox(height: 24.0),
+        ],
+      ),
     );
   }
 }

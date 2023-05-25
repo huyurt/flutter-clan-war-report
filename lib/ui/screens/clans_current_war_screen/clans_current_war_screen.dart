@@ -131,6 +131,7 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                 children: [
                   Expanded(
                     child: RefreshIndicator(
+                      color: Colors.amber,
                       onRefresh: _refreshList,
                       child: ListView.builder(
                         key: PageStorageKey(widget.key),

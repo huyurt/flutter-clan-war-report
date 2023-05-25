@@ -2,7 +2,6 @@ import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ionicons/ionicons.dart';
 
 import '../../../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import '../../../../utils/constants/locale_key.dart';
@@ -29,7 +28,6 @@ class BottomNavBar extends StatelessWidget {
           ),
           child: BottomNavigationBar(
             currentIndex: currentIndex,
-            type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
                 icon: Container(
@@ -45,7 +43,7 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   child: const Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 18.0),
                     child: Icon(AkarIcons.double_sword),
                   ),
                 ),
@@ -65,7 +63,7 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   child: const Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 18.0),
                     child: Icon(AkarIcons.shield),
                   ),
                 ),
@@ -85,7 +83,7 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   child: const Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 18.0),
                     child: Icon(AkarIcons.people_multiple),
                   ),
                 ),
@@ -105,7 +103,7 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   child: const Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 18.0),
                     child: Icon(AkarIcons.gear),
                   ),
                 ),

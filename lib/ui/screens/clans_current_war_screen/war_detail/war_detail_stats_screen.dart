@@ -19,18 +19,24 @@ class WarDetailStatsScreen extends StatefulWidget {
     required this.clanCurrentWar,
     required this.clan,
     required this.opponent,
+    required this.refreshCallback,
   });
 
   final String clanTag;
   final ClansCurrentWarStateModel clanCurrentWar;
   final WarClan clan;
   final WarClan opponent;
+  final VoidCallback refreshCallback;
 
   @override
   State<WarDetailStatsScreen> createState() => _WarDetailStatsScreenState();
 }
 
 class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
+  Future<void> _refresh() async {
+    widget.refreshCallback();
+  }
+
   @override
   Widget build(BuildContext context) {
     final clanCurrentWar = widget.clanCurrentWar.war;
@@ -142,510 +148,514 @@ class _WarDetailStatsScreenState extends State<WarDetailStatsScreen> {
       remainingDateTime = startTime;
     }
 
-    return ListView(
-      key: PageStorageKey(widget.key),
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 12.0, bottom: 24.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Tooltip(
-                message: clan.name,
-                triggerMode: TooltipTriggerMode.tap,
-                preferBelow: true,
-                child: SizedBox(
-                  width: 60,
+    return RefreshIndicator(
+      color: Colors.amber,
+      onRefresh: _refresh,
+      child: ListView(
+        key: PageStorageKey(widget.key),
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 12.0, bottom: 24.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Tooltip(
+                  message: clan.name,
+                  triggerMode: TooltipTriggerMode.tap,
+                  preferBelow: true,
+                  child: SizedBox(
+                    width: 60,
+                    child: Column(
+                      children: [
+                        FadeInImage.assetNetwork(
+                          height: 50,
+                          width: 50,
+                          image: clan.badgeUrls.large,
+                          placeholder: AppConstants.placeholderImage,
+                          fit: BoxFit.cover,
+                        ),
+                        Text(
+                          clan.name ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: const TextStyle(height: 1.2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FadeInImage.assetNetwork(
-                        height: 50,
-                        width: 50,
-                        image: clan.badgeUrls.large,
-                        placeholder: AppConstants.placeholderImage,
-                        fit: BoxFit.cover,
-                      ),
                       Text(
-                        clan.name ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(height: 1.2),
+                        tr('${clanCurrentWar.state}_description'),
+                        style: const TextStyle(fontSize: 16.0),
+                      ),
+                      if (remainingDateTime != null)
+                        CountdownTimerWidget(
+                          remainingDateTime: remainingDateTime,
+                        ),
+                    ],
+                  ),
+                ),
+                Tooltip(
+                  message: opponent.name,
+                  triggerMode: TooltipTriggerMode.tap,
+                  preferBelow: true,
+                  child: SizedBox(
+                    width: 60,
+                    child: Column(
+                      children: [
+                        FadeInImage.assetNetwork(
+                          height: 50,
+                          width: 50,
+                          image: opponent.badgeUrls.large,
+                          placeholder: AppConstants.placeholderImage,
+                          fit: BoxFit.cover,
+                        ),
+                        Text(
+                          opponent.name ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: const TextStyle(height: 1.2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              children: [
+                Text(tr(LocaleKey.stars)),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(clan.stars.toString()),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: LinearProgressIndicator(
+                          value: starsRatio,
+                          backgroundColor: clanCurrentWar.state ==
+                                  WarStateEnum.preparation.name
+                              ? Colors.yellow
+                              : Colors.red,
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.green),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(opponent.stars.toString()),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              children: [
+                Text(tr(LocaleKey.totalDestruction)),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                            '%${clan.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: LinearProgressIndicator(
+                          value: destructionPercentageRatio,
+                          backgroundColor: clanCurrentWar.state ==
+                                  WarStateEnum.preparation.name
+                              ? Colors.yellow
+                              : Colors.red,
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.green),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                            '%${opponent.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 50.0, bottom: 24.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                            '${clan.attacks}/${(clanCurrentWar.teamSize ?? 0) * (clanCurrentWar.attacksPerMember ?? 1)}'),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Text(
+                          tr(LocaleKey.attacksUsed),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                            '${opponent.attacks}/${(clanCurrentWar.teamSize ?? 0) * (clanCurrentWar.attacksPerMember ?? 1)}'),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(clan3StarCount.toString()),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(opponent3StarCount.toString()),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      tr('${clanCurrentWar.state}_description'),
-                      style: const TextStyle(fontSize: 16.0),
-                    ),
-                    if (remainingDateTime != null)
-                      CountdownTimerWidget(
-                        remainingDateTime: remainingDateTime,
-                      ),
-                  ],
-                ),
-              ),
-              Tooltip(
-                message: opponent.name,
-                triggerMode: TooltipTriggerMode.tap,
-                preferBelow: true,
-                child: SizedBox(
-                  width: 60,
-                  child: Column(
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
                     children: [
-                      FadeInImage.assetNetwork(
-                        height: 50,
-                        width: 50,
-                        image: opponent.badgeUrls.large,
-                        placeholder: AppConstants.placeholderImage,
-                        fit: BoxFit.cover,
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(clan2StarCount.toString()),
+                        ),
                       ),
-                      Text(
-                        opponent.name ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(height: 1.2),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(opponent2StarCount.toString()),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(clan1StarCount.toString()),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(opponent1StarCount.toString()),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(clan0StarCount.toString()),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                              Image.asset(
+                                '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
+                                height: 16,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(opponent0StarCount.toString()),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Column(
-            children: [
-              Text(tr(LocaleKey.stars)),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(clan.stars.toString()),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: LinearProgressIndicator(
-                        value: starsRatio,
-                        backgroundColor: clanCurrentWar.state ==
-                                WarStateEnum.preparation.name
-                            ? Colors.yellow
-                            : Colors.red,
-                        valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.green),
+          Padding(
+            padding: const EdgeInsets.only(top: 24.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(clanAverageStars
+                              .toStringAsFixed(2)
+                              .padLeft(2, '0')),
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Text(
+                            tr(LocaleKey.averageStars),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(opponentAverageStars
+                              .toStringAsFixed(2)
+                              .padLeft(2, '0')),
+                        ),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(opponent.stars.toString()),
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                              '%${clanAverageDestruction.toStringAsFixed(2).padLeft(2, '0')}'),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Text(
+                            tr(LocaleKey.averageDestruction),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                              '%${opponentAverageDestruction.toStringAsFixed(2).padLeft(2, '0')}'),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(clanAverageDurationText),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Text(
+                            tr(LocaleKey.averageAttackDuration),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(opponentAverageDurationText),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Column(
-            children: [
-              Text(tr(LocaleKey.totalDestruction)),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                          '%${clan.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: LinearProgressIndicator(
-                        value: destructionPercentageRatio,
-                        backgroundColor: clanCurrentWar.state ==
-                                WarStateEnum.preparation.name
-                            ? Colors.yellow
-                            : Colors.red,
-                        valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.green),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                          '%${opponent.destructionPercentage.toStringAsFixed(2).padLeft(2, '0')}'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 50.0, bottom: 24.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                          '${clan.attacks}/${(clanCurrentWar.teamSize ?? 0) * (clanCurrentWar.attacksPerMember ?? 1)}'),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Text(
-                        tr(LocaleKey.attacksUsed),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                          '${opponent.attacks}/${(clanCurrentWar.teamSize ?? 0) * (clanCurrentWar.attacksPerMember ?? 1)}'),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(clan3StarCount.toString()),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(opponent3StarCount.toString()),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(clan2StarCount.toString()),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(opponent2StarCount.toString()),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(clan1StarCount.toString()),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(opponent1StarCount.toString()),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(clan0StarCount.toString()),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                            Image.asset(
-                              '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-                              height: 16,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(opponent0StarCount.toString()),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 24.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(clanAverageStars
-                            .toStringAsFixed(2)
-                            .padLeft(2, '0')),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Text(
-                          tr(LocaleKey.averageStars),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(opponentAverageStars
-                            .toStringAsFixed(2)
-                            .padLeft(2, '0')),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            '%${clanAverageDestruction.toStringAsFixed(2).padLeft(2, '0')}'),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Text(
-                          tr(LocaleKey.averageDestruction),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                            '%${opponentAverageDestruction.toStringAsFixed(2).padLeft(2, '0')}'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(clanAverageDurationText),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Text(
-                          tr(LocaleKey.averageAttackDuration),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(opponentAverageDurationText),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
-            ? const SizedBox(height: 72.0)
-            : const SizedBox(height: 24.0),
-      ],
+          widget.clanCurrentWar.warType == WarTypeEnum.leagueWar
+              ? const SizedBox(height: 72.0)
+              : const SizedBox(height: 24.0),
+        ],
+      ),
     );
   }
 }

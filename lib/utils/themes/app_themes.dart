@@ -135,14 +135,22 @@ class AppThemes {
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
       elevation: 0.0,
       backgroundColor: Colors.transparent,
+      unselectedIconTheme: IconThemeData(
+        size: 20.0,
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 10.0,
+      ),
       selectedItemColor: Colors.black,
       selectedIconTheme: IconThemeData(
         color: Colors.black,
+        size: 20.0,
       ),
       selectedLabelStyle: TextStyle(
-        fontSize: 12.0,
+        fontSize: 10.0,
       ),
     ),
   );
@@ -277,14 +285,22 @@ class AppThemes {
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
       elevation: 0.0,
       backgroundColor: Colors.transparent,
+      unselectedIconTheme: IconThemeData(
+        size: 20.0,
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 10.0,
+      ),
       selectedItemColor: Colors.white,
       selectedIconTheme: IconThemeData(
         color: Colors.black,
+        size: 20.0,
       ),
       selectedLabelStyle: TextStyle(
-        fontSize: 12.0,
+        fontSize: 10.0,
       ),
     ),
   );
