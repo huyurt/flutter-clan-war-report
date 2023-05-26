@@ -120,7 +120,7 @@ class _LeagueWarDetailRoundsScreenState
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 14.0),
+                                  vertical: 4.0, horizontal: 4.0),
                               child: SizedBox(
                                 height: 70,
                                 child: Row(

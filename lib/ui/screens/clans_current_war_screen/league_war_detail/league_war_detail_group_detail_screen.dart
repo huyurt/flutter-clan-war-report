@@ -158,8 +158,8 @@ class _LeagueWarDetailGroupDetailScreenState
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: FadeInImage.assetNetwork(
-                        height: 75,
-                        width: 75,
+                        height: 75.0,
+                        width: 75.0,
                         image: widget.clan?.badgeUrls.large ??
                             AppConstants.placeholderImage,
                         placeholder: AppConstants.placeholderImage,
@@ -188,7 +188,7 @@ class _LeagueWarDetailGroupDetailScreenState
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               direction: Axis.horizontal,
@@ -206,7 +206,7 @@ class _LeagueWarDetailGroupDetailScreenState
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
                         child: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           direction: Axis.horizontal,
@@ -277,9 +277,9 @@ class _LeagueWarDetailGroupDetailScreenState
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 5.0),
+                      vertical: 10.0, horizontal: 4.0),
                   child: SizedBox(
-                    height: 70,
+                    height: 70.0,
                     child: Row(
                       children: [
                         Expanded(
@@ -289,8 +289,8 @@ class _LeagueWarDetailGroupDetailScreenState
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               FadeInImage.assetNetwork(
-                                height: 40,
-                                width: 40,
+                                height: 40.0,
+                                width: 40.0,
                                 image: clan.badgeUrls.large,
                                 placeholder: AppConstants.placeholderImage,
                                 fit: BoxFit.cover,
@@ -304,10 +304,10 @@ class _LeagueWarDetailGroupDetailScreenState
                           ),
                         ),
                         SizedBox(
-                          width: 155,
+                          width: 155.0,
                           child: Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                                const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -415,8 +415,8 @@ class _LeagueWarDetailGroupDetailScreenState
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               FadeInImage.assetNetwork(
-                                height: 40,
-                                width: 40,
+                                height: 40.0,
+                                width: 40.0,
                                 image: opponent.badgeUrls.large,
                                 placeholder: AppConstants.placeholderImage,
                                 fit: BoxFit.cover,

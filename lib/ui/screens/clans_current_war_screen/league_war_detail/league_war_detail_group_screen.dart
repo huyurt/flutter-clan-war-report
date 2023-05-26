@@ -274,41 +274,39 @@ class _LeagueWarDetailGroupScreenState
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 8.0),
+                        vertical: 12.0, horizontal: 4.0),
                     child: SizedBox(
                       height: 70,
                       child: Row(
                         children: [
+                          totals.indexOf(total) + 1 <=
+                                  lastWarLeagueResult.promoted
+                              ? const Icon(
+                                  Icons.keyboard_arrow_up,
+                                  size: 24.0,
+                                  color: Colors.green,
+                                )
+                              : (totals.indexOf(total) + 1 >
+                                      totals.length -
+                                          lastWarLeagueResult.demoted
+                                  ? const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 24.0,
+                                      color: Colors.red,
+                                    )
+                                  : const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 24.0,
+                                      color: Colors.transparent,
+                                    )),
                           Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: totals.indexOf(total) + 1 <=
-                                    lastWarLeagueResult.promoted
-                                ? const Icon(
-                                    Icons.keyboard_arrow_up,
-                                    size: 24.0,
-                                    color: Colors.green,
-                                  )
-                                : (totals.indexOf(total) + 1 >
-                                        totals.length -
-                                            lastWarLeagueResult.demoted
-                                    ? const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 24.0,
-                                        color: Colors.red,
-                                      )
-                                    : const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 24.0,
-                                        color: Colors.transparent,
-                                      )),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Text('${totals.indexOf(total) + 1}. '),
                           ),
                           FadeInImage.assetNetwork(
-                            height: 45,
-                            width: 45,
+                            height: 45.0,
+                            width: 45.0,
                             image: clan?.badgeUrls.large ??
                                 AppConstants.placeholderImage,
                             placeholder: AppConstants.placeholderImage,
@@ -318,7 +316,7 @@ class _LeagueWarDetailGroupScreenState
                             flex: 1,
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,

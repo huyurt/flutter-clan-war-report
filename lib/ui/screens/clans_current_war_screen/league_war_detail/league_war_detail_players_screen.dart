@@ -330,14 +330,18 @@ class _LeagueWarDetailPlayersScreenState
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 14.0),
+                        vertical: 8.0, horizontal: 4.0),
                     child: SizedBox(
-                      height: 60,
+                      height: 60.0,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('${index + 1}.'),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Text('${index + 1}.'),
+                          ),
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),

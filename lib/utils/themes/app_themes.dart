@@ -97,11 +97,21 @@ class AppThemes {
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       elevation: 0.0,
+      titleTextStyle: TextStyle(
+        fontFamily: AppFontFamily.clashLight,
+        fontSize: 16.0,
+      ),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
         statusBarColor: Colors.transparent,
         systemStatusBarContrastEnforced: false,
         statusBarIconBrightness: Brightness.dark,
+      ),
+    ),
+    popupMenuTheme: PopupMenuThemeData(
+      textStyle: TextStyle(
+        fontFamily: AppFontFamily.clashLight,
+        fontSize: 12.0,
       ),
     ),
     iconTheme: IconThemeData(
@@ -247,11 +257,21 @@ class AppThemes {
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       elevation: 0.0,
+      titleTextStyle: TextStyle(
+        fontFamily: AppFontFamily.clashLight,
+        fontSize: 16.0,
+      ),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
         statusBarColor: Colors.transparent,
         systemStatusBarContrastEnforced: false,
         statusBarIconBrightness: Brightness.light,
+      ),
+    ),
+    popupMenuTheme: PopupMenuThemeData(
+      textStyle: TextStyle(
+        fontFamily: AppFontFamily.clashLight,
+        fontSize: 12.0,
       ),
     ),
     iconTheme: IconThemeData(
