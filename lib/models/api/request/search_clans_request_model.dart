@@ -1,4 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../../utils/constants/app_constants.dart';
 
 class SearchClansRequestModel extends Equatable {
   const SearchClansRequestModel({
@@ -41,4 +44,15 @@ class SearchClansRequestModel extends Equatable {
   @override
   List<Object?> get props =>
       [clanName, minMembers, maxMembers, minClanLevel, after];
+
+  bool get isDefault {
+    if ((locationId == null || locationId == -1) &&
+        (minMembers == null || minMembers == AppConstants.minMembersFilter) &&
+        (maxMembers == null || maxMembers == AppConstants.maxMembersFilter) &&
+        (minClanLevel == null ||
+            minClanLevel == AppConstants.minClanLevelFilter)) {
+      return true;
+    }
+    return false;
+  }
 }

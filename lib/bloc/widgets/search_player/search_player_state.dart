@@ -27,5 +27,5 @@ class SearchPlayerState extends Equatable {
   ) : this._(errorMessage: errorMessage, status: BlocStatusEnum.failure);
 
   @override
-  List<Object> get props => [status, items];
+  List<Object?> get props => [errorMessage, status, items];
 }

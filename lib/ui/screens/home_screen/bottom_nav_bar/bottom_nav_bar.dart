@@ -22,8 +22,8 @@ class BottomNavBar extends StatelessWidget {
           color: Theme.of(context).colorScheme.surfaceVariant,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(0),
-              topRight: Radius.circular(0),
+              topLeft: Radius.circular(0.0),
+              topRight: Radius.circular(0.0),
             ),
           ),
           child: BottomNavigationBar(

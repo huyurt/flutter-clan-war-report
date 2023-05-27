@@ -19,24 +19,24 @@ class ThemeCard extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Card(
-        elevation: 2,
+        elevation: 2.0,
         color: currentThemeMode == themeMode
             ? Theme.of(context).colorScheme.primary
             : Theme.of(context).colorScheme.surface,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
-            Radius.circular(12),
+            Radius.circular(12.0),
           ),
         ),
         child: InkWell(
           onTap: () =>
               BlocProvider.of<ThemeCubit>(context).changeTheme(themeMode),
           borderRadius: const BorderRadius.all(
-            Radius.circular(12),
+            Radius.circular(12.0),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: Icon(icon, size: 32),
+            child: Icon(icon, size: 32.0),
           ),
         ),
       ),

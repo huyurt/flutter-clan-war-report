@@ -31,24 +31,20 @@ class SettingScreen extends StatelessWidget {
               child: Container(
                 height: 60.0,
                 padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: Row(
                   children: [
-                    CountryFlag.fromCountryCode(
-                      EnumHelper.getCountryCode(
-                          EnumHelper.getLocaleType(context.locale)),
-                      height: 24.0,
-                      width: 31.0,
-                      borderRadius: 4.0,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12.0),
+                      child: CountryFlag.fromCountryCode(
+                        EnumHelper.getCountryCode(
+                            EnumHelper.getLocaleType(context.locale)),
+                        height: 24.0,
+                        width: 31.0,
+                        borderRadius: 4.0,
+                      ),
                     ),
-                    const SizedBox(width: 16.0),
-                    Text(
-                      tr(context.locale.languageCode),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .apply(fontWeightDelta: 2),
-                    ),
+                    Text(tr(context.locale.languageCode)),
                   ],
                 ),
               ),

@@ -75,14 +75,14 @@ class _PlayersScreenState extends State<PlayersScreen> {
           children: [
             const Icon(
               AkarIcons.people_multiple,
-              size: 96.0,
+              size: 64.0,
               color: Colors.amber,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
                 tr(LocaleKey.noBookmarkedPlayers),
-                style: const TextStyle(fontSize: 22.0),
+                style: const TextStyle(fontSize: 18.0),
               ),
             ),
             Text(
@@ -127,7 +127,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                   state.items.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (state.items.isEmpty) {
+              if (state.items.isEmpty || !state.items.any((e) => e != null)) {
                 return _emptyList();
               }
               return Column(

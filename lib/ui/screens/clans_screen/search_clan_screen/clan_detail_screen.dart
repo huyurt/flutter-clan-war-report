@@ -140,7 +140,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          height: 75,
+                          height: 75.0,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,

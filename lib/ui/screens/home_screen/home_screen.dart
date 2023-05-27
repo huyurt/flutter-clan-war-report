@@ -32,23 +32,24 @@ class HomeScreen extends StatelessWidget {
     ];
 
     return BlocBuilder<BottomNavigationBarCubit, BottomNavigationBarState>(
-        builder: (context, state) {
-      return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: appBarBuilder(context, state.screenType),
-        body: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: SafeArea(
-            child: pageNavigation[state.index],
+      builder: (context, state) {
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: appBarBuilder(context, state.screenType),
+          body: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: SafeArea(
+              child: pageNavigation[state.index],
+            ),
           ),
-        ),
-        floatingActionButton: Visibility(
-          visible: state.screenType == ScreenEnum.clans ||
-              state.screenType == ScreenEnum.players,
-          child: const AppFloatingActionButton(),
-        ),
-        bottomNavigationBar: const BottomNavBar(),
-      );
-    });
+          floatingActionButton: Visibility(
+            visible: state.screenType == ScreenEnum.clans ||
+                state.screenType == ScreenEnum.players,
+            child: const AppFloatingActionButton(),
+          ),
+          bottomNavigationBar: const BottomNavBar(),
+        );
+      },
+    );
   }
 }

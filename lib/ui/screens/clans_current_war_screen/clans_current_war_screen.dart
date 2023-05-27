@@ -62,32 +62,22 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
   }
 
   Widget _emptyList() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              AkarIcons.double_sword,
-              size: 96.0,
-              color: Colors.amber,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Text(
-                tr(LocaleKey.noClansInWar),
-                style: const TextStyle(fontSize: 22.0),
-              ),
-            ),
-            Text(
-              tr(LocaleKey.noClansInWarMessage),
-              textAlign: TextAlign.center,
-            ),
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(AkarIcons.double_sword, size: 64.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          child: Text(
+            tr(LocaleKey.noClansInWar),
+            style: const TextStyle(fontSize: 18.0),
+          ),
         ),
-      ),
+        Text(
+          tr(LocaleKey.noClansInWarMessage),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 
@@ -121,10 +111,10 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
             case BlocStatusEnum.loading:
             case BlocStatusEnum.success:
               if (state.status == BlocStatusEnum.loading &&
-                  state.items.isEmpty) {
+                  (state.items.isEmpty || !state.items.any((e) => e != null))) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (state.items.isEmpty) {
+              if (state.items.isEmpty || !state.items.any((e) => e != null)) {
                 return _emptyList();
               }
               return Column(

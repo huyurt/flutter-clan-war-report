@@ -12,9 +12,11 @@ import '../../../../bloc/widgets/search_clan/search_clan_bloc.dart';
 import '../../../../bloc/widgets/search_clan/search_clan_event.dart';
 import '../../../../bloc/widgets/search_clan/search_clan_state.dart';
 import '../../../../models/api/response/location_response_model.dart';
+import '../../../../repositories/search_clan/search_clan_filter_cache.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../models/api/request/search_clans_request_model.dart';
 import '../../../../utils/helpers/location_helper.dart';
+import '../../../../utils/injection.dart';
 import '../../../widgets/bottom_loader.dart';
 import 'clan_detail_screen.dart';
 
@@ -34,14 +36,13 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   String? _after = '';
 
   final TextEditingController _clanFilterController = TextEditingController();
-  final TextEditingController _locationFilterController =
-      TextEditingController();
   LocationItem? _location;
   RangeValues _members = const RangeValues(
       AppConstants.minMembersFilter, AppConstants.maxMembersFilter);
   double _minClanLevel = AppConstants.minClanLevelFilter;
   String? _prevClanFilter;
   bool _filterChanged = false;
+  bool _isDefaultFilter = true;
 
   @override
   void initState() {
@@ -57,12 +58,36 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
       }
     });
     _location = locations.first;
+
+    final cachedSearchFilter = locator.get<SearchClanFilterCache>().get();
+    if (cachedSearchFilter != null) {
+      if (cachedSearchFilter.locationId != null) {
+        _location =
+            locations.firstWhere((l) => l.id == cachedSearchFilter.locationId);
+      }
+
+      double minMembers = AppConstants.minMembersFilter;
+      double maxMembers = AppConstants.maxMembersFilter;
+      if (cachedSearchFilter.minMembers != null) {
+        minMembers = cachedSearchFilter.minMembers?.toDouble() ??
+            AppConstants.minMembersFilter;
+      }
+      if (cachedSearchFilter.maxMembers != null) {
+        maxMembers = cachedSearchFilter.maxMembers?.toDouble() ??
+            AppConstants.maxMembersFilter;
+      }
+      _members = RangeValues(minMembers, maxMembers);
+
+      if (cachedSearchFilter.minClanLevel != null) {
+        _minClanLevel = cachedSearchFilter.minClanLevel?.toDouble() ??
+            AppConstants.minClanLevelFilter;
+      }
+    }
   }
 
   @override
   void dispose() {
     _clanFilterController.dispose();
-    _locationFilterController.dispose();
     _listController
       ..removeListener(_onScroll)
       ..dispose();
@@ -99,17 +124,22 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   }
 
   void _performSearch(bool isFilter) {
+    final searchFilter = SearchClansRequestModel(
+      clanName: _clanFilterController.text,
+      locationId: _location?.id,
+      minMembers: _members.start.round(),
+      maxMembers: _members.end.round(),
+      minClanLevel: _minClanLevel.round(),
+    );
+    locator.get<SearchClanFilterCache>().set(searchFilter);
+    setState(() {
+      _isDefaultFilter = searchFilter.isDefault;
+    });
     if (isFilter) {
       if (_filterChanged) {
         _searchClanBloc.add(
           FilterChanged(
-            searchTerm: SearchClansRequestModel(
-              clanName: _clanFilterController.text,
-              locationId: _location?.id,
-              minMembers: _members.start.round(),
-              maxMembers: _members.end.round(),
-              minClanLevel: _minClanLevel.round(),
-            ),
+            searchTerm: searchFilter,
           ),
         );
         _filterChanged = false;
@@ -117,13 +147,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
     } else {
       _searchClanBloc.add(
         TextChanged(
-          searchTerm: SearchClansRequestModel(
-            clanName: _clanFilterController.text,
-            locationId: _location?.id,
-            minMembers: _members.start.round(),
-            maxMembers: _members.end.round(),
-            minClanLevel: _minClanLevel.round(),
-          ),
+          searchTerm: searchFilter,
         ),
       );
     }
@@ -131,15 +155,20 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
 
   //void _onClearTapped() {
   //  _clanFilterController.text = '';
+  //  final searchFilter = SearchClansRequestModel(
+  //    clanName: '',
+  //    locationId: _location?.id,
+  //    minMembers: _members.start.round(),
+  //    maxMembers: _members.end.round(),
+  //    minClanLevel: _minClanLevel.round(),
+  //  );
+  //  locator.get<SearchClanFilterCache>().set(searchFilter);
+  //  setState(() {
+  //    _isDefaultFilter = true;
+  //  });
   //  _searchClanBloc.add(
   //    FilterChanged(
-  //      searchTerm: SearchClansRequestModel(
-  //        clanName: '',
-  //        locationId: _location?.id,
-  //        minMembers: _members.start.round(),
-  //        maxMembers: _members.end.round(),
-  //        minClanLevel: _minClanLevel.round(),
-  //      ),
+  //      searchTerm: searchFilter,
   //    ),
   //  );
   //}
@@ -402,11 +431,30 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
           controller: _clanFilterController,
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Ionicons.filter),
-            onPressed: () {
-              showFilter(context);
-            },
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Ionicons.filter),
+                onPressed: () {
+                  showFilter(context);
+                },
+              ),
+              Visibility(
+                visible: !_isDefaultFilter,
+                child: Positioned(
+                  top: 12,
+                  right: 8,
+                  child: Container(
+                    height: 8.0,
+                    width: 8.0,
+                    decoration: BoxDecoration(
+                      color: Colors.pink,
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -608,25 +656,20 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
               );
             default:
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.search, size: 50.0),
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
-                  Center(
+                  const Icon(Icons.search, size: 64.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Text(
                       tr(LocaleKey.searchClan),
-                      style: const TextStyle(fontSize: 20.0),
+                      style: const TextStyle(fontSize: 18.0),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15.0, horizontal: 75.0),
-                    child: Center(
-                      child: Text(
-                        tr(LocaleKey.searchClanMessage),
-                        textAlign: TextAlign.center,
-                      ),
+                  Center(
+                    child: Text(
+                      tr(LocaleKey.searchClanMessage),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],

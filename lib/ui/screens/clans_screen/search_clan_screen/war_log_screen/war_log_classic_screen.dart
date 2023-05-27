@@ -146,8 +146,8 @@ class _WarLogClassicScreenState extends State<WarLogClassicScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             FadeInImage.assetNetwork(
-                              height: 40,
-                              width: 40,
+                              height: 40.0,
+                              width: 40.0,
                               image: opponent.badgeUrls?.large ?? '',
                               placeholder: AppConstants.placeholderImage,
                               fit: BoxFit.cover,

@@ -19,14 +19,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const <Widget>[
+          children: [
             FlutterLogo(
-              size: 128,
+              size: 128.0,
             ),
           ],
         ),

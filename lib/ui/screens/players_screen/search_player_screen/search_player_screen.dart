@@ -226,25 +226,20 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
               );
             default:
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.search, size: 50.0),
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
-                  Center(
+                  const Icon(Icons.search, size: 64.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Text(
                       tr(LocaleKey.searchPlayer),
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15.0, horizontal: 75.0),
-                    child: Center(
-                      child: Text(
-                        tr(LocaleKey.searchPlayerMessage),
-                        textAlign: TextAlign.center,
-                      ),
+                  Center(
+                    child: Text(
+                      tr(LocaleKey.searchPlayerMessage),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],

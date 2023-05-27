@@ -30,5 +30,5 @@ class SearchClanState extends Equatable {
   ) : this._(errorMessage: errorMessage, status: BlocStatusEnum.failure);
 
   @override
-  List<Object?> get props => [status, after, items];
+  List<Object?> get props => [errorMessage, status, after, items];
 }

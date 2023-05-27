@@ -17,7 +17,7 @@ class AppDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.0),
       ),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
@@ -57,7 +57,7 @@ class AppDialog extends StatelessWidget {
                     const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
                 child: Text(
                   title.toString(),
-                  style: const TextStyle(fontSize: 22),
+                  style: const TextStyle(fontSize: 18.0),
                 ),
               ),
               16.height,
