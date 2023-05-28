@@ -1,24 +1,23 @@
 import 'package:equatable/equatable.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 import '../../../utils/constants/app_constants.dart';
 
 class SearchClansRequestModel extends Equatable {
   const SearchClansRequestModel({
     required this.clanName,
-    this.locationId,
-    this.minMembers,
-    this.maxMembers,
-    this.minClanLevel,
+    required this.locationId,
+    required this.minMembers,
+    required this.maxMembers,
+    required this.minClanLevel,
     this.after,
     this.before,
   });
 
   final String clanName;
-  final int? locationId;
-  final int? minMembers;
-  final int? maxMembers;
-  final int? minClanLevel;
+  final int locationId;
+  final int minMembers;
+  final int maxMembers;
+  final int minClanLevel;
   final String? after;
   final String? before;
 
@@ -43,14 +42,13 @@ class SearchClansRequestModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [clanName, minMembers, maxMembers, minClanLevel, after];
+      [clanName, locationId, minMembers, maxMembers, minClanLevel, after];
 
   bool get isDefault {
-    if ((locationId == null || locationId == -1) &&
-        (minMembers == null || minMembers == AppConstants.minMembersFilter) &&
-        (maxMembers == null || maxMembers == AppConstants.maxMembersFilter) &&
-        (minClanLevel == null ||
-            minClanLevel == AppConstants.minClanLevelFilter)) {
+    if (locationId == -1 &&
+        minMembers == AppConstants.minMembersFilter &&
+        maxMembers == AppConstants.maxMembersFilter &&
+        minClanLevel == AppConstants.minClanLevelFilter) {
       return true;
     }
     return false;

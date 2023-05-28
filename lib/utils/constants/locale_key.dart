@@ -183,4 +183,6 @@ class LocaleKey {
   static const tabWarLogLeagueTitle = 'tab_war_log_league_title';
   static const noAttacksYet = 'No attacks yet';
   static const allClans = 'All clans';
+  static const donatedTroops = 'Donated Troops';
+  static const troopsReceived = 'Troops Received';
 }

@@ -15,6 +15,7 @@ class AppConstants {
   static const pageSize = 20;
 
   static const placeholderImage = 'assets/images/placeholder.png';
+  static const levelImage = 'level.png';
   static const unrankedImage = '0_unranked.png';
   static const cup1Image = 'cup_1.png';
   static const star0Image = 'star_0.png';

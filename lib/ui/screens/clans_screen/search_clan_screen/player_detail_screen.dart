@@ -1,3 +1,4 @@
+import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -173,10 +174,39 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                   animate: true,
                                   duration: const Duration(milliseconds: 250),
                                   child: player?.townHallWeaponLevel != null
-                                      ? Image.asset(
-                                          '${AppConstants.townHallsImagePath}${player?.townHallLevel}.${player?.townHallWeaponLevel}.png',
-                                          width: 70,
-                                          fit: BoxFit.cover,
+                                      ? Stack(
+                                          children: [
+                                            Image.asset(
+                                              '${AppConstants.townHallsImagePath}${player?.townHallLevel}.${player?.townHallWeaponLevel}.png',
+                                              width: 70,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Positioned.fill(
+                                              child: Align(
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.0),
+                                                  ),
+                                                  child: Icon(
+                                                    AkarIcons.double_sword,
+                                                    size: 16.0,
+                                                    color:
+                                                        player?.warPreference ==
+                                                                WarPreference.IN
+                                                            ? Colors.green
+                                                            : Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         )
                                       : Image.asset(
                                           '${AppConstants.townHallsImagePath}${player?.townHallLevel}.png',
@@ -242,6 +272,101 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                         ),
                                       ),
                                     ],
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            alignment: WrapAlignment.center,
+                            spacing: 14.0,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 2.0),
+                                      child: Image.asset(
+                                        '${AppConstants.clashResourceImagePath}${AppConstants.levelImage}',
+                                        height: 14.0,
+                                        width: 14.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Text(
+                                      ' ${(player?.expLevel ?? 0).toString()} ${tr(LocaleKey.level)}',
+                                      style: const TextStyle(fontSize: 10.0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    const Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 0.0,
+                                      color: Colors.green,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2.0),
+                                        child: RotationTransition(
+                                          turns: AlwaysStoppedAnimation(0.75),
+                                          child: Icon(
+                                            Icons.trending_neutral,
+                                            size: 14.0,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      ' ${(player?.donations ?? 0).toString()} ${tr(LocaleKey.donatedTroops)}',
+                                      style: const TextStyle(fontSize: 10.0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    const Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 0.0,
+                                      color: Colors.orange,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2.0),
+                                        child: RotationTransition(
+                                          turns: AlwaysStoppedAnimation(0.25),
+                                          child: Icon(
+                                            Icons.trending_neutral,
+                                            size: 14.0,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      ' ${(player?.donationsReceived ?? 0).toString()} ${tr(LocaleKey.troopsReceived)}',
+                                      style: const TextStyle(fontSize: 10.0),
+                                    ),
                                   ],
                                 ),
                               ),

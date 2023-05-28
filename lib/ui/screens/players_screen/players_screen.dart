@@ -178,11 +178,35 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                             AppConstants.placeholderImage,
                                         fit: BoxFit.cover,
                                       ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        child: Stack(
+                                          children: [
+                                            Image.asset(
+                                              '${AppConstants.clashResourceImagePath}${AppConstants.levelImage}',
+                                              height: 30.0,
+                                              width: 30.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Positioned.fill(
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                    (player.expLevel ?? 0)
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        fontSize: 10.0)),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                       Expanded(
                                         flex: 1,
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
+                                              horizontal: 4.0),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,

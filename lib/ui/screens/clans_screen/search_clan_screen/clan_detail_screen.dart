@@ -133,7 +133,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
               }
               if (snapshot.hasData) {
                 final clan = snapshot.data;
-                final members = clan?.memberList ?? <MemberList>[];
+                final players = clan?.memberList ?? <MemberList>[];
                 return SingleChildScrollView(
                   child: Column(
                     children: [
@@ -189,112 +189,122 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Wrap(
-                          direction: Axis.horizontal,
-                          alignment: WrapAlignment.center,
-                          spacing: 14.0,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 5.0),
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                children: [
-                                  const Card(
-                                    margin: EdgeInsets.zero,
-                                    elevation: 0.0,
-                                    color: Colors.green,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 2.0),
-                                      child: Icon(
-                                        Icons.trending_up,
-                                        size: 14.0,
-                                        color: Colors.white,
+                        child: Center(
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            alignment: WrapAlignment.center,
+                            spacing: 14.0,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    const Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 0.0,
+                                      color: Colors.green,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2.0),
+                                        child: Icon(
+                                          Icons.trending_up,
+                                          size: 14.0,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Text(
-                                      ' ${(clan?.warWins ?? 0).toString()} ${tr(LocaleKey.wins)}'),
-                                ],
+                                    Text(
+                                      ' ${(clan?.warWins ?? 0).toString()} ${tr(LocaleKey.wins)}',
+                                      style: const TextStyle(fontSize: 10.0),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 5.0),
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                children: [
-                                  const Card(
-                                    margin: EdgeInsets.zero,
-                                    elevation: 0.0,
-                                    color: Colors.blue,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 2.0),
-                                      child: Icon(
-                                        Icons.trending_neutral,
-                                        size: 14.0,
-                                        color: Colors.white,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    const Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 0.0,
+                                      color: Colors.blue,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2.0),
+                                        child: Icon(
+                                          Icons.trending_neutral,
+                                          size: 14.0,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Text(
-                                      ' ${(clan?.warTies ?? 0).toString()} ${tr(LocaleKey.ties)}'),
-                                ],
+                                    Text(
+                                      ' ${(clan?.warTies ?? 0).toString()} ${tr(LocaleKey.ties)}',
+                                      style: const TextStyle(fontSize: 10.0),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 5.0),
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                children: [
-                                  const Card(
-                                    margin: EdgeInsets.zero,
-                                    elevation: 0.0,
-                                    color: Colors.red,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 2.0),
-                                      child: Icon(
-                                        Icons.trending_down,
-                                        size: 14.0,
-                                        color: Colors.white,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    const Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 0.0,
+                                      color: Colors.red,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2.0),
+                                        child: Icon(
+                                          Icons.trending_down,
+                                          size: 14.0,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Text(
-                                      ' ${(clan?.warLosses ?? 0).toString()} ${tr(LocaleKey.losses)}'),
-                                ],
+                                    Text(
+                                      ' ${(clan?.warLosses ?? 0).toString()} ${tr(LocaleKey.losses)}',
+                                      style: const TextStyle(fontSize: 10.0),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 5.0),
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                children: [
-                                  const Card(
-                                    margin: EdgeInsets.zero,
-                                    elevation: 0.0,
-                                    color: Colors.grey,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 2.0),
-                                      child: Icon(
-                                        MdiIcons.chartLineVariant,
-                                        size: 14.0,
-                                        color: Colors.white,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    const Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 0.0,
+                                      color: Colors.grey,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 2.0),
+                                        child: Icon(
+                                          MdiIcons.chartLineVariant,
+                                          size: 14.0,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Text(
-                                      ' ${(clan?.warWinStreak ?? 0).toString()} ${tr(LocaleKey.warWinStreak)}'),
-                                ],
+                                    Text(
+                                      ' ${(clan?.warWinStreak ?? 0).toString()} ${tr(LocaleKey.warWinStreak)}',
+                                      style: const TextStyle(fontSize: 10.0),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -391,11 +401,11 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                           ),
                         ),
                       ],
-                      if (members.isNotEmpty) ...[
+                      if (players.isNotEmpty) ...[
                         const SizedBox(height: 14.0),
-                        ...members
+                        ...players
                             .map(
-                              (member) => SizedBox(
+                              (player) => SizedBox(
                                 height: 70,
                                 child: Card(
                                   margin: EdgeInsets.zero,
@@ -404,7 +414,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                           .watch<BookmarkedPlayerTagsCubit>()
                                           .state
                                           .playerTags
-                                          .contains(member.tag)
+                                          .contains(player.tag)
                                       ? AppConstants.attackerClanBackgroundColor
                                       : Colors.transparent,
                                   shape: RoundedRectangleBorder(
@@ -413,42 +423,104 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                   child: InkWell(
                                     onTap: () {
                                       PlayerDetailScreen(
-                                        playerTag: member.tag,
+                                        playerTag: player.tag,
                                       ).launch(context);
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10.0, horizontal: 5.0),
                                       child: SizedBox(
-                                        height: 70,
+                                        height: 70.0,
                                         child: Row(
                                           children: [
-                                            member.league?.iconUrls?.medium !=
-                                                    null
-                                                ? FadeInImage.assetNetwork(
-                                                    width: 50,
-                                                    image: member
-                                                            .league
-                                                            ?.iconUrls
-                                                            ?.medium ??
-                                                        AppConstants
+                                            Stack(
+                                              children: [
+                                                player.league?.iconUrls
+                                                            ?.medium !=
+                                                        null
+                                                    ? FadeInImage.assetNetwork(
+                                                        width: 45.0,
+                                                        image: player
+                                                                .league
+                                                                ?.iconUrls
+                                                                ?.medium ??
+                                                            AppConstants
+                                                                .placeholderImage,
+                                                        placeholder: AppConstants
                                                             .placeholderImage,
-                                                    placeholder: AppConstants
-                                                        .placeholderImage,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Image.asset(
-                                                    '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                                                    height: 50,
-                                                    width: 50,
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : Image.asset(
+                                                        '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
+                                                        height: 45.0,
+                                                        width: 45.0,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                Visibility(
+                                                  visible: (player.clanRank ??
+                                                          0) !=
+                                                      (player.previousClanRank ??
+                                                          0),
+                                                  child: Positioned.fill(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.bottomLeft,
+                                                      child: (player.clanRank ??
+                                                                  0) >
+                                                              (player.previousClanRank ??
+                                                                  0)
+                                                          ? const Icon(
+                                                              Icons
+                                                                  .keyboard_arrow_up,
+                                                              size: 24.0,
+                                                              color:
+                                                                  Colors.green,
+                                                            )
+                                                          : const Icon(
+                                                              Icons
+                                                                  .keyboard_arrow_down,
+                                                              size: 24.0,
+                                                              color: Colors.red,
+                                                            ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4.0),
+                                              child: Stack(
+                                                children: [
+                                                  Image.asset(
+                                                    '${AppConstants.clashResourceImagePath}${AppConstants.levelImage}',
+                                                    height: 30.0,
+                                                    width: 30.0,
                                                     fit: BoxFit.cover,
                                                   ),
+                                                  Positioned.fill(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          (player.expLevel ?? 0)
+                                                              .toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize:
+                                                                      10.0)),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                             Expanded(
                                               flex: 1,
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
+                                                        horizontal: 4.0),
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -460,7 +532,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                               .symmetric(
                                                           vertical: 4.0),
                                                       child: Text(
-                                                        member.name,
+                                                        player.name,
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         maxLines: 1,
@@ -470,7 +542,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      tr(member.role),
+                                                      tr(player.role),
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .bodySmall,
@@ -493,7 +565,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                         MainAxisAlignment.end,
                                                     children: [
                                                       Text(
-                                                          '${(member.trophies ?? 0).toString()} '),
+                                                          '${(player.trophies ?? 0).toString()} '),
                                                       Image.asset(
                                                         '${AppConstants.clashResourceImagePath}${AppConstants.cup1Image}',
                                                         height: 20,

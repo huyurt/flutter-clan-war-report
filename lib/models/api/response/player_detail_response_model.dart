@@ -51,7 +51,7 @@ class PlayerDetailResponseModel {
   final int? bestVersusTrophies;
   final int? versusBattleWins;
   final String? role;
-  final String? warPreference;
+  final WarPreference? warPreference;
   final int? donations;
   final int? donationsReceived;
   final int? clanCapitalContributions;
@@ -81,7 +81,7 @@ class PlayerDetailResponseModel {
     int? bestVersusTrophies,
     int? versusBattleWins,
     String? role,
-    String? warPreference,
+    WarPreference? warPreference,
     int? donations,
     int? donationsReceived,
     int? clanCapitalContributions,
@@ -146,7 +146,7 @@ class PlayerDetailResponseModel {
     bestVersusTrophies: json["bestVersusTrophies"],
     versusBattleWins: json["versusBattleWins"],
     role: json["role"],
-    warPreference: json["warPreference"],
+    warPreference: warPreferenceValues.map[json["warPreference"]]!,
     donations: json["donations"],
     donationsReceived: json["donationsReceived"],
     clanCapitalContributions: json["clanCapitalContributions"],
@@ -177,7 +177,7 @@ class PlayerDetailResponseModel {
     "bestVersusTrophies": bestVersusTrophies,
     "versusBattleWins": versusBattleWins,
     "role": role,
-    "warPreference": warPreference,
+    "warPreference": warPreferenceValues.reverse[warPreference],
     "donations": donations,
     "donationsReceived": donationsReceived,
     "clanCapitalContributions": clanCapitalContributions,
@@ -192,6 +192,13 @@ class PlayerDetailResponseModel {
     "spells": spells == null ? [] : List<dynamic>.from(spells!.map((x) => x.toMap())),
   };
 }
+
+enum WarPreference { IN, OUT }
+
+final warPreferenceValues = EnumValues({
+  "in": WarPreference.IN,
+  "out": WarPreference.OUT
+});
 
 class Achievement {
   Achievement({

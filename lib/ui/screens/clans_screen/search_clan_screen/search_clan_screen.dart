@@ -36,10 +36,9 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   String? _after = '';
 
   final TextEditingController _clanFilterController = TextEditingController();
-  LocationItem? _location;
-  RangeValues _members = const RangeValues(
-      AppConstants.minMembersFilter, AppConstants.maxMembersFilter);
-  double _minClanLevel = AppConstants.minClanLevelFilter;
+  late LocationItem _location;
+  late RangeValues _members;
+  late double _minClanLevel;
   String? _prevClanFilter;
   bool _filterChanged = false;
   bool _isDefaultFilter = true;
@@ -57,32 +56,12 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
         _performSearch(false);
       }
     });
-    _location = locations.first;
 
-    final cachedSearchFilter = locator.get<SearchClanFilterCache>().get();
-    if (cachedSearchFilter != null) {
-      if (cachedSearchFilter.locationId != null) {
-        _location =
-            locations.firstWhere((l) => l.id == cachedSearchFilter.locationId);
-      }
-
-      double minMembers = AppConstants.minMembersFilter;
-      double maxMembers = AppConstants.maxMembersFilter;
-      if (cachedSearchFilter.minMembers != null) {
-        minMembers = cachedSearchFilter.minMembers?.toDouble() ??
-            AppConstants.minMembersFilter;
-      }
-      if (cachedSearchFilter.maxMembers != null) {
-        maxMembers = cachedSearchFilter.maxMembers?.toDouble() ??
-            AppConstants.maxMembersFilter;
-      }
-      _members = RangeValues(minMembers, maxMembers);
-
-      if (cachedSearchFilter.minClanLevel != null) {
-        _minClanLevel = cachedSearchFilter.minClanLevel?.toDouble() ??
-            AppConstants.minClanLevelFilter;
-      }
-    }
+    final cachedSearchFilter = locator.get<SearchClanFilterCache>();
+    _location = locations
+        .firstWhere((l) => l.id == cachedSearchFilter.get().locationId);
+    _members = cachedSearchFilter.getMembers();
+    _minClanLevel = cachedSearchFilter.get().minClanLevel.toDouble();
   }
 
   @override
@@ -105,7 +84,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
         NextPageFetched(
           searchTerm: SearchClansRequestModel(
             clanName: _clanFilterController.text,
-            locationId: _location?.id,
+            locationId: _location.id,
             minMembers: _members.start.round(),
             maxMembers: _members.end.round(),
             minClanLevel: _minClanLevel.round(),
@@ -126,7 +105,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
   void _performSearch(bool isFilter) {
     final searchFilter = SearchClansRequestModel(
       clanName: _clanFilterController.text,
-      locationId: _location?.id,
+      locationId: _location.id,
       minMembers: _members.start.round(),
       maxMembers: _members.end.round(),
       minClanLevel: _minClanLevel.round(),
@@ -199,7 +178,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                       return Card(
                         margin: EdgeInsets.zero,
                         elevation: 0.0,
-                        color: _location?.id == location.id
+                        color: _location.id == location.id
                             ? Colors.black12
                             : Colors.transparent,
                         shape: RoundedRectangleBorder(
@@ -208,7 +187,7 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              if (_location?.id != location.id) {
+                              if (_location.id != location.id) {
                                 _filterChanged = true;
                               }
                               _location = location;
@@ -290,21 +269,21 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                             vertical: 18.0, horizontal: 18.0),
                         child: Row(
                           children: [
-                            _location?.isCountry ?? false
+                            _location.isCountry
                                 ? CountryFlag.fromCountryCode(
-                                    _location?.countryCode ?? '',
+                                    _location.countryCode ?? '',
                                     height: 16.0,
                                     width: 24.0,
                                     borderRadius: 4.0,
                                   )
-                                : (_location?.id == -1
+                                : (_location.id == -1
                                     ? Container()
                                     : const Icon(
                                         Icons.public,
                                         size: 24.0,
                                         color: Colors.blue,
                                       )),
-                            Text(_location?.name ?? '').paddingLeft(8.0),
+                            Text(_location.name).paddingLeft(8.0),
                           ],
                         ),
                       ),
