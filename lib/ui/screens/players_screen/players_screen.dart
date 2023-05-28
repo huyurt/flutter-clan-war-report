@@ -50,7 +50,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
       GetBookmarkedPlayerDetail(
         process: ProcessType.refresh,
         playerTagList:
-            context.watch<BookmarkedPlayerTagsCubit>().state.playerTags,
+            context.read<BookmarkedPlayerTagsCubit>().state.playerTags,
       ),
     );
   }

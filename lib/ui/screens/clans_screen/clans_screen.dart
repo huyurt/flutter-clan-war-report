@@ -48,7 +48,7 @@ class _ClansScreenState extends State<ClansScreen> {
     _bookmarkedClansBloc.add(
       GetBookmarkedClanDetail(
         process: ProcessType.refresh,
-        clanTagList: context.watch<BookmarkedClanTagsCubit>().state.clanTags,
+        clanTagList: context.read<BookmarkedClanTagsCubit>().state.clanTags,
       ),
     );
   }
