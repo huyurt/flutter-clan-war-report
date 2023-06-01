@@ -19,6 +19,7 @@ import '../../../../services/clan_service.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
+import '../../../widgets/rank_image.dart';
 
 class ClanDetailScreen extends StatefulWidget {
   const ClanDetailScreen({
@@ -145,12 +146,10 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              FadeInImage.assetNetwork(
+                              RankImage(
+                                imageUrl: clan?.badgeUrls?.large,
                                 height: 70,
-                                image: clan?.badgeUrls?.large ??
-                                    AppConstants.placeholderImage,
-                                placeholder: AppConstants.placeholderImage,
-                                fit: BoxFit.cover,
+                                width: 70,
                               ),
                               Padding(
                                 padding:

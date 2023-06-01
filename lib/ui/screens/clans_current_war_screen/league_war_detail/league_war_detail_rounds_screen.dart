@@ -6,9 +6,9 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../../../models/api/response/clan_detail_response_model.dart';
 import '../../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
-import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/enums/war_state_enum.dart';
 import '../../../../utils/enums/war_type_enum.dart';
+import '../../../widgets/rank_image.dart';
 import '../war_detail/war_detail_screen.dart';
 
 class LeagueWarDetailRoundsScreen extends StatefulWidget {
@@ -142,13 +142,10 @@ class _LeagueWarDetailRoundsScreenState
                                               ),
                                             ),
                                           ),
-                                          FadeInImage.assetNetwork(
+                                          RankImage(
+                                            imageUrl: clan.badgeUrls.large,
                                             height: 40,
                                             width: 40,
-                                            image: clan.badgeUrls.large,
-                                            placeholder:
-                                                AppConstants.placeholderImage,
-                                            fit: BoxFit.cover,
                                           ),
                                         ],
                                       ),
@@ -236,13 +233,10 @@ class _LeagueWarDetailRoundsScreenState
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          FadeInImage.assetNetwork(
+                                          RankImage(
+                                            imageUrl: opponent.badgeUrls.large,
                                             height: 40,
                                             width: 40,
-                                            image: opponent.badgeUrls.large,
-                                            placeholder:
-                                                AppConstants.placeholderImage,
-                                            fit: BoxFit.cover,
                                           ),
                                           Expanded(
                                             child: Center(

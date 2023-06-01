@@ -12,6 +12,7 @@ import '../../../../bloc/widgets/search_player/search_player_state.dart';
 import '../../../../models/api/response/player_detail_response_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../widgets/bottom_loader.dart';
+import '../../../widgets/rank_image.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
 
 class SearchPlayerScreen extends StatefulWidget {
@@ -160,13 +161,10 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                           height: 70,
                           child: Row(
                             children: [
-                              FadeInImage.assetNetwork(
+                              RankImage(
+                                imageUrl: player.league?.iconUrls?.medium,
                                 height: 50,
                                 width: 50,
-                                image: player.league?.iconUrls?.medium ??
-                                    AppConstants.placeholderImage,
-                                placeholder: AppConstants.placeholderImage,
-                                fit: BoxFit.cover,
                               ),
                               Expanded(
                                 flex: 1,

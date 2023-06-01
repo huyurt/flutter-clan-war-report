@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../../models/api/response/war_log_response_model.dart';
-import '../../../../../utils/constants/app_constants.dart';
+import '../../../../widgets/rank_image.dart';
 
 class WarLogClassicScreen extends StatefulWidget {
   const WarLogClassicScreen({super.key, required this.warLogs});
@@ -52,12 +52,10 @@ class _WarLogClassicScreenState extends State<WarLogClassicScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            FadeInImage.assetNetwork(
+                            RankImage(
+                              imageUrl: clan.badgeUrls?.large,
                               height: 40,
                               width: 40,
-                              image: clan.badgeUrls?.large ?? '',
-                              placeholder: AppConstants.placeholderImage,
-                              fit: BoxFit.cover,
                             ),
                             Text(
                               clan.name ?? '',
@@ -145,12 +143,10 @@ class _WarLogClassicScreenState extends State<WarLogClassicScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            FadeInImage.assetNetwork(
-                              height: 40.0,
-                              width: 40.0,
-                              image: opponent.badgeUrls?.large ?? '',
-                              placeholder: AppConstants.placeholderImage,
-                              fit: BoxFit.cover,
+                            RankImage(
+                              imageUrl: opponent.badgeUrls?.large,
+                              height: 40,
+                              width: 40,
                             ),
                             Text(
                               opponent.name ?? '',

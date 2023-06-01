@@ -14,6 +14,7 @@ import '../../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_c
 import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
+import '../../../widgets/rank_image.dart';
 import '../../clans_screen/search_clan_screen/clan_detail_screen.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
 
@@ -143,18 +144,16 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                 }
               },
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 16.0),
                 child: Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 16.0),
-                      child: FadeInImage.assetNetwork(
+                      child: RankImage(
+                        imageUrl: clan.badgeUrls.large,
                         height: 50,
                         width: 50,
-                        image: clan.badgeUrls.large,
-                        placeholder: AppConstants.placeholderImage,
-                        fit: BoxFit.cover,
                       ),
                     ),
                     Column(
@@ -184,14 +183,16 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
 
               WarClanMember? attackDefender1;
               if (attacks.isNotEmpty) {
-                attackDefender1 = opponent.members?.firstWhere((opponentMember) =>
-                    opponentMember.tag == attacks[0].defenderTag);
+                attackDefender1 = opponent.members?.firstWhere(
+                    (opponentMember) =>
+                        opponentMember.tag == attacks[0].defenderTag);
               }
 
               WarClanMember? attackDefender2;
               if (attacks.length > 1) {
-                attackDefender2 = opponent.members?.firstWhere((opponentMember) =>
-                    opponentMember.tag == attacks[1].defenderTag);
+                attackDefender2 = opponent.members?.firstWhere(
+                    (opponentMember) =>
+                        opponentMember.tag == attacks[1].defenderTag);
               }
 
               WarClanMember? defenderAttacker;
@@ -333,12 +334,12 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                          vertical: 4.0),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 4.0),
                                                   child: Row(
                                                     children: [
-                                                      const Icon(AkarIcons.sword,
+                                                      const Icon(
+                                                          AkarIcons.sword,
                                                           size: 14.0),
                                                       Text(
                                                         ' ${tr(LocaleKey.attack)} 2',
@@ -351,13 +352,14 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                 attackDefender2 != null
                                                     ? Text(
                                                         '${attackDefender2.mapPosition}. ${attackDefender2.name}',
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         maxLines: 1,
                                                         style: const TextStyle(
                                                             height: 1),
                                                       )
-                                                    : Text(tr(LocaleKey.notUsed)),
+                                                    : Text(
+                                                        tr(LocaleKey.notUsed)),
                                               ],
                                             ),
                                           ),
@@ -365,12 +367,12 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                             children: [
                                               if (attackDefender2 != null) ...[
                                                 Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                          vertical: 4.0),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 4.0),
                                                   child: Row(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: getStarsWidget(
                                                         allAttacks,
                                                         member.attacks?[1]),

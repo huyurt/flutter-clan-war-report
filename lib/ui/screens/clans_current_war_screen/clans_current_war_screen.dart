@@ -12,12 +12,12 @@ import '../../../bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_curr
 import '../../../bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current_war_event.dart';
 import '../../../bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current_war_state.dart';
 import '../../../models/api/response/clan_war_response_model.dart';
-import '../../../utils/constants/app_constants.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
 import '../../../utils/enums/process_type_enum.dart';
 import '../../../utils/enums/war_state_enum.dart';
 import '../../widgets/countdown_timer/countdown_timer_widget.dart';
 import '../../widgets/bottom_progression_indicator.dart';
+import '../../widgets/rank_image.dart';
 
 class ClansCurrentWarScreen extends StatefulWidget {
   const ClansCurrentWarScreen({super.key});
@@ -208,13 +208,10 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            FadeInImage.assetNetwork(
+                                            RankImage(
+                                              imageUrl: clan.badgeUrls.large,
                                               height: 40,
                                               width: 40,
-                                              image: clan.badgeUrls.large,
-                                              placeholder:
-                                                  AppConstants.placeholderImage,
-                                              fit: BoxFit.cover,
                                             ),
                                             Text(
                                               clan.name ?? '',
@@ -364,13 +361,11 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            FadeInImage.assetNetwork(
+                                            RankImage(
+                                              imageUrl:
+                                                  opponent.badgeUrls.large,
                                               height: 40,
                                               width: 40,
-                                              image: opponent.badgeUrls.large,
-                                              placeholder:
-                                                  AppConstants.placeholderImage,
-                                              fit: BoxFit.cover,
                                             ),
                                             Text(
                                               opponent.name ?? '',

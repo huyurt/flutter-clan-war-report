@@ -14,6 +14,7 @@ import '../../../utils/constants/locale_key.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
 import '../../../utils/enums/process_type_enum.dart';
 import '../../widgets/bottom_progression_indicator.dart';
+import '../../widgets/rank_image.dart';
 
 class ClansScreen extends StatefulWidget {
   const ClansScreen({super.key});
@@ -167,14 +168,10 @@ class _ClansScreenState extends State<ClansScreen> {
                                   height: 70,
                                   child: Row(
                                     children: [
-                                      FadeInImage.assetNetwork(
+                                      RankImage(
+                                        imageUrl: clan.badgeUrls?.large,
                                         height: 50,
                                         width: 50,
-                                        image: clan.badgeUrls?.large ??
-                                            AppConstants.placeholderImage,
-                                        placeholder:
-                                            AppConstants.placeholderImage,
-                                        fit: BoxFit.cover,
                                       ),
                                       Expanded(
                                         flex: 1,

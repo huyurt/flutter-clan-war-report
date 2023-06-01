@@ -10,6 +10,7 @@ import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_state_enum.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 import '../../../widgets/countdown_timer/countdown_timer_widget.dart';
+import '../../../widgets/rank_image.dart';
 import '../../clans_screen/search_clan_screen/clan_detail_screen.dart';
 import '../war_detail/war_detail_screen.dart';
 
@@ -157,13 +158,10 @@ class _LeagueWarDetailGroupDetailScreenState
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: FadeInImage.assetNetwork(
-                        height: 75.0,
-                        width: 75.0,
-                        image: widget.clan?.badgeUrls.large ??
-                            AppConstants.placeholderImage,
-                        placeholder: AppConstants.placeholderImage,
-                        fit: BoxFit.cover,
+                      child: RankImage(
+                        imageUrl: widget.clan?.badgeUrls.large,
+                        height: 75,
+                        width: 75,
                       ),
                     ),
                     Column(
@@ -288,12 +286,10 @@ class _LeagueWarDetailGroupDetailScreenState
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              FadeInImage.assetNetwork(
-                                height: 40.0,
-                                width: 40.0,
-                                image: clan.badgeUrls.large,
-                                placeholder: AppConstants.placeholderImage,
-                                fit: BoxFit.cover,
+                              RankImage(
+                                imageUrl: clan.badgeUrls.large,
+                                height: 40,
+                                width: 40,
                               ),
                               Text(
                                 clan.name ?? '',
@@ -414,12 +410,10 @@ class _LeagueWarDetailGroupDetailScreenState
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              FadeInImage.assetNetwork(
-                                height: 40.0,
-                                width: 40.0,
-                                image: opponent.badgeUrls.large,
-                                placeholder: AppConstants.placeholderImage,
-                                fit: BoxFit.cover,
+                              RankImage(
+                                imageUrl: opponent.badgeUrls.large,
+                                height: 40,
+                                width: 40,
                               ),
                               Text(
                                 opponent.name ?? '',

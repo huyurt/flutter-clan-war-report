@@ -13,6 +13,7 @@ import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
+import '../../../widgets/rank_image.dart';
 import 'league_war_detail_players_detail_screen.dart';
 
 class ClanLeagueWarsMemberStats {
@@ -134,13 +135,10 @@ class _LeagueWarDetailPlayersScreenState
                             child: Row(
                               children: [
                                 if (clan.badgeUrls != null)
-                                  FadeInImage.assetNetwork(
-                                    height: 16.0,
-                                    width: 16.0,
-                                    image: clan.badgeUrls?.large ??
-                                        AppConstants.placeholderImage,
-                                    placeholder: AppConstants.placeholderImage,
-                                    fit: BoxFit.cover,
+                                  RankImage(
+                                    imageUrl: clan.badgeUrls?.large,
+                                    height: 16,
+                                    width: 16,
                                   ).paddingRight(8.0),
                                 Text(
                                   clan.name,
@@ -269,13 +267,10 @@ class _LeagueWarDetailPlayersScreenState
                 child: Row(
                   children: [
                     if (_clanFilter.badgeUrls != null)
-                      FadeInImage.assetNetwork(
-                        height: 16.0,
-                        width: 16.0,
-                        image: _clanFilter.badgeUrls?.large ??
-                            AppConstants.placeholderImage,
-                        placeholder: AppConstants.placeholderImage,
-                        fit: BoxFit.cover,
+                      RankImage(
+                        imageUrl: _clanFilter.badgeUrls?.large,
+                        height: 16,
+                        width: 16,
                       ).paddingRight(8.0),
                     Text(
                       _clanFilter.name,
@@ -371,14 +366,10 @@ class _LeagueWarDetailPlayersScreenState
                                 ),
                                 Row(
                                   children: [
-                                    FadeInImage.assetNetwork(
-                                      height: 12.0,
-                                      width: 12.0,
-                                      image: clan?.badgeUrls?.large ??
-                                          AppConstants.placeholderImage,
-                                      placeholder:
-                                          AppConstants.placeholderImage,
-                                      fit: BoxFit.cover,
+                                    RankImage(
+                                      imageUrl: clan?.badgeUrls?.large,
+                                      height: 12,
+                                      width: 12,
                                     ),
                                     Expanded(
                                       child: Text(
@@ -550,14 +541,10 @@ class _LeagueWarDetailPlayersScreenState
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(right: 4.0),
-                                      child: FadeInImage.assetNetwork(
-                                        height: 12.0,
-                                        width: 12.0,
-                                        image: clan?.badgeUrls?.large ??
-                                            AppConstants.placeholderImage,
-                                        placeholder:
-                                            AppConstants.placeholderImage,
-                                        fit: BoxFit.cover,
+                                      child: RankImage(
+                                        imageUrl: clan?.badgeUrls?.large,
+                                        height: 12,
+                                        width: 12,
                                       ),
                                     ),
                                     Expanded(

@@ -11,6 +11,7 @@ import '../../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
+import '../../../widgets/rank_image.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
 
 class ClanLeagueWarsStats {
@@ -247,13 +248,10 @@ class _LeagueWarDetailPlayersDetailScreenState
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(right: 4.0),
-                                child: FadeInImage.assetNetwork(
+                                child: RankImage(
+                                  imageUrl: clan?.badgeUrls?.large,
                                   height: 18,
                                   width: 18,
-                                  image: clan?.badgeUrls?.large ??
-                                      AppConstants.placeholderImage,
-                                  placeholder: AppConstants.placeholderImage,
-                                  fit: BoxFit.cover,
                                 ),
                               ),
                               Text(

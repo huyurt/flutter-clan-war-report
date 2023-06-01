@@ -14,6 +14,7 @@ import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/league_state_enum.dart';
 import '../../../../utils/enums/war_winning_enum.dart';
+import '../../../widgets/rank_image.dart';
 import 'league_war_detail_group_detail_screen.dart';
 
 class ClanLeagueWarsStats {
@@ -304,13 +305,10 @@ class _LeagueWarDetailGroupScreenState
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Text('${totals.indexOf(total) + 1}. '),
                           ),
-                          FadeInImage.assetNetwork(
-                            height: 45.0,
-                            width: 45.0,
-                            image: clan?.badgeUrls.large ??
-                                AppConstants.placeholderImage,
-                            placeholder: AppConstants.placeholderImage,
-                            fit: BoxFit.cover,
+                          RankImage(
+                            imageUrl: clan?.badgeUrls.large,
+                            height: 45,
+                            width: 45,
                           ),
                           Expanded(
                             flex: 1,

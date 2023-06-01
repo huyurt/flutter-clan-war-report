@@ -18,6 +18,7 @@ import '../../../../models/api/request/search_clans_request_model.dart';
 import '../../../../utils/helpers/location_helper.dart';
 import '../../../../utils/injection.dart';
 import '../../../widgets/bottom_loader.dart';
+import '../../../widgets/rank_image.dart';
 import 'clan_detail_screen.dart';
 
 class SearchClanScreen extends StatefulWidget {
@@ -510,13 +511,10 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                           height: 70,
                           child: Row(
                             children: [
-                              FadeInImage.assetNetwork(
+                              RankImage(
+                                imageUrl: clan.badgeUrls?.large,
                                 height: 50,
                                 width: 50,
-                                image: clan.badgeUrls?.large ??
-                                    AppConstants.placeholderImage,
-                                placeholder: AppConstants.placeholderImage,
-                                fit: BoxFit.cover,
                               ),
                               Expanded(
                                 flex: 1,
