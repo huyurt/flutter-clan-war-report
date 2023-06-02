@@ -11,7 +11,7 @@ import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/enums/war_state_enum.dart';
 import '../../../widgets/countdown_timer/countdown_timer_widget.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
 
 class WarDetailStatsScreen extends StatefulWidget {
   const WarDetailStatsScreen({

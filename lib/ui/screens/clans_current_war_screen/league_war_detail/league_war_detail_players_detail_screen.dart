@@ -9,20 +9,12 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../../models/api/response/clan_war_response_model.dart';
+import '../../../../models/coc/clan_league_wars_stat_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
+import '../../../widgets/app_widgets/star_stats_widget.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
-
-class ClanLeagueWarsStats {
-  ClanLeagueWarsStats({
-    required this.stars,
-    required this.totalStarCount,
-  });
-
-  final int stars;
-  late int totalStarCount;
-}
 
 class LeagueWarDetailPlayersDetailScreen extends StatefulWidget {
   const LeagueWarDetailPlayersDetailScreen({
@@ -51,28 +43,6 @@ class LeagueWarDetailPlayersDetailScreen extends StatefulWidget {
 
 class _LeagueWarDetailPlayersDetailScreenState
     extends State<LeagueWarDetailPlayersDetailScreen> {
-  List<Widget> getStarsWidget(int stars) {
-    final zeroStar = 3 - stars;
-    final widgets = <Widget>[];
-
-    for (var index = 0; index < stars; index++) {
-      widgets.add(Image.asset(
-        '${AppConstants.clashResourceImagePath}${AppConstants.star3_1Image}',
-        height: 16,
-        fit: BoxFit.cover,
-      ));
-    }
-    for (var index = 0; index < zeroStar; index++) {
-      widgets.add(Image.asset(
-        '${AppConstants.clashResourceImagePath}${AppConstants.star3_3Image}',
-        height: 16,
-        fit: BoxFit.cover,
-      ));
-    }
-
-    return widgets;
-  }
-
   @override
   Widget build(BuildContext context) {
     final borderColor =
@@ -273,43 +243,9 @@ class _LeagueWarDetailPlayersDetailScreenState
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              direction: Axis.horizontal,
-              alignment: WrapAlignment.center,
-              spacing: 32.0,
-              children: [
-                ...stars.map((star) {
-                  return Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    direction: Axis.vertical,
-                    children: [
-                      Row(
-                        children: [
-                          ...getStarsWidget(star.stars),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          direction: Axis.horizontal,
-                          children: [
-                            Text(star.totalStarCount.toString()),
-                            Text(
-                              ' (%${totalStarCount == 0 ? 0 : (star.totalStarCount / totalStarCount * 100).toStringAsFixed(2).padLeft(2, '0')})',
-                              style: const TextStyle(fontSize: 12.0),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-              ],
-            ),
+          StarStatWidget(
+            stars: stars,
+            totalStarCount: totalStarCount,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

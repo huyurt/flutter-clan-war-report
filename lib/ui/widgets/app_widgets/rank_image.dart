@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/constants/app_constants.dart';
+import '../../../utils/constants/app_constants.dart';
 
 class RankImage extends StatelessWidget {
   const RankImage({

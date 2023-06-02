@@ -18,7 +18,7 @@ import '../../../../models/api/request/search_clans_request_model.dart';
 import '../../../../utils/helpers/location_helper.dart';
 import '../../../../utils/injection.dart';
 import '../../../widgets/bottom_loader.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
 import 'clan_detail_screen.dart';
 
 class SearchClanScreen extends StatefulWidget {

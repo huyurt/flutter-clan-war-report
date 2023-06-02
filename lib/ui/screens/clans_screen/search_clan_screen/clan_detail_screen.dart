@@ -19,7 +19,7 @@ import '../../../../services/clan_service.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
 
 class ClanDetailScreen extends StatefulWidget {
   const ClanDetailScreen({
@@ -164,19 +164,14 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: const TextStyle(
-                                            height: 1.2, fontSize: 22.0),
+                                            height: 1.2, fontSize: 20.0),
                                       ),
                                     ),
                                     Flexible(
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 8.0),
-                                        child: Text(
-                                          clan?.tag ?? '',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
+                                        child: Text(clan?.tag ?? ''),
                                       ),
                                     ),
                                   ],

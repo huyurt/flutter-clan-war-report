@@ -8,7 +8,7 @@ import '../../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/enums/war_state_enum.dart';
 import '../../../../utils/enums/war_type_enum.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
 import '../war_detail/war_detail_screen.dart';
 
 class LeagueWarDetailRoundsScreen extends StatefulWidget {

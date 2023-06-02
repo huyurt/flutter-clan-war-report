@@ -14,7 +14,7 @@ import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/league_state_enum.dart';
 import '../../../../utils/enums/war_winning_enum.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
 import 'league_war_detail_group_detail_screen.dart';
 
 class ClanLeagueWarsStats {

@@ -14,7 +14,7 @@ import '../../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_c
 import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
 import '../../clans_screen/search_clan_screen/clan_detail_screen.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
 

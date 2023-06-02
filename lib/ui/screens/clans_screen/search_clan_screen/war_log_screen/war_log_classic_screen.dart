@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../../models/api/response/war_log_response_model.dart';
-import '../../../../widgets/rank_image.dart';
+import '../../../../widgets/app_widgets/rank_image.dart';
 
 class WarLogClassicScreen extends StatefulWidget {
   const WarLogClassicScreen({super.key, required this.warLogs});

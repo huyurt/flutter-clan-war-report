@@ -13,7 +13,7 @@ import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
 import 'league_war_detail_players_detail_screen.dart';
 
 class ClanLeagueWarsMemberStats {

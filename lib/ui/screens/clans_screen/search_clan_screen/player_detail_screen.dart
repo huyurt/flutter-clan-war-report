@@ -1,6 +1,5 @@
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +13,7 @@ import '../../../../services/player_service.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/helpers/image_helper.dart';
+import '../../../widgets/app_widgets/player_item_widget.dart';
 import 'clan_detail_screen.dart';
 
 class PlayerDetailScreen extends StatefulWidget {
@@ -49,11 +49,6 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor =
-        Theme.of(context).colorScheme.brightness == Brightness.dark
-            ? Colors.white24
-            : Colors.black26;
-
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -131,28 +126,6 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
               if (snapshot.hasData) {
                 final player = snapshot.data;
                 clanTag = player?.clan?.tag ?? '';
-                final heroes = player?.heroes
-                        ?.where((element) => element.village == Village.HOME) ??
-                    <PlayerItemLevel>[].where((element) =>
-                        ImageHelper.getHeroes().contains(element.name));
-                final troops = (player?.troops?.where(
-                            (element) => element.village == Village.HOME) ??
-                        <PlayerItemLevel>[])
-                    .where((element) =>
-                        ImageHelper.getTroops().contains(element.name));
-                final pets = (player?.troops?.where(
-                            (element) => element.village == Village.HOME) ??
-                        <PlayerItemLevel>[])
-                    .where((element) =>
-                        ImageHelper.getPets().contains(element.name));
-                final spells = player?.spells
-                        ?.where((element) => element.village == Village.HOME) ??
-                    <PlayerItemLevel>[].where((element) =>
-                        ImageHelper.getSpells().contains(element.name));
-                final siegeMachines = player?.troops
-                        ?.where((element) => element.village == Village.HOME) ??
-                    <PlayerItemLevel>[].where((element) =>
-                        ImageHelper.getSiegeMachines().contains(element.name));
 
                 return SingleChildScrollView(
                   child: Column(
@@ -453,527 +426,35 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(tr(LocaleKey.heroes)),
+                      PlayerItemWidget(
+                        title: tr(LocaleKey.heroes),
+                        imagePath: AppConstants.heroesImagePath,
+                        itemImages: ImageHelper.getHeroes(),
+                        itemLevels: player?.heroes,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: FadeIn(
-                          animate: true,
-                          duration: const Duration(milliseconds: 250),
-                          child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 4.0,
-                            children: ImageHelper.getHeroes().map(
-                              (heroImage) {
-                                PlayerItemLevel? hero = heroes.firstWhereOrNull(
-                                    (element) => element.name == heroImage);
-                                List<String> tooltipMessage = <String>[];
-                                tooltipMessage.add(tr(heroImage));
-                                tooltipMessage.add(hero != null
-                                    ? '${tr(LocaleKey.level)} ${hero.level}/${hero.maxLevel}'
-                                    : tr(LocaleKey.notUnlocked));
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 4.0, bottom: 8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 3,
-                                        color: borderColor,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: Tooltip(
-                                      message: tooltipMessage
-                                          .getRange(0, tooltipMessage.length)
-                                          .join('\n'),
-                                      triggerMode: TooltipTriggerMode.tap,
-                                      preferBelow: true,
-                                      child: Stack(
-                                        children: [
-                                          if (hero != null) ...[
-                                            Image.asset(
-                                              '${AppConstants.heroesImagePath}$heroImage.png',
-                                              height: 42.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            Positioned.fill(
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0,
-                                                      horizontal:
-                                                          hero.level < 10
-                                                              ? 4.0
-                                                              : 2.0),
-                                                  decoration: BoxDecoration(
-                                                    color: hero.level ==
-                                                            hero.maxLevel
-                                                        ? Colors.amber
-                                                        : Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4.0),
-                                                  ),
-                                                  child: Text(
-                                                    hero.level.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 8.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: hero.level ==
-                                                              hero.maxLevel
-                                                          ? Colors.black
-                                                          : Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ] else
-                                            ColorFiltered(
-                                              colorFilter:
-                                                  const ColorFilter.mode(
-                                                Colors.black,
-                                                BlendMode.saturation,
-                                              ),
-                                              child: Image.asset(
-                                                '${AppConstants.heroesImagePath}$heroImage.png',
-                                                height: 42.0,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        ),
+                      PlayerItemWidget(
+                        title: tr(LocaleKey.pets),
+                        imagePath: AppConstants.petsImagePath,
+                        itemImages: ImageHelper.getPets(),
+                        itemLevels: player?.troops,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(tr(LocaleKey.pets)),
+                      PlayerItemWidget(
+                        title: tr(LocaleKey.troops),
+                        imagePath: AppConstants.troopsImagePath,
+                        itemImages: ImageHelper.getTroops(),
+                        itemLevels: player?.troops,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: FadeIn(
-                          animate: true,
-                          duration: const Duration(milliseconds: 250),
-                          child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 4.0,
-                            children: ImageHelper.getPets().map(
-                              (petImage) {
-                                PlayerItemLevel? pet = pets.firstWhereOrNull(
-                                    (element) => element.name == petImage);
-                                List<String> tooltipMessage = <String>[];
-                                tooltipMessage.add(tr(petImage));
-                                tooltipMessage.add(pet != null
-                                    ? '${tr(LocaleKey.level)} ${pet.level}/${pet.maxLevel}'
-                                    : tr(LocaleKey.notUnlocked));
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 4.0, bottom: 8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 3,
-                                        color: borderColor,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: Tooltip(
-                                      message: tooltipMessage
-                                          .getRange(0, tooltipMessage.length)
-                                          .join('\n'),
-                                      triggerMode: TooltipTriggerMode.tap,
-                                      preferBelow: true,
-                                      child: Stack(
-                                        children: [
-                                          if (pet != null) ...[
-                                            Image.asset(
-                                              '${AppConstants.petsImagePath}$petImage.png',
-                                              height: 42.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            Positioned.fill(
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0,
-                                                      horizontal: pet.level < 10
-                                                          ? 4.0
-                                                          : 2.0),
-                                                  decoration: BoxDecoration(
-                                                    color: pet.level ==
-                                                            pet.maxLevel
-                                                        ? Colors.amber
-                                                        : Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4.0),
-                                                  ),
-                                                  child: Text(
-                                                    pet.level.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 8.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: pet.level ==
-                                                              pet.maxLevel
-                                                          ? Colors.black
-                                                          : Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ] else
-                                            ColorFiltered(
-                                              colorFilter:
-                                                  const ColorFilter.mode(
-                                                Colors.black,
-                                                BlendMode.saturation,
-                                              ),
-                                              child: Image.asset(
-                                                '${AppConstants.petsImagePath}$petImage.png',
-                                                height: 42.0,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        ),
+                      PlayerItemWidget(
+                        title: tr(LocaleKey.spells),
+                        imagePath: AppConstants.spellsImagePath,
+                        itemImages: ImageHelper.getSpells(),
+                        itemLevels: player?.spells,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(tr(LocaleKey.troops)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: FadeIn(
-                          animate: true,
-                          duration: const Duration(milliseconds: 250),
-                          child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 4.0,
-                            children: ImageHelper.getTroops().map(
-                              (troopImage) {
-                                PlayerItemLevel? troop =
-                                    troops.firstWhereOrNull((element) =>
-                                        element.name == troopImage);
-                                List<String> tooltipMessage = <String>[];
-                                tooltipMessage.add(tr(troopImage));
-                                tooltipMessage.add(troop != null
-                                    ? '${tr(LocaleKey.level)} ${troop.level}/${troop.maxLevel}'
-                                    : tr(LocaleKey.notUnlocked));
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 4.0, bottom: 8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 3,
-                                        color: borderColor,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: Tooltip(
-                                      message: tooltipMessage
-                                          .getRange(0, tooltipMessage.length)
-                                          .join('\n'),
-                                      triggerMode: TooltipTriggerMode.tap,
-                                      preferBelow: true,
-                                      child: Stack(
-                                        children: [
-                                          if (troop != null) ...[
-                                            Image.asset(
-                                              '${AppConstants.troopsImagePath}$troopImage.png',
-                                              height: 42.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            Positioned.fill(
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0,
-                                                      horizontal:
-                                                          troop.level < 10
-                                                              ? 4.0
-                                                              : 2.0),
-                                                  decoration: BoxDecoration(
-                                                    color: troop.level ==
-                                                            troop.maxLevel
-                                                        ? Colors.amber
-                                                        : Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4.0),
-                                                  ),
-                                                  child: Text(
-                                                    troop.level.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 8.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: troop.level ==
-                                                              troop.maxLevel
-                                                          ? Colors.black
-                                                          : Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ] else
-                                            ColorFiltered(
-                                              colorFilter:
-                                                  const ColorFilter.mode(
-                                                Colors.black,
-                                                BlendMode.saturation,
-                                              ),
-                                              child: Image.asset(
-                                                '${AppConstants.troopsImagePath}$troopImage.png',
-                                                height: 42.0,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(tr(LocaleKey.spells)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: FadeIn(
-                          animate: true,
-                          duration: const Duration(milliseconds: 250),
-                          child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 4.0,
-                            children: ImageHelper.getSpells().map(
-                              (spellImage) {
-                                PlayerItemLevel? spell =
-                                    spells.firstWhereOrNull((element) =>
-                                        element.name == spellImage);
-                                List<String> tooltipMessage = <String>[];
-                                tooltipMessage.add(tr(spellImage));
-                                tooltipMessage.add(spell != null
-                                    ? '${tr(LocaleKey.level)} ${spell.level}/${spell.maxLevel}'
-                                    : tr(LocaleKey.notUnlocked));
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 4.0, bottom: 8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 3,
-                                        color: borderColor,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: Tooltip(
-                                      message: tooltipMessage
-                                          .getRange(0, tooltipMessage.length)
-                                          .join('\n'),
-                                      triggerMode: TooltipTriggerMode.tap,
-                                      preferBelow: true,
-                                      child: Stack(
-                                        children: [
-                                          if (spell != null) ...[
-                                            Image.asset(
-                                              '${AppConstants.spellsImagePath}$spellImage.png',
-                                              height: 42.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            Positioned.fill(
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0,
-                                                      horizontal:
-                                                          spell.level < 10
-                                                              ? 4.0
-                                                              : 2.0),
-                                                  decoration: BoxDecoration(
-                                                    color: spell.level ==
-                                                            spell.maxLevel
-                                                        ? Colors.amber
-                                                        : Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4.0),
-                                                  ),
-                                                  child: Text(
-                                                    spell.level.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 8.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: spell.level ==
-                                                              spell.maxLevel
-                                                          ? Colors.black
-                                                          : Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ] else
-                                            ColorFiltered(
-                                              colorFilter:
-                                                  const ColorFilter.mode(
-                                                Colors.black,
-                                                BlendMode.saturation,
-                                              ),
-                                              child: Image.asset(
-                                                '${AppConstants.spellsImagePath}$spellImage.png',
-                                                height: 42.0,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(tr(LocaleKey.siegeMachines)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: FadeIn(
-                          animate: true,
-                          duration: const Duration(milliseconds: 250),
-                          child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 4.0,
-                            children: ImageHelper.getSiegeMachines().map(
-                              (siegeMachineImage) {
-                                PlayerItemLevel? siegeMachine =
-                                    siegeMachines.firstWhereOrNull((element) =>
-                                        element.name == siegeMachineImage);
-                                List<String> tooltipMessage = <String>[];
-                                tooltipMessage.add(tr(siegeMachineImage));
-                                tooltipMessage.add(siegeMachine != null
-                                    ? '${tr(LocaleKey.level)} ${siegeMachine.level}/${siegeMachine.maxLevel}'
-                                    : tr(LocaleKey.notUnlocked));
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 4.0, bottom: 8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 3,
-                                        color: borderColor,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: Tooltip(
-                                      message: tooltipMessage
-                                          .getRange(0, tooltipMessage.length)
-                                          .join('\n'),
-                                      triggerMode: TooltipTriggerMode.tap,
-                                      preferBelow: true,
-                                      child: Stack(
-                                        children: [
-                                          if (siegeMachine != null) ...[
-                                            Image.asset(
-                                              '${AppConstants.siegeMachinesImagePath}$siegeMachineImage.png',
-                                              height: 42.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            Positioned.fill(
-                                              child: Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0,
-                                                      horizontal:
-                                                          siegeMachine.level <
-                                                                  10
-                                                              ? 4.0
-                                                              : 2.0),
-                                                  decoration: BoxDecoration(
-                                                    color: siegeMachine.level ==
-                                                            siegeMachine
-                                                                .maxLevel
-                                                        ? Colors.amber
-                                                        : Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4.0),
-                                                  ),
-                                                  child: Text(
-                                                    siegeMachine.level
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 8.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color:
-                                                          siegeMachine.level ==
-                                                                  siegeMachine
-                                                                      .maxLevel
-                                                              ? Colors.black
-                                                              : Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ] else
-                                            ColorFiltered(
-                                              colorFilter:
-                                                  const ColorFilter.mode(
-                                                Colors.black,
-                                                BlendMode.saturation,
-                                              ),
-                                              child: Image.asset(
-                                                '${AppConstants.siegeMachinesImagePath}$siegeMachineImage.png',
-                                                height: 42.0,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        ),
+                      PlayerItemWidget(
+                        title: tr(LocaleKey.siegeMachines),
+                        imagePath: AppConstants.siegeMachinesImagePath,
+                        itemImages: ImageHelper.getSiegeMachines(),
+                        itemLevels: player?.troops,
                       ),
                       const SizedBox(height: 24.0),
                     ],

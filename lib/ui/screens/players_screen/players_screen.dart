@@ -13,7 +13,7 @@ import '../../../utils/constants/locale_key.dart';
 import '../../../utils/enums/bloc_status_enum.dart';
 import '../../../utils/enums/process_type_enum.dart';
 import '../../widgets/bottom_progression_indicator.dart';
-import '../../widgets/rank_image.dart';
+import '../../widgets/app_widgets/rank_image.dart';
 import '../clans_screen/search_clan_screen/player_detail_screen.dart';
 
 class PlayersScreen extends StatefulWidget {

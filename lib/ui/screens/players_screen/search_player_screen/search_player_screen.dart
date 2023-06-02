@@ -12,7 +12,7 @@ import '../../../../bloc/widgets/search_player/search_player_state.dart';
 import '../../../../models/api/response/player_detail_response_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../widgets/bottom_loader.dart';
-import '../../../widgets/rank_image.dart';
+import '../../../widgets/app_widgets/rank_image.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
 
 class SearchPlayerScreen extends StatefulWidget {
