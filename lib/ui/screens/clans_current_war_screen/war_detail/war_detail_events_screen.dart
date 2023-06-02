@@ -84,19 +84,21 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
       color: Colors.amber,
       onRefresh: _refresh,
       child: attacks.isEmpty
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.paste,
-                  size: 54.0,
-                  color: Colors.amber,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(tr(LocaleKey.noAttacksYet)),
-                ),
-              ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.paste,
+                    size: 54.0,
+                    color: Colors.amber,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(tr(LocaleKey.noAttacksYet)),
+                  ),
+                ],
+              ),
             )
           : Column(
               children: [
