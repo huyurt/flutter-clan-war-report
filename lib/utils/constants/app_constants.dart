@@ -16,6 +16,8 @@ class AppConstants {
 
   static const placeholderImage = 'assets/images/placeholder.png';
   static const levelImage = 'level.png';
+  static const unknownImage = 'unknown.png';
+  static const unknownTroopImage = 'unknown_troop.png';
   static const unrankedImage = '0_unranked.png';
   static const cup1Image = 'cup_1.png';
   static const star0Image = 'star_0.png';

@@ -28,9 +28,9 @@ class PlayerItemWidget extends StatelessWidget {
             : Colors.black26;
 
     final items =
-        itemLevels?.where((element) => element.village == Village.HOME) ??
+        itemLevels?.where((element) => element.village == Village.HOME).toList() ??
             <PlayerItemLevel>[]
-                .where((element) => itemImages.contains(element.name));
+                .where((element) => itemImages.contains(element.name)).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
