@@ -110,6 +110,7 @@ class LocaleKey {
   static const bowler = 'Bowler';
   static const iceGolem = 'Ice Golem';
   static const headhunter = 'Headhunter';
+  static const apprenticeWarden = 'Apprentice Warden';
   static const lightningSpell = 'Lightning Spell';
   static const healingSpell = 'Healing Spell';
   static const rageSpell = 'Rage Spell';

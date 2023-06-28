@@ -48,6 +48,7 @@ class ImageHelper {
       "Bowler",
       "Ice Golem",
       "Headhunter",
+      "Apprentice Warden",
     ];
   }
 
