@@ -15,6 +15,7 @@ import '../../../utils/enums/bloc_status_enum.dart';
 import '../../../utils/enums/process_type_enum.dart';
 import '../../widgets/bottom_progression_indicator.dart';
 import '../../widgets/app_widgets/rank_image.dart';
+import '../../widgets/api_error_widget.dart';
 
 class ClansScreen extends StatefulWidget {
   const ClansScreen({super.key});
@@ -101,24 +102,10 @@ class _ClansScreenState extends State<ClansScreen> {
         builder: (context, state) {
           switch (state.status) {
             case BlocStatusEnum.failure:
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      AkarIcons.face_sad,
-                      size: 56.0,
-                      color: Colors.amber,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text(
-                        state.errorMessage ?? tr(LocaleKey.cocApiErrorMessage),
-                        style: const TextStyle(fontSize: 18.0),
-                      ),
-                    ),
-                  ],
-                ),
+              return ApiErrorWidget(
+                onRefresh: _refreshList,
+                isTimeout: state.isTimeout,
+                errorMessage: state.errorMessage,
               );
             case BlocStatusEnum.loading:
             case BlocStatusEnum.success:

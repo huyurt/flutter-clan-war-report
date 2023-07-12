@@ -207,5 +207,8 @@
   "No attacks yet": "Henüz saldırı yapılmadı",
   "All clans": "Tüm klanlar",
   "Donated Troops": "Bağışlanan Birlikler",
-  "Troops Received": "Alınan Birlikler"
+  "Troops Received": "Alınan Birlikler",
+  "Connection Error": "Bağlantı Hatası",
+  "connection_error_detail": "Sunucu ile bağlantı kurulamadı. İnternet bağlantınızı kontrol edip yeniden deneyin.",
+  "Try Again": "Tekrar Deneyin"
 }

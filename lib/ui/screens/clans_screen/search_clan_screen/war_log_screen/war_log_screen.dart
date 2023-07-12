@@ -12,6 +12,7 @@ import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 
 import '../../../../../models/api/response/war_log_response_model.dart';
 import '../../../../../models/coc/war_logs_model.dart';
+import '../../../../widgets/api_error_widget.dart';
 
 class WarLogScreen extends StatefulWidget {
   const WarLogScreen({super.key, required this.clanTag});
@@ -80,7 +81,9 @@ class _WarLogScreenState extends State<WarLogScreen> {
                     ],
                   );
                 }
-                return Center(child: Text(tr('search_failed_message')));
+                return ApiErrorWidget(
+                  error: snapshot.error,
+                );
               }
             }
             if (snapshot.hasData) {

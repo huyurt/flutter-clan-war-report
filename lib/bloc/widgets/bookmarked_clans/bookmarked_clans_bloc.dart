@@ -48,8 +48,7 @@ class BookmarkedClansBloc
   ) async {
     bookmarkedClansRepository.cleanRemovedClanTags(event.clanTagList);
     final fetchedClanTags = bookmarkedClansRepository.getClanTags();
-    final newClanTags =
-        event.clanTagList.where((c) => !fetchedClanTags.contains(c)).toList();
+    final newClanTags = event.clanTagList.where((c) => !fetchedClanTags.contains(c)).toList();
 
     if (newClanTags.isEmpty) {
       return emit(BookmarkedClansState.success(
@@ -66,9 +65,12 @@ class BookmarkedClansBloc
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
       } catch (error) {
         if (error is DioError) {
-          emit(BookmarkedClansState.failure(error.message));
+          if (error.type == DioExceptionType.connectionTimeout) {
+            return emit(BookmarkedClansState.failure(true, error.message));
+          }
+          emit(BookmarkedClansState.failure(false, error.message));
         } else {
-          emit(BookmarkedClansState.failure(tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedClansState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedClansState.loading(
@@ -96,9 +98,12 @@ class BookmarkedClansBloc
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
       } catch (error) {
         if (error is DioError) {
-          emit(BookmarkedClansState.failure(error.message));
+          if (error.type == DioExceptionType.connectionTimeout) {
+            return emit(BookmarkedClansState.failure(true, error.message));
+          }
+          emit(BookmarkedClansState.failure(false, error.message));
         } else {
-          emit(BookmarkedClansState.failure(tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedClansState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedClansState.loading(
@@ -115,8 +120,7 @@ class BookmarkedClansBloc
     ReorderBookmarkedClanDetail event,
     Emitter<BookmarkedClansState> emit,
   ) async {
-    final newIndex =
-        event.newIndex > event.oldIndex ? (event.newIndex - 1) : event.newIndex;
+    final newIndex = event.newIndex > event.oldIndex ? (event.newIndex - 1) : event.newIndex;
     final item = state.items[event.oldIndex];
     if (item != null) {
       bookmarkedClansRepository.reorder(item, newIndex);

@@ -7,6 +7,7 @@ import '../../../../models/coc/clan_details_and_league_wars_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
+import '../../../widgets/api_error_widget.dart';
 import 'league_war_detail_group_screen.dart';
 import 'league_war_detail_players_screen.dart';
 import 'league_war_detail_rounds_screen.dart';
@@ -84,7 +85,10 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return Center(child: Text(tr('search_failed_message')));
+              return ApiErrorWidget(
+                onRefresh: _refresh,
+                error: snapshot.error,
+              );
             }
             if (snapshot.hasData) {
               final totalRoundCount = snapshot.data?.rounds ?? 0;

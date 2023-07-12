@@ -50,5 +50,6 @@
   "war_log_error_message_title": "Private war log",
   "war_log_error_message": "This clan has decided to keep their war log private. If this is your clan, please ask one of your clan leaders to make the war log public.",
   "tab_war_log_classic_title": "Classic",
-  "tab_war_log_league_title": "War League"
+  "tab_war_log_league_title": "War League",
+  "connection_error_detail": "Unable to connect with the server. Check your internet connection and try again."
 }

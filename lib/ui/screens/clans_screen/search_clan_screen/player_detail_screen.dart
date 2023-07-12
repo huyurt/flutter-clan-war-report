@@ -13,6 +13,7 @@ import '../../../../services/player_service.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/helpers/image_helper.dart';
+import '../../../widgets/api_error_widget.dart';
 import '../../../widgets/app_widgets/player_item_widget.dart';
 import 'clan_detail_screen.dart';
 
@@ -121,7 +122,10 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
-                return Center(child: Text(tr('search_failed_message')));
+                return ApiErrorWidget(
+                  onRefresh: _refresh,
+                  error: snapshot.error,
+                );
               }
               if (snapshot.hasData) {
                 final player = snapshot.data;

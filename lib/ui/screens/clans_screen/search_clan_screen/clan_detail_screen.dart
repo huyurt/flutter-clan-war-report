@@ -19,6 +19,7 @@ import '../../../../services/clan_service.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
+import '../../../widgets/api_error_widget.dart';
 import '../../../widgets/app_widgets/rank_image.dart';
 
 class ClanDetailScreen extends StatefulWidget {
@@ -130,7 +131,10 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
-                return Center(child: Text(tr('search_failed_message')));
+                return ApiErrorWidget(
+                  onRefresh: _refresh,
+                  error: snapshot.error,
+                );
               }
               if (snapshot.hasData) {
                 final clan = snapshot.data;

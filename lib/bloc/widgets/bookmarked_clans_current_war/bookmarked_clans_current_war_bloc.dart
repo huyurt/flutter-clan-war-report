@@ -44,8 +44,7 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
   ) async {
     bookmarkedClansCurrentWarRepository.cleanRemovedClanTags(event.clanTagList);
     final fetchedClanTags = bookmarkedClansCurrentWarRepository.getClanTags();
-    final newClanTags =
-        event.clanTagList.where((c) => !fetchedClanTags.contains(c)).toList();
+    final newClanTags = event.clanTagList.where((c) => !fetchedClanTags.contains(c)).toList();
 
     if (newClanTags.isEmpty) {
       return emit(BookmarkedClansCurrentWarState.success(
@@ -62,10 +61,12 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
       } catch (error) {
         if (error is DioError) {
-          emit(BookmarkedClansCurrentWarState.failure(error.message));
+          if (error.type == DioExceptionType.connectionTimeout) {
+            return emit(BookmarkedClansCurrentWarState.failure(true, error.message));
+          }
+          emit(BookmarkedClansCurrentWarState.failure(false, error.message));
         } else {
-          emit(BookmarkedClansCurrentWarState.failure(
-              tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedClansCurrentWarState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedClansCurrentWarState.loading(
@@ -93,10 +94,12 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
       } catch (error) {
         if (error is DioError) {
-          emit(BookmarkedClansCurrentWarState.failure(error.message));
+          if (error.type == DioExceptionType.connectionTimeout) {
+            return emit(BookmarkedClansCurrentWarState.failure(true, error.message));
+          }
+          emit(BookmarkedClansCurrentWarState.failure(false, error.message));
         } else {
-          emit(BookmarkedClansCurrentWarState.failure(
-              tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedClansCurrentWarState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedClansCurrentWarState.loading(

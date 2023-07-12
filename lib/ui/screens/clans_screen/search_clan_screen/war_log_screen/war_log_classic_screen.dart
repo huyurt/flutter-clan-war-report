@@ -43,7 +43,7 @@ class _WarLogClassicScreenState extends State<WarLogClassicScreen> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
                 child: SizedBox(
-                  height: 70,
+                  height: 75,
                   child: Row(
                     children: [
                       Expanded(

@@ -67,10 +67,12 @@ class BookmarkedPlayersBloc
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
       } catch (error) {
         if (error is DioError) {
-          emit(BookmarkedPlayersState.failure(error.message));
+          if (error.type == DioExceptionType.connectionTimeout) {
+            return emit(BookmarkedPlayersState.failure(true, error.message));
+          }
+          emit(BookmarkedPlayersState.failure(false, error.message));
         } else {
-          emit(
-              BookmarkedPlayersState.failure(tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedPlayersState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedPlayersState.loading(
@@ -98,10 +100,12 @@ class BookmarkedPlayersBloc
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
       } catch (error) {
         if (error is DioError) {
-          emit(BookmarkedPlayersState.failure(error.message));
+          if (error.type == DioExceptionType.connectionTimeout) {
+            return emit(BookmarkedPlayersState.failure(true, error.message));
+          }
+          emit(BookmarkedPlayersState.failure(false, error.message));
         } else {
-          emit(
-              BookmarkedPlayersState.failure(tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedPlayersState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedPlayersState.loading(
@@ -118,8 +122,7 @@ class BookmarkedPlayersBloc
     ReorderBookmarkedPlayerDetail event,
     Emitter<BookmarkedPlayersState> emit,
   ) async {
-    final newIndex =
-        event.newIndex > event.oldIndex ? (event.newIndex - 1) : event.newIndex;
+    final newIndex = event.newIndex > event.oldIndex ? (event.newIndex - 1) : event.newIndex;
     final item = state.items[event.oldIndex];
     if (item != null) {
       bookmarkedPlayersRepository.reorder(item, newIndex);

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_current_war_screen/war_detail/war_detail_attacks_screen.dart';
@@ -11,6 +12,7 @@ import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../services/clan_service.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
+import '../../../widgets/api_error_widget.dart';
 import '../league_war_detail/league_war_detail_screen.dart';
 
 class WarDetailScreen extends StatefulWidget {
@@ -89,7 +91,10 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return Center(child: Text(tr('search_failed_message')));
+              return ApiErrorWidget(
+                onRefresh: _refresh,
+                error: snapshot.error,
+              );
             }
             if (snapshot.hasData) {
               final clansCurrentWar = snapshot.data;

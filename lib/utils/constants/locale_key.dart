@@ -186,4 +186,7 @@ class LocaleKey {
   static const allClans = 'All clans';
   static const donatedTroops = 'Donated Troops';
   static const troopsReceived = 'Troops Received';
+  static const connectionError = 'Connection Error';
+  static const connectionErrorDetail = 'connection_error_detail';
+  static const tryAgain = 'Try Again';
 }
