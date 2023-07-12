@@ -48,8 +48,8 @@ class _WarLogScreenState extends State<WarLogScreen> {
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              if (snapshot.error is DioError) {
-                final error = snapshot.error as DioError;
+              if (snapshot.error is DioException) {
+                final error = snapshot.error as DioException;
                 if (error.response?.statusCode == HttpStatus.forbidden) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,9 +81,7 @@ class _WarLogScreenState extends State<WarLogScreen> {
                     ],
                   );
                 }
-                return ApiErrorWidget(
-                  error: snapshot.error,
-                );
+                return const ApiErrorWidget();
               }
             }
             if (snapshot.hasData) {

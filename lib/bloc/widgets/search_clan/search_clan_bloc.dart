@@ -86,7 +86,7 @@ class SearchClanBloc extends Bloc<SearchClanEvent, SearchClanState> {
           await searchClanRepository.searchClans(isNextPageRequest, searchTerm);
       emit(SearchClanState.success(result.after, result.items));
     } catch (error) {
-      if (error is DioError) {
+      if (error is DioException) {
         emit(SearchClanState.failure(error.message));
       } else {
         emit(SearchClanState.failure(tr(LocaleKey.cocApiErrorMessage)));

@@ -81,7 +81,6 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
             case BlocStatusEnum.failure:
               return ApiErrorWidget(
                 onRefresh: _refreshList,
-                isTimeout: state.isTimeout,
                 errorMessage: state.errorMessage,
               );
             case BlocStatusEnum.loading:

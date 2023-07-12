@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -64,13 +65,13 @@ class BookmarkedClansBloc
       try {
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
       } catch (error) {
-        if (error is DioError) {
-          if (error.type == DioExceptionType.connectionTimeout) {
-            return emit(BookmarkedClansState.failure(true, error.message));
+        if (error is DioException) {
+          if (error.type == DioExceptionType.connectionTimeout || !await InternetConnectionChecker().hasConnection) {
+            return emit(BookmarkedClansState.failure(error.message));
           }
-          emit(BookmarkedClansState.failure(false, error.message));
+          emit(BookmarkedClansState.failure(error.message));
         } else {
-          emit(BookmarkedClansState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedClansState.failure(tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedClansState.loading(
@@ -97,13 +98,13 @@ class BookmarkedClansBloc
       try {
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
       } catch (error) {
-        if (error is DioError) {
-          if (error.type == DioExceptionType.connectionTimeout) {
-            return emit(BookmarkedClansState.failure(true, error.message));
+        if (error is DioException) {
+          if (error.type == DioExceptionType.connectionTimeout || !await InternetConnectionChecker().hasConnection) {
+            return emit(BookmarkedClansState.failure(error.message));
           }
-          emit(BookmarkedClansState.failure(false, error.message));
+          emit(BookmarkedClansState.failure(error.message));
         } else {
-          emit(BookmarkedClansState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedClansState.failure(tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedClansState.loading(
