@@ -133,7 +133,6 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
               if (snapshot.hasError) {
                 return ApiErrorWidget(
                   onRefresh: _refresh,
-                  error: snapshot.error,
                 );
               }
               if (snapshot.hasData) {

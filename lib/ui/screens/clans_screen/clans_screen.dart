@@ -104,7 +104,6 @@ class _ClansScreenState extends State<ClansScreen> {
             case BlocStatusEnum.failure:
               return ApiErrorWidget(
                 onRefresh: _refreshList,
-                isTimeout: state.isTimeout,
                 errorMessage: state.errorMessage,
               );
             case BlocStatusEnum.loading:

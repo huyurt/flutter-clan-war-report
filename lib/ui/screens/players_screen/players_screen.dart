@@ -106,7 +106,6 @@ class _PlayersScreenState extends State<PlayersScreen> {
             case BlocStatusEnum.failure:
               return ApiErrorWidget(
                 onRefresh: _refreshList,
-                isTimeout: state.isTimeout,
                 errorMessage: state.errorMessage,
               );
             case BlocStatusEnum.loading:

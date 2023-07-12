@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:more_useful_clash_of_clans/ui/screens/clans_current_war_screen/war_detail/war_detail_attacks_screen.dart';
@@ -93,7 +92,6 @@ class _WarDetailScreenState extends State<WarDetailScreen> {
             if (snapshot.hasError) {
               return ApiErrorWidget(
                 onRefresh: _refresh,
-                error: snapshot.error,
               );
             }
             if (snapshot.hasData) {

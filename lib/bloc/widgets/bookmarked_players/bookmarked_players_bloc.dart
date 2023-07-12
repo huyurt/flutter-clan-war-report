@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_player_tags/bookmarked_player_tags_repository.dart';
@@ -66,13 +67,13 @@ class BookmarkedPlayersBloc
       try {
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
       } catch (error) {
-        if (error is DioError) {
-          if (error.type == DioExceptionType.connectionTimeout) {
-            return emit(BookmarkedPlayersState.failure(true, error.message));
+        if (error is DioException) {
+          if (error.type == DioExceptionType.connectionTimeout || !await InternetConnectionChecker().hasConnection) {
+            return emit(BookmarkedPlayersState.failure(error.message));
           }
-          emit(BookmarkedPlayersState.failure(false, error.message));
+          emit(BookmarkedPlayersState.failure(error.message));
         } else {
-          emit(BookmarkedPlayersState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedPlayersState.failure(tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedPlayersState.loading(
@@ -99,13 +100,13 @@ class BookmarkedPlayersBloc
       try {
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
       } catch (error) {
-        if (error is DioError) {
-          if (error.type == DioExceptionType.connectionTimeout) {
-            return emit(BookmarkedPlayersState.failure(true, error.message));
+        if (error is DioException) {
+          if (error.type == DioExceptionType.connectionTimeout || !await InternetConnectionChecker().hasConnection) {
+            return emit(BookmarkedPlayersState.failure(error.message));
           }
-          emit(BookmarkedPlayersState.failure(false, error.message));
+          emit(BookmarkedPlayersState.failure(error.message));
         } else {
-          emit(BookmarkedPlayersState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedPlayersState.failure(tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedPlayersState.loading(

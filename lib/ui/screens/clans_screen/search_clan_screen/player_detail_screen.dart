@@ -124,7 +124,6 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
               if (snapshot.hasError) {
                 return ApiErrorWidget(
                   onRefresh: _refresh,
-                  error: snapshot.error,
                 );
               }
               if (snapshot.hasData) {

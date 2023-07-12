@@ -61,7 +61,7 @@ class SearchPlayerBloc extends Bloc<SearchPlayerEvent, SearchPlayerState> {
       final result = await searchPlayerRepository.searchPlayers(searchTerm!);
       emit(SearchPlayerState.success(result.items));
     } catch (error) {
-      if (error is DioError) {
+      if (error is DioException) {
         if (error.response?.statusCode == HttpStatus.notFound) {
           return emit(
               const SearchPlayerState.success(<PlayerDetailResponseModel>[]));

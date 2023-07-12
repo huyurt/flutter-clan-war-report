@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_clans_current_war/bookmarked_clans_current_war_repository.dart';
@@ -60,13 +61,13 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
       try {
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
       } catch (error) {
-        if (error is DioError) {
-          if (error.type == DioExceptionType.connectionTimeout) {
-            return emit(BookmarkedClansCurrentWarState.failure(true, error.message));
+        if (error is DioException) {
+          if (error.type == DioExceptionType.connectionTimeout || !await InternetConnectionChecker().hasConnection) {
+            return emit(BookmarkedClansCurrentWarState.failure(error.message));
           }
-          emit(BookmarkedClansCurrentWarState.failure(false, error.message));
+          emit(BookmarkedClansCurrentWarState.failure(error.message));
         } else {
-          emit(BookmarkedClansCurrentWarState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedClansCurrentWarState.failure(tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedClansCurrentWarState.loading(
@@ -93,13 +94,13 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
       try {
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
       } catch (error) {
-        if (error is DioError) {
-          if (error.type == DioExceptionType.connectionTimeout) {
-            return emit(BookmarkedClansCurrentWarState.failure(true, error.message));
+        if (error is DioException) {
+          if (error.type == DioExceptionType.connectionTimeout || !await InternetConnectionChecker().hasConnection) {
+            return emit(BookmarkedClansCurrentWarState.failure(error.message));
           }
-          emit(BookmarkedClansCurrentWarState.failure(false, error.message));
+          emit(BookmarkedClansCurrentWarState.failure(error.message));
         } else {
-          emit(BookmarkedClansCurrentWarState.failure(false, tr(LocaleKey.cocApiErrorMessage)));
+          emit(BookmarkedClansCurrentWarState.failure(tr(LocaleKey.cocApiErrorMessage)));
         }
       }
       emit(BookmarkedClansCurrentWarState.loading(

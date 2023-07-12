@@ -87,7 +87,6 @@ class _LeagueWarDetailScreenState extends State<LeagueWarDetailScreen> {
             if (snapshot.hasError) {
               return ApiErrorWidget(
                 onRefresh: _refresh,
-                error: snapshot.error,
               );
             }
             if (snapshot.hasData) {
