@@ -6,7 +6,6 @@ import '../../utils/constants/app_constants.dart';
 class CocApiConnector {
   static Dio get dio {
     BaseOptions options = BaseOptions(
-      connectTimeout: const Duration(seconds: 1),
       baseUrl: dotenv.env[AppConstants.envCocBaseUrlKey]!,
       headers: {
         'Authorization':

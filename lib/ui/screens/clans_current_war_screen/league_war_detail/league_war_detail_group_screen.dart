@@ -1,11 +1,13 @@
 import "package:collection/collection.dart";
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/war_league_enum.dart';
 import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
 import 'package:more_useful_clash_of_clans/utils/helpers/enum_helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import '../../../../models/api/response/clan_detail_response_model.dart';
 import '../../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../../models/api/response/clan_war_response_model.dart';
@@ -253,10 +255,20 @@ class _LeagueWarDetailGroupScreenState
           ...totals.map(
             (total) {
               final clan = total.clan;
+
+              Color? bgColor;
+              if (context
+                  .watch<BookmarkedClanTagsCubit>()
+                  .state
+                  .clanTags
+                  .contains(clan?.tag)) {
+                bgColor = AppConstants.attackerClanBackgroundColor;
+              }
+
               return Card(
                 margin: EdgeInsets.zero,
                 elevation: 0.0,
-                color: Colors.transparent,
+                color: bgColor ?? Colors.transparent,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(0.0),
                 ),
