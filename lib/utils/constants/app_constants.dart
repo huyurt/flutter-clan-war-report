@@ -51,7 +51,7 @@ class AppConstants {
   static const maxClanLevelFilter = 20.0;
 
   static const attackerDefaultBackgroundColor = Color.fromARGB(150, 75, 75, 75);
-  static const attackerClanBackgroundColor = Color.fromARGB(150, 0, 255, 0);
+  static const attackerClanBackgroundColor = Color.fromARGB(50, 0, 255, 0);
   static const attackerOpponentBackgroundColor = Color.fromARGB(150, 255, 50, 50);
 
   static const cocAppClanUrl = 'https://link.clashofclans.com';
