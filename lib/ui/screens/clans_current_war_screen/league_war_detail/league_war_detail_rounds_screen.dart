@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import '../../../../models/api/response/clan_detail_response_model.dart';
 import '../../../../models/api/response/clan_league_group_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
+import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/enums/war_state_enum.dart';
 import '../../../../utils/enums/war_type_enum.dart';
 import '../../../widgets/app_widgets/rank_image.dart';
@@ -100,10 +103,24 @@ class _LeagueWarDetailRoundsScreenState
                                         opponent.destructionPercentage))
                             : null;
 
+                        Color? bgColor;
+                        if (context
+                                .watch<BookmarkedClanTagsCubit>()
+                                .state
+                                .clanTags
+                                .contains(clan.tag) ||
+                            context
+                                .watch<BookmarkedClanTagsCubit>()
+                                .state
+                                .clanTags
+                                .contains(opponent.tag)) {
+                          bgColor = AppConstants.attackerClanBackgroundColor;
+                        }
+
                         return Card(
                           margin: EdgeInsets.zero,
                           elevation: 0.0,
-                          color: Colors.transparent,
+                          color: bgColor ?? Colors.transparent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(0.0),
                           ),

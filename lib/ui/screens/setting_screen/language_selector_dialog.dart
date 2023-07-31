@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../../bloc/locale/locale_cubit.dart';
+import '../../../bloc/settings/locale_cubit.dart';
 import '../../../utils/constants/locale_key.dart';
 import '../../../utils/enums/locale_enum.dart';
 import '../../../utils/helpers/enum_helper.dart';

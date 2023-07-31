@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
     ];
 
     return BlocBuilder<BottomNavigationBarCubit, BottomNavigationBarState>(
-      builder: (context, state) {
+      builder: (mContext, state) {
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: appBarBuilder(context, state.screenType),
