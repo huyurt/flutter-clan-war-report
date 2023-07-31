@@ -100,6 +100,7 @@ class AppThemes {
       titleTextStyle: TextStyle(
         fontFamily: AppFontFamily.clashLight,
         fontSize: 16.0,
+        color: Color(0xff000000),
       ),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
@@ -162,6 +163,9 @@ class AppThemes {
       selectedLabelStyle: TextStyle(
         fontSize: 10.0,
       ),
+    ),
+    expansionTileTheme: ExpansionTileThemeData(
+      textColor: Colors.black,
     ),
   );
 
@@ -322,6 +326,9 @@ class AppThemes {
       selectedLabelStyle: TextStyle(
         fontSize: 10.0,
       ),
+    ),
+    expansionTileTheme: ExpansionTileThemeData(
+      textColor: Colors.white,
     ),
   );
 }

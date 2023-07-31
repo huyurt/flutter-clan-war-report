@@ -210,5 +210,15 @@
   "Troops Received": "Alınan Birlikler",
   "Connection Error": "Bağlantı Hatası",
   "connection_error_detail": "Sunucu ile bağlantı kurulamadı. İnternet bağlantınızı kontrol edip yeniden deneyin.",
-  "Try Again": "Tekrar Deneyin"
+  "Try Again": "Tekrar Deneyin",
+  "Widget Refresh": "Widget Güncellensin",
+  "widget_refresh_message": "Ana ekran aracı her 15 dakikada yeni klan savaşı listesiyle güncellenir.",
+  "Last Updated": "Son Güncelleme",
+  "Rate on Google Play": "Google Play'de Oyla",
+  "About App": "Uygulama Hakkında",
+  "about_app_short_message": "Bu uygulama resmi değildir ve Supercell tarafından desteklenmemektedir. Daha fazla bilgi için Supercell Hayran İçeriği Politikası'na bakınız:",
+  "about_app_question_1": "Veriler neden tam olarak güncel değil?",
+  "about_app_answer_1": "Supercell'in API sınırlamaları nedeniyle 10 dakikaya kadar gecikme olabilir.",
+  "Version": "Versiyon",
+  "Powered by Flutter": "Flutter ile Geliştirildi"
 }

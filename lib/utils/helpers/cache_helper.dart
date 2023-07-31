@@ -1,5 +1,6 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nb_utils/nb_utils.dart';
 
+import '../../models/app/settings_model.dart';
 import '../constants/app_constants.dart';
 import '../enums/locale_enum.dart';
 import '../enums/theme_enum.dart';
@@ -30,6 +31,18 @@ class CacheHelper {
 
   static Future<void> setCachedTheme(ThemeEnum themeType) async {
     await prefs.setInt(AppConstants.hiveThemeKey, themeType.index);
+  }
+
+  static SettingsModel getCachedSettings() {
+    final settings = prefs.getString(AppConstants.hiveSettingsKey) ?? '';
+    if (settings.isEmptyOrNull) {
+      return SettingsModel.getDefault();
+    }
+    return SettingsModel.fromJson(settings);
+  }
+
+  static Future<void> setCachedSettings(SettingsModel settingsModel) async {
+    await prefs.setString(AppConstants.hiveSettingsKey, settingsModel.toJson());
   }
 
   static List<String> getCachedBookmarkedClanTags() {

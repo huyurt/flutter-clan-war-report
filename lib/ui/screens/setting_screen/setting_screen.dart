@@ -1,8 +1,14 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:more_useful_clash_of_clans/models/app/settings_model.dart';
+import 'package:more_useful_clash_of_clans/ui/screens/setting_screen/about_app_screen.dart';
+import 'package:nb_utils/nb_utils.dart';
 
+import '../../../bloc/settings/settings_cubit.dart';
 import '../../../utils/constants/locale_key.dart';
 import '../../../utils/helpers/enum_helper.dart';
 import 'theme_card.dart';
@@ -14,20 +20,22 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsModel settings = context.watch<SettingsCubit>().state;
+
+    final inAppReview = InAppReview.instance;
+
     return Material(
       child: ListView(
         key: PageStorageKey(key),
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         children: [
-          TextDivider(text: tr(LocaleKey.language)),
+          const TextDivider(text: LocaleKey.language),
           Card(
             elevation: 2,
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12))),
+                borderRadius: BorderRadius.all(Radius.circular(12.0))),
             child: InkWell(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(12),
-              ),
+              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
               child: Container(
                 height: 60.0,
                 padding:
@@ -74,6 +82,95 @@ class SettingScreen extends StatelessWidget {
               ),
             ],
           ),
+          const TextDivider(),
+          Card(
+            elevation: 2,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            child: InkWell(
+              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+              child: Container(
+                height: 60.0,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: Icon(Icons.star),
+                    ),
+                    Text(tr(LocaleKey.rateOnGooglePlay)),
+                  ],
+                ),
+              ),
+              onTap: () async {
+                if (await inAppReview.isAvailable()) {
+                  inAppReview.requestReview();
+                }
+              },
+            ),
+          ),
+          Card(
+            elevation: 2,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            child: InkWell(
+              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+              child: Container(
+                height: 60.0,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 12.0),
+                      child: Icon(Icons.info),
+                    ),
+                    Text(tr(LocaleKey.aboutApp)),
+                  ],
+                ),
+              ),
+              onTap: () {
+                const AboutAppScreen().launch(context);
+              },
+            ),
+          ),
+          /*
+          TextDivider(text: tr(LocaleKey.widget)),
+          Card(
+            elevation: 2,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            child: InkWell(
+              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4.0),
+                        child: Text(tr(LocaleKey.widgetRefresh)),
+                      ),
+                      Text(
+                        tr(LocaleKey.widgetRefreshMessage),
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 10.0),
+                      ),
+                    ],
+                  ),
+                  trailing: CupertinoSwitch(
+                      value: settings.widgetRefresh,
+                      activeColor: Colors.amber,
+                      onChanged: (bool newValue) =>
+                          BlocProvider.of<SettingsCubit>(context)
+                              .changeWidgetRefresh(newValue)),
+                ),
+              ),
+            ),
+          ),
+          */
           const SizedBox(height: 24.0),
         ],
       ),

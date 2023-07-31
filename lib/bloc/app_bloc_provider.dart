@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/bloc/theme/theme_cubit.dart';
+import 'package:more_useful_clash_of_clans/bloc/settings/locale_cubit.dart';
+import 'package:more_useful_clash_of_clans/bloc/settings/settings_cubit.dart';
+import 'package:more_useful_clash_of_clans/bloc/settings/theme_cubit.dart';
 import 'package:more_useful_clash_of_clans/bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import 'package:more_useful_clash_of_clans/bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
 import 'package:more_useful_clash_of_clans/bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current_war_bloc.dart';
@@ -16,10 +18,12 @@ import '../repositories/bookmarked_player_tags/bookmarked_player_tags_repository
 import '../repositories/bookmarked_players/bookmarked_players_repository.dart';
 import '../repositories/search_clan/search_clan_repository.dart';
 import '../repositories/search_player/search_player_repository.dart';
-import 'locale/locale_cubit.dart';
 
 getBlocProviders() {
   return [
+    BlocProvider(
+      create: (context) => SettingsCubit(),
+    ),
     BlocProvider(
       create: (context) => LocaleCubit(),
     ),

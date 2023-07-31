@@ -4,6 +4,7 @@ class AppConstants {
   static const hivePreferenceKey = 'preferences';
   static const hiveLocaleKey = 'localeKey';
   static const hiveThemeKey = 'themeKey';
+  static const hiveSettingsKey = 'settingsKey';
   static const hiveClanTagsKey = 'clanTagsKey';
   static const hivePlayerTagsKey = 'playerTagsKey';
 
@@ -14,6 +15,7 @@ class AppConstants {
 
   static const pageSize = 20;
 
+  static const appIconImage = 'assets/images/icon.png';
   static const placeholderImage = 'assets/images/placeholder.png';
   static const levelImage = 'level.png';
   static const unknownImage = 'unknown.png';
@@ -57,5 +59,7 @@ class AppConstants {
   static const cocAppClanUrl = 'https://link.clashofclans.com';
   static const cocAppClanProfileUrl = '$cocAppClanUrl?action=OpenClanProfile&tag=';
   static const cocAppPlayerProfileUrl = '$cocAppClanUrl?action=OpenPlayerProfile&tag=';
+
+  static const supercellFanContentPolicyUrl = 'www.supercell.com/fan-content-policy';
   static const playStoreUrl = 'https://play.google.com/store/apps/details?id=';
 }

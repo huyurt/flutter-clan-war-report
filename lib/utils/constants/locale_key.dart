@@ -189,4 +189,15 @@ class LocaleKey {
   static const connectionError = 'Connection Error';
   static const connectionErrorDetail = 'connection_error_detail';
   static const tryAgain = 'Try Again';
+  static const widget = 'Widget';
+  static const widgetRefresh = 'Widget Refresh';
+  static const widgetRefreshMessage = 'widget_refresh_message';
+  static const lastUpdated = 'Last Updated';
+  static const aboutAppShortMessage = 'about_app_short_message';
+  static const aboutAppQuestion1 = 'about_app_question_1';
+  static const aboutAppAnswer1 = 'about_app_answer_1';
+  static const rateOnGooglePlay = 'Rate on Google Play';
+  static const aboutApp = 'About App';
+  static const version = 'Version';
+  static const poweredByFlutter = 'Powered by Flutter';
 }
