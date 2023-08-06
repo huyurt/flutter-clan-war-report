@@ -87,7 +87,7 @@ class PlayerItemWidget extends StatelessWidget {
                                     padding: EdgeInsets.symmetric(
                                         vertical: 2.0,
                                         horizontal:
-                                            itemLevel.level < 10 ? 4.0 : 2.0),
+                                            (itemLevel.level ?? 0) < 10 ? 4.0 : 2.0),
                                     decoration: BoxDecoration(
                                       color:
                                           itemLevel.level == itemLevel.maxLevel

@@ -175,7 +175,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                                     size: 16.0,
                                                     color:
                                                         player?.warPreference ==
-                                                                WarPreference.IN
+                                                                'in'
                                                             ? Colors.green
                                                             : Colors.red,
                                                   ),
