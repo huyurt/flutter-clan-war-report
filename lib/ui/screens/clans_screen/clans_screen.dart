@@ -2,7 +2,7 @@ import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/clan_detail_screen.dart';
+import 'package:clan_war_report/ui/screens/clans_screen/search_clan_screen/clan_detail_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';

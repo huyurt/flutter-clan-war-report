@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/screen_enum.dart';
+import 'package:clan_war_report/utils/enums/screen_enum.dart';
 
 part 'bottom_navigation_bar_state.dart';
 

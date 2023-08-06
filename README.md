@@ -1,4 +1,4 @@
-# More Useful Clash of Clans
+# Clan War Report
 
 ## Assets
 

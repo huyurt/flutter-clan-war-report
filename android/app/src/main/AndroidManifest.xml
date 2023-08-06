@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mixxdev.more_useful_clash_of_clans">
+    package="com.mixxdev.clan_war_report">
 
    <uses-permission android:name="android.permission.INTERNET" />
    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
    <application
-        android:label="More Useful Clash of Clans"
+        android:label="Clan War Report"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

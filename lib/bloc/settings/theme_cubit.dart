@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/theme_enum.dart';
-import 'package:more_useful_clash_of_clans/utils/helpers/enum_helper.dart';
+import 'package:clan_war_report/utils/enums/theme_enum.dart';
+import 'package:clan_war_report/utils/helpers/enum_helper.dart';
 
 import '../../utils/helpers/cache_helper.dart';
 

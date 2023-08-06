@@ -1,4 +1,4 @@
-import 'package:more_useful_clash_of_clans/models/api/response/clan_detail_response_model.dart';
+import 'package:clan_war_report/models/api/response/clan_detail_response_model.dart';
 
 import '../api/response/war_log_response_model.dart';
 

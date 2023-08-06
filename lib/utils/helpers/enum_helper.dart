@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/locale_enum.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/war_league_enum.dart';
+import 'package:clan_war_report/utils/enums/locale_enum.dart';
+import 'package:clan_war_report/utils/enums/war_league_enum.dart';
 
 import '../../models/coc/league_result_model.dart';
 import '../constants/app_constants.dart';

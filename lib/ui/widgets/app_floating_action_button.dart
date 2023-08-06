@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/players_screen/search_player_screen/search_player_screen.dart';
+import 'package:clan_war_report/ui/screens/players_screen/search_player_screen/search_player_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';

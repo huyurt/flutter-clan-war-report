@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/setting_screen/setting_screen.dart';
+import 'package:clan_war_report/ui/screens/setting_screen/setting_screen.dart';
 
 import '../../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import '../../../utils/enums/screen_enum.dart';

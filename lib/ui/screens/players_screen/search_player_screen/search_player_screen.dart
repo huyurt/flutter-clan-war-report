@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/bloc_status_enum.dart';
+import 'package:clan_war_report/utils/constants/locale_key.dart';
+import 'package:clan_war_report/utils/enums/bloc_status_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
@@ -61,20 +61,6 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
     );
   }
 
-  //void _onClearTapped() {
-  //  _clanFilterController.text = '';
-  //  _SearchPlayerBloc.add(
-  //    FilterChanged(
-  //      searchTerm: String(
-  //        clanName: '',
-  //        minMembers: _members.start.round(),
-  //        maxMembers: _members.end.round(),
-  //        minClanLevel: _minClanLevel.round(),
-  //      ),
-  //    ),
-  //  );
-  //}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,10 +72,6 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             hintText: tr(LocaleKey.search),
-            //suffixIcon: GestureDetector(
-            //  onTap: _onClearTapped,
-            //  child: const Icon(Icons.clear),
-            //),
           ),
           controller: _clanFilterController,
         ),
@@ -235,9 +217,12 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                     ),
                   ),
                   Center(
-                    child: Text(
-                      tr(LocaleKey.searchPlayerMessage),
-                      textAlign: TextAlign.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        tr(LocaleKey.searchPlayerMessage),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ],

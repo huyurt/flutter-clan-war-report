@@ -4,11 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:more_useful_clash_of_clans/services/clan_service.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_classic_screen.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_league_screen.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/app_constants.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
+import 'package:clan_war_report/services/clan_service.dart';
+import 'package:clan_war_report/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_classic_screen.dart';
+import 'package:clan_war_report/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_league_screen.dart';
+import 'package:clan_war_report/utils/constants/app_constants.dart';
+import 'package:clan_war_report/utils/constants/locale_key.dart';
 
 import '../../../../../models/api/response/war_log_response_model.dart';
 import '../../../../../models/coc/war_logs_model.dart';

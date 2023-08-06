@@ -2,7 +2,7 @@ import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
+import 'package:clan_war_report/utils/constants/locale_key.dart';
 
 import '../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import '../../../bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current_war_bloc.dart';
@@ -52,22 +52,32 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
   }
 
   Widget _emptyList() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(AkarIcons.double_sword, size: 64.0),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0),
-          child: Text(
-            tr(LocaleKey.noClansInWar),
-            style: const TextStyle(fontSize: 18.0),
-          ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              AkarIcons.double_sword,
+              size: 64.0,
+              color: Colors.amber,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Text(
+                tr(LocaleKey.noClansInWar),
+                style: const TextStyle(fontSize: 18.0),
+              ),
+            ),
+            Text(
+              tr(LocaleKey.noClansInWarMessage),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
-        Text(
-          tr(LocaleKey.noClansInWarMessage),
-          textAlign: TextAlign.center,
-        ),
-      ],
+      ),
     );
   }
 

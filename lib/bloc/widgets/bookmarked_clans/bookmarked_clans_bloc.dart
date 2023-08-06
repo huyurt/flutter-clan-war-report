@@ -3,7 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
+import 'package:clan_war_report/utils/constants/locale_key.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';

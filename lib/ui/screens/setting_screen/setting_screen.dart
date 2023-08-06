@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:more_useful_clash_of_clans/models/app/settings_model.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/setting_screen/about_app_screen.dart';
+import 'package:clan_war_report/models/app/settings_model.dart';
+import 'package:clan_war_report/ui/screens/setting_screen/about_app_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../bloc/settings/settings_cubit.dart';
