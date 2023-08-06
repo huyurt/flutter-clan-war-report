@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/constants/app_constants.dart';
 import '../../../utils/routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,14 +21,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            FlutterLogo(
-              size: 128.0,
+            FadeIn(
+              animate: true,
+              duration: const Duration(milliseconds: 250),
+              child: Image.asset(
+                AppConstants.appIconImage,
+                height: 128.0,
+                fit: BoxFit.cover,
+              ),
             ),
           ],
         ),
