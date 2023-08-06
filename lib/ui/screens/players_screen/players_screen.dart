@@ -213,18 +213,25 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                                       padding:
                                                           const EdgeInsets.only(
                                                               right: 4.0),
-                                                      child: FadeInImage
-                                                          .assetNetwork(
-                                                        width: 16.0,
-                                                        image: player
+                                                      child: Visibility(
+                                                        visible: player
                                                                 .clan
                                                                 ?.badgeUrls
-                                                                ?.large ??
-                                                            AppConstants
-                                                                .placeholderImage,
-                                                        placeholder: AppConstants
-                                                            .placeholderImage,
-                                                        fit: BoxFit.cover,
+                                                                ?.large !=
+                                                            null,
+                                                        child: FadeInImage
+                                                            .assetNetwork(
+                                                          width: 16.0,
+                                                          image: player
+                                                                  .clan
+                                                                  ?.badgeUrls
+                                                                  ?.large ??
+                                                              AppConstants
+                                                                  .placeholderImage,
+                                                          placeholder: AppConstants
+                                                              .placeholderImage,
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
                                                     Text(
