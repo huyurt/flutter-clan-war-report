@@ -1,4 +1,4 @@
-package com.mixxdev.more_useful_clash_of_clans
+package com.mixxdev.clan_war_report
 
 import io.flutter.embedding.android.FlutterActivity
 

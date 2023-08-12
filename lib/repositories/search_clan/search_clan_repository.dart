@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:more_useful_clash_of_clans/repositories/search_clan/search_clan_cache.dart';
+import 'package:clan_war_report/repositories/search_clan/search_clan_cache.dart';
 
 import '../../models/api/request/search_clans_request_model.dart';
 import '../../../services/coc_api/coc_api_clans.dart';

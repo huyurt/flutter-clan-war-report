@@ -1,5 +1,5 @@
 import 'package:async/async.dart';
-import 'package:more_useful_clash_of_clans/services/coc_api/coc_api_clans.dart';
+import 'package:clan_war_report/services/coc_api/coc_api_clans.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../models/api/response/clan_detail_response_model.dart';

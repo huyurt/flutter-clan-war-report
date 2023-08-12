@@ -4,8 +4,8 @@
 
 import 'dart:convert';
 
-import 'package:more_useful_clash_of_clans/utils/enums/locale_enum.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/theme_enum.dart';
+import 'package:clan_war_report/utils/enums/locale_enum.dart';
+import 'package:clan_war_report/utils/enums/theme_enum.dart';
 
 class SettingsModel {
   final int? localeType;

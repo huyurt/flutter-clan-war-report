@@ -2,8 +2,8 @@ import 'package:duration/duration.dart';
 import 'package:duration/locale.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/war_type_enum.dart';
+import 'package:clan_war_report/utils/constants/locale_key.dart';
+import 'package:clan_war_report/utils/enums/war_type_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../models/api/response/clan_war_response_model.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:more_useful_clash_of_clans/utils/themes/app_font_family.dart';
+import 'package:clan_war_report/utils/themes/app_font_family.dart';
 
 class AppThemes {
   AppThemes._();
@@ -113,6 +113,7 @@ class AppThemes {
       textStyle: TextStyle(
         fontFamily: AppFontFamily.clashLight,
         fontSize: 12.0,
+        color: Color(0xdd000000),
       ),
     ),
     iconTheme: IconThemeData(

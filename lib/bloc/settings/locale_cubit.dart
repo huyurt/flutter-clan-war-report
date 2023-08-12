@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/locale_enum.dart';
+import 'package:clan_war_report/utils/enums/locale_enum.dart';
 
 import '../../utils/helpers/cache_helper.dart';
 import '../../utils/helpers/enum_helper.dart';

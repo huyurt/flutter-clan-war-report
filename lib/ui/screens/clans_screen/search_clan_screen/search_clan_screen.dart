@@ -3,8 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/bloc_status_enum.dart';
+import 'package:clan_war_report/utils/constants/locale_key.dart';
+import 'package:clan_war_report/utils/enums/bloc_status_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
@@ -132,26 +132,6 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
       );
     }
   }
-
-  //void _onClearTapped() {
-  //  _clanFilterController.text = '';
-  //  final searchFilter = SearchClansRequestModel(
-  //    clanName: '',
-  //    locationId: _location?.id,
-  //    minMembers: _members.start.round(),
-  //    maxMembers: _members.end.round(),
-  //    minClanLevel: _minClanLevel.round(),
-  //  );
-  //  locator.get<SearchClanFilterCache>().set(searchFilter);
-  //  setState(() {
-  //    _isDefaultFilter = true;
-  //  });
-  //  _searchClanBloc.add(
-  //    FilterChanged(
-  //      searchTerm: searchFilter,
-  //    ),
-  //  );
-  //}
 
   void showLocationFilter(BuildContext aContext, StateSetter setState) {
     showModalBottomSheet(
@@ -403,10 +383,6 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             hintText: tr(LocaleKey.search),
-            //suffixIcon: GestureDetector(
-            //  onTap: _onClearTapped,
-            //  child: const Icon(Icons.clear),
-            //),
           ),
           controller: _clanFilterController,
         ),
@@ -644,9 +620,12 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                     ),
                   ),
                   Center(
-                    child: Text(
-                      tr(LocaleKey.searchClanMessage),
-                      textAlign: TextAlign.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        tr(LocaleKey.searchClanMessage),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ],

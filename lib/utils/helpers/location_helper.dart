@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:more_useful_clash_of_clans/utils/constants/locale_key.dart';
+import 'package:clan_war_report/utils/constants/locale_key.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../models/api/response/location_response_model.dart';

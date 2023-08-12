@@ -2,6 +2,7 @@ import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
@@ -100,194 +101,243 @@ class _PlayersScreenState extends State<PlayersScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: BlocBuilder<BookmarkedPlayersBloc, BookmarkedPlayersState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case BlocStatusEnum.failure:
-              return ApiErrorWidget(
-                onRefresh: _refreshList,
-                errorMessage: state.errorMessage,
-              );
-            case BlocStatusEnum.loading:
-            case BlocStatusEnum.success:
-              if (state.status == BlocStatusEnum.loading &&
-                  state.items.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (state.items.isEmpty || !state.items.any((e) => e != null)) {
-                return _emptyList();
-              }
-              return Column(
-                children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      color: Colors.amber,
+      child: Column(
+        children: [
+          AppBar(
+            title: Text(tr(LocaleKey.players)),
+            actions: [
+              IconButton(
+                icon: const Icon(Ionicons.reload),
+                onPressed: () {
+                  _bookmarkedPlayersBloc.add(
+                    GetBookmarkedPlayerDetail(
+                      process: ProcessType.refresh,
+                      playerTagList: context
+                          .read<BookmarkedPlayerTagsCubit>()
+                          .state
+                          .playerTags,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          Expanded(
+            child: BlocBuilder<BookmarkedPlayersBloc, BookmarkedPlayersState>(
+              builder: (context, state) {
+                switch (state.status) {
+                  case BlocStatusEnum.failure:
+                    return ApiErrorWidget(
                       onRefresh: _refreshList,
-                      child: ReorderableListView.builder(
-                        key: PageStorageKey(widget.key),
-                        padding: const EdgeInsets.only(bottom: 75.0),
-                        onReorder: _onReorder,
-                        itemCount: state.items.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final player = state.items[index];
-                          if (player == null) {
-                            return Container(key: const PageStorageKey(''));
-                          }
+                      errorMessage: state.errorMessage,
+                    );
+                  case BlocStatusEnum.loading:
+                  case BlocStatusEnum.success:
+                    if (state.status == BlocStatusEnum.loading &&
+                        state.items.isEmpty) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (state.items.isEmpty ||
+                        !state.items.any((e) => e != null)) {
+                      return _emptyList();
+                    }
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: RefreshIndicator(
+                            color: Colors.amber,
+                            onRefresh: _refreshList,
+                            child: ReorderableListView.builder(
+                              key: PageStorageKey(widget.key),
+                              padding: const EdgeInsets.only(bottom: 75.0),
+                              onReorder: _onReorder,
+                              itemCount: state.items.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final player = state.items[index];
+                                if (player == null) {
+                                  return Container(
+                                      key: const PageStorageKey(''));
+                                }
 
-                          return Card(
-                            key: PageStorageKey(player.tag),
-                            margin: EdgeInsets.zero,
-                            elevation: 0.0,
-                            color: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                PlayerDetailScreen(
-                                  playerTag: player.tag,
-                                ).launch(context);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 5.0),
-                                child: SizedBox(
-                                  height: 70,
-                                  child: Row(
-                                    children: [
-                                      RankImage(
-                                        imageUrl:
-                                            player.league?.iconUrls?.medium,
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
-                                        child: Stack(
+                                return Card(
+                                  key: PageStorageKey(player.tag),
+                                  margin: EdgeInsets.zero,
+                                  elevation: 0.0,
+                                  color: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      PlayerDetailScreen(
+                                        playerTag: player.tag,
+                                      ).launch(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 5.0),
+                                      child: SizedBox(
+                                        height: 70,
+                                        child: Row(
                                           children: [
-                                            Image.asset(
-                                              '${AppConstants.clashResourceImagePath}${AppConstants.levelImage}',
-                                              height: 30.0,
-                                              width: 30.0,
-                                              fit: BoxFit.cover,
+                                            RankImage(
+                                              imageUrl: player
+                                                  .league?.iconUrls?.medium,
+                                              height: 50,
+                                              width: 50,
                                             ),
-                                            Positioned.fill(
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                    (player.expLevel ?? 0)
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                        fontSize: 10.0)),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4.0),
+                                              child: Stack(
+                                                children: [
+                                                  Image.asset(
+                                                    '${AppConstants.clashResourceImagePath}${AppConstants.levelImage}',
+                                                    height: 30.0,
+                                                    width: 30.0,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                  Positioned.fill(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          (player.expLevel ?? 0)
+                                                              .toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize:
+                                                                      10.0)),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 4.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      player.name,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      style: const TextStyle(
+                                                          height: 1.2,
+                                                          fontSize: 14.0),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 8.0),
+                                                      child: Row(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right: 4.0),
+                                                            child: Visibility(
+                                                              visible: player
+                                                                      .clan
+                                                                      ?.badgeUrls
+                                                                      ?.large !=
+                                                                  null,
+                                                              child: FadeInImage
+                                                                  .assetNetwork(
+                                                                width: 16.0,
+                                                                image: player
+                                                                        .clan
+                                                                        ?.badgeUrls
+                                                                        ?.large ??
+                                                                    AppConstants
+                                                                        .placeholderImage,
+                                                                placeholder:
+                                                                    AppConstants
+                                                                        .placeholderImage,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            player.clan?.name ??
+                                                                '',
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 1,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall
+                                                                ?.copyWith(
+                                                                    height:
+                                                                        1.2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 50,
+                                              width: 110,
+                                              child: Card(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 6.0,
+                                                      horizontal: 12.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                          '${(player.trophies ?? 0).toString()} '),
+                                                      Image.asset(
+                                                        '${AppConstants.clashResourceImagePath}${AppConstants.cup1Image}',
+                                                        height: 20,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                player.name,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: const TextStyle(
-                                                    height: 1.2,
-                                                    fontSize: 14.0),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8.0),
-                                                child: Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              right: 4.0),
-                                                      child: FadeInImage
-                                                          .assetNetwork(
-                                                        width: 16.0,
-                                                        image: player
-                                                                .clan
-                                                                ?.badgeUrls
-                                                                ?.large ??
-                                                            AppConstants
-                                                                .placeholderImage,
-                                                        placeholder: AppConstants
-                                                            .placeholderImage,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      player.clan?.name ?? '',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall
-                                                          ?.copyWith(
-                                                              height: 1.2),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 50,
-                                        width: 110,
-                                        child: Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 6.0,
-                                                horizontal: 12.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                    '${(player.trophies ?? 0).toString()} '),
-                                                Image.asset(
-                                                  '${AppConstants.clashResourceImagePath}${AppConstants.cup1Image}',
-                                                  height: 20,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  if (state.status == BlocStatusEnum.loading) ...[
-                    const BottomProgressionIndicator(),
-                  ],
-                ],
-              );
-            default:
-              return _emptyList();
-          }
-        },
+                          ),
+                        ),
+                        if (state.status == BlocStatusEnum.loading) ...[
+                          const BottomProgressionIndicator(),
+                        ],
+                      ],
+                    );
+                  default:
+                    return _emptyList();
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

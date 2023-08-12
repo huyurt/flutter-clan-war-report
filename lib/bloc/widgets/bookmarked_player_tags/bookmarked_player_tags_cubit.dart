@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:more_useful_clash_of_clans/utils/helpers/cache_helper.dart';
+import 'package:clan_war_report/utils/helpers/cache_helper.dart';
 
 import '../../../repositories/bookmarked_player_tags/bookmarked_player_tags_repository.dart';
 

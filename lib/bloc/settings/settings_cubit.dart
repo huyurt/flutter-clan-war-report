@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:more_useful_clash_of_clans/models/app/settings_model.dart';
+import 'package:clan_war_report/models/app/settings_model.dart';
 
 import '../../utils/helpers/cache_helper.dart';
 

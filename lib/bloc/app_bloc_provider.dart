@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/bloc/settings/locale_cubit.dart';
-import 'package:more_useful_clash_of_clans/bloc/settings/settings_cubit.dart';
-import 'package:more_useful_clash_of_clans/bloc/settings/theme_cubit.dart';
-import 'package:more_useful_clash_of_clans/bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
-import 'package:more_useful_clash_of_clans/bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
-import 'package:more_useful_clash_of_clans/bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current_war_bloc.dart';
-import 'package:more_useful_clash_of_clans/bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
-import 'package:more_useful_clash_of_clans/bloc/widgets/bookmarked_players/bookmarked_players_bloc.dart';
-import 'package:more_useful_clash_of_clans/bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
-import 'package:more_useful_clash_of_clans/bloc/widgets/search_clan/search_clan_bloc.dart';
-import 'package:more_useful_clash_of_clans/bloc/widgets/search_player/search_player_bloc.dart';
+import 'package:clan_war_report/bloc/settings/locale_cubit.dart';
+import 'package:clan_war_report/bloc/settings/settings_cubit.dart';
+import 'package:clan_war_report/bloc/settings/theme_cubit.dart';
+import 'package:clan_war_report/bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
+import 'package:clan_war_report/bloc/widgets/bookmarked_clans/bookmarked_clans_bloc.dart';
+import 'package:clan_war_report/bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current_war_bloc.dart';
+import 'package:clan_war_report/bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
+import 'package:clan_war_report/bloc/widgets/bookmarked_players/bookmarked_players_bloc.dart';
+import 'package:clan_war_report/bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
+import 'package:clan_war_report/bloc/widgets/search_clan/search_clan_bloc.dart';
+import 'package:clan_war_report/bloc/widgets/search_player/search_player_bloc.dart';
 
 import '../repositories/bookmarked_clan_tags/bookmarked_clan_tags_repository.dart';
 import '../repositories/bookmarked_clans/bookmarked_clans_repository.dart';

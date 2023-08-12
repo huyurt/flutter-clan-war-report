@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/ui/widgets/app_widgets/rank_image.dart';
+import 'package:clan_war_report/ui/widgets/app_widgets/rank_image.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../models/api/response/clan_war_response_model.dart';

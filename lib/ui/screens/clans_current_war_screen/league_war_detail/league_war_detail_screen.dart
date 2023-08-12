@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:more_useful_clash_of_clans/services/clan_service.dart';
+import 'package:clan_war_report/services/clan_service.dart';
 
 import '../../../../models/api/response/clan_detail_response_model.dart';
 import '../../../../models/coc/clan_details_and_league_wars_model.dart';

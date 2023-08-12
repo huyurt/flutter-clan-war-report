@@ -3,7 +3,7 @@ import "package:collection/collection.dart";
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
+import 'package:clan_war_report/utils/enums/war_state_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../bloc/widgets/bookmarked_player_tags/bookmarked_player_tags_cubit.dart';

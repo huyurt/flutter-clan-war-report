@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/clans_current_war_screen/war_detail/war_detail_screen.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/player_detail_screen.dart';
-import 'package:more_useful_clash_of_clans/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_screen.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/war_state_enum.dart';
+import 'package:clan_war_report/ui/screens/clans_current_war_screen/war_detail/war_detail_screen.dart';
+import 'package:clan_war_report/ui/screens/clans_screen/search_clan_screen/player_detail_screen.dart';
+import 'package:clan_war_report/ui/screens/clans_screen/search_clan_screen/war_log_screen/war_log_screen.dart';
+import 'package:clan_war_report/utils/enums/war_state_enum.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 

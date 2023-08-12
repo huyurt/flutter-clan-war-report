@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:more_useful_clash_of_clans/utils/enums/process_type_enum.dart';
+import 'package:clan_war_report/utils/enums/process_type_enum.dart';
 
 import '../bookmarked_player_tags/bookmarked_player_tags_cubit.dart';
 

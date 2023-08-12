@@ -1,4 +1,4 @@
-import 'package:more_useful_clash_of_clans/utils/constants/app_constants.dart';
+import 'package:clan_war_report/utils/constants/app_constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../models/api/response/clan_detail_response_model.dart';

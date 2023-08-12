@@ -5,6 +5,38 @@
 import 'dart:convert';
 
 class PlayerDetailResponseModel {
+  final String tag;
+  final String name;
+  final int? townHallLevel;
+  final int? townHallWeaponLevel;
+  final int? expLevel;
+  final int? trophies;
+  final int? bestTrophies;
+  final int? warStars;
+  final int? attackWins;
+  final int? defenseWins;
+  final int? builderHallLevel;
+  final int? builderBaseTrophies;
+  final int? versusTrophies;
+  final int? bestBuilderBaseTrophies;
+  final int? bestVersusTrophies;
+  final int? versusBattleWins;
+  final String? role;
+  final String? warPreference;
+  final int? donations;
+  final int? donationsReceived;
+  final int? clanCapitalContributions;
+  final Clan? clan;
+  final League? league;
+  final BuilderBaseLeague? builderBaseLeague;
+  final LegendStatistics? legendStatistics;
+  final List<Achievement>? achievements;
+  final PlayerHouse? playerHouse;
+  final List<Label>? labels;
+  final List<PlayerItemLevel>? troops;
+  final List<PlayerItemLevel>? heroes;
+  final List<PlayerItemLevel>? spells;
+
   PlayerDetailResponseModel({
     required this.tag,
     required this.name,
@@ -15,9 +47,11 @@ class PlayerDetailResponseModel {
     this.bestTrophies,
     this.warStars,
     this.attackWins,
-    this.defenceWins,
+    this.defenseWins,
     this.builderHallLevel,
+    this.builderBaseTrophies,
     this.versusTrophies,
+    this.bestBuilderBaseTrophies,
     this.bestVersusTrophies,
     this.versusBattleWins,
     this.role,
@@ -27,43 +61,15 @@ class PlayerDetailResponseModel {
     this.clanCapitalContributions,
     this.clan,
     this.league,
+    this.builderBaseLeague,
+    this.legendStatistics,
     this.achievements,
     this.playerHouse,
-    this.versusBattleWinCount,
     this.labels,
     this.troops,
     this.heroes,
     this.spells,
   });
-
-  final String tag;
-  final String name;
-  final int? townHallLevel;
-  final int? townHallWeaponLevel;
-  final int? expLevel;
-  final int? trophies;
-  final int? bestTrophies;
-  final int? warStars;
-  final int? attackWins;
-  final int? defenceWins;
-  final int? builderHallLevel;
-  final int? versusTrophies;
-  final int? bestVersusTrophies;
-  final int? versusBattleWins;
-  final String? role;
-  final WarPreference? warPreference;
-  final int? donations;
-  final int? donationsReceived;
-  final int? clanCapitalContributions;
-  final PlayerClan? clan;
-  final PlayerLeague? league;
-  final List<Achievement>? achievements;
-  final PlayerHouse? playerHouse;
-  final int? versusBattleWinCount;
-  final List<Label>? labels;
-  final List<PlayerItemLevel>? troops;
-  final List<PlayerItemLevel>? heroes;
-  final List<PlayerItemLevel>? spells;
 
   PlayerDetailResponseModel copyWith({
     String? tag,
@@ -75,21 +81,24 @@ class PlayerDetailResponseModel {
     int? bestTrophies,
     int? warStars,
     int? attackWins,
-    int? defenceWins,
+    int? defenseWins,
     int? builderHallLevel,
+    int? builderBaseTrophies,
     int? versusTrophies,
+    int? bestBuilderBaseTrophies,
     int? bestVersusTrophies,
     int? versusBattleWins,
     String? role,
-    WarPreference? warPreference,
+    String? warPreference,
     int? donations,
     int? donationsReceived,
     int? clanCapitalContributions,
-    PlayerClan? clan,
-    PlayerLeague? league,
+    Clan? clan,
+    League? league,
+    BuilderBaseLeague? builderBaseLeague,
+    LegendStatistics? legendStatistics,
     List<Achievement>? achievements,
     PlayerHouse? playerHouse,
-    int? versusBattleWinCount,
     List<Label>? labels,
     List<PlayerItemLevel>? troops,
     List<PlayerItemLevel>? heroes,
@@ -105,9 +114,11 @@ class PlayerDetailResponseModel {
         bestTrophies: bestTrophies ?? this.bestTrophies,
         warStars: warStars ?? this.warStars,
         attackWins: attackWins ?? this.attackWins,
-        defenceWins: defenceWins ?? this.defenceWins,
+        defenseWins: defenseWins ?? this.defenseWins,
         builderHallLevel: builderHallLevel ?? this.builderHallLevel,
+        builderBaseTrophies: builderBaseTrophies ?? this.builderBaseTrophies,
         versusTrophies: versusTrophies ?? this.versusTrophies,
+        bestBuilderBaseTrophies: bestBuilderBaseTrophies ?? this.bestBuilderBaseTrophies,
         bestVersusTrophies: bestVersusTrophies ?? this.bestVersusTrophies,
         versusBattleWins: versusBattleWins ?? this.versusBattleWins,
         role: role ?? this.role,
@@ -117,9 +128,10 @@ class PlayerDetailResponseModel {
         clanCapitalContributions: clanCapitalContributions ?? this.clanCapitalContributions,
         clan: clan ?? this.clan,
         league: league ?? this.league,
+        builderBaseLeague: builderBaseLeague ?? this.builderBaseLeague,
+        legendStatistics: legendStatistics ?? this.legendStatistics,
         achievements: achievements ?? this.achievements,
         playerHouse: playerHouse ?? this.playerHouse,
-        versusBattleWinCount: versusBattleWinCount ?? this.versusBattleWinCount,
         labels: labels ?? this.labels,
         troops: troops ?? this.troops,
         heroes: heroes ?? this.heroes,
@@ -140,21 +152,24 @@ class PlayerDetailResponseModel {
     bestTrophies: json["bestTrophies"],
     warStars: json["warStars"],
     attackWins: json["attackWins"],
-    defenceWins: json["defenceWins"],
+    defenseWins: json["defenseWins"],
     builderHallLevel: json["builderHallLevel"],
+    builderBaseTrophies: json["builderBaseTrophies"],
     versusTrophies: json["versusTrophies"],
+    bestBuilderBaseTrophies: json["bestBuilderBaseTrophies"],
     bestVersusTrophies: json["bestVersusTrophies"],
     versusBattleWins: json["versusBattleWins"],
     role: json["role"],
-    warPreference: warPreferenceValues.map[json["warPreference"]]!,
+    warPreference: json["warPreference"],
     donations: json["donations"],
     donationsReceived: json["donationsReceived"],
     clanCapitalContributions: json["clanCapitalContributions"],
-    clan: json["clan"] == null ? null : PlayerClan.fromMap(json["clan"]),
-    league: json["league"] == null ? null : PlayerLeague.fromMap(json["league"]),
+    clan: json["clan"] == null ? null : Clan.fromMap(json["clan"]),
+    league: json["league"] == null ? null : League.fromMap(json["league"]),
+    builderBaseLeague: json["builderBaseLeague"] == null ? null : BuilderBaseLeague.fromMap(json["builderBaseLeague"]),
+    legendStatistics: json["legendStatistics"] == null ? null : LegendStatistics.fromMap(json["legendStatistics"]),
     achievements: json["achievements"] == null ? [] : List<Achievement>.from(json["achievements"]!.map((x) => Achievement.fromMap(x))),
     playerHouse: json["playerHouse"] == null ? null : PlayerHouse.fromMap(json["playerHouse"]),
-    versusBattleWinCount: json["versusBattleWinCount"],
     labels: json["labels"] == null ? [] : List<Label>.from(json["labels"]!.map((x) => Label.fromMap(x))),
     troops: json["troops"] == null ? [] : List<PlayerItemLevel>.from(json["troops"]!.map((x) => PlayerItemLevel.fromMap(x))),
     heroes: json["heroes"] == null ? [] : List<PlayerItemLevel>.from(json["heroes"]!.map((x) => PlayerItemLevel.fromMap(x))),
@@ -171,21 +186,24 @@ class PlayerDetailResponseModel {
     "bestTrophies": bestTrophies,
     "warStars": warStars,
     "attackWins": attackWins,
-    "defenceWins": defenceWins,
+    "defenseWins": defenseWins,
     "builderHallLevel": builderHallLevel,
+    "builderBaseTrophies": builderBaseTrophies,
     "versusTrophies": versusTrophies,
+    "bestBuilderBaseTrophies": bestBuilderBaseTrophies,
     "bestVersusTrophies": bestVersusTrophies,
     "versusBattleWins": versusBattleWins,
     "role": role,
-    "warPreference": warPreferenceValues.reverse[warPreference],
+    "warPreference": warPreference,
     "donations": donations,
     "donationsReceived": donationsReceived,
     "clanCapitalContributions": clanCapitalContributions,
     "clan": clan?.toMap(),
     "league": league?.toMap(),
+    "builderBaseLeague": builderBaseLeague?.toMap(),
+    "legendStatistics": legendStatistics?.toMap(),
     "achievements": achievements == null ? [] : List<dynamic>.from(achievements!.map((x) => x.toMap())),
     "playerHouse": playerHouse?.toMap(),
-    "versusBattleWinCount": versusBattleWinCount,
     "labels": labels == null ? [] : List<dynamic>.from(labels!.map((x) => x.toMap())),
     "troops": troops == null ? [] : List<dynamic>.from(troops!.map((x) => x.toMap())),
     "heroes": heroes == null ? [] : List<dynamic>.from(heroes!.map((x) => x.toMap())),
@@ -193,14 +211,15 @@ class PlayerDetailResponseModel {
   };
 }
 
-enum WarPreference { IN, OUT }
-
-final warPreferenceValues = EnumValues({
-  "in": WarPreference.IN,
-  "out": WarPreference.OUT
-});
-
 class Achievement {
+  final String? name;
+  final int? stars;
+  final int? value;
+  final int? target;
+  final String? info;
+  final String? completionInfo;
+  final Village? village;
+
   Achievement({
     this.name,
     this.stars,
@@ -210,14 +229,6 @@ class Achievement {
     this.completionInfo,
     this.village,
   });
-
-  final String? name;
-  final int? stars;
-  final int? value;
-  final int? target;
-  final String? info;
-  final String? completionInfo;
-  final Village? village;
 
   Achievement copyWith({
     String? name,
@@ -263,44 +274,80 @@ class Achievement {
   };
 }
 
-enum Village { HOME, BUILDER_BASE }
+enum Village {
+  BUILDER_BASE,
+  HOME
+}
 
 final villageValues = EnumValues({
   "builderBase": Village.BUILDER_BASE,
   "home": Village.HOME
 });
 
-class PlayerClan {
-  PlayerClan({
+class BuilderBaseLeague {
+  final int? id;
+  final String? name;
+
+  BuilderBaseLeague({
+    this.id,
+    this.name,
+  });
+
+  BuilderBaseLeague copyWith({
+    int? id,
+    String? name,
+  }) =>
+      BuilderBaseLeague(
+        id: id ?? this.id,
+        name: name ?? this.name,
+      );
+
+  factory BuilderBaseLeague.fromJson(String str) => BuilderBaseLeague.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory BuilderBaseLeague.fromMap(Map<String, dynamic> json) => BuilderBaseLeague(
+    id: json["id"],
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+  };
+}
+
+class Clan {
+  final String? tag;
+  final String? name;
+  final int? clanLevel;
+  final BadgeUrls? badgeUrls;
+
+  Clan({
     this.tag,
     this.name,
     this.clanLevel,
     this.badgeUrls,
   });
 
-  final String? tag;
-  final String? name;
-  final int? clanLevel;
-  final BadgeUrls? badgeUrls;
-
-  PlayerClan copyWith({
+  Clan copyWith({
     String? tag,
     String? name,
     int? clanLevel,
     BadgeUrls? badgeUrls,
   }) =>
-      PlayerClan(
+      Clan(
         tag: tag ?? this.tag,
         name: name ?? this.name,
         clanLevel: clanLevel ?? this.clanLevel,
         badgeUrls: badgeUrls ?? this.badgeUrls,
       );
 
-  factory PlayerClan.fromJson(String str) => PlayerClan.fromMap(json.decode(str));
+  factory Clan.fromJson(String str) => Clan.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory PlayerClan.fromMap(Map<String, dynamic> json) => PlayerClan(
+  factory Clan.fromMap(Map<String, dynamic> json) => Clan(
     tag: json["tag"],
     name: json["name"],
     clanLevel: json["clanLevel"],
@@ -316,15 +363,15 @@ class PlayerClan {
 }
 
 class BadgeUrls {
+  final String? small;
+  final String? large;
+  final String? medium;
+
   BadgeUrls({
     this.small,
     this.large,
     this.medium,
   });
-
-  final String? small;
-  final String? large;
-  final String? medium;
 
   BadgeUrls copyWith({
     String? small,
@@ -355,17 +402,17 @@ class BadgeUrls {
 }
 
 class PlayerItemLevel {
+  final String? name;
+  final int? level;
+  final int? maxLevel;
+  final Village? village;
+
   PlayerItemLevel({
-    required this.name,
-    required this.level,
-    required this.maxLevel,
+    this.name,
+    this.level,
+    this.maxLevel,
     this.village,
   });
-
-  final String name;
-  final int level;
-  final int maxLevel;
-  final Village? village;
 
   PlayerItemLevel copyWith({
     String? name,
@@ -400,15 +447,15 @@ class PlayerItemLevel {
 }
 
 class Label {
+  final int? id;
+  final String? name;
+  final LabelIconUrls? iconUrls;
+
   Label({
     this.id,
     this.name,
     this.iconUrls,
   });
-
-  final int? id;
-  final String? name;
-  final LabelIconUrls? iconUrls;
 
   Label copyWith({
     int? id,
@@ -439,13 +486,13 @@ class Label {
 }
 
 class LabelIconUrls {
+  final String? small;
+  final String? medium;
+
   LabelIconUrls({
     this.small,
     this.medium,
   });
-
-  final String? small;
-  final String? medium;
 
   LabelIconUrls copyWith({
     String? small,
@@ -471,33 +518,33 @@ class LabelIconUrls {
   };
 }
 
-class PlayerLeague {
-  PlayerLeague({
+class League {
+  final int? id;
+  final String? name;
+  final LeagueIconUrls? iconUrls;
+
+  League({
     this.id,
     this.name,
     this.iconUrls,
   });
 
-  final int? id;
-  final String? name;
-  final LeagueIconUrls? iconUrls;
-
-  PlayerLeague copyWith({
+  League copyWith({
     int? id,
     String? name,
     LeagueIconUrls? iconUrls,
   }) =>
-      PlayerLeague(
+      League(
         id: id ?? this.id,
         name: name ?? this.name,
         iconUrls: iconUrls ?? this.iconUrls,
       );
 
-  factory PlayerLeague.fromJson(String str) => PlayerLeague.fromMap(json.decode(str));
+  factory League.fromJson(String str) => League.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory PlayerLeague.fromMap(Map<String, dynamic> json) => PlayerLeague(
+  factory League.fromMap(Map<String, dynamic> json) => League(
     id: json["id"],
     name: json["name"],
     iconUrls: json["iconUrls"] == null ? null : LeagueIconUrls.fromMap(json["iconUrls"]),
@@ -511,15 +558,15 @@ class PlayerLeague {
 }
 
 class LeagueIconUrls {
+  final String? small;
+  final String? tiny;
+  final String? medium;
+
   LeagueIconUrls({
     this.small,
     this.tiny,
     this.medium,
   });
-
-  final String? small;
-  final String? tiny;
-  final String? medium;
 
   LeagueIconUrls copyWith({
     String? small,
@@ -549,12 +596,123 @@ class LeagueIconUrls {
   };
 }
 
+class LegendStatistics {
+  final int? legendTrophies;
+  final BestSeason? bestBuilderBaseSeason;
+  final BestSeason? bestVersusSeason;
+  final CurrentSeason? currentSeason;
+
+  LegendStatistics({
+    this.legendTrophies,
+    this.bestBuilderBaseSeason,
+    this.bestVersusSeason,
+    this.currentSeason,
+  });
+
+  LegendStatistics copyWith({
+    int? legendTrophies,
+    BestSeason? bestBuilderBaseSeason,
+    BestSeason? bestVersusSeason,
+    CurrentSeason? currentSeason,
+  }) =>
+      LegendStatistics(
+        legendTrophies: legendTrophies ?? this.legendTrophies,
+        bestBuilderBaseSeason: bestBuilderBaseSeason ?? this.bestBuilderBaseSeason,
+        bestVersusSeason: bestVersusSeason ?? this.bestVersusSeason,
+        currentSeason: currentSeason ?? this.currentSeason,
+      );
+
+  factory LegendStatistics.fromJson(String str) => LegendStatistics.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory LegendStatistics.fromMap(Map<String, dynamic> json) => LegendStatistics(
+    legendTrophies: json["legendTrophies"],
+    bestBuilderBaseSeason: json["bestBuilderBaseSeason"] == null ? null : BestSeason.fromMap(json["bestBuilderBaseSeason"]),
+    bestVersusSeason: json["bestVersusSeason"] == null ? null : BestSeason.fromMap(json["bestVersusSeason"]),
+    currentSeason: json["currentSeason"] == null ? null : CurrentSeason.fromMap(json["currentSeason"]),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "legendTrophies": legendTrophies,
+    "bestBuilderBaseSeason": bestBuilderBaseSeason?.toMap(),
+    "bestVersusSeason": bestVersusSeason?.toMap(),
+    "currentSeason": currentSeason?.toMap(),
+  };
+}
+
+class BestSeason {
+  final String? id;
+  final int? rank;
+  final int? trophies;
+
+  BestSeason({
+    this.id,
+    this.rank,
+    this.trophies,
+  });
+
+  BestSeason copyWith({
+    String? id,
+    int? rank,
+    int? trophies,
+  }) =>
+      BestSeason(
+        id: id ?? this.id,
+        rank: rank ?? this.rank,
+        trophies: trophies ?? this.trophies,
+      );
+
+  factory BestSeason.fromJson(String str) => BestSeason.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory BestSeason.fromMap(Map<String, dynamic> json) => BestSeason(
+    id: json["id"],
+    rank: json["rank"],
+    trophies: json["trophies"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "rank": rank,
+    "trophies": trophies,
+  };
+}
+
+class CurrentSeason {
+  final int? trophies;
+
+  CurrentSeason({
+    this.trophies,
+  });
+
+  CurrentSeason copyWith({
+    int? trophies,
+  }) =>
+      CurrentSeason(
+        trophies: trophies ?? this.trophies,
+      );
+
+  factory CurrentSeason.fromJson(String str) => CurrentSeason.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory CurrentSeason.fromMap(Map<String, dynamic> json) => CurrentSeason(
+    trophies: json["trophies"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "trophies": trophies,
+  };
+}
+
 class PlayerHouse {
+  final List<Element>? elements;
+
   PlayerHouse({
     this.elements,
   });
-
-  final List<Element>? elements;
 
   PlayerHouse copyWith({
     List<Element>? elements,
@@ -577,13 +735,13 @@ class PlayerHouse {
 }
 
 class Element {
+  final String? type;
+  final int? id;
+
   Element({
     this.type,
     this.id,
   });
-
-  final String? type;
-  final int? id;
 
   Element copyWith({
     String? type,
