@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clan_war_report/utils/constants/locale_key.dart';
+import 'package:ionicons/ionicons.dart';
 
 import '../../../bloc/widgets/bookmarked_clan_tags/bookmarked_clan_tags_cubit.dart';
 import '../../../bloc/widgets/bookmarked_clans_current_war/bookmarked_clans_current_war_bloc.dart';
@@ -84,57 +85,84 @@ class _ClansCurrentWarScreenState extends State<ClansCurrentWarScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: BlocBuilder<BookmarkedClansCurrentWarBloc,
-          BookmarkedClansCurrentWarState>(
-        builder: (context, state) {
-          switch (state.status) {
-            case BlocStatusEnum.failure:
-              return ApiErrorWidget(
-                onRefresh: _refreshList,
-                errorMessage: state.errorMessage,
-              );
-            case BlocStatusEnum.loading:
-            case BlocStatusEnum.success:
-              if (state.status == BlocStatusEnum.loading &&
-                  (state.items.isEmpty || !state.items.any((e) => e != null))) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (state.items.isEmpty || !state.items.any((e) => e != null)) {
-                return _emptyList();
-              }
-              return Column(
-                children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      color: Colors.amber,
-                      onRefresh: _refreshList,
-                      child: ListView.builder(
-                        key: PageStorageKey(widget.key),
-                        itemCount: state.items.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final clanCurrentWarData = state.items[index];
-                          final clanTag = clanCurrentWarData?.clanTag;
-                          final clanCurrentWar = clanCurrentWarData?.war;
-
-                          return WarInfoCard(
-                            clanTag: clanTag ?? '',
-                            warTag: clanCurrentWarData?.warTag ?? '',
-                            warType: clanCurrentWarData?.warType,
-                            war: clanCurrentWar,
-                          );
-                        },
-                      ),
+      child: Column(
+        children: [
+          AppBar(
+            title: Text(tr(LocaleKey.wars)),
+            actions: [
+              IconButton(
+                icon: const Icon(Ionicons.reload),
+                onPressed: () {
+                  _bookmarkedClansCurrentWarBloc.add(
+                    GetBookmarkedClansCurrentWar(
+                      process: ProcessType.refresh,
+                      clanTagList: context
+                          .read<BookmarkedClanTagsCubit>()
+                          .state
+                          .clanTags,
                     ),
-                  ),
-                  if (state.status == BlocStatusEnum.loading) ...[
-                    const BottomProgressionIndicator(),
-                  ],
-                ],
-              );
-            default:
-              return _emptyList();
-          }
-        },
+                  );
+                },
+              ),
+            ],
+          ),
+          Expanded(
+            child: BlocBuilder<BookmarkedClansCurrentWarBloc,
+                BookmarkedClansCurrentWarState>(
+              builder: (context, state) {
+                switch (state.status) {
+                  case BlocStatusEnum.failure:
+                    return ApiErrorWidget(
+                      onRefresh: _refreshList,
+                      errorMessage: state.errorMessage,
+                    );
+                  case BlocStatusEnum.loading:
+                  case BlocStatusEnum.success:
+                    if (state.status == BlocStatusEnum.loading &&
+                        (state.items.isEmpty ||
+                            !state.items.any((e) => e != null))) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (state.items.isEmpty ||
+                        !state.items.any((e) => e != null)) {
+                      return _emptyList();
+                    }
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: RefreshIndicator(
+                            color: Colors.amber,
+                            onRefresh: _refreshList,
+                            child: ListView.builder(
+                              key: PageStorageKey(widget.key),
+                              itemCount: state.items.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final clanCurrentWarData = state.items[index];
+                                final clanTag = clanCurrentWarData?.clanTag;
+                                final clanCurrentWar = clanCurrentWarData?.war;
+
+                                return WarInfoCard(
+                                  clanTag: clanTag ?? '',
+                                  warTag: clanCurrentWarData?.warTag ?? '',
+                                  warType: clanCurrentWarData?.warType,
+                                  war: clanCurrentWar,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        if (state.status == BlocStatusEnum.loading) ...[
+                          const BottomProgressionIndicator(),
+                        ],
+                      ],
+                    );
+                  default:
+                    return _emptyList();
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

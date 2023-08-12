@@ -4,7 +4,6 @@ import 'package:clan_war_report/ui/screens/setting_screen/setting_screen.dart';
 
 import '../../../bloc/widgets/bottom_navigation_bar/bottom_navigation_bar_cubit.dart';
 import '../../../utils/enums/screen_enum.dart';
-import '../../widgets/app_bar/app_bar_builder.dart';
 import '../../widgets/app_floating_action_button.dart';
 import '../clans_current_war_screen/clans_current_war_screen.dart';
 import '../clans_screen/clans_screen.dart';
@@ -35,7 +34,6 @@ class HomeScreen extends StatelessWidget {
       builder: (mContext, state) {
         return Scaffold(
           extendBodyBehindAppBar: true,
-          appBar: appBarBuilder(context, state.screenType),
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: SafeArea(

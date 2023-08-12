@@ -25,153 +25,162 @@ class SettingScreen extends StatelessWidget {
     final inAppReview = InAppReview.instance;
 
     return Material(
-      child: ListView(
-        key: PageStorageKey(key),
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Column(
         children: [
-          const TextDivider(text: LocaleKey.language),
-          Card(
-            elevation: 2,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12.0))),
-            child: InkWell(
-              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-              child: Container(
-                height: 60.0,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 12.0),
-                      child: CountryFlag.fromCountryCode(
-                        EnumHelper.getCountryCode(
-                            EnumHelper.getLocaleType(context.locale)),
-                        height: 24.0,
-                        width: 31.0,
-                        borderRadius: 4.0,
+          AppBar(
+            title: Text(tr(LocaleKey.settings)),
+          ),
+          Expanded(
+            child: ListView(
+              key: PageStorageKey(key),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              children: [
+                const TextDivider(text: LocaleKey.language),
+                Card(
+                  elevation: 2,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                    child: Container(
+                      height: 60.0,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12.0),
+                            child: CountryFlag.fromCountryCode(
+                              EnumHelper.getCountryCode(
+                                  EnumHelper.getLocaleType(context.locale)),
+                              height: 24.0,
+                              width: 31.0,
+                              borderRadius: 4.0,
+                            ),
+                          ),
+                          Text(tr(context.locale.languageCode)),
+                        ],
                       ),
                     ),
-                    Text(tr(context.locale.languageCode)),
-                  ],
-                ),
-              ),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) =>
-                      const LanguageSelectorDialog(),
-                );
-              },
-            ),
-          ),
-          TextDivider(text: tr(LocaleKey.theme)),
-          const Row(
-            children: [
-              ThemeCard(
-                themeMode: ThemeMode.system,
-                icon: Ionicons.contrast_outline,
-              ),
-              ThemeCard(
-                themeMode: ThemeMode.light,
-                icon: Ionicons.sunny_outline,
-              ),
-              ThemeCard(
-                themeMode: ThemeMode.dark,
-                icon: Ionicons.moon_outline,
-              ),
-            ],
-          ),
-          const TextDivider(),
-          Card(
-            elevation: 2,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12.0))),
-            child: InkWell(
-              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-              child: Container(
-                height: 60.0,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: Icon(Icons.star),
-                    ),
-                    Text(tr(LocaleKey.rateOnGooglePlay)),
-                  ],
-                ),
-              ),
-              onTap: () async {
-                if (await inAppReview.isAvailable()) {
-                  inAppReview.requestReview();
-                }
-              },
-            ),
-          ),
-          Card(
-            elevation: 2,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12.0))),
-            child: InkWell(
-              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-              child: Container(
-                height: 60.0,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: Icon(Icons.info),
-                    ),
-                    Text(tr(LocaleKey.aboutApp)),
-                  ],
-                ),
-              ),
-              onTap: () {
-                const AboutAppScreen().launch(context);
-              },
-            ),
-          ),
-          /*
-          TextDivider(text: tr(LocaleKey.widget)),
-          Card(
-            elevation: 2,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12.0))),
-            child: InkWell(
-              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 4.0),
-                        child: Text(tr(LocaleKey.widgetRefresh)),
-                      ),
-                      Text(
-                        tr(LocaleKey.widgetRefreshMessage),
-                        style:
-                            const TextStyle(color: Colors.grey, fontSize: 10.0),
-                      ),
-                    ],
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            const LanguageSelectorDialog(),
+                      );
+                    },
                   ),
-                  trailing: CupertinoSwitch(
-                      value: settings.widgetRefresh,
-                      activeColor: Colors.amber,
-                      onChanged: (bool newValue) =>
-                          BlocProvider.of<SettingsCubit>(context)
-                              .changeWidgetRefresh(newValue)),
                 ),
-              ),
+                TextDivider(text: tr(LocaleKey.theme)),
+                const Row(
+                  children: [
+                    ThemeCard(
+                      themeMode: ThemeMode.system,
+                      icon: Ionicons.contrast_outline,
+                    ),
+                    ThemeCard(
+                      themeMode: ThemeMode.light,
+                      icon: Ionicons.sunny_outline,
+                    ),
+                    ThemeCard(
+                      themeMode: ThemeMode.dark,
+                      icon: Ionicons.moon_outline,
+                    ),
+                  ],
+                ),
+                const TextDivider(),
+                Card(
+                  elevation: 2,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                    child: Container(
+                      height: 60.0,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 12.0),
+                            child: Icon(Icons.star),
+                          ),
+                          Text(tr(LocaleKey.rateOnGooglePlay)),
+                        ],
+                      ),
+                    ),
+                    onTap: () async {
+                      if (await inAppReview.isAvailable()) {
+                        inAppReview.requestReview();
+                      }
+                    },
+                  ),
+                ),
+                Card(
+                  elevation: 2,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                    child: Container(
+                      height: 60.0,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 12.0),
+                            child: Icon(Icons.info),
+                          ),
+                          Text(tr(LocaleKey.aboutApp)),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      const AboutAppScreen().launch(context);
+                    },
+                  ),
+                ),
+                /*
+                TextDivider(text: tr(LocaleKey.widget)),
+                Card(
+                  elevation: 2,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ListTile(
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 4.0),
+                              child: Text(tr(LocaleKey.widgetRefresh)),
+                            ),
+                            Text(
+                              tr(LocaleKey.widgetRefreshMessage),
+                              style:
+                                  const TextStyle(color: Colors.grey, fontSize: 10.0),
+                            ),
+                          ],
+                        ),
+                        trailing: CupertinoSwitch(
+                            value: settings.widgetRefresh,
+                            activeColor: Colors.amber,
+                            onChanged: (bool newValue) =>
+                                BlocProvider.of<SettingsCubit>(context)
+                                    .changeWidgetRefresh(newValue)),
+                      ),
+                    ),
+                  ),
+                ),
+                */
+                const SizedBox(height: 24.0),
+              ],
             ),
           ),
-          */
-          const SizedBox(height: 24.0),
         ],
       ),
     );

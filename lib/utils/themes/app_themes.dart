@@ -113,6 +113,7 @@ class AppThemes {
       textStyle: TextStyle(
         fontFamily: AppFontFamily.clashLight,
         fontSize: 12.0,
+        color: Color(0xdd000000),
       ),
     ),
     iconTheme: IconThemeData(
