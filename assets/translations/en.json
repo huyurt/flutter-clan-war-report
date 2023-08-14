@@ -53,7 +53,7 @@
   "tab_war_log_league_title": "War League",
   "connection_error_detail": "Unable to connect with the server. Check your internet connection and try again.",
   "widget_refresh_message": "The home screen widget is updated with new clan war list every 15 minutes.",
-  "about_app_short_message": "This app is unofficial and is not endorsed by Supercell. For more information, see the Supercell Fan Content Policy:",
+  "about_app_short_message": "This content is not affiliated with, endorsed, sponsored, or specifically approved by Supercell and Supercell is not responsible for it. For more information see Supercell’s Fan Content Policy:",
   "about_app_question_1": "Why is the data not fully up to date?",
   "about_app_answer_1": "There can be delay of up to 10 minutes due to Supercell's API limitations."
 }
