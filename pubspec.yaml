@@ -2,7 +2,7 @@ name: clan_war_report
 description: Clan War Report
 publish_to: 'none'
 
-version: 1.0.0+8
+version: 1.0.0+9
 
 environment:
   sdk: '>=2.19.2 <3.0.0'

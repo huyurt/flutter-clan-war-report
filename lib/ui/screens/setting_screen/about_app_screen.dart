@@ -32,6 +32,7 @@ class AboutAppScreen extends StatelessWidget {
                         child: Text(
                           packageInfo?.appName ?? '',
                           style: const TextStyle(fontSize: 16.0),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       FadeIn(
