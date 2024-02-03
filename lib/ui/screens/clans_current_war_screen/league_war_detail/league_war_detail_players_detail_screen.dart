@@ -12,6 +12,7 @@ import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clan_league_wars_stat_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
+import '../../../../utils/helpers/image_helper.dart';
 import '../../../widgets/app_widgets/rank_image.dart';
 import '../../../widgets/app_widgets/star_stats_widget.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
@@ -61,9 +62,7 @@ class _LeagueWarDetailPlayersDetailScreenState
     final memberAttacks = widget.memberAttacks;
     final memberDefenceAttacks = widget.memberDefenceAttacks;
 
-    final clanMemberTownHallLevel = (member.townHallLevel) > 11
-        ? '${member.townHallLevel}.5'
-        : (member.townHallLevel).toString();
+    final clanMemberTownHallLevel = ImageHelper.getTownhallImage(member.townHallLevel, 1);
 
     final notUsedAttackCount = widget.roundCount - memberAttacks.length;
     final groupedStars =

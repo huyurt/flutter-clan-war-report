@@ -18,6 +18,7 @@ class ImageHelper {
       "Diggy",
       "Poison Lizard",
       "Phoenix",
+      "Spirit Fox",
     ];
   }
 
@@ -39,6 +40,7 @@ class ImageHelper {
       "Yeti",
       "Dragon Rider",
       "Electro Titan",
+      "Root Rider",
       "Minion",
       "Hog Rider",
       "Valkyrie",
@@ -99,6 +101,7 @@ class ImageHelper {
       "Super Wall Breaker",
       "Super Witch",
       "Super Wizard",
+      "Super Hog Rider",
     ];
   }
 
@@ -116,5 +119,13 @@ class ImageHelper {
       "Sneaky Archer",
       "Super P.E.K.K.A",
     ];
+  }
+
+  static String getTownhallImage(int? townhallLevel, int? townHallWeaponLevel) {
+    townhallLevel = townhallLevel ?? 1;
+    if (townhallLevel > 11) {
+      return '$townhallLevel.${townHallWeaponLevel ?? 5}';
+    }
+    return townhallLevel.toString();
   }
 }

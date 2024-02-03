@@ -133,7 +133,7 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                     child: InkWell(
                       onTap: () {
                         PlayerDetailScreen(
-                          playerTag: player.tag,
+                          playerTag: player.tag ?? '',
                         ).launch(context);
                       },
                       child: Padding(
@@ -159,7 +159,7 @@ class _SearchPlayerScreenState extends State<SearchPlayerScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        player.name,
+                                        player.name ?? '',
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: const TextStyle(

@@ -127,7 +127,7 @@ class BookmarkedPlayersBloc
     final item = state.items[event.oldIndex];
     if (item != null) {
       bookmarkedPlayersRepository.reorder(item, newIndex);
-      await event.bookmarkedPlayerTagsCubit.onReorder(item.tag, newIndex);
+      await event.bookmarkedPlayerTagsCubit.onReorder(item.tag ?? '', newIndex);
     }
 
     emit(BookmarkedPlayersState.success(

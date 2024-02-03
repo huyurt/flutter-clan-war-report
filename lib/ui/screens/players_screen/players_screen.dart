@@ -170,7 +170,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                   child: InkWell(
                                     onTap: () {
                                       PlayerDetailScreen(
-                                        playerTag: player.tag,
+                                        playerTag: player.tag ?? '',
                                       ).launch(context);
                                     },
                                     child: Padding(
@@ -227,7 +227,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      player.name,
+                                                      player.name ?? '',
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       maxLines: 1,

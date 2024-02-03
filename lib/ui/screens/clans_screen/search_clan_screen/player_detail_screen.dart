@@ -153,7 +153,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                       ? Stack(
                                           children: [
                                             Image.asset(
-                                              '${AppConstants.townHallsImagePath}${player?.townHallLevel}.${player?.townHallWeaponLevel}.png',
+                                              '${AppConstants.townHallsImagePath}${ImageHelper.getTownhallImage(player?.townHallLevel, player?.townHallWeaponLevel)}.png',
                                               width: 70,
                                               fit: BoxFit.cover,
                                             ),
@@ -174,8 +174,7 @@ class _PlayerDetailScreenState extends State<PlayerDetailScreen> {
                                                     AkarIcons.double_sword,
                                                     size: 16.0,
                                                     color:
-                                                        player?.warPreference ==
-                                                                'in'
+                                                        player?.warPreference == 'in'
                                                             ? Colors.green
                                                             : Colors.red,
                                                   ),

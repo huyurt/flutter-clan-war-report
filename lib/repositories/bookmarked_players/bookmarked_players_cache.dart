@@ -5,7 +5,7 @@ import '../../models/api/response/player_detail_response_model.dart';
 class BookmarkedPlayersCache {
   late List<PlayerDetailResponseModel> _cache = <PlayerDetailResponseModel>[];
 
-  List<String> getPlayerTags() => _cache.map((e) => e.tag).toList();
+  List<String> getPlayerTags() => _cache.map((e) => e.tag ?? '').toList();
 
   List<PlayerDetailResponseModel> getValues() => List.of(_cache);
 

@@ -12,6 +12,7 @@ import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
 import '../../../../utils/enums/war_type_enum.dart';
+import '../../../../utils/helpers/image_helper.dart';
 import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
 import '../../../widgets/attacker_painter.dart';
 
@@ -120,15 +121,8 @@ class _WarDetailEventsScreenState extends State<WarDetailEventsScreen> {
                           final clanAttacker =
                               clanMember?.tag == attack.attackerTag;
 
-                          final clanMemberTownHallLevel =
-                              (clanMember?.townhallLevel ?? 1) > 11
-                                  ? '${clanMember?.townhallLevel}.5'
-                                  : (clanMember?.townhallLevel ?? 1).toString();
-                          final opponentMemberTownHallLevel =
-                              (opponentMember?.townhallLevel ?? 1) > 11
-                                  ? '${opponentMember?.townhallLevel}.5'
-                                  : (opponentMember?.townhallLevel ?? 1)
-                                      .toString();
+                          final clanMemberTownHallLevel = ImageHelper.getTownhallImage(clanMember?.townhallLevel, 1);
+                          final opponentMemberTownHallLevel = ImageHelper.getTownhallImage(opponentMember?.townhallLevel, 1);
 
                           Color? bgColor;
                           if (clanAttacker) {

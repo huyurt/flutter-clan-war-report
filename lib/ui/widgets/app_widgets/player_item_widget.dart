@@ -18,7 +18,7 @@ class PlayerItemWidget extends StatelessWidget {
   final String title;
   final String imagePath;
   final List<String> itemImages;
-  final List<PlayerItemLevel>? itemLevels;
+  final List<HeroEquipment>? itemLevels;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class PlayerItemWidget extends StatelessWidget {
 
     final items =
         itemLevels?.where((element) => element.village == Village.HOME).toList() ??
-            <PlayerItemLevel>[]
+            <HeroEquipment>[]
                 .where((element) => itemImages.contains(element.name)).toList();
 
     return Column(
@@ -49,7 +49,7 @@ class PlayerItemWidget extends StatelessWidget {
               spacing: 4.0,
               children: itemImages.map(
                 (itemImage) {
-                  PlayerItemLevel? itemLevel = items
+                  HeroEquipment? itemLevel = items
                       .firstWhereOrNull((element) => element.name == itemImage);
                   List<String> tooltipMessage = <String>[];
                   tooltipMessage.add(tr(itemImage));

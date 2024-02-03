@@ -13,6 +13,7 @@ import '../../../../models/api/response/clan_war_response_model.dart';
 import '../../../../models/coc/clans_current_war_state_model.dart';
 import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/constants/locale_key.dart';
+import '../../../../utils/helpers/image_helper.dart';
 import '../../../widgets/app_widgets/rank_image.dart';
 import 'league_war_detail_players_detail_screen.dart';
 
@@ -291,9 +292,7 @@ class _LeagueWarDetailPlayersScreenState
               final clan = widget.clanLeague.clans?.firstWhere(
                   (e1) => e1.members.any((e2) => e2.tag == member.tag));
 
-              final clanMemberTownHallLevel = (member.townHallLevel) > 11
-                  ? '${member.townHallLevel}.5'
-                  : (member.townHallLevel).toString();
+              final clanMemberTownHallLevel = ImageHelper.getTownhallImage(member.townHallLevel, 1);
 
               Color? bgColor;
               if (context
@@ -475,10 +474,7 @@ class _LeagueWarDetailPlayersScreenState
               final clan = widget.clanLeague.clans?.firstWhere((e1) =>
                   e1.members.any((e2) => e2.tag == participant.member.tag));
 
-              final clanMemberTownHallLevel =
-                  (participant.member.townHallLevel) > 11
-                      ? '${participant.member.townHallLevel}.5'
-                      : (participant.member.townHallLevel).toString();
+              final clanMemberTownHallLevel = ImageHelper.getTownhallImage(participant.member.townHallLevel, 1);
 
               return Card(
                 margin: EdgeInsets.zero,

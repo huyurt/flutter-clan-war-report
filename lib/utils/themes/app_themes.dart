@@ -6,7 +6,7 @@ class AppThemes {
   AppThemes._();
 
   static final ThemeData lightTheme = ThemeData(
-    androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+    //androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
     fontFamily: AppFontFamily.clashLight,
     primarySwatch: MaterialColor(Colors.amber.value, const <int, Color>{
       50: Colors.amber,
@@ -170,7 +170,7 @@ class AppThemes {
   );
 
   static final ThemeData darkTheme = ThemeData(
-    androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+    //androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
     fontFamily: AppFontFamily.clashLight,
     primarySwatch: MaterialColor(Colors.black.value, const <int, Color>{
       50: Colors.black,
