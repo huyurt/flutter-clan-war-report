@@ -36,7 +36,9 @@ class ThemeCard extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: Icon(icon, size: 32.0),
+            child: Icon(icon,
+                size: 32.0,
+                color: currentThemeMode == themeMode ? Colors.white : null),
           ),
         ),
       ),

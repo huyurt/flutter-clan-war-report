@@ -8,6 +8,21 @@ class AppThemes {
   static final ThemeData lightTheme = ThemeData(
     //androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
     fontFamily: AppFontFamily.clashLight,
+    colorScheme: ColorScheme(
+      primary: Color(0xffffc107),
+      primaryContainer: Color(0xffffa000),
+      secondary: Color(0xffffc107),
+      secondaryContainer: Color(0xffffa000),
+      surface: Color(0xffffffff),
+      background: Color(0xffffe082),
+      error: Color(0xffd32f2f),
+      onPrimary: Color(0xff000000),
+      onSecondary: Color(0xff000000),
+      onSurface: Color(0xff000000),
+      onBackground: Color(0xff000000),
+      onError: Color(0xffffffff),
+      brightness: Brightness.light,
+    ),
     primarySwatch: MaterialColor(Colors.amber.value, const <int, Color>{
       50: Colors.amber,
       100: Colors.amber,
@@ -172,6 +187,21 @@ class AppThemes {
   static final ThemeData darkTheme = ThemeData(
     //androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
     fontFamily: AppFontFamily.clashLight,
+    colorScheme: ColorScheme(
+      primary: Color(0xffffc107),
+      primaryContainer: Color(0xffffa000),
+      secondary: Color(0xffffc107),
+      secondaryContainer: Color(0xffffa000),
+      surface: Color(0xff424242),
+      background: Color(0xff616161),
+      error: Color(0xffd32f2f),
+      onPrimary: Color(0xff000000),
+      onSecondary: Color(0xff000000),
+      onSurface: Color(0xffffffff),
+      onBackground: Color(0xff000000),
+      onError: Color(0xff000000),
+      brightness: Brightness.dark,
+    ),
     primarySwatch: MaterialColor(Colors.black.value, const <int, Color>{
       50: Colors.black,
       100: Colors.black,
