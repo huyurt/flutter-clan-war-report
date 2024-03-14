@@ -69,6 +69,7 @@ class ImageHelper {
       "Haste Spell",
       "Skeleton Spell",
       "Bat Spell",
+      "Overgrowth Spell",
     ];
   }
 

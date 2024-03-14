@@ -124,6 +124,7 @@ class LocaleKey {
   static const hasteSpell = 'Haste Spell';
   static const skeletonSpell = 'Skeleton Spell';
   static const batSpell = 'Bat Spell';
+  static const overgrowthSpell = 'Overgrowth Spell';
   static const wallWrecker = 'Wall Wrecker';
   static const battleBlimp = 'Battle Blimp';
   static const stoneSlammer = 'Stone Slammer';

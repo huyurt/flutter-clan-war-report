@@ -49,7 +49,9 @@ class BookmarkedClansCurrentWarRepository {
     // Fetch current clan war
     try {
       clanCurrentWar = await CocApiClans.getClanCurrentWar(clanTag);
-    } catch (e) {}
+    } catch (error) {
+      // ignored, fix here
+    }
 
     if (clanCurrentWar == null ||
         clanCurrentWar.war.state == WarStateEnum.notInWar.name) {
