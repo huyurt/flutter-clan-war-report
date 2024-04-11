@@ -204,7 +204,8 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                         member.bestOpponentAttack?.attackerTag);
               }
 
-              final clanMemberTownHallLevel =  ImageHelper.getTownhallImage(member.townhallLevel, 1);
+              final clanMemberTownHallLevel =
+                  ImageHelper.getTownhallImage(member.townhallLevel, 1);
 
               Color? bgColor;
               if (context
@@ -397,7 +398,7 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                                                         vertical: 4.0),
                                                 child: Row(
                                                   children: [
-                                                    const Icon(MdiIcons.shield,
+                                                    Icon(MdiIcons.shield,
                                                         size: 14.0),
                                                     Text(
                                                       ' ${tr(LocaleKey.defence)}',

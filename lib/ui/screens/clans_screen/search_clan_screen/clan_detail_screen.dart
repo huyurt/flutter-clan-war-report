@@ -279,12 +279,12 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                 child: Wrap(
                                   direction: Axis.horizontal,
                                   children: [
-                                    const Card(
+                                    Card(
                                       margin: EdgeInsets.zero,
                                       elevation: 0.0,
                                       color: Colors.grey,
                                       child: Padding(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 2.0),
                                         child: Icon(
                                           MdiIcons.chartLineVariant,
@@ -400,188 +400,177 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                       ],
                       if (players.isNotEmpty) ...[
                         const SizedBox(height: 14.0),
-                        ...players
-                            .map(
-                              (player) => SizedBox(
-                                height: 70,
-                                child: Card(
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0.0,
-                                  color: context
-                                          .watch<BookmarkedPlayerTagsCubit>()
-                                          .state
-                                          .playerTags
-                                          .contains(player.tag)
-                                      ? AppConstants.attackerClanBackgroundColor
-                                      : Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      PlayerDetailScreen(
-                                        playerTag: player.tag,
-                                      ).launch(context);
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 5.0),
-                                      child: SizedBox(
-                                        height: 70.0,
-                                        child: Row(
+                        ...players.map(
+                          (player) => SizedBox(
+                            height: 70,
+                            child: Card(
+                              margin: EdgeInsets.zero,
+                              elevation: 0.0,
+                              color: context
+                                      .watch<BookmarkedPlayerTagsCubit>()
+                                      .state
+                                      .playerTags
+                                      .contains(player.tag)
+                                  ? AppConstants.attackerClanBackgroundColor
+                                  : Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  PlayerDetailScreen(
+                                    playerTag: player.tag,
+                                  ).launch(context);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 5.0),
+                                  child: SizedBox(
+                                    height: 70.0,
+                                    child: Row(
+                                      children: [
+                                        Stack(
                                           children: [
-                                            Stack(
-                                              children: [
-                                                player.league?.iconUrls
-                                                            ?.medium !=
-                                                        null
-                                                    ? FadeInImage.assetNetwork(
-                                                        width: 45.0,
-                                                        image: player
-                                                                .league
-                                                                ?.iconUrls
-                                                                ?.medium ??
-                                                            AppConstants
-                                                                .placeholderImage,
-                                                        placeholder: AppConstants
+                                            player.league?.iconUrls?.medium !=
+                                                    null
+                                                ? FadeInImage.assetNetwork(
+                                                    width: 45.0,
+                                                    image: player
+                                                            .league
+                                                            ?.iconUrls
+                                                            ?.medium ??
+                                                        AppConstants
                                                             .placeholderImage,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : Image.asset(
-                                                        '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
-                                                        height: 45.0,
-                                                        width: 45.0,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                Visibility(
-                                                  visible: (player.clanRank ??
-                                                          0) !=
-                                                      (player.previousClanRank ??
-                                                          0),
-                                                  child: Positioned.fill(
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.bottomLeft,
-                                                      child: (player.clanRank ??
-                                                                  0) >
-                                                              (player.previousClanRank ??
-                                                                  0)
-                                                          ? const Icon(
-                                                              Icons
-                                                                  .keyboard_arrow_up,
-                                                              size: 24.0,
-                                                              color:
-                                                                  Colors.green,
-                                                            )
-                                                          : const Icon(
-                                                              Icons
-                                                                  .keyboard_arrow_down,
-                                                              size: 24.0,
-                                                              color: Colors.red,
-                                                            ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4.0),
-                                              child: Stack(
-                                                children: [
-                                                  Image.asset(
-                                                    '${AppConstants.clashResourceImagePath}${AppConstants.levelImage}',
-                                                    height: 30.0,
-                                                    width: 30.0,
+                                                    placeholder: AppConstants
+                                                        .placeholderImage,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Image.asset(
+                                                    '${AppConstants.leaguesImagePath}${AppConstants.unrankedImage}',
+                                                    height: 45.0,
+                                                    width: 45.0,
                                                     fit: BoxFit.cover,
                                                   ),
-                                                  Positioned.fill(
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                          (player.expLevel ?? 0)
-                                                              .toString(),
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize:
-                                                                      10.0)),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 4.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 4.0),
-                                                      child: Text(
-                                                        player.name,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        maxLines: 1,
-                                                        style: const TextStyle(
-                                                            height: 1.2,
-                                                            fontSize: 14.0),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      tr(player.role),
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 50,
-                                              width: 110,
-                                              child: Card(
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      vertical: 6.0,
-                                                      horizontal: 12.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                          '${(player.trophies ?? 0).toString()} '),
-                                                      Image.asset(
-                                                        '${AppConstants.clashResourceImagePath}${AppConstants.cup1Image}',
-                                                        height: 20,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ],
-                                                  ),
+                                            Visibility(
+                                              visible: (player.clanRank ?? 0) !=
+                                                  (player.previousClanRank ??
+                                                      0),
+                                              child: Positioned.fill(
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.bottomLeft,
+                                                  child: (player.clanRank ??
+                                                              0) >
+                                                          (player.previousClanRank ??
+                                                              0)
+                                                      ? const Icon(
+                                                          Icons
+                                                              .keyboard_arrow_up,
+                                                          size: 24.0,
+                                                          color: Colors.green,
+                                                        )
+                                                      : const Icon(
+                                                          Icons
+                                                              .keyboard_arrow_down,
+                                                          size: 24.0,
+                                                          color: Colors.red,
+                                                        ),
                                                 ),
                                               ),
                                             ),
                                           ],
                                         ),
-                                      ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 4.0),
+                                          child: Stack(
+                                            children: [
+                                              Image.asset(
+                                                '${AppConstants.clashResourceImagePath}${AppConstants.levelImage}',
+                                                height: 30.0,
+                                                width: 30.0,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              Positioned.fill(
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                      (player.expLevel ?? 0)
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                          fontSize: 10.0)),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 4.0),
+                                                  child: Text(
+                                                    player.name,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: const TextStyle(
+                                                        height: 1.2,
+                                                        fontSize: 14.0),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  tr(player.role),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 50,
+                                          width: 110,
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 6.0,
+                                                      horizontal: 12.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                      '${(player.trophies ?? 0).toString()} '),
+                                                  Image.asset(
+                                                    '${AppConstants.clashResourceImagePath}${AppConstants.cup1Image}',
+                                                    height: 20,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
-                            )
-                            .toList(),
+                            ),
+                          ),
+                        ),
                       ],
                       const SizedBox(height: 72.0),
                     ],

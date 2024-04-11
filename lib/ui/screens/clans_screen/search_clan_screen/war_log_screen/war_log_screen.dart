@@ -55,7 +55,7 @@ class _WarLogScreenState extends State<WarLogScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         MdiIcons.eyeRemove,
                         size: 50.0,
                         color: Colors.amber,

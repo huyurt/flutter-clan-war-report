@@ -27,10 +27,12 @@ class PlayerItemWidget extends StatelessWidget {
             ? Colors.white24
             : Colors.black26;
 
-    final items =
-        itemLevels?.where((element) => element.village == Village.HOME).toList() ??
-            <HeroEquipment>[]
-                .where((element) => itemImages.contains(element.name)).toList();
+    final items = itemLevels
+            ?.where((element) => element.village == Village.HOME)
+            .toList() ??
+        <HeroEquipment>[]
+            .where((element) => itemImages.contains(element.name))
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,8 +88,9 @@ class PlayerItemWidget extends StatelessWidget {
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                         vertical: 2.0,
-                                        horizontal:
-                                            (itemLevel.level ?? 0) < 10 ? 4.0 : 2.0),
+                                        horizontal: (itemLevel.level ?? 0) < 10
+                                            ? 4.0
+                                            : 2.0),
                                     decoration: BoxDecoration(
                                       color:
                                           itemLevel.level == itemLevel.maxLevel
@@ -109,18 +112,21 @@ class PlayerItemWidget extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            ] else
-                              ColorFiltered(
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.black,
-                                  BlendMode.saturation,
-                                ),
-                                child: Image.asset(
-                                  '$imagePath$itemImage.png',
-                                  height: 42.0,
-                                  fit: BoxFit.cover,
+                            ] else ...[
+                              ClipRect(
+                                child: ColorFiltered(
+                                  colorFilter: const ColorFilter.mode(
+                                    Colors.black,
+                                    BlendMode.saturation,
+                                  ),
+                                  child: Image.asset(
+                                    '$imagePath$itemImage.png',
+                                    height: 42.0,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
+                            ],
                           ],
                         ),
                       ),

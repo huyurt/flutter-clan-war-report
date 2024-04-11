@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:animate_do/animate_do.dart';
 import "package:collection/collection.dart";
 import 'package:duration/duration.dart';
 import 'package:duration/locale.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:graphic/graphic.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../models/api/response/clan_league_group_response_model.dart';
@@ -62,7 +66,8 @@ class _LeagueWarDetailPlayersDetailScreenState
     final memberAttacks = widget.memberAttacks;
     final memberDefenceAttacks = widget.memberDefenceAttacks;
 
-    final clanMemberTownHallLevel = ImageHelper.getTownhallImage(member.townHallLevel, 1);
+    final clanMemberTownHallLevel =
+        ImageHelper.getTownhallImage(member.townHallLevel, 1);
 
     final notUsedAttackCount = widget.roundCount - memberAttacks.length;
     final groupedStars =
@@ -134,6 +139,39 @@ class _LeagueWarDetailPlayersDetailScreenState
           : memberAttacks.sumBy((e) => e.duration ?? 0) /
               (widget.roundCount - notUsedAttackCount);
     }
+
+    var averageStats = [
+      {'name': tr(LocaleKey.star), 'value': ((averageStars / 3) * 100).round()},
+      {
+        'name': tr(LocaleKey.destruction),
+        'value': ((averageDestructionPercentage / 100) * 100).round(),
+      },
+      {
+        'name': tr(LocaleKey.reliability),
+        'value': widget.roundCount == 0
+            ? 0
+            : ((memberAttacks.length.floorToDouble() /
+                        widget.roundCount.floorToDouble()) *
+                    100)
+                .round(),
+      },
+      {
+        'name': tr(LocaleKey.speed),
+        'value': widget.roundCount == 0
+            ? 0
+            : ((memberAttacks.isEmpty
+                        ? 0
+                        : (180 - averageAttackDuration.floor()) / 180) *
+                    100)
+                .round(),
+      },
+      {
+        'name': tr(LocaleKey.defence),
+        'value':
+            ((widget.roundCount == 0 ? 0 : (3 - averageDefenceStars) / 3) * 100)
+                .round(),
+      },
+    ];
 
     final clanAverageDuration =
         Duration(seconds: averageAttackDuration.floor());
@@ -351,116 +389,56 @@ class _LeagueWarDetailPlayersDetailScreenState
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
-                  child: AspectRatio(
-                    aspectRatio: 1.5,
-                    child: RadarChart(
-                      RadarChartData(
-                        radarTouchData: RadarTouchData(
-                          touchCallback: (FlTouchEvent event,
-                              RadarTouchResponse? response) {
-                            if (event is FlTapDownEvent &&
-                                response?.touchedSpot?.touchedDataSetIndex ==
-                                    0) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  width: 75.0,
-                                  behavior: SnackBarBehavior.floating,
-                                  elevation: 5.0,
-                                  backgroundColor: Colors.black38,
-                                  duration: const Duration(milliseconds: 500),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(35.0)),
-                                  content: Center(
-                                    child: Text(
-                                      '%${((response?.touchedSpot?.touchedRadarEntry.value ?? 0) * 100).round().toString()}',
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          },
+                Visibility(
+                  visible: widget.roundCount > 0,
+                  child: SizedBox(
+                    height: 300,
+                    child: Chart(
+                      rebuild: true,
+                      data: averageStats,
+                      variables: {
+                        'name': Variable(
+                          accessor: (Map map) => map['name'] as String,
                         ),
-                        dataSets: [
-                          RadarDataSet(
-                            entryRadius: 4.0,
-                            fillColor: Colors.amber.withOpacity(0.5),
-                            borderColor: Colors.amber,
-                            dataEntries: [
-                              RadarEntry(value: averageStars / 3),
-                              RadarEntry(
-                                  value: averageDestructionPercentage / 100),
-                              RadarEntry(
-                                  value: memberAttacks.length.floorToDouble() /
-                                      widget.roundCount.floorToDouble()),
-                              RadarEntry(
-                                  value: memberAttacks.isEmpty
-                                      ? 0
-                                      : (180 - averageAttackDuration.floor()) /
-                                          180),
-                              RadarEntry(
-                                  value: widget.roundCount == 0
-                                      ? 0
-                                      : (3 - averageDefenceStars) / 3),
-                            ],
+                        'value': Variable(
+                          accessor: (Map map) => map['value'] as num,
+                          scale: LinearScale(min: 0, max: 100),
+                        ),
+                      },
+                      marks: [
+                        IntervalMark(
+                          label: LabelEncode(
+                            encoder: (tuple) => Label(
+                              '${tuple['name']} %${tuple['value']}',
+                              LabelStyle(
+                                textStyle: const TextStyle(
+                                  fontFamily: 'Clash-Light',
+                                  fontSize: 10.0,
+                                ),
+                              ),
+                            ),
                           ),
-                          RadarDataSet(
-                            entryRadius: 0.0,
-                            fillColor: Colors.transparent,
-                            borderColor: Colors.transparent,
-                            dataEntries: [
-                              const RadarEntry(value: 1),
-                              const RadarEntry(value: 1),
-                              const RadarEntry(value: 1),
-                              const RadarEntry(value: 1),
-                              const RadarEntry(value: 1),
-                            ],
+                          shape: ShapeEncode(
+                            encoder: (tuple) => RectShape(
+                              labelPosition: tuple['value'] > 50 ? 0.5 : 1,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                            ),
                           ),
-                        ],
-                        radarShape: RadarShape.polygon,
-                        tickCount: 3,
-                        ticksTextStyle:
-                            const TextStyle(color: Colors.transparent),
-                        radarBorderData: BorderSide(color: borderColor),
-                        tickBorderData: BorderSide(color: borderColor),
-                        gridBorderData: BorderSide(color: borderColor),
-                        getTitle: (index, angle) {
-                          final usedAngle = angle;
-                          switch (index) {
-                            case 0:
-                              return RadarChartTitle(
-                                text: tr(LocaleKey.star),
-                                angle: usedAngle,
-                              );
-                            case 1:
-                              return RadarChartTitle(
-                                text: tr(LocaleKey.destruction),
-                                angle: usedAngle,
-                              );
-                            case 2:
-                              return RadarChartTitle(
-                                text: tr(LocaleKey.reliability),
-                                angle: usedAngle + 180,
-                              );
-                            case 3:
-                              return RadarChartTitle(
-                                text: tr(LocaleKey.speed),
-                                angle: usedAngle + 180,
-                              );
-                            case 4:
-                              return RadarChartTitle(
-                                text: tr(LocaleKey.defence),
-                                angle: usedAngle,
-                              );
-                            default:
-                              return const RadarChartTitle(text: '');
-                          }
-                        },
-                      ),
+                          color: ColorEncode(
+                              variable: 'name', values: Defaults.colors10),
+                          elevation: ElevationEncode(value: 5),
+                          transition: Transition(
+                              duration: const Duration(seconds: 1),
+                              curve: Curves.easeOutCirc),
+                          entrance: {MarkEntrance.x, MarkEntrance.y},
+                        ),
+                      ],
+                      axes: [
+                        Defaults.radialAxis,
+                        Defaults.circularAxis..label = null,
+                      ],
+                      coord: PolarCoord(startRadius: 0.15),
                     ),
                   ),
                 ),

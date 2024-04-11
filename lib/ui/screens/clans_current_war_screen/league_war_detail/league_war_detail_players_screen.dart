@@ -292,7 +292,8 @@ class _LeagueWarDetailPlayersScreenState
               final clan = widget.clanLeague.clans?.firstWhere(
                   (e1) => e1.members.any((e2) => e2.tag == member.tag));
 
-              final clanMemberTownHallLevel = ImageHelper.getTownhallImage(member.townHallLevel, 1);
+              final clanMemberTownHallLevel =
+                  ImageHelper.getTownhallImage(member.townHallLevel, 1);
 
               Color? bgColor;
               if (context
@@ -463,7 +464,7 @@ class _LeagueWarDetailPlayersScreenState
                 ),
               );
             },
-          ).toList(),
+          ),
           ...(_clanFilter.tag.isEmptyOrNull
                   ? leagueParticipants
                   : leagueParticipants
@@ -474,7 +475,8 @@ class _LeagueWarDetailPlayersScreenState
               final clan = widget.clanLeague.clans?.firstWhere((e1) =>
                   e1.members.any((e2) => e2.tag == participant.member.tag));
 
-              final clanMemberTownHallLevel = ImageHelper.getTownhallImage(participant.member.townHallLevel, 1);
+              final clanMemberTownHallLevel = ImageHelper.getTownhallImage(
+                  participant.member.townHallLevel, 1);
 
               return Card(
                 margin: EdgeInsets.zero,
@@ -497,9 +499,9 @@ class _LeagueWarDetailPlayersScreenState
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 14.0),
+                        vertical: 8.0, horizontal: 4.0),
                     child: SizedBox(
-                      height: 70,
+                      height: 60.0,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -534,14 +536,10 @@ class _LeagueWarDetailPlayersScreenState
                                 ),
                                 Row(
                                   children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 4.0),
-                                      child: RankImage(
-                                        imageUrl: clan?.badgeUrls?.large,
-                                        height: 12,
-                                        width: 12,
-                                      ),
+                                    RankImage(
+                                      imageUrl: clan?.badgeUrls?.large,
+                                      height: 12,
+                                      width: 12,
                                     ),
                                     Expanded(
                                       child: Text(
@@ -632,7 +630,7 @@ class _LeagueWarDetailPlayersScreenState
                 ),
               );
             },
-          ).toList(),
+          ),
           const SizedBox(height: 24.0),
         ],
       ),

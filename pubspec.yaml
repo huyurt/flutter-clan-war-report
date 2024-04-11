@@ -1,48 +1,48 @@
 name: clan_war_report
-description: Clan War Report
+description: Clan War Report for Clash of Clans
 publish_to: 'none'
 
-version: 1.0.0+12
+version: 1.0.0+13
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=3.3.3 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
   # COMMON
-  animate_do: ^3.0.2
-  dio: ^5.3.2
-  duration: ^3.0.12
-  easy_localization: ^3.0.2
+  animate_do: ^3.3.4
+  dio: ^5.4.2+1
+  duration: ^3.0.13
+  easy_localization: ^3.0.5
   equatable: ^2.0.5
   flutter_countdown_timer: ^4.1.0
   flutter_displaymode: ^0.6.0
-  flutter_dotenv: ^5.0.2
-  get_it: ^7.6.0
+  flutter_dotenv: ^5.1.0
+  get_it: ^7.6.8
   internet_connection_checker: ^1.0.0+1
-  nb_utils: ^6.0.2
-  package_info_plus: ^4.0.2
+  nb_utils: ^6.1.3
+  package_info_plus: ^5.0.1
   stream_transform: ^2.1.0
-  url_launcher: ^6.1.11
-  workmanager: ^0.5.1
+  url_launcher: ^6.2.5
+  workmanager: ^0.5.2
 
   # STATE MANAGEMENT
-  bloc: ^8.1.1
-  bloc_concurrency: ^0.2.1
-  flutter_bloc: ^8.1.2
+  bloc: ^8.1.4
+  bloc_concurrency: ^0.2.5
+  flutter_bloc: ^8.1.5
 
   # ICONS
-  akar_icons_flutter: ^1.1.16
+  akar_icons_flutter: ^1.1.21
+  country_flags: ^2.2.0
   ionicons: ^0.2.2
-  material_design_icons_flutter: ^6.0.7096
+  material_design_icons_flutter: ^7.0.7296
 
   # UI
-  country_flags: ^2.0.0
-  fl_chart: ^0.63.0
-  home_widget: ^0.3.0
-  in_app_review: ^2.0.6
+  graphic: ^2.2.1
+  home_widget: ^0.4.1
+  in_app_review: ^2.0.9
 
   flutter_localizations:
     sdk: flutter
@@ -52,9 +52,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.1
-  mocktail: ^0.3.0
-  very_good_analysis: ^5.0.0+1
+  flutter_lints: ^3.0.2
+  mocktail: ^1.0.3
+  very_good_analysis: ^5.1.0
 
 
 flutter_launcher_icons:
