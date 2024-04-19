@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:akar_icons_flutter/akar_icons_flutter.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:clan_war_report/ui/screens/clans_current_war_screen/war_detail/war_detail_attacks_detail_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,6 @@ import '../../../../utils/constants/app_constants.dart';
 import '../../../../utils/helpers/image_helper.dart';
 import '../../../widgets/app_widgets/rank_image.dart';
 import '../../clans_screen/search_clan_screen/clan_detail_screen.dart';
-import '../../clans_screen/search_clan_screen/player_detail_screen.dart';
 
 class WarDetailAttacksScreen extends StatefulWidget {
   const WarDetailAttacksScreen({
@@ -228,8 +228,15 @@ class _WarDetailAttacksScreenState extends State<WarDetailAttacksScreen> {
                   child: InkWell(
                     onTap: () {
                       if (!member.tag.isEmptyOrNull) {
-                        PlayerDetailScreen(
-                          playerTag: member.tag,
+                        WarDetailAttacksDetailScreen(
+                          clan: clan,
+                          member: member,
+                          memberAttacks: member.attacks ?? <Attack>[],
+                          memberDefenceAttacks:
+                              member.bestOpponentAttack != null
+                                  ? <Attack>[member.bestOpponentAttack!]
+                                  : <Attack>[],
+                          roundCount: 2,
                         ).launch(context);
                       }
                     },

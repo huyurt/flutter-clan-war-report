@@ -83,6 +83,7 @@ class LocaleKey {
   static const unicorn = 'Unicorn';
   static const frosty = 'Frosty';
   static const diggy = 'Diggy';
+  static const angryJelly = 'Angry Jelly';
   static const poisonLizard = 'Poison Lizard';
   static const phoenix = 'Phoenix';
   static const barbarian = 'Barbarian';
@@ -160,6 +161,8 @@ class LocaleKey {
   static const notUsed = 'Not used';
   static const viewLeague = 'View League';
   static const clanWarLeague = 'Clan War League';
+  static const clanWar = 'Clan War';
+  static const bestOpponentAttack = 'Best Opponent Attack';
   static const season = 'Season';
   static const group = 'Group';
   static const nthRound = 'nth_round';

@@ -2,7 +2,7 @@ name: clan_war_report
 description: Clan War Report for Clash of Clans
 publish_to: 'none'
 
-version: 1.0.0+13
+version: 1.0.0+14
 
 environment:
   sdk: '>=3.3.3 <4.0.0'

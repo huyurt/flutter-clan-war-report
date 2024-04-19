@@ -19,6 +19,7 @@ class ImageHelper {
       "Poison Lizard",
       "Phoenix",
       "Spirit Fox",
+      "Angry Jelly",
     ];
   }
 
