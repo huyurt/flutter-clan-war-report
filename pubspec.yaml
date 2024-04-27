@@ -2,7 +2,7 @@ name: clan_war_report
 description: Clan War Report for Clash of Clans
 publish_to: 'none'
 
-version: 1.0.0+14
+version: 1.0.0+15
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
@@ -55,7 +55,6 @@ dev_dependencies:
   flutter_lints: ^3.0.2
   mocktail: ^1.0.3
   very_good_analysis: ^5.1.0
-
 
 flutter_launcher_icons:
   android: "launcher_icon"
