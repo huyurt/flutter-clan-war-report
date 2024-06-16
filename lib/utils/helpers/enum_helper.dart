@@ -57,8 +57,8 @@ class EnumHelper {
   }
 
   static WarLeagueEnum getWarLeagueById(int warLeagueId) {
-    final index = warLeagueId % WarLeagueEnum.values.length;
-    return WarLeagueEnum.values[index];
+    int war = 48000000 + warLeagueId % 100;
+    return WarLeagueEnum.values.firstWhere((w) => w.value == war);
   }
 
   static int getWarLeagueId(WarLeagueEnum warLeague) {
