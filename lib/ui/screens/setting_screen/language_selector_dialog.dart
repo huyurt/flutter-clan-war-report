@@ -41,7 +41,7 @@ class LanguageSelectorDialog extends StatelessWidget {
                               EnumHelper.getLocaleType(locale)),
                           height: 24.0,
                           width: 31.0,
-                          borderRadius: 4.0,
+                          shape: RoundedRectangle(4.0),
                         ),
                         const SizedBox(width: 16.0),
                         Text(

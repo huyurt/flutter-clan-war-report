@@ -62,7 +62,7 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
       } catch (error) {
         if (error is DioException) {
-          if (!await InternetConnectionChecker().hasConnection) {
+          if (!await InternetConnectionChecker.instance.hasConnection) {
             return emit(BookmarkedClansCurrentWarState.failure(error.message));
           }
           emit(BookmarkedClansCurrentWarState.failure(error.message));
@@ -95,7 +95,7 @@ class BookmarkedClansCurrentWarBloc extends Bloc<BookmarkedClansCurrentWarEvent,
         await bookmarkedClansCurrentWarRepository.fetchClanCurrentWar(clanTag);
       } catch (error) {
         if (error is DioException) {
-          if (!await InternetConnectionChecker().hasConnection) {
+          if (!await InternetConnectionChecker.instance.hasConnection) {
             return emit(BookmarkedClansCurrentWarState.failure(error.message));
           }
           emit(BookmarkedClansCurrentWarState.failure(error.message));

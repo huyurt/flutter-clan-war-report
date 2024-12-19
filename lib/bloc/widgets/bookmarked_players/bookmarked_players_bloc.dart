@@ -68,7 +68,7 @@ class BookmarkedPlayersBloc
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
       } catch (error) {
         if (error is DioException) {
-          if (!await InternetConnectionChecker().hasConnection) {
+          if (!await InternetConnectionChecker.instance.hasConnection) {
             return emit(BookmarkedPlayersState.failure(error.message));
           }
           emit(BookmarkedPlayersState.failure(error.message));
@@ -101,7 +101,7 @@ class BookmarkedPlayersBloc
         await bookmarkedPlayersRepository.fetchPlayerDetail(playerTag);
       } catch (error) {
         if (error is DioException) {
-          if (!await InternetConnectionChecker().hasConnection) {
+          if (!await InternetConnectionChecker.instance.hasConnection) {
             return emit(BookmarkedPlayersState.failure(error.message));
           }
           emit(BookmarkedPlayersState.failure(error.message));

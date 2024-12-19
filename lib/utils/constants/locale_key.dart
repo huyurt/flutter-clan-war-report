@@ -77,6 +77,7 @@ class LocaleKey {
   static const archerQueen = 'Archer Queen';
   static const grandWarden = 'Grand Warden';
   static const royalChampion = 'Royal Champion';
+  static const minionPrince = 'Minion Prince';
   static const LASSI = 'L.A.S.S.I';
   static const electroOwl = 'Electro Owl';
   static const mightyYak = 'Mighty Yak';
@@ -105,6 +106,8 @@ class LocaleKey {
   static const minion = 'Minyon';
   static const hogRider = 'Hog Rider';
   static const valkyrie = 'Valkyrie';
+  static const rootRider = 'Root Rider';
+  static const thrower = 'Thrower';
   static const golem = 'Golem';
   static const witch = 'Witch';
   static const lavaHound = 'Lava Hound';
@@ -120,6 +123,7 @@ class LocaleKey {
   static const cloneSpell = 'Clone Spell';
   static const invisibilitySpell = 'Invisibility Spell';
   static const recallSpell = 'Recall Spell';
+  static const reviveSpell = 'Revive Spell';
   static const poisonSpell = 'Poison Spell';
   static const earthquakeSpell = 'Earthquake Spell';
   static const hasteSpell = 'Haste Spell';

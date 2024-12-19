@@ -5,6 +5,7 @@ class ImageHelper {
       "Archer Queen",
       "Grand Warden",
       "Royal Champion",
+      "Minion Prince",
     ];
   }
 
@@ -42,6 +43,7 @@ class ImageHelper {
       "Dragon Rider",
       "Electro Titan",
       "Root Rider",
+      "Thrower",
       "Minion",
       "Hog Rider",
       "Valkyrie",
@@ -65,6 +67,7 @@ class ImageHelper {
       "Clone Spell",
       "Invisibility Spell",
       "Recall Spell",
+      "Revive Spell",
       "Poison Spell",
       "Earthquake Spell",
       "Haste Spell",

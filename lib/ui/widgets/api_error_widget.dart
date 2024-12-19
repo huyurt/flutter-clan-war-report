@@ -23,7 +23,7 @@ class _ApiErrorWidgetState extends State<ApiErrorWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: InternetConnectionChecker().hasConnection,
+      future: InternetConnectionChecker.instance.hasConnection,
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {

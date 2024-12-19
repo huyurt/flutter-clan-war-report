@@ -66,7 +66,7 @@ class BookmarkedClansBloc
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
       } catch (error) {
         if (error is DioException) {
-          if (!await InternetConnectionChecker().hasConnection) {
+          if (!await InternetConnectionChecker.instance.hasConnection) {
             return emit(BookmarkedClansState.failure(error.message));
           }
           emit(BookmarkedClansState.failure(error.message));
@@ -99,7 +99,7 @@ class BookmarkedClansBloc
         await bookmarkedClansRepository.fetchClanDetail(clanTag);
       } catch (error) {
         if (error is DioException) {
-          if (!await InternetConnectionChecker().hasConnection) {
+          if (!await InternetConnectionChecker.instance.hasConnection) {
             return emit(BookmarkedClansState.failure(error.message));
           }
           emit(BookmarkedClansState.failure(error.message));

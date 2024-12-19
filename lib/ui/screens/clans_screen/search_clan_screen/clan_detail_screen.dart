@@ -332,7 +332,7 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                         '',
                                                     height: 18.0,
                                                     width: 24.0,
-                                                    borderRadius: 4.0,
+                                                    shape: RoundedRectangle(4.0),
                                                   )
                                                 : const Icon(
                                                     Icons.public,

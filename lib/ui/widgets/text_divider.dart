@@ -18,7 +18,7 @@ class TextDivider extends StatelessWidget {
         children: [
           Expanded(
             child: Divider(
-              color: Theme.of(context).colorScheme.onBackground.withOpacity(.4),
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(.4),
             ),
           ),
           Visibility(
@@ -33,7 +33,7 @@ class TextDivider extends StatelessWidget {
           ),
           Expanded(
             child: Divider(
-              color: Theme.of(context).colorScheme.onBackground.withOpacity(.4),
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(.4),
             ),
           ),
         ],

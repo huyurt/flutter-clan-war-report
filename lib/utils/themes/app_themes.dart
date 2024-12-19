@@ -8,18 +8,16 @@ class AppThemes {
   static final ThemeData lightTheme = ThemeData(
     //androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
     fontFamily: AppFontFamily.clashLight,
-    colorScheme: ColorScheme(
+    colorScheme: const ColorScheme(
       primary: Color(0xffffc107),
       primaryContainer: Color(0xffffa000),
       secondary: Color(0xffffc107),
       secondaryContainer: Color(0xffffa000),
       surface: Color(0xffffffff),
-      background: Color(0xffffe082),
       error: Color(0xffd32f2f),
       onPrimary: Color(0xff000000),
       onSecondary: Color(0xff000000),
       onSurface: Color(0xff000000),
-      onBackground: Color(0xff000000),
       onError: Color(0xffffffff),
       brightness: Brightness.light,
     ),
@@ -36,43 +34,43 @@ class AppThemes {
       900: Colors.amber,
     }),
     brightness: Brightness.light,
-    primaryColor: Color(0xffffffff),
-    primaryColorLight: Color(0xffe6e6e6),
-    primaryColorDark: Color(0xff4d4d4d),
-    canvasColor: Color(0xfffafafa),
-    scaffoldBackgroundColor: Color(0xfffafafa),
-    bottomAppBarTheme: BottomAppBarTheme(
+    primaryColor: const Color(0xffffffff),
+    primaryColorLight: const Color(0xffe6e6e6),
+    primaryColorDark: const Color(0xff4d4d4d),
+    canvasColor: const Color(0xfffafafa),
+    scaffoldBackgroundColor: const Color(0xfffafafa),
+    bottomAppBarTheme: const BottomAppBarTheme(
       color: Color(0xffffffff),
     ),
-    cardColor: Color(0xffffffff),
-    dividerColor: Color(0x1f000000),
-    highlightColor: Color(0x66bcbcbc),
-    splashColor: Color(0x66c8c8c8),
+    cardColor: const Color(0xffffffff),
+    dividerColor: const Color(0x1f000000),
+    highlightColor: const Color(0x66bcbcbc),
+    splashColor: const Color(0x66c8c8c8),
     //selectedRowColor: Color(0xfff5f5f5),
-    unselectedWidgetColor: Color(0x8a000000),
-    disabledColor: Color(0x61000000),
-    toggleButtonsTheme: ToggleButtonsThemeData(
+    unselectedWidgetColor: const Color(0x8a000000),
+    disabledColor: const Color(0x61000000),
+    toggleButtonsTheme: const ToggleButtonsThemeData(
       color: Color(0xffffc107),
     ),
-    secondaryHeaderColor: Color(0xfff2f2f2),
-    dialogBackgroundColor: Color(0xffffffff),
-    indicatorColor: Color(0xffffc107),
-    hintColor: Color(0x8a000000),
-    textSelectionTheme: TextSelectionThemeData(
+    secondaryHeaderColor: const Color(0xfff2f2f2),
+    dialogBackgroundColor: const Color(0xffffffff),
+    indicatorColor: const Color(0xffffc107),
+    hintColor: const Color(0x8a000000),
+    textSelectionTheme: const TextSelectionThemeData(
       cursorColor: Color(0xffffc107),
       selectionColor: Color(0xffffe082),
       selectionHandleColor: Color(0xffffd54f),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Color(0xffffc107),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12.0)),
       ),
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Color(0xffffc107),
     ),
-    buttonTheme: ButtonThemeData(
+    buttonTheme: const ButtonThemeData(
       textTheme: ButtonTextTheme.normal,
       minWidth: 88,
       height: 36,
@@ -98,12 +96,10 @@ class AppThemes {
         secondary: Color(0xffffc107),
         secondaryContainer: Color(0xffffa000),
         surface: Color(0xffffffff),
-        background: Color(0xffffe082),
         error: Color(0xffd32f2f),
         onPrimary: Color(0xff000000),
         onSecondary: Color(0xff000000),
         onSurface: Color(0xff000000),
-        onBackground: Color(0xff000000),
         onError: Color(0xffffffff),
         brightness: Brightness.light,
       ),
@@ -116,9 +112,9 @@ class AppThemes {
       titleTextStyle: TextStyle(
         fontFamily: AppFontFamily.clashLight,
         fontSize: 16.0,
-        color: Color(0xff000000),
+        color: const Color(0xff000000),
       ),
-      systemOverlayStyle: SystemUiOverlayStyle(
+      systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark,
         statusBarColor: Colors.transparent,
         systemStatusBarContrastEnforced: false,
@@ -129,30 +125,30 @@ class AppThemes {
       textStyle: TextStyle(
         fontFamily: AppFontFamily.clashLight,
         fontSize: 12.0,
-        color: Color(0xdd000000),
+        color: const Color(0xdd000000),
       ),
     ),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: Color(0xdd000000),
       opacity: 1,
       size: 24,
     ),
-    primaryIconTheme: IconThemeData(
+    primaryIconTheme: const IconThemeData(
       color: Color(0xff000000),
       opacity: 1,
       size: 24,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: const TabBarTheme(
       indicatorSize: TabBarIndicatorSize.tab,
       labelColor: Color(0xdd000000),
       unselectedLabelColor: Color(0xb2000000),
     ),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodySmall: TextStyle(fontSize: 10.0),
       bodyMedium: TextStyle(fontSize: 12.0),
       bodyLarge: TextStyle(fontSize: 14.0),
     ),
-    dialogTheme: DialogTheme(
+    dialogTheme: const DialogTheme(
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: Color(0xff000000),
@@ -162,7 +158,7 @@ class AppThemes {
         borderRadius: BorderRadius.all(Radius.circular(0.0)),
       ),
     ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       elevation: 0.0,
       backgroundColor: Colors.transparent,
@@ -181,7 +177,7 @@ class AppThemes {
         fontSize: 10.0,
       ),
     ),
-    expansionTileTheme: ExpansionTileThemeData(
+    expansionTileTheme: const ExpansionTileThemeData(
       textColor: Colors.black,
     ),
   );
@@ -189,18 +185,16 @@ class AppThemes {
   static final ThemeData darkTheme = ThemeData(
     //androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
     fontFamily: AppFontFamily.clashLight,
-    colorScheme: ColorScheme(
+    colorScheme: const ColorScheme(
       primary: Color(0xffffc107),
       primaryContainer: Color(0xffffa000),
       secondary: Color(0xffffc107),
       secondaryContainer: Color(0xffffa000),
       surface: Color(0xff424242),
-      background: Color(0xff616161),
       error: Color(0xffd32f2f),
       onPrimary: Color(0xff000000),
       onSecondary: Color(0xff000000),
       onSurface: Color(0xffffffff),
-      onBackground: Color(0xff000000),
       onError: Color(0xff000000),
       brightness: Brightness.dark,
     ),
@@ -217,43 +211,43 @@ class AppThemes {
       900: Colors.black,
     }),
     brightness: Brightness.dark,
-    primaryColor: Color(0xff212121),
-    primaryColorLight: Color(0xff9e9e9e),
-    primaryColorDark: Color(0xff000000),
-    canvasColor: Color(0xff303030),
-    scaffoldBackgroundColor: Color(0xff303030),
-    bottomAppBarTheme: BottomAppBarTheme(
+    primaryColor: const Color(0xff212121),
+    primaryColorLight: const Color(0xff9e9e9e),
+    primaryColorDark: const Color(0xff000000),
+    canvasColor: const Color(0xff303030),
+    scaffoldBackgroundColor: const Color(0xff303030),
+    bottomAppBarTheme: const BottomAppBarTheme(
       color: Color(0xff424242),
     ),
-    cardColor: Color(0xff424242),
-    dividerColor: Color(0x1fffffff),
-    highlightColor: Color(0x40cccccc),
-    splashColor: Color(0x40cccccc),
+    cardColor: const Color(0xff424242),
+    dividerColor: const Color(0x1fffffff),
+    highlightColor: const Color(0x40cccccc),
+    splashColor: const Color(0x40cccccc),
     //selectedRowColor: Color(0xfff5f5f5),
-    unselectedWidgetColor: Color(0xb3ffffff),
-    disabledColor: Color(0x62ffffff),
-    toggleButtonsTheme: ToggleButtonsThemeData(
+    unselectedWidgetColor: const Color(0xb3ffffff),
+    disabledColor: const Color(0x62ffffff),
+    toggleButtonsTheme: const ToggleButtonsThemeData(
       color: Color(0xffffc107),
     ),
-    secondaryHeaderColor: Color(0xff616161),
-    dialogBackgroundColor: Color(0xff424242),
-    indicatorColor: Color(0xffffc107),
-    hintColor: Color(0x80ffffff),
-    textSelectionTheme: TextSelectionThemeData(
+    secondaryHeaderColor: const Color(0xff616161),
+    dialogBackgroundColor: const Color(0xff424242),
+    indicatorColor: const Color(0xffffc107),
+    hintColor: const Color(0x80ffffff),
+    textSelectionTheme: const TextSelectionThemeData(
       cursorColor: Color(0xffffc107),
       selectionColor: Color(0xffffe082),
       selectionHandleColor: Color(0xffffd54f),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Color(0xffffc107),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12.0)),
       ),
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: Color(0xffffc107),
     ),
-    buttonTheme: ButtonThemeData(
+    buttonTheme: const ButtonThemeData(
       textTheme: ButtonTextTheme.normal,
       minWidth: 88,
       height: 36,
@@ -279,12 +273,10 @@ class AppThemes {
         secondary: Color(0xffffc107),
         secondaryContainer: Color(0xffffa000),
         surface: Color(0xff424242),
-        background: Color(0xff616161),
         error: Color(0xffd32f2f),
         onPrimary: Color(0xff000000),
         onSecondary: Color(0xff000000),
         onSurface: Color(0xffffffff),
-        onBackground: Color(0xff000000),
         onError: Color(0xff000000),
         brightness: Brightness.dark,
       ),
@@ -298,7 +290,7 @@ class AppThemes {
         fontFamily: AppFontFamily.clashLight,
         fontSize: 16.0,
       ),
-      systemOverlayStyle: SystemUiOverlayStyle(
+      systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
         statusBarColor: Colors.transparent,
         systemStatusBarContrastEnforced: false,
@@ -311,27 +303,27 @@ class AppThemes {
         fontSize: 12.0,
       ),
     ),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: Color(0xffffc107),
       opacity: 1,
       size: 24,
     ),
-    primaryIconTheme: IconThemeData(
+    primaryIconTheme: const IconThemeData(
       color: Color(0xffffffff),
       opacity: 1,
       size: 24,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: const TabBarTheme(
       indicatorSize: TabBarIndicatorSize.tab,
       labelColor: Color(0xffffffff),
       unselectedLabelColor: Color(0xb2ffffff),
     ),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodySmall: TextStyle(fontSize: 10.0),
       bodyMedium: TextStyle(fontSize: 12.0),
       bodyLarge: TextStyle(fontSize: 14.0),
     ),
-    dialogTheme: DialogTheme(
+    dialogTheme: const DialogTheme(
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: Color(0xff000000),
@@ -341,7 +333,7 @@ class AppThemes {
         borderRadius: BorderRadius.all(Radius.circular(0.0)),
       ),
     ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       elevation: 0.0,
       backgroundColor: Colors.transparent,
@@ -360,7 +352,7 @@ class AppThemes {
         fontSize: 10.0,
       ),
     ),
-    expansionTileTheme: ExpansionTileThemeData(
+    expansionTileTheme: const ExpansionTileThemeData(
       textColor: Colors.white,
     ),
   );

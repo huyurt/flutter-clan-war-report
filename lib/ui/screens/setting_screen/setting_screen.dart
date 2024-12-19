@@ -55,7 +55,7 @@ class SettingScreen extends StatelessWidget {
                                   EnumHelper.getLocaleType(context.locale)),
                               height: 24.0,
                               width: 31.0,
-                              borderRadius: 4.0,
+                              shape: RoundedRectangle(4.0),
                             ),
                           ),
                           Text(tr(context.locale.languageCode)),
