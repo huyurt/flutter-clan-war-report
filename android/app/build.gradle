@@ -22,7 +22,7 @@ if (keystorePropertiesFile.exists()) {
 android.buildTypes.release.ndk.debugSymbolLevel = 'FULL'
 
 android {
-    namespace = "com.mixxdev.clan_war_report"
+    namespace = "com.example.clan_war_report"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -37,7 +37,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.mixxdev.clan_war_report"
+        applicationId "com.example.clan_war_report"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = flutter.minSdkVersion

@@ -1,4 +1,4 @@
-package com.mixxdev.clan_war_report
+package com.example.clan_war_report
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -7,8 +7,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.View
 import android.widget.RemoteViews
-import com.mixxdev.clan_war_report.MainActivity
-import com.mixxdev.clan_war_report.R
+import com.example.clan_war_report.MainActivity
+import com.example.clan_war_report.R
 import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
