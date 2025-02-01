@@ -6,8 +6,8 @@
 
 ## Quick Start
 
-* Rename the `env.example` file to `.env`
-* Paste your Clash of Clans API token as the value of the `COC_AUTH_TOKEN` variable in the file.
+* :pencil2: ​Rename the `env.example` file to `.env`
+* :clipboard: ​Paste your [Clash of Clans API](https://developer.clashofclans.com) token as the value of the `COC_AUTH_TOKEN` variable in the file.
 
 
 
@@ -24,4 +24,4 @@
 
 
 
-My Clan: #JVJ8YJC
+:european_castle: ​My Clan: #JVJ8YJC
