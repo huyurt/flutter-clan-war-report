@@ -2,6 +2,7 @@ import 'package:country_flags/country_flags.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 //import 'package:in_app_review/in_app_review.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:clan_war_report/models/app/settings_model.dart';
@@ -53,9 +54,11 @@ class SettingScreen extends StatelessWidget {
                             child: CountryFlag.fromCountryCode(
                               EnumHelper.getCountryCode(
                                   EnumHelper.getLocaleType(context.locale)),
-                              height: 24.0,
-                              width: 31.0,
-                              shape: RoundedRectangle(4.0),
+                              theme: const ImageTheme(
+                                height: 24.0,
+                                width: 31.0,
+                                shape: RoundedRectangle(4.0),
+                              ),
                             ),
                           ),
                           Text(tr(context.locale.languageCode)),

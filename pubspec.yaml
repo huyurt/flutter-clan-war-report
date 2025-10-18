@@ -3,7 +3,7 @@ description: Clan War Report for Clash of Clans
 repository: https://github.com/huyurt/flutter-clan-war-report
 publish_to: 'none'
 
-version: 1.0.0+19
+version: 1.0.0+20
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
@@ -13,49 +13,47 @@ dependencies:
     sdk: flutter
 
   # COMMON
-  animate_do: ^3.3.4
-  dio: ^5.7.0
-  duration: ^3.0.15
-  easy_localization: ^3.0.7
+  animate_do: ^4.2.0
+  dio: ^5.9.0
+  duration: ^4.0.3
+  easy_localization: ^3.0.8
   equatable: ^2.0.7
   flutter_countdown_timer: ^4.1.0
-  flutter_displaymode: ^0.6.0
-  flutter_dotenv: ^5.2.1
-  get_it: ^8.0.3
+  flutter_displaymode: ^0.7.0
+  flutter_dotenv: ^6.0.0
+  get_it: ^8.2.0
   internet_connection_checker: ^3.0.1
-  nb_utils: ^7.0.7
-  package_info_plus: ^8.1.2
+  nb_utils: ^7.1.8
+  package_info_plus: ^9.0.0
   stream_transform: ^2.1.1
-  url_launcher: ^6.3.1
-  workmanager: ^0.5.2
+  url_launcher: ^6.3.2
 
   # STATE MANAGEMENT
-  bloc: ^8.1.4
-  bloc_concurrency: ^0.2.5
-  flutter_bloc: ^8.1.6
+  bloc: ^9.1.0
+  bloc_concurrency: ^0.3.0
+  flutter_bloc: ^9.1.1
 
   # ICONS
   akar_icons_flutter: ^1.1.21
-  country_flags: ^3.1.0
+  country_flags: ^4.1.0
   ionicons: ^0.2.2
   material_design_icons_flutter: ^7.0.7296
 
   # UI
-  graphic: ^2.5.0
-  home_widget: ^0.7.0
-  in_app_review: ^2.0.10
+  graphic: ^2.6.0
+  in_app_review: ^2.0.11
 
   flutter_localizations:
     sdk: flutter
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.14.2
+  flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   mocktail: ^1.0.4
-  very_good_analysis: ^7.0.0
+  very_good_analysis: ^10.0.0
 
 flutter_launcher_icons:
   android: "launcher_icon"

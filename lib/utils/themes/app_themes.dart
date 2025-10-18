@@ -39,7 +39,7 @@ class AppThemes {
     primaryColorDark: const Color(0xff4d4d4d),
     canvasColor: const Color(0xfffafafa),
     scaffoldBackgroundColor: const Color(0xfffafafa),
-    bottomAppBarTheme: const BottomAppBarTheme(
+    bottomAppBarTheme: const BottomAppBarThemeData(
       color: Color(0xffffffff),
     ),
     cardColor: const Color(0xffffffff),
@@ -138,7 +138,7 @@ class AppThemes {
       opacity: 1,
       size: 24,
     ),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       indicatorSize: TabBarIndicatorSize.tab,
       labelColor: Color(0xdd000000),
       unselectedLabelColor: Color(0xb2000000),
@@ -148,7 +148,7 @@ class AppThemes {
       bodyMedium: TextStyle(fontSize: 12.0),
       bodyLarge: TextStyle(fontSize: 14.0),
     ),
-    dialogTheme: const DialogTheme(
+    dialogTheme: const DialogThemeData(
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: Color(0xff000000),
@@ -216,7 +216,7 @@ class AppThemes {
     primaryColorDark: const Color(0xff000000),
     canvasColor: const Color(0xff303030),
     scaffoldBackgroundColor: const Color(0xff303030),
-    bottomAppBarTheme: const BottomAppBarTheme(
+    bottomAppBarTheme: const BottomAppBarThemeData(
       color: Color(0xff424242),
     ),
     cardColor: const Color(0xff424242),
@@ -313,7 +313,7 @@ class AppThemes {
       opacity: 1,
       size: 24,
     ),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       indicatorSize: TabBarIndicatorSize.tab,
       labelColor: Color(0xffffffff),
       unselectedLabelColor: Color(0xb2ffffff),
@@ -323,7 +323,7 @@ class AppThemes {
       bodyMedium: TextStyle(fontSize: 12.0),
       bodyLarge: TextStyle(fontSize: 14.0),
     ),
-    dialogTheme: const DialogTheme(
+    dialogTheme: const DialogThemeData(
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: Color(0xff000000),

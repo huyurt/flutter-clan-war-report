@@ -330,9 +330,12 @@ class _ClanDetailScreenState extends State<ClanDetailScreen> {
                                                     clan?.location
                                                             ?.countryCode ??
                                                         '',
-                                                    height: 18.0,
-                                                    width: 24.0,
-                                                    shape: RoundedRectangle(4.0),
+                                                    theme: const ImageTheme(
+                                                      height: 18.0,
+                                                      width: 24.0,
+                                                      shape:
+                                                          RoundedRectangle(4.0),
+                                                    ),
                                                   )
                                                 : const Icon(
                                                     Icons.public,

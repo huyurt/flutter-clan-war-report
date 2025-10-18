@@ -21,6 +21,7 @@ class ImageHelper {
       "Phoenix",
       "Spirit Fox",
       "Angry Jelly",
+      "Sneezy",
     ];
   }
 
@@ -54,6 +55,8 @@ class ImageHelper {
       "Ice Golem",
       "Headhunter",
       "Apprentice Warden",
+      "Druid",
+      "Furnace",
     ];
   }
 
@@ -74,6 +77,7 @@ class ImageHelper {
       "Skeleton Spell",
       "Bat Spell",
       "Overgrowth Spell",
+      "Ice Block Spell",
     ];
   }
 
@@ -86,6 +90,7 @@ class ImageHelper {
       "Log Launcher",
       "Flame Flinger",
       "Battle Drill",
+      "Troop Launcher",
     ];
   }
 
@@ -107,6 +112,7 @@ class ImageHelper {
       "Super Witch",
       "Super Wizard",
       "Super Hog Rider",
+      "Super Yeti",
     ];
   }
 

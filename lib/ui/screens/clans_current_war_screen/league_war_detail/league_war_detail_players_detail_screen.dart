@@ -178,18 +178,18 @@ class _LeagueWarDetailPlayersDetailScreenState
     final durationLocale =
         DurationLocale.fromLanguageCode(context.locale.languageCode);
     final clanAverageDurationText = durationLocale != null
-        ? printDuration(
+        ? prettyDuration(
             clanAverageDuration,
             abbreviated: true,
-            conjugation: ' ',
+            conjunction: ' ',
             tersity: DurationTersity.second,
             upperTersity: DurationTersity.minute,
             locale: durationLocale,
           )
-        : printDuration(
+        : prettyDuration(
             clanAverageDuration,
             abbreviated: true,
-            conjugation: ' ',
+            conjunction: ' ',
             tersity: DurationTersity.second,
             upperTersity: DurationTersity.minute,
           );

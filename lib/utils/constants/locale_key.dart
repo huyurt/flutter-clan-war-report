@@ -85,6 +85,7 @@ class LocaleKey {
   static const frosty = 'Frosty';
   static const diggy = 'Diggy';
   static const angryJelly = 'Angry Jelly';
+  static const sneezy = 'Sneezy';
   static const poisonLizard = 'Poison Lizard';
   static const phoenix = 'Phoenix';
   static const barbarian = 'Barbarian';
@@ -115,6 +116,8 @@ class LocaleKey {
   static const iceGolem = 'Ice Golem';
   static const headhunter = 'Headhunter';
   static const apprenticeWarden = 'Apprentice Warden';
+  static const druid = 'Druid';
+  static const furnace = 'Furnace';
   static const lightningSpell = 'Lightning Spell';
   static const healingSpell = 'Healing Spell';
   static const rageSpell = 'Rage Spell';
@@ -130,6 +133,7 @@ class LocaleKey {
   static const skeletonSpell = 'Skeleton Spell';
   static const batSpell = 'Bat Spell';
   static const overgrowthSpell = 'Overgrowth Spell';
+  static const iceBlockSpell = 'Ice Block Spell';
   static const wallWrecker = 'Wall Wrecker';
   static const battleBlimp = 'Battle Blimp';
   static const stoneSlammer = 'Stone Slammer';
@@ -137,6 +141,7 @@ class LocaleKey {
   static const logLauncher = 'Log Launcher';
   static const flameFlinger = 'Flame Flinger';
   static const battleDrill = 'Battle Drill';
+  static const troopLauncher = 'Troop Launcher';
   static const openClanType = 'open_clan_type';
   static const inviteOnlyClanType = 'inviteOnly_clan_type';
   static const closedClanType = 'closed_clan_type';

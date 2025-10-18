@@ -183,9 +183,11 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                 location.isCountry
                                     ? CountryFlag.fromCountryCode(
                                         location.countryCode ?? '',
-                                        height: 16.0,
-                                        width: 24.0,
-                                        shape: RoundedRectangle(4.0),
+                                        theme: const ImageTheme(
+                                          height: 16.0,
+                                          width: 24.0,
+                                          shape: RoundedRectangle(4.0),
+                                        ),
                                       )
                                     : (location.id == -1
                                         ? const SizedBox(width: 24.0)
@@ -253,9 +255,11 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                             _location.isCountry
                                 ? CountryFlag.fromCountryCode(
                                     _location.countryCode ?? '',
-                                    height: 16.0,
-                                    width: 24.0,
-                                    shape: RoundedRectangle(4.0),
+                                    theme: const ImageTheme(
+                                      height: 16.0,
+                                      width: 24.0,
+                                      shape: RoundedRectangle(4.0),
+                                    ),
                                   )
                                 : (_location.id == -1
                                     ? Container()
@@ -557,9 +561,12 @@ class _SearchClanScreenState extends State<SearchClanScreen> {
                                                   ? CountryFlag.fromCountryCode(
                                                       location?.countryCode ??
                                                           '',
-                                                      height: 16.0,
-                                                      width: 24.0,
-                                                      shape: RoundedRectangle(4.0),
+                                                      theme: const ImageTheme(
+                                                        height: 16.0,
+                                                        width: 24.0,
+                                                        shape: RoundedRectangle(
+                                                            4.0),
+                                                      ),
                                                     )
                                                   : const Icon(
                                                       Icons.public,

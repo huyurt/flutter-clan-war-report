@@ -39,9 +39,11 @@ class LanguageSelectorDialog extends StatelessWidget {
                         CountryFlag.fromCountryCode(
                           EnumHelper.getCountryCode(
                               EnumHelper.getLocaleType(locale)),
-                          height: 24.0,
-                          width: 31.0,
-                          shape: RoundedRectangle(4.0),
+                          theme: const ImageTheme(
+                            height: 24.0,
+                            width: 31.0,
+                            shape: RoundedRectangle(4.0),
+                          ),
                         ),
                         const SizedBox(width: 16.0),
                         Text(
